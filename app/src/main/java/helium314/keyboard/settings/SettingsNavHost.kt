@@ -1,8 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-only
 package helium314.keyboard.settings
 
-import helium314.keyboard.fork.settings.ThemeEditorScreen
-import helium314.keyboard.fork.settings.ThemeListScreen
+import helium314.keyboard.fork.settings.ThemeColorsScreen
 import helium314.keyboard.fork.settings.DynamicToolbarScreen
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInHorizontally
