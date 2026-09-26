@@ -22,10 +22,14 @@ import helium314.keyboard.latin.utils.prefs
  * *behind* the keyboard frame. It is moved with translationY only, so animating never triggers a
  * layout pass of the keyboard.
  *
- * Insets (what the app behind sees): apps are resized when contentTopInsets change. Changing them on
- * every animation frame makes the app relayout every frame (jank, jumping content). So the insets are
- * changed exactly once per transition: at the start of expanding, and at the end of collapsing.
- * With the "overlay" setting they are never changed and the toolbar covers the bottom of the app.
+ * Insets (what the app behind sees): apps are resized when contentTopInsets change.
+ *  - smooth resize (default): the insets follow the visible toolbar top on every animation frame, so the
+ *    app moves together with the toolbar. The toolbar is moved via translationY, which invalidates the
+ *    view tree, and every traversal calls LatinIME.onComputeInsets, so no relayout of the keyboard is needed.
+ *    Costs one app relayout per frame, which may stutter in heavy apps.
+ *  - otherwise the insets change exactly once per transition: at the start of expanding and at the
+ *    end of collapsing (app jumps once).
+ *  - with the "overlay" setting they are never changed and the toolbar covers the bottom of the app.
  *
  * The state is persisted, so it survives input view re-creation (e.g. Fold cover <-> main display)
  * and process death.
@@ -142,7 +146,14 @@ class DynamicToolbarController(private val context: Context) {
     /** Top of the area the app should be resized for (contentTopInsets), Int.MAX_VALUE if toolbar is not relevant. */
     fun insetTop(): Int {
         if (!isUsable() || !insetsIncludeToolbar) return Int.MAX_VALUE
-        if (context.prefs().getBoolean(ForkSettings.PREF_TOOLBAR_OVERLAY, ForkSettings.DEFAULT_TOOLBAR_OVERLAY)) return Int.MAX_VALUE
+        val prefs = context.prefs()
+        if (prefs.getBoolean(ForkSettings.PREF_TOOLBAR_OVERLAY, ForkSettings.DEFAULT_TOOLBAR_OVERLAY)) return Int.MAX_VALUE
+        if (prefs.getBoolean(ForkSettings.PREF_TOOLBAR_SMOOTH_RESIZE, ForkSettings.DEFAULT_TOOLBAR_SMOOTH_RESIZE)) {
+            // follow the currently visible part of the toolbar, so the app moves with the animation
+            val tb = toolbar ?: return Int.MAX_VALUE
+            if (hiddenFraction >= 1f) return Int.MAX_VALUE
+            return expandedTop() + (hiddenFraction * tb.height).toInt()
+        }
         return expandedTop()
     }
 

@@ -27,6 +27,7 @@ fun DynamicToolbarScreen(
             ForkSettings.PREF_SWIPE_HORIZONTAL_REJECT_DP,
             ForkSettings.PREF_SWIPE_MAX_DURATION,
             ForkSettings.PREF_TOOLBAR_ANIM_DURATION,
+            ForkSettings.PREF_TOOLBAR_SMOOTH_RESIZE,
             ForkSettings.PREF_TOOLBAR_OVERLAY,
         )
     )
@@ -96,6 +97,10 @@ fun createDynamicToolbarSettings(context: Context) = listOf(
             description = { stringResource(R.string.abbreviation_unit_milliseconds, it.toString()) },
             stepSize = 20,
         )
+    },
+    Setting(context, ForkSettings.PREF_TOOLBAR_SMOOTH_RESIZE,
+        R.string.fork_toolbar_smooth_resize, R.string.fork_toolbar_smooth_resize_summary) {
+        SwitchPreference(it, ForkSettings.DEFAULT_TOOLBAR_SMOOTH_RESIZE)
     },
     Setting(context, ForkSettings.PREF_TOOLBAR_OVERLAY,
         R.string.fork_toolbar_overlay, R.string.fork_toolbar_overlay_summary) {

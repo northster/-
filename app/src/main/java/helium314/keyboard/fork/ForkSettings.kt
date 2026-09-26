@@ -31,12 +31,14 @@ object ForkSettings {
     const val PREF_SWIPE_HORIZONTAL_REJECT_DP = "fork_swipe_horizontal_reject_dp"
     const val PREF_SWIPE_MAX_DURATION = "fork_swipe_max_duration_ms"
     const val PREF_TOOLBAR_OVERLAY = "fork_toolbar_overlay"
+    const val PREF_TOOLBAR_SMOOTH_RESIZE = "fork_toolbar_smooth_resize"
     const val PREF_TOOLBAR_ANIM_DURATION = "fork_toolbar_anim_duration_ms"
     /** Toolbar state, persisted so it survives input view re-creation (e.g. fold / unfold) and process death. */
     const val PREF_TOOLBAR_EXPANDED = "fork_toolbar_expanded"
 
     const val DEFAULT_TOOLBAR_SWIPE_ENABLED = true
     const val DEFAULT_TOOLBAR_OVERLAY = false
+    const val DEFAULT_TOOLBAR_SMOOTH_RESIZE = true
     const val DEFAULT_TOOLBAR_ANIM_DURATION = 180
 
     @Volatile private var cachedThresholds: SwipeThresholds? = null

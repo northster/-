@@ -17,6 +17,8 @@
     <string name="fork_swipe_max_duration">Maximum swipe duration</string>
     <string name="fork_toolbar_overlay">Toolbar overlays the app</string>
     <string name="fork_toolbar_overlay_summary">Don\'t resize the app when the toolbar is shown. No layout jump in the app, but the toolbar covers the bottom of it</string>
+    <string name="fork_toolbar_smooth_resize">Move the app smoothly with the toolbar</string>
+    <string name="fork_toolbar_smooth_resize_summary">The app screen follows the toolbar animation instead of jumping once. May stutter in heavy apps</string>
     <string name="fork_toolbar_anim_duration">Animation duration</string>
     <string name="fork_unit_dp">%s dp</string>
     <string name="fork_unit_dp_per_s">%s dp/s</string>

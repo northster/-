@@ -17,5 +17,7 @@
     <string name="fork_swipe_max_duration">최대 스와이프 시간</string>
     <string name="fork_toolbar_overlay">툴바가 앱 위에 겹쳐 표시</string>
     <string name="fork_toolbar_overlay_summary">툴바를 열어도 앱 크기를 바꾸지 않음. 앱 화면이 튀지 않지만 앱 하단을 가림</string>
+    <string name="fork_toolbar_smooth_resize">앱 화면을 툴바와 함께 부드럽게 이동</string>
+    <string name="fork_toolbar_smooth_resize_summary">앱 화면이 한 번에 튀지 않고 툴바 애니메이션을 따라 움직임. 무거운 앱에서는 버벅일 수 있음</string>
     <string name="fork_toolbar_anim_duration">애니메이션 시간</string>
 </resources>
