@@ -19,6 +19,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -72,18 +73,24 @@ fun SearchSettingsScreen(
                 ) { innerPadding ->
                     Column(
                         Modifier.verticalScroll(rememberScrollState()).then(Modifier.padding(innerPadding))
+                            .padding(bottom = 24.dp)
                     ) {
+                        // fork: shadcn style, settings between two categories are grouped in one card
+                        val sections = mutableListOf<Pair<Int?, MutableList<String>>>()
                         settings.forEach {
-                            if (it is Int) {
-                                PreferenceCategory(stringResource(it))
-                            } else {
-                                // this only animates appearing prefs
-                                // a solution would be using a list(visible to key)
-                                AnimatedVisibility(visible = it != null) {
-                                    if (it != null)
-                                        SettingsActivity.settingsContainer[it]?.Preference()
+                            when (it) {
+                                is Int -> sections.add(it to mutableListOf())
+                                is String -> {
+                                    if (sections.isEmpty()) sections.add(null to mutableListOf())
+                                    sections.last().second.add(it)
                                 }
                             }
+                        }
+                        sections.forEach { (title, keys) ->
+                            val rows = keys.mapNotNull { key ->
+                                SettingsActivity.settingsContainer[key]?.let { setting -> @Composable { setting.Preference() } }
+                            }
+                            SettingsSection(title?.let { stringResource(it) }, rows)
                         }
                     }
                     // lazyColumn has janky scroll for a while (not sure why compose gets smoother after a while)
@@ -139,7 +146,7 @@ fun <T: Any?> SearchScreen(
                 else onClickBack()
             }
             Surface(
-                color = MaterialTheme.colorScheme.surfaceContainer,
+                color = MaterialTheme.colorScheme.background, // fork: shadcn header, border instead of tinted bar
             ) {
                 Column {
                     TopAppBar(
@@ -185,9 +192,14 @@ fun <T: Any?> SearchScreen(
                             .fillMaxWidth()
                             .padding(horizontal = 16.dp, vertical = 8.dp),
                         colors = TextFieldDefaults.colors(
-                            focusedContainerColor = MaterialTheme.colorScheme.surface
-                        )
+                            focusedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
+                            unfocusedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
+                            focusedIndicatorColor = androidx.compose.ui.graphics.Color.Transparent,
+                            unfocusedIndicatorColor = androidx.compose.ui.graphics.Color.Transparent,
+                        ),
+                        shape = MaterialTheme.shapes.medium,
                     )
+                    HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
                 }
             }
             CompositionLocalProvider(LocalTextStyle provides MaterialTheme.typography.bodyLarge) {
@@ -222,6 +234,7 @@ fun ExpandableSearchField(
     onSearchChange: (TextFieldValue) -> Unit,
     modifier: Modifier = Modifier,
     colors: TextFieldColors = TextFieldDefaults.colors(),
+    shape: androidx.compose.ui.graphics.Shape = TextFieldDefaults.shape,
 ) {
     val focusRequester = remember { FocusRequester() }
 
@@ -240,6 +253,7 @@ fun ExpandableSearchField(
             }) { CloseIcon(android.R.string.cancel) } },
             singleLine = true,
             colors = colors,
+            shape = shape,
             textStyle = contentTextDirectionStyle,
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search)
         )

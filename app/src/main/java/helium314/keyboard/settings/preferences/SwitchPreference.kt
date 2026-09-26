@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-only
 package helium314.keyboard.settings.preferences
 
+import helium314.keyboard.settings.ShadcnSwitch
 import androidx.compose.material3.Switch
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -72,7 +73,7 @@ fun SwitchPreference(
         modifier = modifier,
         description = description
     ) {
-        Switch(
+        ShadcnSwitch(
             checked = value,
             onCheckedChange = { switched(it) },
         )

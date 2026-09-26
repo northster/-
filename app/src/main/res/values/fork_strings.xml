@@ -23,4 +23,38 @@
     <string name="fork_unit_dp">%s dp</string>
     <string name="fork_unit_dp_per_s">%s dp/s</string>
     <string name="fork_unit_degrees">%s°</string>
+
+    <!-- fork: settings reorganization -->
+    <string name="fork_main_input">Input</string>
+    <string name="fork_main_look">Look</string>
+    <string name="fork_main_toolbar">Toolbar</string>
+    <string name="fork_main_more">More</string>
+    <string name="fork_desc_preferences">Hints, long press, vibration, sound, extra keys, clipboard</string>
+    <string name="fork_desc_correction">Auto correction, suggestions, spacing, personal dictionary</string>
+    <string name="fork_desc_dictionaries">Add or manage dictionaries</string>
+    <string name="fork_desc_appearance">Theme, colors, keyboard height, fonts</string>
+    <string name="fork_desc_layouts">Symbols, numbers and functional key layouts</string>
+    <string name="fork_desc_dynamic_toolbar">Swipe gesture, animation, app resize</string>
+    <string name="fork_desc_toolbar">Suggestion strip and toolbar keys of the original keyboard</string>
+    <string name="fork_desc_advanced">Long press timing, backup, experimental options</string>
+    <string name="fork_desc_about">Version, license, logs</string>
+    <string name="fork_desc_gesture">Glide typing</string>
+    <string name="fork_setup_not_enabled_title">Keyboard is turned off</string>
+    <string name="fork_setup_not_enabled_desc">Turn on %s in the system keyboard list to use it.</string>
+    <string name="fork_setup_not_enabled_action">Turn on</string>
+    <string name="fork_setup_not_current_title">Not your current keyboard</string>
+    <string name="fork_setup_not_current_desc">%s is turned on but another keyboard is selected.</string>
+    <string name="fork_setup_not_current_action">Select keyboard</string>
+    <string name="fork_test_field_hint">Try the keyboard here</string>
+    <string name="fork_cat_feedback">Feedback</string>
+    <string name="fork_cat_hints">Hints &amp; long press</string>
+    <string name="fork_cat_general">General</string>
+    <string name="fork_cat_size">Size &amp; spacing</string>
+    <string name="fork_cat_font">Text &amp; fonts</string>
+    <string name="fork_cat_behavior">Key behavior</string>
+    <string name="fork_cat_auto_switch">Return to letters automatically</string>
+    <string name="fork_cat_custom_keys">Custom keys</string>
+    <string name="fork_cat_privacy_backup">Privacy &amp; backup</string>
+    <string name="fork_cat_gesture">Swipe gesture</string>
+    <string name="fork_cat_animation">Animation &amp; app screen</string>
 </resources>

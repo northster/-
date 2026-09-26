@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-only
 package helium314.keyboard.settings.preferences
 
+import helium314.keyboard.settings.ShadcnSwitch
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -39,15 +40,8 @@ fun PreferenceCategory(
     title: String,
     modifier: Modifier = Modifier,
 ) {
-    Column {
-        HorizontalDivider()
-        Text(
-            text = title,
-            modifier = modifier.padding(top = 12.dp, start = 16.dp, end = 8.dp, bottom = 8.dp),
-            color = MaterialTheme.colorScheme.secondary,
-            style = MaterialTheme.typography.titleSmall
-        )
-    }
+    // fork: shadcn style section label, the card grouping is done by SearchSettingsScreen
+    helium314.keyboard.settings.SectionLabel(title, modifier)
 }
 
 @Composable
@@ -59,19 +53,22 @@ fun Preference(
     @DrawableRes icon: Int? = null,
     value: @Composable (RowScope.() -> Unit)? = null,
 ) {
+    // fork: shadcn style row: 15sp medium title, 13sp muted description, 16dp padding
     Row(
         modifier = modifier
             .fillMaxWidth()
             .clickable { onClick() }
-            .heightIn(min = 44.dp)
-            .padding(vertical = 10.dp, horizontal = 12.dp),
-        horizontalArrangement = Arrangement.spacedBy(12.dp),
+            .heightIn(min = 52.dp)
+            .padding(vertical = 12.dp, horizontal = 16.dp),
+        horizontalArrangement = Arrangement.spacedBy(14.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         if (icon != null)
-            IconOrImage(icon, name, 32)
+            CompositionLocalProvider(LocalContentColor provides MaterialTheme.colorScheme.onSurface) {
+                IconOrImage(icon, name, 22)
+            }
         Column(modifier = Modifier.weight(1f)) {
-            Text(text = name, style = MaterialTheme.typography.bodyLarge)
+            Text(text = name, style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurface)
             if (description != null) {
                 CompositionLocalProvider(
                     LocalTextStyle provides MaterialTheme.typography.bodyMedium,
@@ -86,7 +83,7 @@ fun Preference(
         }
         if (value != null) {
             CompositionLocalProvider(
-                LocalTextStyle provides LocalTextStyle.current.copy(
+                LocalTextStyle provides MaterialTheme.typography.bodyMedium.copy(
                     textAlign = TextAlign.End,
                     hyphens = Hyphens.Auto
                 ),
@@ -137,7 +134,7 @@ private fun PreferencePreview() {
                     name = "Preference with switch",
                     onClick = {}
                 ) {
-                    Switch(checked = true, onCheckedChange = {})
+                    ShadcnSwitch(checked = true, onCheckedChange = {})
                 }
                 SwitchPreference(
                     name = "SwitchPreference",

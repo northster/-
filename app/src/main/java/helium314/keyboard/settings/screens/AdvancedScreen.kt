@@ -58,31 +58,27 @@ fun AdvancedSettingsScreen(
     val b = (LocalContext.current.getActivity() as? SettingsActivity)?.prefChanged?.collectAsState()
     if ((b?.value ?: 0) < 0)
         Log.v("irrelevant", "stupid way to trigger recomposition on preference change")
+    // fork: vertical space swipe, language swipe, touchpad, delete swipe and space long press language
+    //  picker are disabled in this fork (see ForkSettings), so they are not shown
     val items = listOf(
-        Settings.PREF_ALWAYS_INCOGNITO_MODE,
+        R.string.fork_cat_behavior,
         Settings.PREF_KEY_LONGPRESS_TIMEOUT,
         Settings.PREF_SPACE_HORIZONTAL_SWIPE,
-        Settings.PREF_SPACE_VERTICAL_SWIPE,
-        if (Settings.readHorizontalSpaceSwipe(prefs) == KeyboardActionListener.SwipeAction.SWITCH_LANGUAGE
-            || Settings.readVerticalSpaceSwipe(prefs) == KeyboardActionListener.SwipeAction.SWITCH_LANGUAGE)
-            Settings.PREF_LANGUAGE_SWIPE_DISTANCE else null,
-        if (Settings.readVerticalSpaceSwipe(prefs) == KeyboardActionListener.SwipeAction.TOUCHPAD_MODE)
-            Settings.PREF_TOUCHPAD_SENSITIVITY else null,
-        if (Settings.readVerticalSpaceSwipe(prefs) == KeyboardActionListener.SwipeAction.TOUCHPAD_MODE)
-            Settings.PREF_TOUCHPAD_EDGE_SCROLL else null,
-        Settings.PREF_DELETE_SWIPE,
-        Settings.PREF_SPACE_TO_CHANGE_LANG,
         Settings.PREFS_LONG_PRESS_SYMBOLS_FOR_NUMPAD,
         Settings.PREF_ENABLE_EMOJI_ALT_PHYSICAL_KEY,
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) Settings.PREF_SHOW_SETUP_WIZARD_ICON else null,
+        R.string.fork_cat_auto_switch,
         Settings.PREF_ABC_AFTER_SYMBOL_SPACE,
         Settings.PREF_ABC_AFTER_NUMPAD_SPACE,
         Settings.PREF_ABC_AFTER_EMOJI,
         Settings.PREF_ABC_AFTER_CLIP,
+        R.string.fork_cat_custom_keys,
         Settings.PREF_CUSTOM_CURRENCY_KEY,
         Settings.PREF_MORE_POPUP_KEYS,
         Settings.PREF_TIMESTAMP_FORMAT,
+        R.string.fork_cat_privacy_backup,
+        Settings.PREF_ALWAYS_INCOGNITO_MODE,
         SettingsWithoutKey.BACKUP_RESTORE,
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) Settings.PREF_SHOW_SETUP_WIZARD_ICON else null,
         if (BuildConfig.DEBUG || prefs.getBoolean(DebugSettings.PREF_SHOW_DEBUG_SETTINGS, Defaults.PREF_SHOW_DEBUG_SETTINGS))
             SettingsWithoutKey.DEBUG_SETTINGS else null,
         R.string.settings_category_experimental,
@@ -114,11 +110,9 @@ fun createAdvancedSettings(context: Context) = listOf(
         )
     },
     Setting(context, Settings.PREF_SPACE_HORIZONTAL_SWIPE, R.string.show_horizontal_space_swipe) {
+        // fork: only cursor movement is supported for horizontal space swipes (see ForkSettings / SettingsValues)
         val items = listOf(
             stringResource(R.string.space_swipe_move_cursor_entry) to KeyboardActionListener.SwipeAction.MOVE_CURSOR.name,
-            stringResource(R.string.switch_language) to KeyboardActionListener.SwipeAction.SWITCH_LANGUAGE.name,
-            stringResource(R.string.space_swipe_toggle_numpad_entry) to KeyboardActionListener.SwipeAction.TOGGLE_NUMPAD.name,
-            stringResource(R.string.space_swipe_toggle_dpad_entry) to KeyboardActionListener.SwipeAction.TOGGLE_DPAD.name,
             stringResource(R.string.action_none) to KeyboardActionListener.SwipeAction.NONE.name,
         )
         ListPreference(it, items, Defaults.PREF_SPACE_HORIZONTAL_SWIPE)

@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-only
 package helium314.keyboard.settings.screens
 
+import helium314.keyboard.settings.ShadcnSwitch
 import android.app.Activity
 import android.content.ClipData
 import android.content.ClipboardManager
@@ -204,7 +205,7 @@ fun ColorsScreen(
                             }
                     }
                     if (colorSetting.auto != null)
-                        Switch(colorSetting.auto, onCheckedChange = { checked ->
+                        ShadcnSwitch(colorSetting.auto, onCheckedChange = { checked ->
                             val oldUserColors = KeyboardTheme.readUserColors(prefs, newThemeName.text)
                             val newUserColors = (oldUserColors + ColorSetting(colorSetting.name, checked, colorSetting.color))
                                 .reversed().distinctBy { it.displayName }

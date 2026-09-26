@@ -42,14 +42,17 @@ fun PreferencesScreen(
     if ((b?.value ?: 0) < 0)
         Log.v("irrelevant", "stupid way to trigger recomposition on preference change")
     val clipboardHistoryEnabled = prefs.getBoolean(Settings.PREF_ENABLE_CLIPBOARD_HISTORY, Defaults.PREF_ENABLE_CLIPBOARD_HISTORY)
+    // fork: regrouped into smaller, clearer sections
     val items = listOf(
-        R.string.settings_category_input,
+        R.string.fork_cat_hints,
         Settings.PREF_SHOW_HINTS,
         if (prefs.getBoolean(Settings.PREF_SHOW_HINTS, Defaults.PREF_SHOW_HINTS))
             Settings.PREF_POPUP_KEYS_HINT_ORDER else null,
         Settings.PREF_POPUP_KEYS_ORDER,
         Settings.PREF_SHOW_POPUP_HINTS,
         Settings.PREF_SHOW_TLD_POPUP_KEYS,
+        Settings.PREF_REMOVE_REDUNDANT_POPUPS,
+        R.string.fork_cat_feedback,
         Settings.PREF_POPUP_ON,
         if (AudioAndHapticFeedbackManager.getInstance().hasVibrator())
             Settings.PREF_VIBRATE_ON else null,
@@ -60,8 +63,6 @@ fun PreferencesScreen(
         Settings.PREF_SOUND_ON,
         if (prefs.getBoolean(Settings.PREF_SOUND_ON, Defaults.PREF_SOUND_ON))
             Settings.PREF_KEYPRESS_SOUND_VOLUME else null,
-        Settings.PREF_SAVE_SUBTYPE_PER_APP,
-        Settings.PREF_SHOW_EMOJI_DESCRIPTIONS,
         R.string.settings_category_additional_keys,
         Settings.PREF_SHOW_NUMBER_ROW,
         if (SubtypeSettings.getEnabledSubtypes(true).any { it.locale().language in localesWithLocalizedNumberRow })
@@ -75,7 +76,6 @@ fun PreferencesScreen(
         Settings.PREF_LANGUAGE_SWITCH_KEY,
         Settings.PREF_SHOW_EMOJI_KEY,
         Settings.PREF_SHOW_DPAD_KEY,
-        Settings.PREF_REMOVE_REDUNDANT_POPUPS,
         R.string.settings_category_clipboard_history,
         Settings.PREF_ENABLE_CLIPBOARD_HISTORY,
         if (clipboardHistoryEnabled) Settings.PREF_CLIPBOARD_HISTORY_RETENTION_TIME else null,
@@ -83,6 +83,9 @@ fun PreferencesScreen(
         if (clipboardHistoryEnabled) Settings.PREF_CLIPBOARD_USE_FILES else null,
         if (clipboardHistoryEnabled && prefs.getBoolean(Settings.PREF_CLIPBOARD_USE_FILES, Defaults.PREF_CLIPBOARD_USE_FILES))
             Settings.PREF_CLIPBOARD_FILES_SIZE_LIMIT else null,
+        R.string.fork_cat_general,
+        Settings.PREF_SAVE_SUBTYPE_PER_APP,
+        Settings.PREF_SHOW_EMOJI_DESCRIPTIONS,
     )
     SearchSettingsScreen(
         onClickBack = onClickBack,

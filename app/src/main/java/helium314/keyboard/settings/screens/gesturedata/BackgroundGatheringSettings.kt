@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-only
 package helium314.keyboard.settings.screens.gesturedata
 
+import helium314.keyboard.settings.ShadcnSwitch
 import android.graphics.drawable.Drawable
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
@@ -120,7 +121,7 @@ fun BackgroundGatheringSettings() {
             val allowedCountText = if (packageInfos.isEmpty()) "" else allowedCount.toString()
             Text(stringResource(R.string.gesture_data_background_gathering_allowed_apps, allowedCountText), style = MaterialTheme.typography.bodySmall)
         }
-        Switch(
+        ShadcnSwitch(
             checked = backgroundGathering,
             onCheckedChange = {
                 if (!GestureDataGatheringSettings.hasBackgroundGatheringPref(ctx.prefs()))
@@ -147,7 +148,7 @@ fun BackgroundGatheringSettings() {
             Text(stringResource(R.string.gesture_data_background_gathering_manual_save))
             Text(stringResource(R.string.gesture_data_background_gathering_manual_save_summary), style = MaterialTheme.typography.bodySmall)
         }
-        Switch(backgroundGatheringManuelSave, { backgroundGatheringManuelSave = it; GestureDataGatheringSettings.setDiscardByDefault(ctx, it) })
+        ShadcnSwitch(backgroundGatheringManuelSave, { backgroundGatheringManuelSave = it; GestureDataGatheringSettings.setDiscardByDefault(ctx, it) })
     }
     ButtonWithText(stringResource(R.string.gesture_data_background_gathering_info), Modifier.fillMaxWidth()) { showInfoDialog = true }
     ButtonWithText(stringResource(R.string.gesture_data_background_excluded_words_button), Modifier.fillMaxWidth()) { showExcludedWordsDialog = true }
@@ -246,7 +247,7 @@ fun BackgroundGatheringSettings() {
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Text(stringResource(R.string.gesture_data_background_apps_include_default))
-                    Switch(checked = defaultInclude, onCheckedChange = { defaultInclude = it; GestureDataGatheringSettings.setAppIncludeByDefault(ctx, it) })
+                    ShadcnSwitch(checked = defaultInclude, onCheckedChange = { defaultInclude = it; GestureDataGatheringSettings.setAppIncludeByDefault(ctx, it) })
                 }
                 TextField(
                     value = filter,

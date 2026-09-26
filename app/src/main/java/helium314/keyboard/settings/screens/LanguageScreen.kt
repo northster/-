@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-only
 package helium314.keyboard.settings.screens
 
+import helium314.keyboard.settings.ShadcnSwitch
 import android.content.Context
 import android.os.Build
 import android.view.inputmethod.InputMethodSubtype
@@ -110,7 +111,7 @@ private fun SubtypeRow(subtype: InputMethodSubtype, isEnabled: Boolean) {
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
         }
-        Switch(
+        ShadcnSwitch(
             checked = isEnabled,
             onCheckedChange = {
                 if (it && !dictsAvailable(subtype.locale(), ctx))

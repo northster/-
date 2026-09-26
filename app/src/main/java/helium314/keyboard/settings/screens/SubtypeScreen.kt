@@ -1,5 +1,6 @@
 package helium314.keyboard.settings.screens
 
+import helium314.keyboard.settings.ShadcnSwitch
 import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -214,7 +215,7 @@ fun SubtypeScreen(
                                     .weight(1f)
                                     .padding(start = 10.dp)
                             )
-                            Switch(
+                            ShadcnSwitch(
                                 checked = checked ?: prefs.getBoolean(
                                     Settings.PREF_LOCALIZED_NUMBER_ROW,
                                     Defaults.PREF_LOCALIZED_NUMBER_ROW
@@ -384,7 +385,7 @@ private fun PopupOrderDialog(
                 KeyboardIconsSet.instance.GetIconOrEmpty(item.name)
                 val text = item.name.lowercase().getStringResourceOrName("popup_keys_", ctx)
                 Text(text, Modifier.weight(1f))
-                Switch(
+                ShadcnSwitch(
                     checked = checked,
                     onCheckedChange = { item.state = it; checked = it }
                 )

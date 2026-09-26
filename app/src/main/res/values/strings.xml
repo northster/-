@@ -11,7 +11,7 @@
     <!-- Name of Android spell checker service. The app name should not be translated. -->
     <string name="spell_checker_service_name">HeliBoard Spell Checker</string>
     <!-- Title for IME settings screen. The app name should not be translated. -->
-    <string name="ime_settings">HeliBoard Settings</string>
+    <string name="ime_settings">DT Keyboard Settings</string>
     <!-- Title for the spell checking service settings screen. The app name should not be translated. -->
     <string name="android_spell_checker_settings">HeliBoard Spell Checker Settings</string>
     <!-- Option to provide vibrate/haptic feedback on keypress -->
@@ -39,7 +39,7 @@
     <!-- Description for toolbar_swipe_down_to_hide -->
     <string name="toolbar_swipe_down_to_hide_summary">Swipe down on the toolbar to close the keyboard</string>
     <!-- Settings screen title for preferences-->
-    <string name="settings_screen_preferences">Preferences</string>
+    <string name="settings_screen_preferences">Keys &amp; feedback</string>
     <!-- Settings screen title for gesture typing preferences -->
     <string name="settings_screen_gesture">Gesture Typing</string>
     <!-- Settings screen title for text correction options -->
@@ -522,7 +522,7 @@ language, hence "No language". -->
     <!-- Text hint for editing layout -->
     <string name="edit_layout">Tap to edit raw layout</string>
     <!-- Settings screen title for secondary layouts (functional keys, symbols, numpad, ...) -->
-    <string name="settings_screen_secondary_layouts">Secondary layouts</string>
+    <string name="settings_screen_secondary_layouts">Layout customization</string>
     <!-- Name for functional keys layout -->
     <string name="layout_functional_keys" tools:keep="@string/layout_functional_keys">Functional keys</string>
     <!-- Name for functional keys layout for tablets -->
@@ -820,9 +820,9 @@ New dictionary:
     <!-- Title of internal InputMethodPicker, strings should be same as the ones from Android system -->
     <string name="select_input_method">Choose input method</string>
     <!-- Settings screen title for appearance preferences -->
-    <string name="settings_screen_appearance">Appearance</string>
+    <string name="settings_screen_appearance">Appearance &amp; size</string>
     <!-- Settings screen title for toolbar preferences -->
-    <string name="settings_screen_toolbar">Toolbar</string>
+    <string name="settings_screen_toolbar">Suggestion strip (classic toolbar)</string>
     <!-- Hidden features title -->
     <string name="hidden_features_title">Description of hidden features</string>
     <!-- Hidden features summary -->

@@ -8,7 +8,7 @@
     <string name="vibrate_on_keypress">"키를 누를 때 진동 발생"</string>
     <string name="sound_on_keypress">"키를 누를 때 소리 발생"</string>
     <string name="popup_on_keypress">"키를 누를 때 팝업"</string>
-    <string name="settings_screen_preferences">"환경설정"</string>
+    <string name="settings_screen_preferences">키 입력</string>
     <string name="settings_screen_gesture">제스처 입력</string>
     <string name="settings_screen_correction">"텍스트 수정"</string>
     <string name="settings_screen_advanced">"고급"</string>
@@ -96,7 +96,7 @@
     <string name="select_input_method">"입력 방법 선택"</string>
     <string name="spell_checker_service_name">HeliBoard 맞춤법 검사기</string>
     <string name="android_spell_checker_settings">HeliBoard 맞춤법 검사기 설정</string>
-    <string name="ime_settings">HeliBoard 설정</string>
+    <string name="ime_settings">DT Keyboard 설정</string>
     <string name="prefs_force_incognito_mode_summary">새로운 단어 학습 비활성화</string>
     <string name="auto_correction_confidence">자동 교정 정확도</string>
     <string name="settings_category_suggestions">제안</string>
@@ -106,7 +106,7 @@
     <string name="delete_swipe">스와이프 삭제</string>
     <string name="show_emoji_key">이모지 키</string>
     <string name="settings_category_input">입력</string>
-    <string name="settings_category_additional_keys">추카 키</string>
+    <string name="settings_category_additional_keys">추가 키</string>
     <string name="settings_category_correction">교정</string>
     <string name="settings_category_clipboard_history">클립보드 기록</string>
     <string name="settings_no_limit">제한 없음</string>
@@ -292,7 +292,7 @@
     <string name="delete_layout">정말 %s 사용자 지정 레이아웃을 삭제합니까?</string>
     <string name="layout_in_use">주의: 레이아웃이 현재 사용 중입니다</string>
     <string name="layout_error">레이아웃 오류: %s</string>
-    <string name="settings_screen_secondary_layouts">보조 레이아웃</string>
+    <string name="settings_screen_secondary_layouts">레이아웃 편집</string>
     <string name="layout_functional_keys" tools:keep="@string/layout_functional_keys">기능 키</string>
     <string name="layout_functional_keys_tablet" tools:keep="@string/layout_functional_keys_tablet">기능 키 (대화면)</string>
     <string name="layout_functional_keys_symbols" tools:keep="@string/layout_functional_keys_symbols">기능 키 (기호)</string>
@@ -381,7 +381,7 @@
     <string name="license">오픈소스 라이선스</string>
     <string name="dialog_close">닫기</string>
     <string name="text_tap_languages">언어를 눌러 설정 열기</string>
-    <string name="settings_screen_appearance">외관</string>
+    <string name="settings_screen_appearance">외관 및 크기</string>
     <string name="full_left" tools:keep="@string/full_left">줄 단위 좌</string>
     <string name="full_right" tools:keep="@string/full_right">줄 단위 우</string>
     <string name="number_row_in_symbols">기호 보기에서 숫자 행 표시</string>
@@ -389,7 +389,7 @@
     <string name="load">불러오기</string>
     <string name="prefs_key_emoji_max_sdk">이모지 버전 덮어쓰기</string>
     <string name="gnu_gpl">GNU 범용 공개 라이선스 v3.0</string>
-    <string name="settings_screen_toolbar">도구 모음</string>
+    <string name="settings_screen_toolbar">제안 줄 (기본 툴바)</string>
     <string name="label_enter_key" tools:keep="@string/label_enter_key">Enter</string>
     <string name="label_tab_key" tools:keep="@string/label_tab_key">Tab</string>
     <string name="label_delete_key" tools:keep="@string/label_delete_key">Delete</string>

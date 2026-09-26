@@ -69,7 +69,11 @@ fun AppearanceScreen(
         Settings.PREF_NAVBAR_COLOR,
         SettingsWithoutKey.BACKGROUND_IMAGE,
         SettingsWithoutKey.BACKGROUND_IMAGE_LANDSCAPE,
-        R.string.settings_category_miscellaneous,
+        R.string.fork_cat_size, // fork: split "miscellaneous" into size and font sections
+        Settings.PREF_KEYBOARD_HEIGHT_SCALE_PREFIX,
+        Settings.PREF_BOTTOM_ROW_SCALE_PREFIX,
+        Settings.PREF_BOTTOM_PADDING_SCALE_PREFIX,
+        Settings.PREF_SIDE_PADDING_SCALE_PREFIX,
         Settings.PREF_ENABLE_SPLIT_KEYBOARD,
         if (prefs.getBoolean(Settings.PREF_ENABLE_SPLIT_KEYBOARD_LANDSCAPE, Defaults.PREF_ENABLE_SPLIT_KEYBOARD)
             || prefs.getBoolean(Settings.PREF_ENABLE_SPLIT_KEYBOARD, Defaults.PREF_ENABLE_SPLIT_KEYBOARD)
@@ -79,10 +83,7 @@ fun AppearanceScreen(
             Settings.PREF_SPLIT_SPACER_SCALE_PREFIX else null,
         if (prefs.getBoolean(Settings.PREF_THEME_KEY_BORDERS, Defaults.PREF_THEME_KEY_BORDERS))
             Settings.PREF_KEY_GAP_SCALE_PREFIX else null,
-        Settings.PREF_KEYBOARD_HEIGHT_SCALE_PREFIX,
-        Settings.PREF_BOTTOM_ROW_SCALE_PREFIX,
-        Settings.PREF_BOTTOM_PADDING_SCALE_PREFIX,
-        Settings.PREF_SIDE_PADDING_SCALE_PREFIX,
+        R.string.fork_cat_font,
         Settings.PREF_SPACE_BAR_TEXT,
         SettingsWithoutKey.CUSTOM_FONT,
         Settings.PREF_FONT_SCALE,

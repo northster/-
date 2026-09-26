@@ -97,10 +97,8 @@ open class SettingsActivity : ComponentActivity(), SharedPreferences.OnSharedPre
                     val dictUri by dictUriFlow.collectAsState()
                     val crashReports by crashReportFiles.collectAsState()
                     val crashFilePicker = filePicker { saveCrashReports(it) }
-                    var showWelcomeWizard by rememberSaveable { mutableStateOf(
-                        !UncachedInputMethodManagerUtils.isThisImeCurrent(this, imm)
-                                || !UncachedInputMethodManagerUtils.isThisImeEnabled(this, imm)
-                    ) }
+                    // fork: no wizard on start, the setup state is shown on top of the main screen instead
+                    var showWelcomeWizard by rememberSaveable { mutableStateOf(false) }
                     if (spellchecker)
                         Scaffold(contentWindowInsets = WindowInsets.safeDrawing) { innerPadding ->
                             Column(Modifier.padding(innerPadding)) {
@@ -183,6 +181,22 @@ open class SettingsActivity : ComponentActivity(), SharedPreferences.OnSharedPre
     override fun onResume() {
         super.onResume()
         paused = false
+        updateImeSetupState()
+    }
+
+    override fun onWindowFocusChanged(hasFocus: Boolean) {
+        super.onWindowFocusChanged(hasFocus)
+        // the input method picker is a dialog, closing it does not resume the activity
+        if (hasFocus) updateImeSetupState()
+    }
+
+    private fun updateImeSetupState() {
+        val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+        imeSetupState.value = when {
+            !UncachedInputMethodManagerUtils.isThisImeEnabled(this, imm) -> ImeSetupState.NOT_ENABLED
+            !UncachedInputMethodManagerUtils.isThisImeCurrent(this, imm) -> ImeSetupState.NOT_CURRENT
+            else -> ImeSetupState.OK
+        }
     }
 
     fun setForceTheme(theme: String?, night: Boolean?) {
@@ -235,12 +249,17 @@ open class SettingsActivity : ComponentActivity(), SharedPreferences.OnSharedPre
 
         var forceNight: Boolean? = null
         var forceTheme: String? = null
+
+        /** fork: whether the keyboard is enabled and selected, shown on the main screen */
+        val imeSetupState = MutableStateFlow(ImeSetupState.OK)
     }
 
     override fun onSharedPreferenceChanged(prefereces: SharedPreferences?, key: String?) {
         prefChanged()
     }
 }
+
+enum class ImeSetupState { OK, NOT_ENABLED, NOT_CURRENT }
 
 // duplicate of SettingsActivity so we can launch it when the app icon is disabled in Android 9 and older
 class SettingsActivity2 : SettingsActivity()

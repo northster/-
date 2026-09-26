@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-only
 package helium314.keyboard.settings.preferences
 
+import helium314.keyboard.settings.ShadcnSwitch
 import androidx.compose.foundation.layout.Row
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
@@ -58,7 +59,7 @@ fun ReorderSwitchPreference(setting: Setting, default: String) {
                     val actualText = if (text != item.name.lowercase()) text
                         else item.name.lowercase().getStringResourceOrName("popup_keys_", ctx)
                     Text(actualText, Modifier.weight(1f))
-                    Switch(
+                    ShadcnSwitch(
                         checked = checked,
                         onCheckedChange = { item.state = it; checked = it }
                     )
