@@ -30,7 +30,7 @@
     <string name="fork_main_toolbar">Toolbar</string>
     <string name="fork_main_more">More</string>
     <string name="fork_desc_preferences">Hints, long press, vibration, sound, extra keys, clipboard</string>
-    <string name="fork_desc_correction">Auto correction, suggestions, spacing, personal dictionary</string>
+    <string name="fork_desc_correction">Auto correction, capitalization, spacing, personal dictionary</string>
     <string name="fork_desc_dictionaries">Add or manage dictionaries</string>
     <string name="fork_desc_appearance">Theme, colors, keyboard height, fonts</string>
     <string name="fork_desc_layouts">Symbols, numbers and functional key layouts</string>
@@ -57,4 +57,6 @@
     <string name="fork_cat_privacy_backup">Privacy &amp; backup</string>
     <string name="fork_cat_gesture">Swipe gesture</string>
     <string name="fork_cat_animation">Animation &amp; app screen</string>
+    <string name="fork_keyboard_preview">Show keyboard</string>
+    <string name="fork_keyboard_preview_summary">Keep the keyboard open at the bottom to see changes right away</string>
 </resources>

@@ -1,6 +1,35 @@
 // SPDX-License-Identifier: GPL-3.0-only
 package helium314.keyboard.settings.screens
 
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.only
+import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.material3.Text
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.unit.dp
+import helium314.keyboard.fork.ForkSettings
+import helium314.keyboard.latin.settings.createPrefKeyForBooleanSettings
+import helium314.keyboard.latin.utils.LocalShadcn
+import helium314.keyboard.settings.SettingsSection
+import helium314.keyboard.settings.SettingsSections
+import helium314.keyboard.settings.preferences.InlineSliderPreference
+import helium314.keyboard.settings.preferences.InlineChoicePreference
 import android.content.Context
 import android.os.Build
 import androidx.compose.foundation.layout.Column
@@ -56,6 +85,8 @@ fun AppearanceScreen(
     if ((b?.value ?: 0) < 0)
         Log.v("irrelevant", "stupid way to trigger recomposition on preference change")
     val dayNightMode = Build.VERSION.SDK_INT >= Build.VERSION_CODES.P && prefs.getBoolean(Settings.PREF_THEME_DAY_NIGHT, Defaults.PREF_THEME_DAY_NIGHT)
+    // fork: every option is visible (no conditional items), sliders and choices are shown inline,
+    //  background images are removed, one size profile for every screen (ForkSettings.SINGLE_SIZE_PROFILE)
     val items = listOf(
         R.string.settings_screen_theme,
         Settings.PREF_THEME_STYLE,
@@ -65,41 +96,82 @@ fun AppearanceScreen(
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)
             Settings.PREF_THEME_DAY_NIGHT else null,
         Settings.PREF_THEME_COLORS,
-        if (dayNightMode) Settings.PREF_THEME_COLORS_NIGHT else null,
+        Settings.PREF_THEME_COLORS_NIGHT,
         Settings.PREF_NAVBAR_COLOR,
-        SettingsWithoutKey.BACKGROUND_IMAGE,
-        SettingsWithoutKey.BACKGROUND_IMAGE_LANDSCAPE,
-        R.string.fork_cat_size, // fork: split "miscellaneous" into size and font sections
+        R.string.fork_cat_size,
         Settings.PREF_KEYBOARD_HEIGHT_SCALE_PREFIX,
         Settings.PREF_BOTTOM_ROW_SCALE_PREFIX,
         Settings.PREF_BOTTOM_PADDING_SCALE_PREFIX,
         Settings.PREF_SIDE_PADDING_SCALE_PREFIX,
+        Settings.PREF_KEY_GAP_SCALE_PREFIX,
         Settings.PREF_ENABLE_SPLIT_KEYBOARD,
-        if (prefs.getBoolean(Settings.PREF_ENABLE_SPLIT_KEYBOARD_LANDSCAPE, Defaults.PREF_ENABLE_SPLIT_KEYBOARD)
-            || prefs.getBoolean(Settings.PREF_ENABLE_SPLIT_KEYBOARD, Defaults.PREF_ENABLE_SPLIT_KEYBOARD)
-            || prefs.getBoolean(Settings.PREF_ENABLE_SPLIT_KEYBOARD_FOLDED, Defaults.PREF_ENABLE_SPLIT_KEYBOARD)
-            || prefs.getBoolean(Settings.PREF_ENABLE_SPLIT_KEYBOARD_FOLDED_LANDSCAPE, Defaults.PREF_ENABLE_SPLIT_KEYBOARD)
-            )
-            Settings.PREF_SPLIT_SPACER_SCALE_PREFIX else null,
-        if (prefs.getBoolean(Settings.PREF_THEME_KEY_BORDERS, Defaults.PREF_THEME_KEY_BORDERS))
-            Settings.PREF_KEY_GAP_SCALE_PREFIX else null,
+        Settings.PREF_SPLIT_SPACER_SCALE_PREFIX,
         R.string.fork_cat_font,
         Settings.PREF_SPACE_BAR_TEXT,
         SettingsWithoutKey.CUSTOM_FONT,
         Settings.PREF_FONT_SCALE,
-        if (prefs.getBoolean(Settings.PREF_SHOW_HINTS, Defaults.PREF_SHOW_HINTS)) Settings.PREF_HINT_FONT_SCALE else null,
+        Settings.PREF_HINT_FONT_SCALE,
         SettingsWithoutKey.CUSTOM_EMOJI_FONT,
         Settings.PREF_EMOJI_FONT_SCALE,
-        if (prefs.getFloat(Settings.PREF_EMOJI_FONT_SCALE, Defaults.PREF_EMOJI_FONT_SCALE) != 1f)
-            Settings.PREF_EMOJI_KEY_FIT else null,
-        if (prefs.getInt(Settings.PREF_EMOJI_MAX_SDK, 0) >= 24)
-            Settings.PREF_EMOJI_SKIN_TONE else null,
+        Settings.PREF_EMOJI_KEY_FIT,
+        Settings.PREF_EMOJI_SKIN_TONE,
     )
+    val showPreview = prefs.getBoolean(ForkSettings.PREF_SHOW_KEYBOARD_PREVIEW, false)
     SearchSettingsScreen(
         onClickBack = onClickBack,
         title = stringResource(R.string.settings_screen_appearance),
         settings = items
-    )
+    ) {
+        Scaffold(
+            contentWindowInsets = WindowInsets.safeDrawing.only(WindowInsetsSides.Bottom),
+            bottomBar = { if (showPreview) KeyboardPreviewField() },
+        ) { innerPadding ->
+            Column(
+                Modifier.verticalScroll(rememberScrollState()).then(Modifier.padding(innerPadding)).padding(bottom = 24.dp)
+            ) {
+                SettingsSection(null, listOf {
+                    SwitchPreference(
+                        name = stringResource(R.string.fork_keyboard_preview),
+                        description = stringResource(R.string.fork_keyboard_preview_summary),
+                        key = ForkSettings.PREF_SHOW_KEYBOARD_PREVIEW,
+                        default = false,
+                    )
+                })
+                SettingsSections(items)
+            }
+        }
+    }
+}
+
+/** fork: focused text field at the bottom, keeps the keyboard open while adjusting the look */
+@Composable
+private fun KeyboardPreviewField() {
+    val focusRequester = remember { FocusRequester() }
+    val keyboardController = LocalSoftwareKeyboardController.current
+    var text by remember { mutableStateOf("") }
+    val s = LocalShadcn.current
+    LaunchedEffect(Unit) {
+        focusRequester.requestFocus()
+        keyboardController?.show()
+    }
+    Surface(color = MaterialTheme.colorScheme.background) {
+        Column(Modifier.imePadding().navigationBarsPadding()) {
+            HorizontalDivider(color = s.border)
+            OutlinedTextField(
+                value = text,
+                onValueChange = { text = it },
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp).focusRequester(focusRequester),
+                placeholder = { Text(stringResource(R.string.fork_test_field_hint), color = s.mutedForeground) },
+                shape = MaterialTheme.shapes.medium,
+                singleLine = true,
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = s.ring,
+                    unfocusedBorderColor = s.input,
+                    cursorColor = s.foreground,
+                ),
+            )
+        }
+    }
 }
 
 fun createAppearanceSettings(context: Context) = listOf(
@@ -109,8 +181,9 @@ fun createAppearanceSettings(context: Context) = listOf(
         val items = KeyboardTheme.STYLES.map {
             it.getStringResourceOrName("style_name_", ctx) to it
         }
-        ListPreference(
-            setting,
+        InlineChoicePreference(
+            setting.title,
+            setting.key,
             items,
             Defaults.PREF_THEME_STYLE
         ) {
@@ -130,11 +203,11 @@ fun createAppearanceSettings(context: Context) = listOf(
         if ((b?.value ?: 0) < 0)
             Log.v("irrelevant", "stupid way to trigger recomposition on preference change")
         val items = KeyboardTheme.STYLES.map { it.getStringResourceOrName("style_name_", ctx) to it }
-        ListPreference(
-            setting,
+        InlineChoicePreference(
+            setting.title,
+            setting.key,
             items,
             Defaults.PREF_ICON_STYLE(ctx.prefs()),
-            { ctx.prefs().edit { remove(Settings.PREF_ICON_STYLE) } }
         ) {
             KeyboardIconsSet.needsReload = true // only relevant for Settings.PREF_CUSTOM_ICON_NAMES
             KeyboardSwitcher.getInstance().setThemeNeedsReload()
@@ -209,95 +282,61 @@ fun createAppearanceSettings(context: Context) = listOf(
         BackgroundImagePref(it, true)
     },
     Setting(context, Settings.PREF_ENABLE_SPLIT_KEYBOARD, R.string.enable_split_keyboard) {
-        var show by remember { mutableStateOf(false) }
-        val prefAndName = listOfNotNull(
-            Settings.PREF_ENABLE_SPLIT_KEYBOARD to stringResource(R.string.button_default),
-            Settings.PREF_ENABLE_SPLIT_KEYBOARD_LANDSCAPE to stringResource(R.string.landscape),
-            if (!FoldableUtils.isFoldable) null else
-                Settings.PREF_ENABLE_SPLIT_KEYBOARD_FOLDED to stringResource(R.string.folded),
-            if (!FoldableUtils.isFoldable) null else
-                Settings.PREF_ENABLE_SPLIT_KEYBOARD_FOLDED_LANDSCAPE to stringResource(R.string.folded) + " / " + stringResource(R.string.landscape)
-        )
-        Preference(
-            name = stringResource(R.string.enable_split_keyboard),
-            onClick = { show = true },
-            description = prefAndName.filter { LocalContext.current.prefs().getBoolean(it.first, Defaults.PREF_ENABLE_SPLIT_KEYBOARD) }
-                .joinToString(", ") { it.second }.takeIf { it.isNotEmpty() }
-        )
-        if (show) {
-            ThreeButtonAlertDialog(
-                onDismissRequest = { show = false },
-                onConfirmed = {},
-                confirmButtonText = null,
-                cancelButtonText = stringResource(R.string.dialog_close),
-                content = {
-                    Column {
-                        prefAndName.forEach {
-                            SwitchPreference(name = it.second, key = it.first, default = Defaults.PREF_ENABLE_SPLIT_KEYBOARD)
-                        }
-                    }
-                }
-            )
-        }
+        // fork: one setting for every screen
+        SwitchPreference(it, Defaults.PREF_ENABLE_SPLIT_KEYBOARD) { KeyboardSwitcher.getInstance().setThemeNeedsReload() }
     },
     Setting(context, Settings.PREF_SPLIT_SPACER_SCALE_PREFIX, R.string.split_spacer_scale) { setting ->
-        KeyboardScalePreference(
+        InlineSliderPreference(
             name = setting.title,
-            baseKey = setting.key,
-            dimensions = listOf(stringResource(R.string.landscape), stringResource(R.string.folded)),
-            defaults = Defaults.PREF_SPLIT_SPACER_SCALE,
+            key = createPrefKeyForBooleanSettings(setting.key, 0, 2),
+            default = Defaults.PREF_SPLIT_SPACER_SCALE[0],
             range = 0.5f..2f,
-            description = { "${(100 * it).toInt()}%" }
+            step = 0.01f,
         ) { KeyboardSwitcher.getInstance().setThemeNeedsReload() }
     },
     Setting(context, Settings.PREF_KEY_GAP_SCALE_PREFIX, R.string.prefs_key_gap_scale) { setting ->
-        KeyboardScalePreference(
+        InlineSliderPreference(
             name = setting.title,
-            baseKey = setting.key,
-            dimensions = listOf(stringResource(R.string.landscape), stringResource(R.string.folded)),
-            defaults = Defaults.PREF_KEY_GAP_SCALE,
+            key = createPrefKeyForBooleanSettings(setting.key, 0, 2),
+            default = Defaults.PREF_KEY_GAP_SCALE[0],
             range = 0.5f..2.5f,
-            description = { "${(100 * it).toInt()}%" }
+            step = 0.01f,
         ) { KeyboardSwitcher.getInstance().setThemeNeedsReload() }
     },
     Setting(context, Settings.PREF_KEYBOARD_HEIGHT_SCALE_PREFIX, R.string.prefs_keyboard_height_scale) { setting ->
-        KeyboardScalePreference(
+        InlineSliderPreference(
             name = setting.title,
-            baseKey = setting.key,
-            dimensions = listOf(stringResource(R.string.landscape), stringResource(R.string.folded)),
-            defaults = Defaults.PREF_KEYBOARD_HEIGHT_SCALE,
+            key = createPrefKeyForBooleanSettings(setting.key, 0, 2),
+            default = Defaults.PREF_KEYBOARD_HEIGHT_SCALE[0],
             range = 0.3f..1.5f,
-            description = { "${(100 * it).toInt()}%" }
+            step = 0.01f,
         ) { KeyboardSwitcher.getInstance().setThemeNeedsReload() }
     },
     Setting(context, Settings.PREF_BOTTOM_ROW_SCALE_PREFIX, R.string.prefs_bottom_row_scale) { setting ->
-        KeyboardScalePreference(
+        InlineSliderPreference(
             name = setting.title,
-            baseKey = setting.key,
-            dimensions = listOf(stringResource(R.string.landscape), stringResource(R.string.folded)),
-            defaults = Defaults.PREF_BOTTOM_ROW_SCALE,
+            key = createPrefKeyForBooleanSettings(setting.key, 0, 2),
+            default = Defaults.PREF_BOTTOM_ROW_SCALE[0],
             range = 0.5f..2f,
-            description = { "${(100 * it).toInt()}%" }
+            step = 0.01f,
         ) { KeyboardSwitcher.getInstance().setThemeNeedsReload() }
     },
     Setting(context, Settings.PREF_BOTTOM_PADDING_SCALE_PREFIX, R.string.prefs_bottom_padding_scale) { setting ->
-        KeyboardScalePreference(
+        InlineSliderPreference(
             name = setting.title,
-            baseKey = setting.key,
-            dimensions = listOf(stringResource(R.string.landscape), stringResource(R.string.folded)),
-            defaults = Defaults.PREF_BOTTOM_PADDING_SCALE,
+            key = createPrefKeyForBooleanSettings(setting.key, 0, 2),
+            default = Defaults.PREF_BOTTOM_PADDING_SCALE[0],
             range = 0f..5f,
-            description = { "${(100 * it).toInt()}%" }
+            step = 0.01f,
         ) { KeyboardSwitcher.getInstance().setThemeNeedsReload() }
     },
     Setting(context, Settings.PREF_SIDE_PADDING_SCALE_PREFIX, R.string.prefs_side_padding_scale) { setting ->
-        KeyboardScalePreference(
+        InlineSliderPreference(
             name = setting.title,
-            baseKey = setting.key,
-            dimensions = listOf(stringResource(R.string.landscape), stringResource(R.string.split), stringResource(R.string.folded)),
-            defaults = Defaults.PREF_SIDE_PADDING_SCALE,
+            key = createPrefKeyForBooleanSettings(setting.key, 0, 3),
+            default = Defaults.PREF_SIDE_PADDING_SCALE[0],
             range = 0f..3f,
-            description = { "${(100 * it).toInt()}%" }
+            step = 0.01f,
         ) { KeyboardSwitcher.getInstance().setThemeNeedsReload() }
     },
     Setting(context, Settings.PREF_SPACE_BAR_TEXT, R.string.prefs_space_bar_text) {
@@ -307,33 +346,33 @@ fun createAppearanceSettings(context: Context) = listOf(
         CustomFontPreference(it, Settings.getCustomFontFile(LocalContext.current), R.string.custom_font)
     },
     Setting(context, Settings.PREF_FONT_SCALE, R.string.prefs_font_scale) { setting ->
-        SliderPreference(
+        InlineSliderPreference(
             name = setting.title,
             key = setting.key,
             default = Defaults.PREF_FONT_SCALE,
             range = 0.5f..1.5f,
-            description = { "${(100 * it).toInt()}%" }
+            step = 0.01f,
         ) { KeyboardSwitcher.getInstance().setThemeNeedsReload() }
     },
     Setting(context, Settings.PREF_HINT_FONT_SCALE, R.string.prefs_hint_font_scale) { setting ->
-        SliderPreference(
+        InlineSliderPreference(
             name = setting.title,
             key = setting.key,
             default = Defaults.PREF_HINT_FONT_SCALE,
             range = 0.5f..1.5f,
-            description = { "${(100 * it).toInt()}%" }
+            step = 0.01f,
         ) { KeyboardSwitcher.getInstance().setThemeNeedsReload() }
     },
     Setting(context, SettingsWithoutKey.CUSTOM_EMOJI_FONT, R.string.custom_emoji_font) {
         CustomFontPreference(it, Settings.getCustomEmojiFontFile(LocalContext.current), R.string.custom_emoji_font)
     },
     Setting(context, Settings.PREF_EMOJI_FONT_SCALE, R.string.prefs_emoji_font_scale) { setting ->
-        SliderPreference(
+        InlineSliderPreference(
             name = setting.title,
             key = setting.key,
             default = Defaults.PREF_EMOJI_FONT_SCALE,
             range = 0.5f..1.5f,
-            description = { "${(100 * it).toInt()}%" }
+            step = 0.01f,
         ) { KeyboardSwitcher.getInstance().setThemeNeedsReload() }
     },
     Setting(context, Settings.PREF_EMOJI_KEY_FIT, R.string.prefs_emoji_key_fit) {
@@ -348,7 +387,7 @@ fun createAppearanceSettings(context: Context) = listOf(
             "\uD83C\uDFFE" to "\uD83C\uDFFE",
             "\uD83C\uDFFF" to "\uD83C\uDFFF"
         )
-        ListPreference(setting, items, Defaults.PREF_EMOJI_SKIN_TONE) { KeyboardSwitcher.getInstance().setThemeNeedsReload() }
+        InlineChoicePreference(setting.title, setting.key, items, Defaults.PREF_EMOJI_SKIN_TONE) { KeyboardSwitcher.getInstance().setThemeNeedsReload() }
     },
 )
 

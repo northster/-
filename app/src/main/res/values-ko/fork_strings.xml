@@ -27,7 +27,7 @@
     <string name="fork_main_toolbar">툴바</string>
     <string name="fork_main_more">기타</string>
     <string name="fork_desc_preferences">힌트, 길게 누르기, 진동, 소리, 추가 키, 클립보드</string>
-    <string name="fork_desc_correction">자동 수정, 추천 단어, 띄어쓰기, 개인 사전</string>
+    <string name="fork_desc_correction">자동 수정, 자동 대문자, 띄어쓰기, 개인 사전</string>
     <string name="fork_desc_dictionaries">사전 추가 및 관리</string>
     <string name="fork_desc_appearance">테마, 색상, 키보드 높이, 글꼴</string>
     <string name="fork_desc_layouts">기호, 숫자, 기능 키 레이아웃</string>
@@ -54,4 +54,6 @@
     <string name="fork_cat_privacy_backup">개인정보 및 백업</string>
     <string name="fork_cat_gesture">스와이프 제스처</string>
     <string name="fork_cat_animation">애니메이션 및 앱 화면</string>
+    <string name="fork_keyboard_preview">키보드 표시</string>
+    <string name="fork_keyboard_preview_summary">화면 아래에 키보드를 띄워두고 바꾼 설정을 바로 확인</string>
 </resources>

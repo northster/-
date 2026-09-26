@@ -150,7 +150,8 @@ private constructor(val themeId: Int, @JvmField val mStyleId: Int) {
 
         private fun getThemeColors(themeName: String, themeStyle: String, context: Context, prefs: SharedPreferences, isNight: Boolean): Colors {
             val hasBorders = prefs.getBoolean(Settings.PREF_THEME_KEY_BORDERS, Defaults.PREF_THEME_KEY_BORDERS)
-            val backgroundImage = Settings.readUserBackgroundImage(context, isNight)
+            val backgroundImage = if (helium314.keyboard.fork.ForkSettings.BACKGROUND_IMAGE_ALLOWED)
+                Settings.readUserBackgroundImage(context, isNight) else null
             return when (themeName) {
                 THEME_DYNAMIC -> {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) DynamicColors(context, themeStyle, hasBorders, backgroundImage)

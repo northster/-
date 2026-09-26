@@ -162,13 +162,25 @@ open class SettingsActivity : ComponentActivity(), SharedPreferences.OnSharedPre
         enableEdgeToEdge()
     }
 
+    // fork: the system writes the selected / enabled keyboards to secure settings, sometimes after our
+    //  window regained focus, so we also listen to those settings directly
+    private val imeSettingsObserver = object : android.database.ContentObserver(android.os.Handler(android.os.Looper.getMainLooper())) {
+        override fun onChange(selfChange: Boolean) = updateImeSetupState()
+    }
+
     override fun onStart() {
         super.onStart()
         prefs.registerOnSharedPreferenceChangeListener(this)
+        contentResolver.registerContentObserver(
+            android.provider.Settings.Secure.getUriFor(android.provider.Settings.Secure.DEFAULT_INPUT_METHOD), false, imeSettingsObserver)
+        contentResolver.registerContentObserver(
+            android.provider.Settings.Secure.getUriFor(android.provider.Settings.Secure.ENABLED_INPUT_METHODS), false, imeSettingsObserver)
+        updateImeSetupState()
     }
 
     override fun onStop() {
         prefs.unregisterOnSharedPreferenceChangeListener(this)
+        contentResolver.unregisterContentObserver(imeSettingsObserver)
         super.onStop()
     }
 
@@ -187,7 +199,12 @@ open class SettingsActivity : ComponentActivity(), SharedPreferences.OnSharedPre
     override fun onWindowFocusChanged(hasFocus: Boolean) {
         super.onWindowFocusChanged(hasFocus)
         // the input method picker is a dialog, closing it does not resume the activity
-        if (hasFocus) updateImeSetupState()
+        if (hasFocus) {
+            updateImeSetupState()
+            // the setting may be written a moment later
+            window.decorView.postDelayed({ updateImeSetupState() }, 500)
+            window.decorView.postDelayed({ updateImeSetupState() }, 1500)
+        }
     }
 
     private fun updateImeSetupState() {

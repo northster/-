@@ -1,7 +1,8 @@
 [
 // fork: Samsung keyboard style bottom row
-//  alphabet: !#1 | 한/영 | space | . | enter
-//  symbols:  ABC | 한/영 | emoji | space | . | enter
+//  alphabet: !#1 | language switch | space | . | enter
+//  symbols:  ABC | language switch | emoji | space | . | enter
+//  the language switch key follows Settings > Keys > language switch key
   [
     { "label": "shift", "width": 0.15 },
     { "type": "placeholder" },
@@ -12,7 +13,7 @@
       "dpad": { "label": "symbol", "width": 0.15 },
       "default": { "label": "symbol_alpha", "width": 0.15 }
     },
-    { "label": "한/영", "code": -227, "type": "function", "labelFlags": 16720 },
+    { "$": "keyboard_state_selector", "languageKeyEnabled": { "label": "language_switch" } },
     { "$": "keyboard_state_selector", "symbols": { "label": "emoji" }, "moreSymbols": { "label": "emoji" } },
     { "$": "variation_selector",
       "email": { "label": "@", "labelFlags": 1073741824, "groupId": 1, "type": "function" },

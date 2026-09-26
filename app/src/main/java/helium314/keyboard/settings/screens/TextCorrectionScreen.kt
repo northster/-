@@ -72,30 +72,10 @@ fun TextCorrectionScreen(
         R.string.settings_category_space,
         Settings.PREF_KEY_USE_DOUBLE_SPACE_PERIOD,
         Settings.PREF_AUTOSPACE_AFTER_PUNCTUATION,
-        Settings.PREF_AUTOSPACE_AFTER_SUGGESTION,
         if (gestureEnabled) Settings.PREF_AUTOSPACE_BEFORE_GESTURE_TYPING else null,
         if (gestureEnabled) Settings.PREF_AUTOSPACE_AFTER_GESTURE_TYPING else null,
         Settings.PREF_SHIFT_REMOVES_AUTOSPACE,
-        R.string.settings_category_suggestions,
-        if (suggestionsVisible) Settings.PREF_SHOW_SUGGESTIONS else null,
-        if (suggestionsEnabled) Settings.PREF_ALWAYS_SHOW_SUGGESTIONS else null,
-        if (suggestionsEnabled && prefs.getBoolean(Settings.PREF_ALWAYS_SHOW_SUGGESTIONS, Defaults.PREF_ALWAYS_SHOW_SUGGESTIONS))
-            Settings.PREF_ALWAYS_SHOW_SUGGESTIONS_EXCEPT_WEB_TEXT else null,
-        if (suggestionsEnabled) Settings.PREF_CENTER_SUGGESTION_TEXT_TO_ENTER else null,
-        if (suggestionsEnabled || autocorrectEnabled) Settings.PREF_SUGGEST_EMOJIS else null,
-        if (suggestionsEnabled || autocorrectEnabled) Settings.PREF_INLINE_EMOJI_SEARCH else null,
-        Settings.PREF_KEY_USE_PERSONALIZED_DICTS,
-        Settings.PREF_BIGRAM_PREDICTIONS,
-        Settings.PREF_SUGGEST_PUNCTUATION,
-        if (prefs.getBoolean(Settings.PREF_SUGGEST_PUNCTUATION, Defaults.PREF_SUGGEST_PUNCTUATION))
-            Settings.PREF_PUNCTUATION_SUGGESTIONS else null,
-        Settings.PREF_SUGGEST_CLIPBOARD_CONTENT,
-        Settings.PREF_USE_CONTACTS,
-        Settings.PREF_USE_APPS,
-        if (prefs.getBoolean(Settings.PREF_KEY_USE_PERSONALIZED_DICTS, Defaults.PREF_KEY_USE_PERSONALIZED_DICTS))
-            Settings.PREF_ADD_TO_PERSONAL_DICTIONARY else null,
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
-            Settings.PREF_SPELLCHECK_SUGGEST else null,
+        // fork: word suggestions and everything that only feeds them are removed (ForkSettings.SUGGESTIONS_ALLOWED)
     )
     SearchSettingsScreen(
         onClickBack = onClickBack,

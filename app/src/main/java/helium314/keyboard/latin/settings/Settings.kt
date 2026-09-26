@@ -22,6 +22,8 @@ fun customIconIds(context: Context, prefs: SharedPreferences) = customIconNames(
 
 /** Derive an index from a number of boolean [settingValues], used to access the matching default value in a defaults arraY */
 fun findIndexOfDefaultSetting(vararg settingValues: Boolean): Int {
+    // fork: the same values are used on every screen (cover / main display, portrait / landscape, split)
+    if (helium314.keyboard.fork.ForkSettings.SINGLE_SIZE_PROFILE) return 0
     var i = -1
     return settingValues.sumOf { i++; if (it) 1.shl(i) else 0 }
 }

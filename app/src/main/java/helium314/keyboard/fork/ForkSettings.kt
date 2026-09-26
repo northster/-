@@ -22,6 +22,13 @@ object ForkSettings {
     const val SPACE_LONG_PRESS_CURSOR = true
     /** Show the language name on the space bar. Samsung style shows only the space icon. */
     const val LANGUAGE_ON_SPACEBAR = false
+    /** One set of size values (height, paddings, gaps, split...) for every screen, no per-orientation / fold variants. */
+    const val SINGLE_SIZE_PROFILE = true
+    /** Keyboard background images. Removed from settings. */
+    const val BACKGROUND_IMAGE_ALLOWED = false
+    /** Word suggestions (suggestion strip candidates). Removed from settings. */
+    const val SUGGESTIONS_ALLOWED = false
+    const val PREF_SHOW_KEYBOARD_PREVIEW = "fork_show_keyboard_preview"
 
     // ---- preference keys ----
     const val PREF_TOOLBAR_SWIPE_ENABLED = "fork_toolbar_swipe_enabled"

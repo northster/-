@@ -75,23 +75,7 @@ fun SearchSettingsScreen(
                         Modifier.verticalScroll(rememberScrollState()).then(Modifier.padding(innerPadding))
                             .padding(bottom = 24.dp)
                     ) {
-                        // fork: shadcn style, settings between two categories are grouped in one card
-                        val sections = mutableListOf<Pair<Int?, MutableList<String>>>()
-                        settings.forEach {
-                            when (it) {
-                                is Int -> sections.add(it to mutableListOf())
-                                is String -> {
-                                    if (sections.isEmpty()) sections.add(null to mutableListOf())
-                                    sections.last().second.add(it)
-                                }
-                            }
-                        }
-                        sections.forEach { (title, keys) ->
-                            val rows = keys.mapNotNull { key ->
-                                SettingsActivity.settingsContainer[key]?.let { setting -> @Composable { setting.Preference() } }
-                            }
-                            SettingsSection(title?.let { stringResource(it) }, rows)
-                        }
+                        SettingsSections(settings)
                     }
                     // lazyColumn has janky scroll for a while (not sure why compose gets smoother after a while)
                     // maybe related to unnecessary recompositions? but even for just displaying text it's there
@@ -257,5 +241,26 @@ fun ExpandableSearchField(
             textStyle = contentTextDirectionStyle,
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search)
         )
+    }
+}
+
+/** fork: shadcn style, settings between two categories (Int string res ids) are grouped in one card */
+@Composable
+fun SettingsSections(settings: List<Any?>) {
+    val sections = mutableListOf<Pair<Int?, MutableList<String>>>()
+    settings.forEach {
+        when (it) {
+            is Int -> sections.add(it to mutableListOf())
+            is String -> {
+                if (sections.isEmpty()) sections.add(null to mutableListOf())
+                sections.last().second.add(it)
+            }
+        }
+    }
+    sections.forEach { (title, keys) ->
+        val rows = keys.mapNotNull { key ->
+            SettingsActivity.settingsContainer[key]?.let { setting -> @Composable { setting.Preference() } }
+        }
+        SettingsSection(title?.let { stringResource(it) }, rows)
     }
 }

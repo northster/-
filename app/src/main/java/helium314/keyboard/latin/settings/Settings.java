@@ -429,13 +429,15 @@ public final class Settings implements SharedPreferences.OnSharedPreferenceChang
     }
 
     public void writeSplitKeyboardEnabled(boolean enabled, boolean isLandscape, boolean isFolded) {
-        String pref = isLandscape
+        String pref = helium314.keyboard.fork.ForkSettings.SINGLE_SIZE_PROFILE ? PREF_ENABLE_SPLIT_KEYBOARD : isLandscape
                         ? (isFolded ? PREF_ENABLE_SPLIT_KEYBOARD_FOLDED_LANDSCAPE : PREF_ENABLE_SPLIT_KEYBOARD_LANDSCAPE)
                         : (isFolded ? PREF_ENABLE_SPLIT_KEYBOARD_FOLDED : PREF_ENABLE_SPLIT_KEYBOARD);
         mPrefs.edit().putBoolean(pref, enabled).apply();
     }
 
     public static boolean readSplitKeyboardEnabled(SharedPreferences prefs, boolean isLandscape, boolean isFolded) {
+        if (helium314.keyboard.fork.ForkSettings.SINGLE_SIZE_PROFILE) // fork: one setting for every screen
+            return prefs.getBoolean(PREF_ENABLE_SPLIT_KEYBOARD, Defaults.PREF_ENABLE_SPLIT_KEYBOARD);
         String pref = isLandscape
                       ? (isFolded ? PREF_ENABLE_SPLIT_KEYBOARD_FOLDED_LANDSCAPE : PREF_ENABLE_SPLIT_KEYBOARD_LANDSCAPE)
                       : (isFolded ? PREF_ENABLE_SPLIT_KEYBOARD_FOLDED : PREF_ENABLE_SPLIT_KEYBOARD);
