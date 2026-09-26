@@ -20,6 +20,8 @@ object ForkSettings {
     const val VERTICAL_SPACE_SWIPE_ALLOWED = false
     /** Long press space, then drag to move the cursor. */
     const val SPACE_LONG_PRESS_CURSOR = true
+    /** Show the language name on the space bar. Samsung style shows only the space icon. */
+    const val LANGUAGE_ON_SPACEBAR = false
 
     // ---- preference keys ----
     const val PREF_TOOLBAR_SWIPE_ENABLED = "fork_toolbar_swipe_enabled"

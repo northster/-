@@ -38,6 +38,10 @@ public final class LanguageOnSpacebarUtils {
         if (subtype.isNoLanguage()) {
             return FORMAT_TYPE_FULL_LOCALE;
         }
+        // fork: Samsung style, only the space icon
+        if (!helium314.keyboard.fork.ForkSettings.LANGUAGE_ON_SPACEBAR) {
+            return FORMAT_TYPE_NONE;
+        }
         // Only this subtype is enabled and equals to the system locale.
         if (sEnabledSubtypes.size() < 2 && sIsSystemLanguageSameAsInputLanguage && Settings.getValues().mSecondaryLocales.isEmpty()) {
             return FORMAT_TYPE_NONE;

@@ -166,7 +166,7 @@ class KeyboardIconsSet private constructor() {
             NAME_SHIFT_KEY_SHIFTED to           R.drawable.sym_keyboard_shift_lxx,
             NAME_SHIFT_KEY_LOCKED to            R.drawable.sym_keyboard_shift_lock_lxx,
             NAME_DELETE_KEY to                  R.drawable.sym_keyboard_delete_lxx,
-//            NAME_SPACE_KEY to                   null,
+            NAME_SPACE_KEY to                   R.drawable.sym_keyboard_space_samsung, // fork
             NAME_ENTER_KEY to                   R.drawable.sym_keyboard_return_lxx,
             NAME_GO_KEY to                      R.drawable.sym_keyboard_go_lxx,
             NAME_SEARCH_KEY to                  R.drawable.sym_keyboard_search_lxx,

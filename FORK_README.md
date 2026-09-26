@@ -99,6 +99,12 @@ Windows는 `scripts/adb-wireless-test.ps1 -Target 192.168.0.12:41234 -Apk .\DTKe
 - 기호 2/2 페이지(`more_symbols/symbols_shifted.txt`)는 `+ × ÷ = < > { } [ ]`, `€ £ ¥ ₩ / ~ ` ¤ ° ♡`, `_ \ | 《 》 ¡ ¿`로 구성된다.
 - 한국어와 영어가 기본으로 켜져 있고 `한/영` 키로 전환한다(`SubtypeSettings.getDefaultEnabledSubtypes`).
 - 폴드 내부 화면(태블릿 크기)에서도 같은 레이아웃을 쓰도록 태블릿용 기능키와 추가 키를 껐다.
+- 외관 기본값
+  - 색상 테마는 `Samsung dark`/`Samsung light`이고 시스템 다크 모드를 따른다(`KeyboardTheme.kt`).
+  - 다크는 스크린샷에서 측정했다: 배경 `#0A0A0A`, 글자 키 `#303030`, 기능 키(Shift, ⌫, !#1, 한/영, 엔터) `#1B1B1B`, 글자 흰색, 숫자 힌트 `#9E9E9E`.
+  - 라이트는 스크린샷이 없어서 근사값이다.
+  - 키는 테두리 켬, 5dp 둥근 모서리, 아래 그림자 없음이다. 키 간격은 1.5배로 넓혔다.
+  - 스페이스바에는 언어 이름 대신 ⎵ 아이콘만 표시한다(`ForkSettings.LANGUAGE_ON_SPACEBAR`). 엔터 키도 강조색이 아니라 기능 키 색이다.
 
 ## 6. 이후 기능을 붙일 자리 (이번 단계에서는 구현하지 않음)
 - **폴드8 내부 화면 스플릿 키보드**: HeliBoard에 이미 접힘/펼침 상태별 스플릿 설정(`Settings.PREF_ENABLE_SPLIT_KEYBOARD`, `..._FOLDED`, `..._LANDSCAPE`)과 `FoldableUtils`가 있다. 이걸 출발점으로 삼는다. 조건 판단은 `fork/`에 새 클래스로 둔다.

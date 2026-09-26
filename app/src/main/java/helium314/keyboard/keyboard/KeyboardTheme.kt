@@ -65,7 +65,11 @@ private constructor(val themeId: Int, @JvmField val mStyleId: Int) {
         const val THEME_PINK = "pink"
         const val THEME_SAND = "sand"
         const val THEME_VIOLETTE = "violette"
+        // fork: Samsung keyboard look, the defaults
+        const val THEME_SAMSUNG_LIGHT = "samsung_light"
+        const val THEME_SAMSUNG_DARK = "samsung_dark"
         fun getAvailableDefaultColors(prefs: SharedPreferences, isNight: Boolean) = listOfNotNull(
+            if (!isNight) THEME_SAMSUNG_LIGHT else null, THEME_SAMSUNG_DARK,
             if (!isNight) THEME_LIGHT else null, THEME_DARK,
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) THEME_DYNAMIC else null,
             if (prefs.getString(Settings.PREF_THEME_STYLE, Defaults.PREF_THEME_STYLE) == STYLE_HOLO) THEME_HOLO_WHITE else null,
@@ -323,6 +327,33 @@ private constructor(val themeId: Int, @JvmField val mStyleId: Int) {
                     Color.BLACK,
                     Color.BLACK,
                     keyboardBackground = backgroundImage
+                )
+                // fork: dark colors measured from a Samsung keyboard screenshot, light is an approximation
+                THEME_SAMSUNG_DARK -> DefaultColors(
+                    themeStyle,
+                    hasBorders,
+                    "#3E91FF".toColorInt(), // accent: shift lock, selected emoji category...
+                    "#0A0A0A".toColorInt(), // keyboard background
+                    "#303030".toColorInt(), // letter keys
+                    "#1B1B1B".toColorInt(), // functional keys
+                    "#303030".toColorInt(), // space
+                    Color.WHITE,
+                    "#9E9E9E".toColorInt(), // number hints
+                    keyboardBackground = backgroundImage,
+                    actionKey = "#1B1B1B".toColorInt(),
+                )
+                THEME_SAMSUNG_LIGHT -> DefaultColors(
+                    themeStyle,
+                    hasBorders,
+                    "#3E91FF".toColorInt(),
+                    "#F0F0F0".toColorInt(),
+                    Color.WHITE,
+                    "#DADADA".toColorInt(),
+                    Color.WHITE,
+                    "#1A1A1A".toColorInt(),
+                    "#7A7A7A".toColorInt(),
+                    keyboardBackground = backgroundImage,
+                    actionKey = "#DADADA".toColorInt(),
                 )
                 THEME_VIOLETTE -> DefaultColors(
                     themeStyle,
