@@ -17,6 +17,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import helium314.keyboard.event.HapticEvent;
+import helium314.keyboard.fork.ForkSettings;
+import helium314.keyboard.fork.gesture.VerticalSwipeDetector;
 import helium314.keyboard.keyboard.internal.BatchInputArbiter;
 import helium314.keyboard.keyboard.internal.BatchInputArbiter.BatchInputArbiterListener;
 import helium314.keyboard.keyboard.internal.BogusMoveEventDetector;
@@ -173,6 +175,11 @@ public final class PointerTracker implements PointerTrackerQueue.Element,
 
     // Touchpad mode for cursor control
     private final TouchpadHandler mTouchpadHandler = new TouchpadHandler();
+
+    // fork: vertical swipe anywhere on the keys expands / collapses the dynamic toolbar
+    private final VerticalSwipeDetector mToolbarSwipeDetector = new VerticalSwipeDetector();
+    // fork: space was long pressed, moving the finger moves the cursor until the pointer goes up
+    private boolean mInSpaceCursorMode = false;
 
     private final BatchInputArbiter mBatchInputArbiter;
     private final GestureStrokeDrawingPoints mGestureStrokeDrawingPoints;
@@ -677,8 +684,18 @@ public final class PointerTracker implements PointerTrackerQueue.Element,
                 sPointerTrackerQueue.releaseAllPointers(eventTime);
             }
         }
+        // fork: a second finger means fast typing, not a toolbar swipe
+        final boolean isOnlyPointer = sPointerTrackerQueue.size() == 0;
+        if (!isOnlyPointer) abortAllToolbarSwipes();
         sPointerTrackerQueue.add(this);
         onDownEventInternal(x, y, eventTime);
+        if (isOnlyPointer && key != null && mCurrentKey != null && !mIsTrackingForActionDisabled
+                && ForkSettings.isToolbarSwipeEnabled()) {
+            mToolbarSwipeDetector.onDown(x, y, eventTime,
+                    ForkSettings.swipeThresholds(Resources.getSystem().getDisplayMetrics().density));
+        } else {
+            mToolbarSwipeDetector.abort();
+        }
         if (!sGestureEnabler.shouldHandleGesture()) {
             return;
         }
@@ -805,10 +822,78 @@ public final class PointerTracker implements PointerTrackerQueue.Element,
         }
     }
 
+    private static void abortAllToolbarSwipes() {
+        final int trackersSize = sTrackers.size();
+        for (int i = 0; i < trackersSize; ++i) {
+            sTrackers.get(i).mToolbarSwipeDetector.abort();
+        }
+    }
+
+    /**
+     * fork: the pointer was recognized as a vertical swipe. Cancel whatever the key would have done
+     * on release and let the listener expand / collapse the toolbar.
+     */
+    private void onToolbarSwipe(final boolean up) {
+        sTimerProxy.cancelKeyTimersOf(this); // long press, key repeat
+        final Key key = mCurrentKey;
+        boolean finishSliding = mIsInSlidingKeyInput; // finger slid from a modifier onto other keys
+        if (key != null) {
+            setReleasedKeyGraphics(key, false);
+            if (key.isModifier() && !mIsTrackingForActionDisabled) {
+                // modifiers (shift, symbols) act on press: release them like after sliding off,
+                // and finish sliding input, which restores the previous state
+                callListenerOnRelease(key, key.getCode(), true);
+                finishSliding = true;
+            }
+        }
+        if (finishSliding) {
+            callListenerOnFinishSlidingInput();
+        }
+        resetKeySelectionByDraggingFinger();
+        if (mKeySwipeAllowed) {
+            mKeySwipeAllowed = false;
+            sInKeySwipe = false;
+            mTouchpadHandler.disableTouchpadMode();
+        }
+        mCurrentKey = null;
+        cancelTrackingForAction(); // nothing will be input on up
+        sListener.onToolbarSwipe(up);
+    }
+
+    /** fork: long press on space -> move cursor by dragging, until the finger goes up */
+    private void enterSpaceCursorMode() {
+        mToolbarSwipeDetector.abort();
+        sTimerProxy.cancelKeyTimersOf(this);
+        mInSpaceCursorMode = true;
+        mKeySwipeAllowed = true;
+        sInKeySwipe = true;
+        mInHorizontalSwipe = true; // horizontal only, vertical movement is ignored
+        mInVerticalSwipe = false;
+        mStartX = mLastX;
+        mStartY = mLastY;
+        sListener.onCustomRequest(KeyboardActionListener.CustomAction.TOUCHPAD_ON); // visual feedback
+    }
+
     private void onMoveEvent(final int x, final int y, final long eventTime, final MotionEvent me) {
         if (DEBUG_MOVE_EVENT) {
             printTouchEvent("onMoveEvent:", x, y, eventTime);
         }
+        // fork: toolbar swipe detection has priority over everything else except already running gestures.
+        // It runs even if key tracking was disabled (e.g. finger slid onto the next key row before the
+        // swipe was recognized), the key input is cancelled anyway in that case.
+        if (mToolbarSwipeDetector.isTracking()) {
+            if (isShowingPopupKeysPanel() || mInSpaceCursorMode || mInHorizontalSwipe || mInVerticalSwipe
+                    || mCurrentRepeatingKeyCode != Constants.NOT_A_CODE || sInGesture) {
+                mToolbarSwipeDetector.abort(); // some other gesture already owns this pointer
+            } else {
+                final VerticalSwipeDetector.Result result = mToolbarSwipeDetector.onMove(x, y, eventTime);
+                if (result == VerticalSwipeDetector.Result.SWIPE_UP || result == VerticalSwipeDetector.Result.SWIPE_DOWN) {
+                    onToolbarSwipe(result == VerticalSwipeDetector.Result.SWIPE_UP);
+                    return;
+                }
+            }
+        }
+
         if (mIsTrackingForActionDisabled) {
             return;
         }
@@ -939,6 +1024,13 @@ public final class PointerTracker implements PointerTrackerQueue.Element,
     }
 
     private void onKeySwipe(final int code, final int x, final int y, final long eventTime) {
+        if (mInSpaceCursorMode) { // fork: space long press cursor movement, independent of swipe settings
+            final int steps = (x - mStartX) / sPointerStep;
+            if (steps != 0 && sListener.onSpaceCursorMove(steps)) {
+                mStartX += steps * sPointerStep;
+            }
+            return;
+        }
         final SettingsValues sv = Settings.getValues();
         final int fastTypingTimeout = 2 * sv.mKeyLongpressTimeout / 3;
         // we don't want keyswipes to start immediately if the user is fast-typing,
@@ -1099,6 +1191,11 @@ public final class PointerTracker implements PointerTrackerQueue.Element,
             return;
         }
 
+        mToolbarSwipeDetector.abort();
+        if (mInSpaceCursorMode) {
+            mInSpaceCursorMode = false;
+            sListener.onCustomRequest(KeyboardActionListener.CustomAction.TOUCHPAD_OFF);
+        }
         if (mKeySwipeAllowed) {
             mKeySwipeAllowed = false;
             sInKeySwipe = false;
@@ -1162,6 +1259,12 @@ public final class PointerTracker implements PointerTrackerQueue.Element,
         }
         final int code = key.getCode();
         sListener.onLongPressKey(code);
+        mToolbarSwipeDetector.abort();
+        if (code == Constants.CODE_SPACE && ForkSettings.SPACE_LONG_PRESS_CURSOR && key.getPopupKeys() == null) {
+            setReleasedKeyGraphics(key, false);
+            enterSpaceCursorMode();
+            return;
+        }
         if (key.hasNoPanelAutoPopupKey()) {
             cancelKeyTracking();
             final int popupKeyCode = key.getPopupKeys()[0].mCode;
@@ -1219,6 +1322,14 @@ public final class PointerTracker implements PointerTrackerQueue.Element,
     }
 
     private void onCancelEventInternal() {
+        mToolbarSwipeDetector.abort();
+        if (mInSpaceCursorMode) {
+            mInSpaceCursorMode = false;
+            mKeySwipeAllowed = false;
+            sInKeySwipe = false;
+            mInHorizontalSwipe = false;
+            sListener.onCustomRequest(KeyboardActionListener.CustomAction.TOUCHPAD_OFF);
+        }
         sTimerProxy.cancelKeyTimersOf(this);
         setReleasedKeyGraphics(mCurrentKey, true);
         resetKeySelectionByDraggingFinger();

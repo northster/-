@@ -125,6 +125,11 @@ public interface KeyboardActionListener {
     void onUpWithDeletePointerActive();
     void resetMetaState();
 
+    /** fork: vertical swipe on the key area, up = expand toolbar, down = collapse */
+    void onToolbarSwipe(boolean up);
+    /** fork: finger moved while in space long press cursor mode. @return true if the steps were consumed */
+    boolean onSpaceCursorMove(int steps);
+
     KeyboardActionListener EMPTY_LISTENER = new Adapter();
 
     enum SwipeAction { NONE, MOVE_CURSOR, SWITCH_LANGUAGE, TOGGLE_NUMPAD, TOGGLE_DPAD, HIDE_KEYBOARD, TOUCHPAD_MODE }
@@ -183,5 +188,11 @@ public interface KeyboardActionListener {
         public void onUpWithDeletePointerActive() {}
         @Override
         public void resetMetaState() {}
+        @Override
+        public void onToolbarSwipe(boolean up) {}
+        @Override
+        public boolean onSpaceCursorMove(int steps) {
+            return false;
+        }
     }
 }

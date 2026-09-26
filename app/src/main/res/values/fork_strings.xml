@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- SPDX-License-Identifier: GPL-3.0-only -->
+<resources>
+    <string name="fork_toolbar_clipboard">Clipboard</string>
+    <string name="fork_toolbar_ai">AI</string>
+    <string name="fork_toolbar_translate">Translate</string>
+    <string name="fork_toolbar_more">More</string>
+    <string name="fork_toolbar_placeholder">%s (placeholder)</string>
+
+    <string name="fork_settings_screen">Dynamic toolbar</string>
+    <string name="fork_toolbar_swipe_enabled">Swipe on keys to show / hide toolbar</string>
+    <string name="fork_toolbar_swipe_enabled_summary">Swipe up on any key to expand the toolbar, swipe down to collapse it</string>
+    <string name="fork_swipe_min_distance">Minimum swipe distance</string>
+    <string name="fork_swipe_min_velocity">Minimum swipe speed</string>
+    <string name="fork_swipe_max_angle">Maximum angle from vertical</string>
+    <string name="fork_swipe_horizontal_reject">Horizontal movement that cancels a swipe</string>
+    <string name="fork_swipe_max_duration">Maximum swipe duration</string>
+    <string name="fork_toolbar_overlay">Toolbar overlays the app</string>
+    <string name="fork_toolbar_overlay_summary">Don\'t resize the app when the toolbar is shown. No layout jump in the app, but the toolbar covers the bottom of it</string>
+    <string name="fork_toolbar_anim_duration">Animation duration</string>
+    <string name="fork_unit_dp">%s dp</string>
+    <string name="fork_unit_dp_per_s">%s dp/s</string>
+    <string name="fork_unit_degrees">%s°</string>
+</resources>

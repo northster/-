@@ -12,6 +12,13 @@
     <include
         android:id="@+id/fakeToast"
         layout="@layout/fake_toast" />
+    <!-- fork: dynamic toolbar, drawn behind the keyboard frame and moved above it by DynamicToolbarController -->
+    <helium314.keyboard.fork.toolbar.DynamicToolbarView
+        android:id="@+id/dynamic_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/fork_dynamic_toolbar_height"
+        android:layout_gravity="bottom"
+        android:visibility="invisible" />
     <include
         android:id="@+id/main_keyboard_frame"
         layout="@layout/main_keyboard_frame" />

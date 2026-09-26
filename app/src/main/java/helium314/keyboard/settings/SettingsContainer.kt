@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-only
 package helium314.keyboard.settings
 
+import helium314.keyboard.fork.settings.createDynamicToolbarSettings
 import android.content.Context
 import androidx.annotation.StringRes
 import androidx.compose.runtime.Composable
@@ -63,7 +64,7 @@ class Setting(
 
 // intentionally not putting individual debug settings in here so user knows the context
 private fun createSettings(context: Context) = createAboutSettings(context) + createAppearanceSettings(context) +
-        createCorrectionSettings(context) + createPreferencesSettings(context) + createToolbarSettings(context) +
+        createCorrectionSettings(context) + createPreferencesSettings(context) + createToolbarSettings(context) + createDynamicToolbarSettings(context) +
         createLayoutSettings(context) + createAdvancedSettings(context) +
         if (JniUtils.sHaveGestureLib) createGestureTypingSettings(context) else emptyList()
 

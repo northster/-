@@ -10,20 +10,32 @@ android {
     compileSdk = 37
 
     defaultConfig {
-        applicationId = "helium314.keyboard"
+        applicationId = "io.github.northster.dtkeyboard" // fork: must differ from HeliBoard to install side by side
         minSdk = 21
         targetSdk = 37
         versionCode = 4101
         versionName = "4.1"
         ndk {
             abiFilters.clear()
-            abiFilters.addAll(listOf("armeabi-v7a", "arm64-v8a", "x86", "x86_64"))
+            abiFilters.addAll(listOf("arm64-v8a", "x86_64")) // fork: Galaxy Z Fold (arm64) + emulator
         }
         proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
     }
 
+    // fork: fixed test key, so every CI build can be installed over the previous one.
+    // Only for testing, don't use this key for anything published.
+    signingConfigs {
+        create("dtTest") {
+            storeFile = rootProject.file("keystore/dt-test.jks")
+            storePassword = "dtkeyboard"
+            keyAlias = "dt-test"
+            keyPassword = "dtkeyboard"
+        }
+    }
+
     buildTypes {
         release {
+            signingConfig = signingConfigs.getByName("dtTest")
             isMinifyEnabled = true
             isShrinkResources = false
             isDebuggable = false
@@ -41,6 +53,7 @@ android {
             isMinifyEnabled = true
             isJniDebuggable = false
             applicationIdSuffix = ".debug"
+            signingConfig = signingConfigs.getByName("dtTest")
         }
         create("runTests") { // build variant for running tests on CI that skips tests known to fail
             isMinifyEnabled = false
@@ -65,7 +78,7 @@ android {
             }
             variant.outputs.forEach { output ->
                 if (output is com.android.build.api.variant.impl.VariantOutputImpl) {
-                    output.outputFileName = "HeliBoard_${defaultConfig.versionName}-${variant.buildType}.apk"
+                    output.outputFileName = "DTKeyboard_${defaultConfig.versionName}-${variant.buildType}.apk"
                 }
             }
         }

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- SPDX-License-Identifier: GPL-3.0-only -->
+<resources>
+    <string name="fork_toolbar_clipboard">클립보드</string>
+    <string name="fork_toolbar_ai">AI</string>
+    <string name="fork_toolbar_translate">번역</string>
+    <string name="fork_toolbar_more">더보기</string>
+    <string name="fork_toolbar_placeholder">%s (준비 중)</string>
+
+    <string name="fork_settings_screen">동적 툴바</string>
+    <string name="fork_toolbar_swipe_enabled">키 위 스와이프로 툴바 열기/닫기</string>
+    <string name="fork_toolbar_swipe_enabled_summary">아무 키에서 위로 쓸어올리면 펼침, 아래로 쓸어내리면 접힘</string>
+    <string name="fork_swipe_min_distance">최소 스와이프 거리</string>
+    <string name="fork_swipe_min_velocity">최소 스와이프 속도</string>
+    <string name="fork_swipe_max_angle">수직 기준 최대 각도</string>
+    <string name="fork_swipe_horizontal_reject">스와이프를 취소하는 가로 이동 거리</string>
+    <string name="fork_swipe_max_duration">최대 스와이프 시간</string>
+    <string name="fork_toolbar_overlay">툴바가 앱 위에 겹쳐 표시</string>
+    <string name="fork_toolbar_overlay_summary">툴바를 열어도 앱 크기를 바꾸지 않음. 앱 화면이 튀지 않지만 앱 하단을 가림</string>
+    <string name="fork_toolbar_anim_duration">애니메이션 시간</string>
+</resources>

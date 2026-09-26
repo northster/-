@@ -1,0 +1,61 @@
+name: DT Keyboard APK
+
+# Builds an installable APK on every push and publishes it as the "dev-latest" pre-release,
+# so it can be downloaded directly on the phone.
+on:
+  push:
+    branches: [ main, 'claude/**' ]
+    paths-ignore: [ '**.md', 'scripts/**' ]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: dt-build-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Unit tests (fork)
+        run: ./gradlew testDebugUnitTest --tests 'helium314.keyboard.fork.*' --stacktrace
+
+      - name: Build APK
+        run: ./gradlew assembleDebug --stacktrace
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: DTKeyboard-debug
+          path: app/build/outputs/apk/debug/*.apk
+
+      - name: Publish dev-latest pre-release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: dev-latest
+          name: DT Keyboard (latest dev build)
+          prerelease: true
+          target_commitish: ${{ github.sha }}
+          body: |
+            Built from ${{ github.ref_name }} @ ${{ github.sha }}
+            Install `DTKeyboard_*-debug.apk` (package io.github.northster.dtkeyboard.debug).
+          files: app/build/outputs/apk/debug/*.apk
+
+      - name: Archive reports for failed job
+        uses: actions/upload-artifact@v4
+        with:
+          name: reports
+          path: '*/build/reports'
+        if: ${{ failure() }}

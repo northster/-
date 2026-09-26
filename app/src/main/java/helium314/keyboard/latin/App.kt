@@ -3,6 +3,7 @@ package helium314.keyboard.latin
 
 import android.app.Application
 import android.os.Build
+import helium314.keyboard.fork.ForkSettings
 import helium314.keyboard.keyboard.emoji.SupportedEmojis
 import helium314.keyboard.latin.define.DebugFlags
 import helium314.keyboard.latin.settings.Defaults
@@ -23,6 +24,7 @@ class App : Application() {
         DebugFlags.init(this)
         FoldableUtils.init(this)
         Settings.init(this)
+        ForkSettings.init(this)
         SubtypeSettings.init(this)
 
         val scope = CoroutineScope(Dispatchers.Default)

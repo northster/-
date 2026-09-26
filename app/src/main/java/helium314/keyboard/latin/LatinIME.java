@@ -50,6 +50,7 @@ import helium314.keyboard.keyboard.internal.keyboard_parser.floris.KeyCode;
 import helium314.keyboard.latin.common.InsetsOutlineProvider;
 import helium314.keyboard.dictionarypack.DictionaryPackConstants;
 import helium314.keyboard.event.Event;
+import helium314.keyboard.fork.toolbar.DynamicToolbarController;
 import helium314.keyboard.event.InputTransaction;
 import helium314.keyboard.keyboard.Keyboard;
 import helium314.keyboard.keyboard.KeyboardId;
@@ -139,6 +140,12 @@ public class LatinIME extends InputMethodService implements
 
     // TODO: Move these {@link View}s to {@link KeyboardSwitcher}.
     private View mInputView;
+    // fork: toolbar above the keyboard, expanded / collapsed by vertical swipes on the keys
+    private DynamicToolbarController mDynamicToolbar;
+
+    public DynamicToolbarController getDynamicToolbar() {
+        return mDynamicToolbar;
+    }
     private InsetsOutlineProvider mInsetsUpdater;
     private SuggestionStripView mSuggestionStripView;
 
@@ -546,6 +553,7 @@ public class LatinIME extends InputMethodService implements
 
     @Override
     public void onCreate() {
+        mDynamicToolbar = new DynamicToolbarController(this);
         mSettings.startListener();
         KeyboardIconsSet.Companion.getInstance().loadIcons(this);
         mRichImm = RichInputMethodManager.getInstance();
@@ -771,6 +779,7 @@ public class LatinIME extends InputMethodService implements
     public void setInputView(final View view) {
         super.setInputView(view);
         mInputView = view;
+        mDynamicToolbar.attach(view);
         mInsetsUpdater = ViewOutlineProviderUtilsKt.setInsetsOutlineProvider(view);
         KtxKt.updateSoftInputWindowLayoutParameters(this, mInputView);
         updateSuggestionStripView(view);
@@ -1222,7 +1231,7 @@ public class LatinIME extends InputMethodService implements
         // Need to set expanded touchable region only if a keyboard view is being shown.
         if (visibleKeyboardView.isShown()) {
             int touchLeft = 0;
-            int touchTop = mKeyboardSwitcher.isShowingPopupKeysPanel() ? 0 : visibleTopY;
+            int touchTop = mKeyboardSwitcher.isShowingPopupKeysPanel() ? 0 : Math.min(visibleTopY, mDynamicToolbar.touchableTop()); // fork: toolbar above keyboard
             int touchRight = visibleKeyboardView.getWidth();
             int touchBottom = inputHeight + EXTENDED_TOUCHABLE_REGION_HEIGHT; // Extend touchable region below the keyboard.
             if (mSettings.getCurrent().mIsFloatingKeyboard) {
@@ -1238,6 +1247,7 @@ public class LatinIME extends InputMethodService implements
 
         // Has to be subtracted after calculating touchableRegion
         visibleTopY -= getEmojiSearchActivityHeight();
+        visibleTopY = Math.min(visibleTopY, mDynamicToolbar.insetTop()); // fork: resize app for toolbar
 
         outInsets.contentTopInsets = visibleTopY;
         outInsets.visibleTopInsets = visibleTopY;

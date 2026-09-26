@@ -278,6 +278,13 @@ class KeyboardActionListenerImpl(private val latinIME: LatinIME, private val inp
         metaState = 0
     }
 
+    override fun onToolbarSwipe(up: Boolean) {
+        performHapticFeedback(HapticEvent.GESTURE_MOVE)
+        latinIME.dynamicToolbar.onSwipe(up)
+    }
+
+    override fun onSpaceCursorMove(steps: Int): Boolean = onMoveCursorHorizontally(steps)
+
     private fun onLanguageSlide(steps: Int): Boolean {
         if (abs(steps) < settings.current.mLanguageSwipeDistance) return false
         val subtypes = SubtypeSettings.getEnabledSubtypes(true)
