@@ -162,9 +162,10 @@ class KeyboardIconsSet private constructor() {
         } }
 
         private val keyboardIconsMaterial by lazy { hashMapOf(
-            NAME_SHIFT_KEY to                   R.drawable.sym_keyboard_shift_lxx,
-            NAME_SHIFT_KEY_SHIFTED to           R.drawable.sym_keyboard_shift_lxx,
-            NAME_SHIFT_KEY_LOCKED to            R.drawable.sym_keyboard_shift_lock_lxx,
+            // fork: Samsung style outline / filled shift arrows
+            NAME_SHIFT_KEY to                   R.drawable.sym_keyboard_shift_samsung,
+            NAME_SHIFT_KEY_SHIFTED to           R.drawable.sym_keyboard_shifted_samsung,
+            NAME_SHIFT_KEY_LOCKED to            R.drawable.sym_keyboard_shift_lock_samsung,
             NAME_DELETE_KEY to                  R.drawable.sym_keyboard_delete_lxx,
             NAME_SPACE_KEY to                   R.drawable.sym_keyboard_space_samsung, // fork
             NAME_ENTER_KEY to                   R.drawable.sym_keyboard_return_lxx,

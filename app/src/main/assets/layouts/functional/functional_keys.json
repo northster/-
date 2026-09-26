@@ -12,14 +12,14 @@
       "dpad": { "label": "symbol", "width": 0.15 },
       "default": { "label": "symbol_alpha", "width": 0.15 }
     },
-    { "label": "한/영", "code": -227, "type": "function", "labelFlags": 16592 },
+    { "label": "한/영", "code": -227, "type": "function", "labelFlags": 16720 },
     { "$": "keyboard_state_selector", "symbols": { "label": "emoji" }, "moreSymbols": { "label": "emoji" } },
     { "$": "variation_selector",
       "email": { "label": "@", "labelFlags": 1073741824, "groupId": 1, "type": "function" },
       "uri":   { "label": "/", "labelFlags": 1073741824, "groupId": 1, "type": "function" }
     },
     { "label": "space" },
-    { "label": "period", "labelFlags": 1073741824 },
+    { "label": "period", "type": "normal", "labelFlags": 1073741824 },
     { "label": "action", "width": 0.15, "labelFlags": 1073741824 }
   ]
 ]

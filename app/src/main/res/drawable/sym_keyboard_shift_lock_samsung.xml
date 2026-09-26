@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- SPDX-License-Identifier: GPL-3.0-only -->
+<!-- fork: Samsung style shift icon -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp" android:height="24dp"
+    android:viewportWidth="24" android:viewportHeight="24">
+    <path android:strokeColor="#FFFFFFFF" android:strokeWidth="1.6" android:strokeLineJoin="round" android:fillColor="#FFFFFFFF" android:pathData="M12,2.5 L3.8,11 L8.2,11 L8.2,16.5 L15.8,16.5 L15.8,11 L20.2,11 Z" />
+    <path android:fillColor="#FFFFFFFF" android:pathData="M7.4,19 h9.2 v1.8 h-9.2 z" />
+</vector>

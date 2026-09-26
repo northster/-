@@ -87,18 +87,18 @@ object Defaults {
     @JvmField
     val PREF_SPLIT_SPACER_SCALE = Array(4) { DEFAULT_SIZE_SCALE }
     @JvmField
-    val PREF_KEYBOARD_HEIGHT_SCALE = Array(4) { DEFAULT_SIZE_SCALE }
+    val PREF_KEYBOARD_HEIGHT_SCALE = Array(4) { 0.74f } // fork: key height like Samsung keyboard
     @JvmField
     val PREF_BOTTOM_ROW_SCALE = Array(4) { DEFAULT_SIZE_SCALE }
     @JvmField
     // DEFAULT_SIZE_SCALE for portrait, 0 for landscape (normal and folded)
     val PREF_BOTTOM_PADDING_SCALE = arrayOf(DEFAULT_SIZE_SCALE, 0f, DEFAULT_SIZE_SCALE, 0f)
     @JvmField
-    val PREF_SIDE_PADDING_SCALE = Array(8) { 0f }
+    val PREF_SIDE_PADDING_SCALE = Array(8) { 0.17f } // fork: Samsung style side margin (~1.4% of width)
     @JvmField
     val PREF_KEY_GAP_SCALE = Array(4) { 1.5f } // fork: Samsung style wider gaps
-    const val PREF_FONT_SCALE = DEFAULT_SIZE_SCALE
-    const val PREF_HINT_FONT_SCALE = DEFAULT_SIZE_SCALE
+    const val PREF_FONT_SCALE = 0.85f // fork: Samsung letter size
+    const val PREF_HINT_FONT_SCALE = 0.85f // fork: Samsung number hint size
     const val PREF_EMOJI_FONT_SCALE = DEFAULT_SIZE_SCALE
     const val PREF_EMOJI_KEY_FIT = true
     const val PREF_EMOJI_SKIN_TONE = ""
