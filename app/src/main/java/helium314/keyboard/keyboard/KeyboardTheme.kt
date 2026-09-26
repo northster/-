@@ -119,6 +119,9 @@ private constructor(val themeId: Int, @JvmField val mStyleId: Int) {
 
         @JvmStatic
         fun getKeyboardTheme(context: Context): KeyboardTheme {
+            // fork: theme files always draw their own keys on the material + borders base
+            if (helium314.keyboard.fork.ForkSettings.THEME_FILES)
+                return KEYBOARD_THEMES.first { it.themeId == THEME_ID_LXX_BASE_BORDER }
             val prefs = context.prefs()
             val style = prefs.getString(Settings.PREF_THEME_STYLE, Defaults.PREF_THEME_STYLE)
             val borders = prefs.getBoolean(Settings.PREF_THEME_KEY_BORDERS, Defaults.PREF_THEME_KEY_BORDERS)
@@ -145,6 +148,12 @@ private constructor(val themeId: Int, @JvmField val mStyleId: Int) {
                 prefs.getString(Settings.PREF_THEME_COLORS, Defaults.PREF_THEME_COLORS)
             val themeStyle = prefs.getString(Settings.PREF_THEME_STYLE, Defaults.PREF_THEME_STYLE)
 
+            // fork: colors and key shapes come from the selected theme file
+            if (helium314.keyboard.fork.ForkSettings.THEME_FILES)
+                return helium314.keyboard.fork.theme.ForkColors(
+                    helium314.keyboard.fork.theme.DtThemeStore.active(prefs, isNight),
+                    context.resources.displayMetrics.density
+                )
             return getThemeColors(themeName!!, themeStyle!!, context, prefs, isNight)
         }
 

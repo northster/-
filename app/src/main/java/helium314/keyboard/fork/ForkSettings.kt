@@ -28,6 +28,8 @@ object ForkSettings {
     const val BACKGROUND_IMAGE_ALLOWED = false
     /** Word suggestions (suggestion strip candidates). Removed from settings. */
     const val SUGGESTIONS_ALLOWED = false
+    /** Keyboard look comes from editable theme files (fork/theme) instead of HeliBoard's color themes. */
+    const val THEME_FILES = true
     const val PREF_SHOW_KEYBOARD_PREVIEW = "fork_show_keyboard_preview"
 
     // ---- preference keys ----

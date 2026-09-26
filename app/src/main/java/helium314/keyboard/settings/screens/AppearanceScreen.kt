@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: GPL-3.0-only
 package helium314.keyboard.settings.screens
 
+import helium314.keyboard.fork.settings.KeyboardPreviewScaffold
+import helium314.keyboard.fork.settings.ForkThemeSettings
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.only
@@ -89,14 +91,11 @@ fun AppearanceScreen(
     //  background images are removed, one size profile for every screen (ForkSettings.SINGLE_SIZE_PROFILE)
     val items = listOf(
         R.string.settings_screen_theme,
-        Settings.PREF_THEME_STYLE,
-        Settings.PREF_ICON_STYLE,
-        Settings.PREF_CUSTOM_ICON_NAMES,
-        Settings.PREF_THEME_KEY_BORDERS,
+        // fork: colors and key shapes are edited in theme files, style / borders / color themes are fixed
+        ForkThemeSettings.THEME_FILES,
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)
             Settings.PREF_THEME_DAY_NIGHT else null,
-        Settings.PREF_THEME_COLORS,
-        Settings.PREF_THEME_COLORS_NIGHT,
+        Settings.PREF_CUSTOM_ICON_NAMES,
         Settings.PREF_NAVBAR_COLOR,
         R.string.fork_cat_size,
         Settings.PREF_KEYBOARD_HEIGHT_SCALE_PREFIX,
@@ -116,61 +115,12 @@ fun AppearanceScreen(
         Settings.PREF_EMOJI_KEY_FIT,
         Settings.PREF_EMOJI_SKIN_TONE,
     )
-    val showPreview = prefs.getBoolean(ForkSettings.PREF_SHOW_KEYBOARD_PREVIEW, false)
     SearchSettingsScreen(
         onClickBack = onClickBack,
         title = stringResource(R.string.settings_screen_appearance),
         settings = items
     ) {
-        Scaffold(
-            contentWindowInsets = WindowInsets.safeDrawing.only(WindowInsetsSides.Bottom),
-            bottomBar = { if (showPreview) KeyboardPreviewField() },
-        ) { innerPadding ->
-            Column(
-                Modifier.verticalScroll(rememberScrollState()).then(Modifier.padding(innerPadding)).padding(bottom = 24.dp)
-            ) {
-                SettingsSection(null, listOf {
-                    SwitchPreference(
-                        name = stringResource(R.string.fork_keyboard_preview),
-                        description = stringResource(R.string.fork_keyboard_preview_summary),
-                        key = ForkSettings.PREF_SHOW_KEYBOARD_PREVIEW,
-                        default = false,
-                    )
-                })
-                SettingsSections(items)
-            }
-        }
-    }
-}
-
-/** fork: focused text field at the bottom, keeps the keyboard open while adjusting the look */
-@Composable
-private fun KeyboardPreviewField() {
-    val focusRequester = remember { FocusRequester() }
-    val keyboardController = LocalSoftwareKeyboardController.current
-    var text by remember { mutableStateOf("") }
-    val s = LocalShadcn.current
-    LaunchedEffect(Unit) {
-        focusRequester.requestFocus()
-        keyboardController?.show()
-    }
-    Surface(color = MaterialTheme.colorScheme.background) {
-        Column(Modifier.imePadding().navigationBarsPadding()) {
-            HorizontalDivider(color = s.border)
-            OutlinedTextField(
-                value = text,
-                onValueChange = { text = it },
-                modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp).focusRequester(focusRequester),
-                placeholder = { Text(stringResource(R.string.fork_test_field_hint), color = s.mutedForeground) },
-                shape = MaterialTheme.shapes.medium,
-                singleLine = true,
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = s.ring,
-                    unfocusedBorderColor = s.input,
-                    cursorColor = s.foreground,
-                ),
-            )
-        }
+        KeyboardPreviewScaffold { SettingsSections(items) }
     }
 }
 

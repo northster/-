@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: GPL-3.0-only
 package helium314.keyboard.settings
 
+import helium314.keyboard.fork.settings.ThemeEditorScreen
+import helium314.keyboard.fork.settings.ThemeListScreen
 import helium314.keyboard.fork.settings.DynamicToolbarScreen
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInHorizontally
@@ -95,6 +97,12 @@ fun SettingsNavHost(
         composable(SettingsDestination.Toolbar) {
             ToolbarScreen(onClickBack = ::goBack)
         }
+        composable(SettingsDestination.ForkThemes) {
+            ThemeListScreen(onClickBack = ::goBack, onEdit = { navController.navigate(SettingsDestination.ForkThemeEditor + it) })
+        }
+        composable(SettingsDestination.ForkThemeEditor + "{id}") {
+            ThemeEditorScreen(themeId = it.arguments?.getString("id")!!, onClickBack = ::goBack)
+        }
         composable(SettingsDestination.DynamicToolbar) {
             DynamicToolbarScreen(onClickBack = ::goBack)
         }
@@ -157,6 +165,8 @@ object SettingsDestination {
     const val Toolbar = "toolbar"
     const val GestureTyping = "gesture_typing"
     const val DynamicToolbar = "fork_dynamic_toolbar"
+    const val ForkThemes = "fork_themes"
+    const val ForkThemeEditor = "fork_theme_editor/"
     const val DataGathering = "data_gathering" // remove when data gathering phase is done (end of 2026 latest)
     const val DataReview = "data_review" // remove when data gathering phase is done (end of 2026 latest)
     const val Advanced = "advanced"
