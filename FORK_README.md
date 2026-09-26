@@ -76,16 +76,19 @@ fork/
   콘텐츠 프로바이더 authority도 바꿨기 때문에 HeliBoard와 함께 설치할 수 있다.
 - ABI는 `arm64-v8a`(폴드8)와 `x86_64`(에뮬레이터)만 넣었다.
 - 서명은 저장소의 `keystore/dt-test.jks`(테스트 전용 고정 키)를 쓴다. 그래서 CI 빌드끼리 덮어쓰기 설치가 된다. **공개 배포에는 쓰지 말 것.**
-- GitHub Actions(`.github/workflows/dt-build.yml`)가 push마다 단위 테스트를 돌리고 APK를 빌드한다. 결과물은 저장소 Releases의 **`dev-latest`** 프리릴리스에 올라간다. 폰 브라우저에서 바로 받으면 된다.
+- GitHub Actions(`.github/workflows/dt-build.yml`)가 push마다 단위 테스트를 돌리고 APK를 빌드한다.
+  - 빌드마다 버전이 올라가는 릴리스(`dt-<번호>`, 버전 `4.1-dt.<번호>`)를 만들고, 최신 10개만 남긴다.
+  - 항상 최신 APK를 받는 고정 링크: https://github.com/northster/-/releases/latest/download/DTKeyboard-debug.apk
+  - 자동 업데이트: [Obtainium](https://github.com/ImranR98/Obtainium)에 `https://github.com/northster/-`를 추가하면 새 빌드를 알림으로 알려주고 설치한다(Android 12 이상은 백그라운드 자동 설치 가능).
 - 로컬 빌드: Android SDK와 NDK 28이 있는 환경에서 `./gradlew assembleDebug`
 
 ## 4. 무선 디버깅 테스트 (`scripts/adb-wireless-test.sh`)
 폰과 PC가 같은 Wi-Fi에 있어야 하고, 폰에서 개발자 옵션 > 무선 디버깅을 켠다.
 ```
 scripts/adb-wireless-test.sh --pair 192.168.0.12:37123 123456   # 최초 1회 페어링
-scripts/adb-wireless-test.sh 192.168.0.12:41234 DTKeyboard_4.1-debug.apk
+scripts/adb-wireless-test.sh 192.168.0.12:41234 DTKeyboard-debug.apk
 ```
-Windows는 `scripts/adb-wireless-test.ps1 -Target 192.168.0.12:41234 -Apk .\DTKeyboard_4.1-debug.apk`를 쓴다(페어링은 `-Pair ... -Code ...`).
+Windows는 `scripts/adb-wireless-test.ps1 -Target 192.168.0.12:41234 -Apk .\DTKeyboard-debug.apk`를 쓴다(페어링은 `-Pair ... -Code ...`).
 스크립트는 다음 순서로 동작한다.
 1. 폰 알림창과 PC에 **"테스트 시작"** 알림을 띄운다.
 2. 앱을 설치하고, IME를 활성화하고 기본 키보드로 지정한다.

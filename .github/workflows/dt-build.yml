@@ -33,6 +33,8 @@ jobs:
         run: ./gradlew testDebugUnitTest --tests 'helium314.keyboard.fork.*' --stacktrace
 
       - name: Build APK
+        env:
+          DT_BUILD_NUMBER: ${{ github.run_number }}
         run: ./gradlew assembleDebug --stacktrace
 
       - name: Upload APK
@@ -41,17 +43,30 @@ jobs:
           name: DTKeyboard-debug
           path: app/build/outputs/apk/debug/*.apk
 
-      - name: Publish dev-latest pre-release
+      - name: Publish release
+        # one release per build with a rising version, newest is marked "latest":
+        #  - direct link: https://github.com/<repo>/releases/latest/download/DTKeyboard-debug.apk
+        #  - Obtainium can track the repo and update automatically
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: dev-latest
-          name: DT Keyboard (latest dev build)
-          prerelease: true
+          tag_name: dt-${{ github.run_number }}
+          name: DT Keyboard 4.1-dt.${{ github.run_number }}
           target_commitish: ${{ github.sha }}
+          make_latest: true
           body: |
+            ${{ github.event.head_commit.message }}
+
             Built from ${{ github.ref_name }} @ ${{ github.sha }}
-            Install `DTKeyboard_*-debug.apk` (package io.github.northster.dtkeyboard.debug).
           files: app/build/outputs/apk/debug/*.apk
+
+      - name: Keep only the newest 10 builds
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release list --limit 100 --json tagName --jq '.[].tagName' \
+            | grep -E '^dt-[0-9]+$' | sort -t- -k2 -n -r | tail -n +11 \
+            | xargs -r -I{} gh release delete {} --yes --cleanup-tag
+          gh release delete dev-latest --yes --cleanup-tag || true
 
       - name: Archive reports for failed job
         uses: actions/upload-artifact@v4

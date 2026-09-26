@@ -13,8 +13,10 @@ android {
         applicationId = "io.github.northster.dtkeyboard" // fork: must differ from HeliBoard to install side by side
         minSdk = 21
         targetSdk = 37
-        versionCode = 4101
-        versionName = "4.1"
+        // fork: CI passes its run number, so every build is a higher version (needed for auto-updaters like Obtainium)
+        val dtBuild = System.getenv("DT_BUILD_NUMBER")?.toIntOrNull() ?: 0
+        versionCode = 4101 * 1000 + dtBuild
+        versionName = "4.1-dt.$dtBuild"
         ndk {
             abiFilters.clear()
             abiFilters.addAll(listOf("arm64-v8a", "x86_64")) // fork: Galaxy Z Fold (arm64) + emulator
@@ -78,7 +80,7 @@ android {
             }
             variant.outputs.forEach { output ->
                 if (output is com.android.build.api.variant.impl.VariantOutputImpl) {
-                    output.outputFileName = "DTKeyboard_${defaultConfig.versionName}-${variant.buildType}.apk"
+                    output.outputFileName = "DTKeyboard-${variant.buildType}.apk" // fork: fixed name, so releases/latest/download/... always works
                 }
             }
         }

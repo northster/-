@@ -1,7 +1,7 @@
 # DT Keyboard: install + smoke test over wireless debugging (Windows PowerShell)
 # Usage:
 #   .\scripts\adb-wireless-test.ps1 -Pair 192.168.0.12:37123 -Code 123456   # first time only
-#   .\scripts\adb-wireless-test.ps1 -Target 192.168.0.12:41234 -Apk .\DTKeyboard_4.1-debug.apk
+#   .\scripts\adb-wireless-test.ps1 -Target 192.168.0.12:41234 -Apk .\DTKeyboard-debug.apk
 param(
     [string]$Target,
     [string]$Apk,
