@@ -41,12 +41,11 @@ import helium314.keyboard.latin.utils.Log
 import helium314.keyboard.latin.utils.getActivity
 import helium314.keyboard.latin.utils.prefs
 import helium314.keyboard.settings.SettingsActivity
-import helium314.keyboard.settings.SettingsSection
-import helium314.keyboard.settings.preferences.SwitchPreference
 
 /**
- * fork: screen content with the "Show keyboard" switch on top. When it's on, a focused text field
- * sits at the bottom so the real keyboard stays open and every change can be seen right away.
+ * fork: screen content for screens with the keyboard preview toggle ([KeyboardPreviewToggle] in the top bar).
+ * When it's on, a focused text field sits at the bottom so the real keyboard stays open and every change
+ * can be seen right away.
  */
 @Composable
 fun KeyboardPreviewScaffold(content: @Composable ColumnScope.() -> Unit) {
@@ -62,14 +61,6 @@ fun KeyboardPreviewScaffold(content: @Composable ColumnScope.() -> Unit) {
         Column(
             Modifier.verticalScroll(rememberScrollState()).then(Modifier.padding(innerPadding)).padding(bottom = 24.dp)
         ) {
-            SettingsSection(null, listOf {
-                SwitchPreference(
-                    name = stringResource(R.string.fork_keyboard_preview),
-                    description = stringResource(R.string.fork_keyboard_preview_summary),
-                    key = ForkSettings.PREF_SHOW_KEYBOARD_PREVIEW,
-                    default = false,
-                )
-            })
             content()
         }
     }
@@ -102,5 +93,29 @@ private fun KeyboardPreviewField() {
                 ),
             )
         }
+    }
+}
+
+/** Top bar button that keeps the keyboard open at the bottom of the screen. */
+@Composable
+fun KeyboardPreviewToggle() {
+    val ctx = LocalContext.current
+    val prefs = ctx.prefs()
+    val b = (ctx.getActivity() as? SettingsActivity)?.prefChanged?.collectAsState()
+    if ((b?.value ?: 0) < 0)
+        Log.v("irrelevant", "stupid way to trigger recomposition on preference change")
+    val on = prefs.getBoolean(ForkSettings.PREF_SHOW_KEYBOARD_PREVIEW, false)
+    val s = LocalShadcn.current
+    androidx.compose.material3.IconButton(
+        onClick = { prefs.edit().putBoolean(ForkSettings.PREF_SHOW_KEYBOARD_PREVIEW, !on).apply() },
+        colors = androidx.compose.material3.IconButtonDefaults.iconButtonColors(
+            containerColor = if (on) s.primary else androidx.compose.ui.graphics.Color.Transparent,
+            contentColor = if (on) s.primaryForeground else s.foreground,
+        ),
+    ) {
+        androidx.compose.material3.Icon(
+            androidx.compose.ui.res.painterResource(R.drawable.ic_fork_keyboard),
+            stringResource(R.string.fork_keyboard_preview),
+        )
     }
 }

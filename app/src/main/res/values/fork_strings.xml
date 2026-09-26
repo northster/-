@@ -32,7 +32,7 @@
     <string name="fork_desc_preferences">Hints, long press, vibration, sound, extra keys, clipboard</string>
     <string name="fork_desc_correction">Auto correction, capitalization, spacing, personal dictionary</string>
     <string name="fork_desc_dictionaries">Add or manage dictionaries</string>
-    <string name="fork_desc_appearance">Theme, colors, keyboard height, fonts</string>
+    <string name="fork_desc_appearance">Keyboard height, spacing, fonts</string>
     <string name="fork_desc_layouts">Symbols, numbers and functional key layouts</string>
     <string name="fork_desc_dynamic_toolbar">Swipe gesture, animation, app resize</string>
     <string name="fork_desc_toolbar">Suggestion strip and toolbar keys of the original keyboard</string>
@@ -63,7 +63,7 @@
     <string name="fork_theme_files_summary">Pick a saved theme or edit its colors and key shapes</string>
     <string name="fork_theme_saved">Saved themes</string>
     <string name="fork_theme_new">New theme</string>
-    <string name="fork_theme_list_hint">A new theme starts as a copy of the current theme. Tap a theme to edit it.</string>
+    <string name="fork_theme_list_hint">Pick a theme above, its colors and shapes are edited below. \"New theme\" copies the selected one.</string>
     <string name="fork_theme_rename">Rename</string>
     <string name="fork_theme_duplicate">Duplicate</string>
     <string name="fork_theme_edit">Edit</string>
@@ -99,4 +99,7 @@
     <string name="fork_shape_key_radius">Key corner radius</string>
     <string name="fork_shape_border_width">Key border width</string>
     <string name="fork_shape_enter_radius">Enter key corner radius</string>
+    <string name="fork_theme_colors">Theme &amp; colors</string>
+    <string name="fork_desc_theme_colors">Pick a theme, edit colors and key shapes</string>
+    <string name="fork_theme_cat_display">Display</string>
 </resources>

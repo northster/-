@@ -29,7 +29,7 @@
     <string name="fork_desc_preferences">힌트, 길게 누르기, 진동, 소리, 추가 키, 클립보드</string>
     <string name="fork_desc_correction">자동 수정, 자동 대문자, 띄어쓰기, 개인 사전</string>
     <string name="fork_desc_dictionaries">사전 추가 및 관리</string>
-    <string name="fork_desc_appearance">테마, 색상, 키보드 높이, 글꼴</string>
+    <string name="fork_desc_appearance">키보드 높이, 간격, 글꼴</string>
     <string name="fork_desc_layouts">기호, 숫자, 기능 키 레이아웃</string>
     <string name="fork_desc_dynamic_toolbar">스와이프 제스처, 애니메이션, 앱 화면 이동</string>
     <string name="fork_desc_toolbar">원래 키보드의 제안 줄과 툴바 키</string>
@@ -60,7 +60,7 @@
     <string name="fork_theme_files_summary">저장된 테마를 고르거나 색상과 키 모양을 편집</string>
     <string name="fork_theme_saved">저장된 테마</string>
     <string name="fork_theme_new">새 테마</string>
-    <string name="fork_theme_list_hint">새 테마는 현재 테마를 복사해서 시작해요. 테마를 누르면 편집할 수 있어요.</string>
+    <string name="fork_theme_list_hint">위에서 테마를 고르면 아래에서 색상과 모양을 편집해요. \"새 테마\"는 선택한 테마를 복사해요.</string>
     <string name="fork_theme_rename">이름 변경</string>
     <string name="fork_theme_duplicate">복제</string>
     <string name="fork_theme_edit">편집</string>
@@ -96,4 +96,7 @@
     <string name="fork_shape_key_radius">키 모서리 둥글기</string>
     <string name="fork_shape_border_width">키 테두리 두께</string>
     <string name="fork_shape_enter_radius">엔터 키 모서리 둥글기</string>
+    <string name="fork_theme_colors">테마 및 색상</string>
+    <string name="fork_desc_theme_colors">테마 선택, 색상과 키 모양 편집</string>
+    <string name="fork_theme_cat_display">표시</string>
 </resources>

@@ -60,11 +60,13 @@ fun SearchSettingsScreen(
     onClickBack: () -> Unit,
     title: String,
     settings: List<Any?>,
+    extraActions: @Composable (() -> Unit)? = null, // fork: e.g. the keyboard preview toggle
     content: @Composable (ColumnScope.() -> Unit)? = null // overrides settings if not null
 ) {
     SearchScreen(
         onClickBack = onClickBack,
         title = { Text(title) },
+        extraActions = extraActions,
         content = {
             if (content != null) content()
             else {
@@ -110,6 +112,7 @@ fun <T: Any?> SearchScreen(
     itemContent: @Composable (T) -> Unit,
     icon: @Composable (() -> Unit)? = null,
     menu: List<Pair<String, () -> Unit>>? = null,
+    extraActions: @Composable (() -> Unit)? = null,
     content: @Composable (ColumnScope.() -> Unit)? = null,
 ) {
     // searchText and showSearch should have the same remember or rememberSaveable
@@ -143,6 +146,7 @@ fun <T: Any?> SearchScreen(
                             }
                         },
                         actions = {
+                            extraActions?.invoke()
                             if (icon == null)
                                 IconButton(onClick = { setShowSearch(!showSearch) }) { SearchIcon() }
                             else

@@ -66,6 +66,7 @@ fun MainSettingsScreen(
     onClickDataGathering: () -> Unit,
     onClickAdvanced: () -> Unit,
     onClickAppearance: () -> Unit,
+    onClickThemeColors: () -> Unit,
     onClickLanguage: () -> Unit,
     onClickLayouts: () -> Unit,
     onClickDictionaries: () -> Unit,
@@ -122,6 +123,8 @@ fun MainSettingsScreen(
                     else null,
                 ))
                 SettingsSection(stringResource(R.string.fork_main_look), listOf(
+                    entry(R.string.fork_theme_colors, stringResource(R.string.fork_desc_theme_colors),
+                        R.drawable.ic_settings_appearance, onClickThemeColors),
                     entry(R.string.settings_screen_appearance, stringResource(R.string.fork_desc_appearance),
                         R.drawable.ic_settings_appearance, onClickAppearance),
                     entry(R.string.settings_screen_secondary_layouts, stringResource(R.string.fork_desc_layouts),
@@ -187,7 +190,7 @@ private fun PreviewScreen() {
     initPreview(LocalContext.current)
     Theme(previewDark) {
         Surface {
-            MainSettingsScreen({}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {})
+            MainSettingsScreen({}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {})
         }
     }
 }

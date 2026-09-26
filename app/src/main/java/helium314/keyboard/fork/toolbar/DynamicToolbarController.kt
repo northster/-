@@ -164,6 +164,18 @@ class DynamicToolbarController(private val context: Context) {
     }
 
     private fun onItemClicked(item: ToolbarItem) {
+        when (item.id) {
+            // opens / closes the clipboard history panel in place of the letters (like the clipboard key)
+            ToolbarItems.CLIPBOARD -> {
+                val listener = (context as? helium314.keyboard.latin.LatinIME)?.mKeyboardActionListener ?: return
+                listener.onCodeInput(
+                    helium314.keyboard.keyboard.internal.keyboard_parser.floris.KeyCode.CLIPBOARD,
+                    helium314.keyboard.latin.common.Constants.NOT_A_COORDINATE,
+                    helium314.keyboard.latin.common.Constants.NOT_A_COORDINATE, false
+                )
+                return
+            }
+        }
         // placeholders, real features will be dispatched from here
         val label = context.getString(item.label)
         KeyboardSwitcher.getInstance().showToast(context.getString(R.string.fork_toolbar_placeholder, label), true)

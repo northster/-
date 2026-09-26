@@ -58,6 +58,7 @@ import helium314.keyboard.settings.SearchSettingsScreen
 import helium314.keyboard.settings.Setting
 import helium314.keyboard.settings.SettingsDestination
 import helium314.keyboard.settings.SettingsSection
+import helium314.keyboard.settings.SettingsSections
 import helium314.keyboard.settings.ShadcnButton
 import helium314.keyboard.settings.dialogs.ConfirmationDialog
 import helium314.keyboard.settings.dialogs.TextInputDialog
@@ -81,117 +82,6 @@ fun createForkThemeSettings(context: Context) = listOf(
 
 private fun reloadKeyboard() = KeyboardSwitcher.getInstance().setThemeNeedsReload()
 
-// ------------------------------------------------------------------ theme list
-
-@Composable
-fun ThemeListScreen(onClickBack: () -> Unit, onEdit: (String) -> Unit) {
-    val prefs = LocalContext.current.prefs()
-    var version by remember { mutableStateOf(0) } // bumped on every change to re-read the store
-    fun changed() { version++; reloadKeyboard() }
-    SearchSettingsScreen(
-        onClickBack = onClickBack,
-        title = stringResource(R.string.fork_theme_files),
-        settings = emptyList(),
-    ) {
-        val themes = remember(version) { DtThemeStore.all(prefs) }
-        val lightId = remember(version) { DtThemeStore.activeId(prefs, false) }
-        val darkId = remember(version) { DtThemeStore.activeId(prefs, true) }
-        var rename by remember { mutableStateOf<DtTheme?>(null) }
-        var delete by remember { mutableStateOf<DtTheme?>(null) }
-        KeyboardPreviewScaffold {
-            SettingsSection(stringResource(R.string.fork_theme_saved), themes.map { theme ->
-                @Composable {
-                    ThemeRow(
-                        theme = theme,
-                        isLight = theme.id == lightId,
-                        isDark = theme.id == darkId,
-                        canDelete = themes.size > 1,
-                        onEdit = { onEdit(theme.id) },
-                        onUseLight = { DtThemeStore.setActive(prefs, theme.id, false); changed() },
-                        onUseDark = { DtThemeStore.setActive(prefs, theme.id, true); changed() },
-                        onDuplicate = {
-                            DtThemeStore.duplicate(prefs, theme, theme.name + " (2)")
-                            changed()
-                        },
-                        onRename = { rename = theme },
-                        onDelete = { delete = theme },
-                    )
-                }
-            })
-            Row(Modifier.fillMaxWidth().padding(16.dp), horizontalArrangement = Arrangement.End) {
-                ShadcnButton(stringResource(R.string.fork_theme_new), onClick = {
-                    val base = DtThemeStore.active(prefs, false)
-                    val copy = DtThemeStore.duplicate(prefs, base, base.name + " (2)")
-                    changed()
-                    onEdit(copy.id)
-                })
-            }
-            Text(
-                stringResource(R.string.fork_theme_list_hint),
-                style = MaterialTheme.typography.bodyMedium,
-                color = LocalShadcn.current.mutedForeground,
-                modifier = Modifier.padding(horizontal = 20.dp),
-            )
-        }
-        rename?.let { theme ->
-            TextInputDialog(
-                onDismissRequest = { rename = null },
-                onConfirmed = { DtThemeStore.save(prefs, theme.copy(name = it.trim().ifEmpty { theme.name })); changed() },
-                title = { Text(stringResource(R.string.fork_theme_rename)) },
-                initialText = theme.name,
-            )
-        }
-        delete?.let { theme ->
-            ConfirmationDialog(
-                onDismissRequest = { delete = null },
-                onConfirmed = { DtThemeStore.delete(prefs, theme.id); changed() },
-                content = { Text(stringResource(R.string.fork_theme_delete_confirm, theme.name)) },
-                confirmButtonText = stringResource(R.string.delete),
-            )
-        }
-    }
-}
-
-@Composable
-private fun ThemeRow(
-    theme: DtTheme, isLight: Boolean, isDark: Boolean, canDelete: Boolean,
-    onEdit: () -> Unit, onUseLight: () -> Unit, onUseDark: () -> Unit,
-    onDuplicate: () -> Unit, onRename: () -> Unit, onDelete: () -> Unit,
-) {
-    val s = LocalShadcn.current
-    var menu by remember { mutableStateOf(false) }
-    Row(
-        Modifier.fillMaxWidth().clickable(onClick = onEdit).padding(start = 16.dp, top = 10.dp, bottom = 10.dp, end = 4.dp),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        ThemeSwatch(theme)
-        Column(Modifier.weight(1f).padding(start = 14.dp)) {
-            Text(theme.name, style = MaterialTheme.typography.bodyLarge)
-            val tags = listOfNotNull(
-                if (isLight) stringResource(R.string.fork_theme_used_light) else null,
-                if (isDark) stringResource(R.string.fork_theme_used_dark) else null,
-            )
-            if (tags.isNotEmpty())
-                Text(tags.joinToString(" · "), style = MaterialTheme.typography.bodyMedium, color = s.mutedForeground)
-        }
-        Box {
-            IconButton(onClick = { menu = true }) {
-                Icon(painterResource(R.drawable.ic_arrow_left), stringResource(R.string.fork_theme_menu), Modifier.rotate(-90f))
-            }
-            DropdownMenu(expanded = menu, onDismissRequest = { menu = false }) {
-                DropdownMenuItem(text = { Text(stringResource(R.string.fork_theme_edit)) }, onClick = { menu = false; onEdit() })
-                DropdownMenuItem(text = { Text(stringResource(R.string.fork_theme_use_light)) }, onClick = { menu = false; onUseLight() })
-                DropdownMenuItem(text = { Text(stringResource(R.string.fork_theme_use_dark)) }, onClick = { menu = false; onUseDark() })
-                DropdownMenuItem(text = { Text(stringResource(R.string.fork_theme_duplicate)) }, onClick = { menu = false; onDuplicate() })
-                DropdownMenuItem(text = { Text(stringResource(R.string.fork_theme_rename)) }, onClick = { menu = false; onRename() })
-                if (canDelete)
-                    DropdownMenuItem(text = { Text(stringResource(R.string.delete), color = s.destructive) }, onClick = { menu = false; onDelete() })
-            }
-        }
-    }
-}
-
-/** tiny keyboard: board, two keys and the enter key */
 @Composable
 private fun ThemeSwatch(theme: DtTheme) {
     val s = LocalShadcn.current
@@ -236,16 +126,94 @@ private val toolbarSlots = listOf(
     ColorSlot(R.string.fork_color_toolbar_icon, { it.toolbarIcon }, { t, c -> t.copy(toolbarIcon = c) }),
 )
 
+/**
+ * fork: "Theme & colors": pick a saved theme at the top, edit its colors and key shapes below.
+ * Every change is saved to the theme file and redrawn on the keyboard right away.
+ */
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun ThemeEditorScreen(themeId: String, onClickBack: () -> Unit) {
+fun ThemeColorsScreen(onClickBack: () -> Unit) {
     val prefs = LocalContext.current.prefs()
-    var theme by remember(themeId) { mutableStateOf(DtThemeStore.get(prefs, themeId)) }
-    val current = theme ?: return onClickBack()
-    fun update(t: DtTheme) { theme = t; DtThemeStore.save(prefs, t); reloadKeyboard() }
+    val s = LocalShadcn.current
+    var version by remember { mutableStateOf(0) } // bumped on every change to re-read the store
+    fun changed() { version++; reloadKeyboard() }
+    val themes = remember(version) { DtThemeStore.all(prefs) }
+    val lightId = remember(version) { DtThemeStore.activeId(prefs, false) }
+    val darkId = remember(version) { DtThemeStore.activeId(prefs, true) }
+    val isNight = androidx.compose.foundation.isSystemInDarkTheme()
+    var selectedId by remember { mutableStateOf(if (isNight) darkId else lightId) }
+    val current = themes.firstOrNull { it.id == selectedId } ?: themes.first()
+    fun update(t: DtTheme) { DtThemeStore.save(prefs, t); changed() }
     var expanded by remember { mutableStateOf<Int?>(null) }
+    var rename by remember { mutableStateOf(false) }
+    var delete by remember { mutableStateOf(false) }
 
-    SearchSettingsScreen(onClickBack = onClickBack, title = current.name, settings = emptyList()) {
+    SearchSettingsScreen(
+        onClickBack = onClickBack,
+        title = stringResource(R.string.fork_theme_colors),
+        settings = emptyList(),
+        extraActions = { KeyboardPreviewToggle() },
+    ) {
         KeyboardPreviewScaffold {
+            // ---- theme selection
+            SettingsSection(stringResource(R.string.fork_theme_saved), listOf(
+                @Composable {
+                    FlowRow(
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        verticalArrangement = Arrangement.spacedBy(8.dp),
+                        modifier = Modifier.fillMaxWidth().padding(16.dp),
+                    ) {
+                        themes.forEach { theme ->
+                            val selected = theme.id == current.id
+                            Row(
+                                Modifier.clip(MaterialTheme.shapes.small)
+                                    .border(1.dp, if (selected) s.primary else s.border, MaterialTheme.shapes.small)
+                                    .background(if (selected) s.accent else Color.Transparent)
+                                    .clickable { selectedId = theme.id; expanded = null }
+                                    .padding(horizontal = 10.dp, vertical = 8.dp),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                            ) {
+                                ThemeSwatch(theme)
+                                Text(theme.name, style = MaterialTheme.typography.labelLarge)
+                            }
+                        }
+                    }
+                },
+                @Composable {
+                    UseAsRow(stringResource(R.string.fork_theme_use_light), current.id == lightId) {
+                        DtThemeStore.setActive(prefs, current.id, false); changed()
+                    }
+                },
+                @Composable {
+                    UseAsRow(stringResource(R.string.fork_theme_use_dark), current.id == darkId) {
+                        DtThemeStore.setActive(prefs, current.id, true); changed()
+                    }
+                },
+                @Composable {
+                    FlowRow(
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 8.dp),
+                    ) {
+                        OutlineButton(stringResource(R.string.fork_theme_new)) {
+                            val copy = DtThemeStore.duplicate(prefs, current, current.name + " (2)")
+                            selectedId = copy.id
+                            changed()
+                        }
+                        OutlineButton(stringResource(R.string.fork_theme_rename)) { rename = true }
+                        if (themes.size > 1)
+                            OutlineButton(stringResource(R.string.delete), destructive = true) { delete = true }
+                    }
+                },
+            ))
+            Text(
+                stringResource(R.string.fork_theme_list_hint),
+                style = MaterialTheme.typography.bodySmall,
+                color = s.mutedForeground,
+                modifier = Modifier.padding(horizontal = 20.dp, vertical = 6.dp),
+            )
+
+            // ---- editor for the selected theme
             fun colorRows(slots: List<ColorSlot>) = slots.map { slot ->
                 @Composable {
                     ColorRow(
@@ -280,7 +248,58 @@ fun ThemeEditorScreen(themeId: String, onClickBack: () -> Unit) {
             ))
             SettingsSection(stringResource(R.string.fork_theme_cat_accent), colorRows(accentSlots))
             SettingsSection(stringResource(R.string.fork_theme_cat_toolbar), colorRows(toolbarSlots))
+            // things that belong to the look but are not part of a theme file
+            SettingsSections(listOf(
+                R.string.fork_theme_cat_display,
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.P)
+                    helium314.keyboard.latin.settings.Settings.PREF_THEME_DAY_NIGHT else null,
+                helium314.keyboard.latin.settings.Settings.PREF_NAVBAR_COLOR,
+                helium314.keyboard.latin.settings.Settings.PREF_CUSTOM_ICON_NAMES,
+            ))
         }
+        if (rename)
+            TextInputDialog(
+                onDismissRequest = { rename = false },
+                onConfirmed = { update(current.copy(name = it.trim().ifEmpty { current.name })) },
+                title = { Text(stringResource(R.string.fork_theme_rename)) },
+                initialText = current.name,
+            )
+        if (delete)
+            ConfirmationDialog(
+                onDismissRequest = { delete = false },
+                onConfirmed = {
+                    DtThemeStore.delete(prefs, current.id)
+                    selectedId = DtThemeStore.activeId(prefs, isNight)
+                    changed()
+                },
+                content = { Text(stringResource(R.string.fork_theme_delete_confirm, current.name)) },
+                confirmButtonText = stringResource(R.string.delete),
+            )
+    }
+}
+
+/** "Use as default theme" / "Use in dark mode": a check mark when active, tap to assign */
+@Composable
+private fun UseAsRow(text: String, active: Boolean, onClick: () -> Unit) {
+    val s = LocalShadcn.current
+    Row(
+        Modifier.fillMaxWidth().clickable(enabled = !active, onClick = onClick).padding(horizontal = 16.dp, vertical = 14.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Text(text, style = MaterialTheme.typography.bodyLarge, modifier = Modifier.weight(1f))
+        helium314.keyboard.settings.ShadcnSwitch(checked = active, onCheckedChange = { if (it) onClick() }, enabled = !active)
+    }
+}
+
+/** shadcn "outline" button */
+@Composable
+private fun OutlineButton(text: String, destructive: Boolean = false, onClick: () -> Unit) {
+    val s = LocalShadcn.current
+    Box(
+        Modifier.clip(MaterialTheme.shapes.small).border(1.dp, s.border, MaterialTheme.shapes.small)
+            .clickable(onClick = onClick).padding(horizontal = 14.dp, vertical = 8.dp)
+    ) {
+        Text(text, style = MaterialTheme.typography.labelLarge, color = if (destructive) s.destructive else s.foreground)
     }
 }
 

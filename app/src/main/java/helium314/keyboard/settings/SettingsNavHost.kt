@@ -79,6 +79,7 @@ fun SettingsNavHost(
                 onClickDataGathering = { navController.navigate(SettingsDestination.DataGathering) },
                 onClickAdvanced = { navController.navigate(SettingsDestination.Advanced) },
                 onClickAppearance = { navController.navigate(SettingsDestination.Appearance) },
+                onClickThemeColors = { navController.navigate(SettingsDestination.ForkThemes) },
                 onClickLanguage = { navController.navigate(SettingsDestination.Languages) },
                 onClickLayouts = { navController.navigate(SettingsDestination.Layouts) },
                 onClickDictionaries = { navController.navigate(SettingsDestination.Dictionaries) },
@@ -98,10 +99,7 @@ fun SettingsNavHost(
             ToolbarScreen(onClickBack = ::goBack)
         }
         composable(SettingsDestination.ForkThemes) {
-            ThemeListScreen(onClickBack = ::goBack, onEdit = { navController.navigate(SettingsDestination.ForkThemeEditor + it) })
-        }
-        composable(SettingsDestination.ForkThemeEditor + "{id}") {
-            ThemeEditorScreen(themeId = it.arguments?.getString("id")!!, onClickBack = ::goBack)
+            ThemeColorsScreen(onClickBack = ::goBack)
         }
         composable(SettingsDestination.DynamicToolbar) {
             DynamicToolbarScreen(onClickBack = ::goBack)
@@ -166,7 +164,6 @@ object SettingsDestination {
     const val GestureTyping = "gesture_typing"
     const val DynamicToolbar = "fork_dynamic_toolbar"
     const val ForkThemes = "fork_themes"
-    const val ForkThemeEditor = "fork_theme_editor/"
     const val DataGathering = "data_gathering" // remove when data gathering phase is done (end of 2026 latest)
     const val DataReview = "data_review" // remove when data gathering phase is done (end of 2026 latest)
     const val Advanced = "advanced"

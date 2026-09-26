@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-only
 package helium314.keyboard.settings.screens
 
+import helium314.keyboard.fork.settings.KeyboardPreviewToggle
 import helium314.keyboard.fork.settings.KeyboardPreviewScaffold
 import helium314.keyboard.fork.settings.ForkThemeSettings
 import androidx.compose.foundation.layout.WindowInsets
@@ -90,13 +91,7 @@ fun AppearanceScreen(
     // fork: every option is visible (no conditional items), sliders and choices are shown inline,
     //  background images are removed, one size profile for every screen (ForkSettings.SINGLE_SIZE_PROFILE)
     val items = listOf(
-        R.string.settings_screen_theme,
-        // fork: colors and key shapes are edited in theme files, style / borders / color themes are fixed
-        ForkThemeSettings.THEME_FILES,
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)
-            Settings.PREF_THEME_DAY_NIGHT else null,
-        Settings.PREF_CUSTOM_ICON_NAMES,
-        Settings.PREF_NAVBAR_COLOR,
+        // fork: theme, colors, day / night and icons are in the separate "Theme & colors" screen
         R.string.fork_cat_size,
         Settings.PREF_KEYBOARD_HEIGHT_SCALE_PREFIX,
         Settings.PREF_BOTTOM_ROW_SCALE_PREFIX,
@@ -118,7 +113,8 @@ fun AppearanceScreen(
     SearchSettingsScreen(
         onClickBack = onClickBack,
         title = stringResource(R.string.settings_screen_appearance),
-        settings = items
+        settings = items,
+        extraActions = { KeyboardPreviewToggle() },
     ) {
         KeyboardPreviewScaffold { SettingsSections(items) }
     }
