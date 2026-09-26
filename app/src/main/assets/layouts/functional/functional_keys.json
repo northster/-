@@ -1,24 +1,24 @@
 [
+// fork: Samsung keyboard style bottom row
+//  alphabet: !#1 | 한/영 | space | . | enter
+//  symbols:  ABC | 한/영 | emoji | space | . | enter
   [
     { "label": "shift", "width": 0.15 },
     { "type": "placeholder" },
     { "label": "delete", "width": 0.15 }
   ],
   [
-    { "label": "symbol_alpha", "width": 0.15 },
-    { "$": "variation_selector",
-      "default":  { "label": "comma", "labelFlags": 1073741824 },
-      "email":    { "label": "@", "labelFlags": 1073741824, "groupId": 1, "type": "function" },
-      "uri":      { "label": "/", "labelFlags": 1073741824, "groupId": 1, "type": "function" }
-    },
-    { "$": "keyboard_state_selector", "languageKeyEnabled": { "$": "keyboard_state_selector", "alphabet": { "label": "language_switch" }}},
-    { "$": "keyboard_state_selector", "emojiKeyEnabled": { "$": "keyboard_state_selector", "alphabet": { "label": "emoji" }}},
-    { "$": "keyboard_state_selector", "symbols": { "label": "numpad" } },
-    { "label": "space" },
     { "$": "keyboard_state_selector",
-      "symbols": { "$": "keyboard_state_selector", "dpadKeyEnabled": { "label": "dpad" } },
-      "dpad": { "label": "symbol" }
+      "dpad": { "label": "symbol", "width": 0.15 },
+      "default": { "label": "symbol_alpha", "width": 0.15 }
     },
+    { "label": "한/영", "code": -227, "type": "function", "labelFlags": 16592 },
+    { "$": "keyboard_state_selector", "symbols": { "label": "emoji" }, "moreSymbols": { "label": "emoji" } },
+    { "$": "variation_selector",
+      "email": { "label": "@", "labelFlags": 1073741824, "groupId": 1, "type": "function" },
+      "uri":   { "label": "/", "labelFlags": 1073741824, "groupId": 1, "type": "function" }
+    },
+    { "label": "space" },
     { "label": "period", "labelFlags": 1073741824 },
     { "label": "action", "width": 0.15, "labelFlags": 1073741824 }
   ]

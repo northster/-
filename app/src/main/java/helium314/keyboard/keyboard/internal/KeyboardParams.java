@@ -276,6 +276,6 @@ public class KeyboardParams {
             keyAttr.recycle();
             keyboardAttr.recycle();
         }
-        setTabletExtraKeys = Settings.getInstance().isTablet() && !mId.getSubtype().isCustom();
+        setTabletExtraKeys = false; // fork: same Samsung style layout on phone and Fold main display
     }
 }

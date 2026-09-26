@@ -31,7 +31,7 @@ object Defaults {
         LayoutType.MAIN -> "qwerty"
         LayoutType.SYMBOLS -> "symbols"
         LayoutType.MORE_SYMBOLS -> "symbols_shifted"
-        LayoutType.FUNCTIONAL -> if (Settings.getInstance().isTablet) "functional_keys_tablet" else "functional_keys"
+        LayoutType.FUNCTIONAL -> "functional_keys" // fork: Samsung style bottom row also on Fold main display (tablet size)
         LayoutType.NUMBER -> "number"
         LayoutType.NUMBER_ROW -> "number_row"
         LayoutType.NUMPAD -> "numpad"

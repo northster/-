@@ -223,6 +223,11 @@ object SubtypeSettings {
             // get best match
                 ?: LocaleUtils.getBestMatch(locale, resourceSubtypesByLocale.keys) {it}?.let { resourceSubtypesByLocale[it] }
             subtypesOfLocale?.firstOrNull()
+        }.toMutableList()
+        // fork: like Samsung keyboard, Korean and English are enabled by default, toggled with the 한/영 key
+        for (locale in listOf(Locale.KOREAN, Locale.US)) {
+            if (subtypes.any { it.locale().language == locale.language }) continue
+            resourceSubtypesByLocale[locale]?.firstOrNull()?.let { subtypes.add(it) }
         }
         if (subtypes.isEmpty()) {
             // hardcoded fallback to en-US for weird cases

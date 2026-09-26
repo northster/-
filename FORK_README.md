@@ -90,8 +90,17 @@ Windows는 `scripts/adb-wireless-test.ps1 -Target 192.168.0.12:41234 -Apk .\DTKe
 3. 폰에서 텍스트 칸을 누르고 Enter를 치면 자동 제스처를 실행한다: 탭 → 빠른 위 스와이프 → 빠른 아래 스와이프 → 느린 위 드래그(열리면 안 됨) → 탭.
 4. logcat에서 펼침/접힘 횟수와 크래시를 집계해 **"테스트 완료 ✅/⚠️"** 알림을 띄운다. 로그는 `test-logs/`에 저장한다.
 
-## 5. 이후 기능을 붙일 자리 (이번 단계에서는 구현하지 않음)
-- **삼성 키보드 레이아웃**: `app/src/main/assets/layouts/main/`에 JSON 레이아웃을 추가한다(기존 `korean.json` 참고). 코드 변경은 필요 없다.
+## 5. 삼성 키보드 스타일 기본 레이아웃
+- 한글은 두벌식(`korean.json`, 삼성과 같은 자모 배치), 영문은 QWERTY이고, 윗줄에 숫자 힌트가 표시된다.
+- 맨 아래 줄은 `layouts/functional/functional_keys.json`에 있다.
+  - 문자 화면: `!#1 | 한/영 | 스페이스 | . | 엔터`
+  - 기호 화면: `ABC | 한/영 | 이모지 | 스페이스 | . | 엔터`
+- 기호 1/2 페이지(`symbols/symbols.txt`)는 숫자 줄, `! @ # $ % ^ & * ( )`, `- ' " : ; , ?`로 구성된다. 첫 줄은 숫자 줄로 바뀌고 그 문자들은 길게 누르기 팝업이 된다.
+- 기호 2/2 페이지(`more_symbols/symbols_shifted.txt`)는 `+ × ÷ = < > { } [ ]`, `€ £ ¥ ₩ / ~ ` ¤ ° ♡`, `_ \ | 《 》 ¡ ¿`로 구성된다.
+- 한국어와 영어가 기본으로 켜져 있고 `한/영` 키로 전환한다(`SubtypeSettings.getDefaultEnabledSubtypes`).
+- 폴드 내부 화면(태블릿 크기)에서도 같은 레이아웃을 쓰도록 태블릿용 기능키와 추가 키를 껐다.
+
+## 6. 이후 기능을 붙일 자리 (이번 단계에서는 구현하지 않음)
 - **폴드8 내부 화면 스플릿 키보드**: HeliBoard에 이미 접힘/펼침 상태별 스플릿 설정(`Settings.PREF_ENABLE_SPLIT_KEYBOARD`, `..._FOLDED`, `..._LANDSCAPE`)과 `FoldableUtils`가 있다. 이걸 출발점으로 삼는다. 조건 판단은 `fork/`에 새 클래스로 둔다.
 - **색상 커스터마이징**: HeliBoard `Colors`/`ColorType`와 사용자 색상 화면을 활용한다. 툴바는 이미 `ColorType`으로 칠해진다.
 - **WM Keyboard 기능 / 툴바 버튼 실제 동작**: `ToolbarItems`에 항목을 추가하고 `DynamicToolbarController.onItemClicked`에서 id별로 처리한다.
