@@ -419,5 +419,14 @@ private fun SmartTypedTester(title: String, description: String?) {
         val result = hit?.let { "${it.query} → ${it.result}" } ?: stringResource(R.string.fork_smart_found_nothing)
         val rates = if (smart.rates == null) " · " + stringResource(R.string.fork_smart_no_rates) else ""
         Text(result + rates, style = MaterialTheme.typography.bodyMedium, modifier = Modifier.padding(top = 8.dp))
+        // where and when the exchange rates are from
+        androidx.compose.runtime.LaunchedEffect(Unit) { helium314.keyboard.fork.smart.CurrencyRates.refreshIfOld(ctx) }
+        val fetched = helium314.keyboard.fork.smart.CurrencyRates.fetchedAt(ctx)
+        if (fetched > 0) {
+            val time = java.text.DateFormat.getDateTimeInstance(java.text.DateFormat.SHORT, java.text.DateFormat.SHORT).format(java.util.Date(fetched))
+            val source = helium314.keyboard.fork.smart.CurrencyRates.source(ctx).ifEmpty { "ExchangeRate-API" }
+            Text(stringResource(R.string.fork_smart_rates_from, source, time), style = MaterialTheme.typography.bodySmall,
+                color = s.mutedForeground, modifier = Modifier.padding(top = 4.dp))
+        }
     }
 }

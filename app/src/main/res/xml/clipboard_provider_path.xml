@@ -3,4 +3,8 @@
     <files-path
         name="clipboard_data"
         path="clipboard/"/>
+    <!-- fork: GIFs sent from the toolbar -->
+    <cache-path
+        name="gif"
+        path="gif/"/>
 </paths>

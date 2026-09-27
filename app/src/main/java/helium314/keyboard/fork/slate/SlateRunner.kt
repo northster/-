@@ -60,6 +60,7 @@ class SlateRunner(private val ime: LatinIME, private val ui: Ui) {
     }
 
     private fun execute(command: SlateCommand, text: String, preceding: String) {
+        SlateCommands.countUse(prefs, command.trigger)
         val name = command.trigger.removePrefix(SlateCommands.prefix(prefs))
         if (command.isBuiltIn) when {
             name == "undo" -> {

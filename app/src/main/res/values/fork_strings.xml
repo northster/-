@@ -276,7 +276,7 @@
     <string name="fork_smart_calc">Calculate while typing</string>
     <string name="fork_smart_calc_summary">"12*4" offers 48</string>
     <string name="fork_smart_currency">Currency conversion</string>
-    <string name="fork_smart_currency_summary">"10 dollars", "$10" or "5만원" offers the amount in won or dollars. Exchange rates are downloaded twice a day</string>
+    <string name="fork_smart_currency_summary">"10 dollars", "$10" or "5만원" offers the amount in won or dollars. Live rates from Coinbase, refreshed every hour</string>
     <string name="fork_smart_units">Unit conversion</string>
     <string name="fork_smart_units_summary">"1 ft" offers metres, "30평" square metres</string>
     <string name="fork_clip_pinned_only">Pinned clips only</string>
@@ -355,4 +355,16 @@
     <string name="fork_toolbar_settings">Settings</string>
     <string name="fork_glow_color">Glow color</string>
     <string name="fork_glow_color_default">Default (sky blue)</string>
+    <string name="fork_smart_rates_from">Rates: %1$s · as of %2$s</string>
+    <string name="fork_cat_gif">GIF</string>
+    <string name="fork_gif_klipy_key">KLIPY API key</string>
+    <string name="fork_gif_giphy_key">GIPHY API key</string>
+    <string name="fork_gif_key_none">Not set. A free key from %1$s</string>
+    <string name="fork_gif_key_help">Free key from %1$s. Stored encrypted.</string>
+    <string name="fork_gif_search_hint">Search GIFs</string>
+    <string name="fork_gif_no_key">Enter a KLIPY or GIPHY API key in the toolbar settings for GIFs</string>
+    <string name="fork_gif_failed">Couldn't load GIFs</string>
+    <string name="fork_gif_nothing">No GIFs found</string>
+    <string name="fork_gif_sending">Sending GIF…</string>
+    <string name="fork_gif_copied">This field takes no GIFs: copied to the clipboard</string>
 </resources>

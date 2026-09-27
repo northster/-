@@ -12,16 +12,18 @@ import java.net.HttpURLConnection
 import java.net.URL
 
 /**
- * Exchange rates for the currency chips, as units per USD, from keyless APIs: open.er-api.com, with
- * api.frankfurter.dev (European Central Bank rates) as the fallback. Fetched in the background at most every
- * [MAX_AGE_MILLIS], only while currency chips are on; the chips use the cached table and stay off without one.
+ * Exchange rates for the currency chips, as units per USD, from keyless APIs: Coinbase (live market rates, updated
+ * every minute), then open.er-api.com (daily) and api.frankfurter.dev (European Central Bank, working days) as
+ * fallbacks. Fetched in the background at most every [MAX_AGE_MILLIS], only while currency chips are on; the chips
+ * use the cached table and stay off without one.
  */
 object CurrencyRates {
     private const val TAG = "CurrencyRates"
     private const val PREF_TABLE = "fork_currency_rates"
     private const val PREF_TIME = "fork_currency_rates_time"
-    private const val MAX_AGE_MILLIS = 12 * 60 * 60 * 1000L
-    private const val RETRY_MILLIS = 30 * 60 * 1000L
+    private const val PREF_SOURCE = "fork_currency_rates_source"
+    private const val MAX_AGE_MILLIS = 60 * 60 * 1000L
+    private const val RETRY_MILLIS = 10 * 60 * 1000L
 
     @Volatile private var cached: Map<String, Double>? = null
     @Volatile private var fetching = false
@@ -34,6 +36,12 @@ object CurrencyRates {
         return runCatching { numbers(JSONObject(json)) }.getOrNull()?.takeIf { it.isNotEmpty() }?.also { cached = it }
     }
 
+    /** when the cached table was fetched (ms), 0 when never */
+    fun fetchedAt(context: Context): Long = context.prefs().getLong(PREF_TIME, 0)
+
+    /** where the cached table came from */
+    fun source(context: Context): String = context.prefs().getString(PREF_SOURCE, null).orEmpty()
+
     /** fetch in the background when the table is missing or old; cheap to call on every keyboard start */
     fun refreshIfOld(context: Context) {
         val prefs = context.prefs()
@@ -45,10 +53,13 @@ object CurrencyRates {
         val app = context.applicationContext
         Thread {
             try {
-                val table = runCatching { erApi() }.getOrElse { Log.w(TAG, "er-api failed", it); frankfurter() }
+                val (source, table) = runCatching { "Coinbase" to coinbase() }
+                    .recoverCatching { Log.w(TAG, "coinbase failed", it); "ExchangeRate-API" to erApi() }
+                    .getOrElse { Log.w(TAG, "er-api failed", it); "Frankfurter (ECB)" to frankfurter() }
                 app.prefs().edit {
                     putString(PREF_TABLE, JSONObject(table as Map<*, *>).toString())
                     putLong(PREF_TIME, System.currentTimeMillis())
+                    putString(PREF_SOURCE, source)
                 }
                 cached = table
                 Log.i(TAG, "rates updated, ${table.size} currencies")
@@ -58,6 +69,14 @@ object CurrencyRates {
                 fetching = false
             }
         }.start()
+    }
+
+    /** live rates; values are strings, which optDouble reads */
+    private fun coinbase(): Map<String, Double> {
+        val rates = JSONObject(get("https://api.coinbase.com/v2/exchange-rates?currency=USD")).getJSONObject("data").getJSONObject("rates")
+        val table = numbers(rates)
+        check(table.containsKey("KRW") && table.containsKey("EUR")) { "incomplete table" }
+        return table + ("USD" to 1.0)
     }
 
     private fun erApi(): Map<String, Double> {

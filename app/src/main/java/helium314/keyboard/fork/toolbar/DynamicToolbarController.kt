@@ -150,6 +150,7 @@ class DynamicToolbarController(private val context: Context) {
             it.addOnLayoutChangeListener(frameLayoutListener)
         }
         applyHeight()
+        newInputView.post { requestHighRefreshRate() } // attached to the display by then
         toolbar?.setItems(ToolbarItems.defaultItems, ToolbarItems.endItems, ::onItemClicked)
         refreshPasteChips()
         // restore persisted state without animation
@@ -545,6 +546,9 @@ class DynamicToolbarController(private val context: Context) {
         }
         if (hit == typedHit) return
         typedHit = hit
+        // an amount typed while the keyboard stayed open for a while: keep the rates within the hour
+        if (hit?.kind == helium314.keyboard.fork.smart.SmartSuggest.Kind.CURRENCY)
+            helium314.keyboard.fork.smart.CurrencyRates.refreshIfOld(context)
         if (hit == null) {
             typedSuppressed = false
             closeTyped()
@@ -702,9 +706,14 @@ class DynamicToolbarController(private val context: Context) {
             end = if (up) toolbarTop - thickness else kvBottom + thickness
         }
         wave.position = start
-        drawable.originX = kvLeft
-        drawable.originY = kvTop
-        kv.setForkOverlay(drawable)
+        // drawn by its own view over the keys: a frame redraws only the wave, not every key (120 Hz needs short frames)
+        val layer = waveLayerFor(kv) ?: return
+        layer.getLocationOnScreen(loc)
+        drawable.originX = loc[0].toFloat()
+        drawable.originY = loc[1].toFloat()
+        layer.drawable = drawable
+        layer.visibility = View.VISIBLE
+        layer.highFrameRate(true)
         waveAnimator = ValueAnimator.ofFloat(start, end).apply {
             duration = params.durationMs
             // a ripple slows down as it spreads out
@@ -712,10 +721,10 @@ class DynamicToolbarController(private val context: Context) {
                 else android.view.animation.LinearInterpolator()
             addUpdateListener {
                 wave.position = it.animatedValue as Float
-                kv.getLocationOnScreen(loc)
+                layer.getLocationOnScreen(loc)
                 drawable.originX = loc[0].toFloat()
                 drawable.originY = loc[1].toFloat()
-                kv.invalidateAllKeys()
+                layer.invalidate()
                 if (up && tb != null && tb.visibility == View.VISIBLE) tb.setWave(wave)
             }
             addListener(object : AnimatorListenerAdapter() {
@@ -731,14 +740,134 @@ class DynamicToolbarController(private val context: Context) {
         val a = waveAnimator
         waveAnimator = null
         a?.cancel()
-        KeyboardSwitcher.getInstance().mainKeyboardView?.setForkOverlay(null)
+        waveLayer?.let {
+            it.drawable = null
+            it.visibility = View.INVISIBLE
+            it.highFrameRate(false)
+        }
         toolbar?.setWave(null)
+    }
+
+    private var waveLayer: WaveLayer? = null
+
+    /** the wave layer on top of the keyboard view's parent, added the first time */
+    private fun waveLayerFor(kv: View): WaveLayer? {
+        val parent = kv.parent as? android.widget.FrameLayout ?: return null
+        waveLayer?.let { if (it.parent === parent) return it else (it.parent as? android.view.ViewGroup)?.removeView(it) }
+        val layer = WaveLayer(context).apply { visibility = View.INVISIBLE }
+        parent.addView(layer, android.widget.FrameLayout.LayoutParams(
+            android.widget.FrameLayout.LayoutParams.MATCH_PARENT, android.widget.FrameLayout.LayoutParams.MATCH_PARENT))
+        waveLayer = layer
+        return layer
+    }
+
+    /**
+     * Ask for the display's highest refresh rate while the keyboard is shown (same resolution only), so the wave can
+     * run at 120 Hz on phones that switch down to 60 Hz. The system may still decide otherwise (power saving).
+     */
+    private fun requestHighRefreshRate() {
+        if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.M) return
+        val window = latinIME?.window?.window ?: return
+        val display = window.decorView.display ?: return
+        val current = display.mode
+        val best = display.supportedModes
+            .filter { it.physicalWidth == current.physicalWidth && it.physicalHeight == current.physicalHeight }
+            .maxByOrNull { it.refreshRate } ?: return
+        val attrs = window.attributes
+        if (attrs.preferredDisplayModeId == best.modeId) return
+        attrs.preferredDisplayModeId = best.modeId
+        runCatching { window.attributes = attrs }.onFailure { Log.w(TAG, "can't set refresh rate", it) }
     }
 
     private val handler = android.os.Handler(android.os.Looper.getMainLooper())
     private val chipExpiry = Runnable { refreshPasteChips() }
 
     val isClipSearchActive get() = clipSearch.isActive
+
+    /** the search bar is a GIF search (same query typing as the clipboard search) */
+    private var gifMode = false
+    private var gifResults: List<helium314.keyboard.fork.gif.GifItem>? = null
+    private var gifStatus: String? = null
+    /** id of the GIF request running, answers of older ones are dropped */
+    private var gifRequest = 0
+    private var gifQuery: String? = null
+    private val gifSearchSoon = Runnable { runGifSearch() }
+
+    /** GIF search in the toolbar: typed query, previews in place of the results, trending while the query is empty */
+    fun startGifSearch() {
+        if (!helium314.keyboard.fork.gif.GifClient.hasKey(context.prefs())) {
+            KeyboardSwitcher.getInstance().showToast(context.getString(R.string.fork_gif_no_key), true)
+            return
+        }
+        gifMode = true
+        gifResults = null
+        gifStatus = null
+        gifQuery = null
+        startClipSearch()
+        if (!clipSearch.isActive) gifMode = false
+    }
+
+    private fun runGifSearch() {
+        if (!gifMode || !clipSearch.isActive) return
+        val query = clipSearch.query.trim()
+        if (query == gifQuery) return
+        gifQuery = query
+        val id = ++gifRequest
+        gifResults = null
+        gifStatus = null
+        updateSearchResults()
+        val app = context.applicationContext
+        Thread {
+            val found = runCatching { helium314.keyboard.fork.gif.GifClient.search(app.prefs(), query) }
+            handler.post {
+                if (id != gifRequest || !gifMode) return@post
+                gifResults = found.getOrNull()
+                gifStatus = if (found.isFailure) context.getString(R.string.fork_gif_failed)
+                    else context.getString(R.string.fork_gif_nothing)
+                if (found.isFailure) Log.w(TAG, "GIF search failed", found.exceptionOrNull())
+                updateSearchResults()
+            }
+        }.start()
+    }
+
+    /** send [item] to the app as a GIF, or copy it when the field takes no images */
+    private fun sendGif(item: helium314.keyboard.fork.gif.GifItem) {
+        val ime = latinIME ?: return
+        val app = context.applicationContext
+        endClipSearch(null)
+        KeyboardSwitcher.getInstance().showToast(context.getString(R.string.fork_gif_sending), true)
+        val editor = ime.currentInputEditorInfo
+        Thread {
+            val file = runCatching { helium314.keyboard.fork.gif.GifClient.download(app, item) }
+                .onFailure { Log.w(TAG, "GIF download failed", it) }.getOrNull()
+            handler.post {
+                if (file == null) {
+                    KeyboardSwitcher.getInstance().showToast(context.getString(R.string.fork_gif_failed), true)
+                    return@post
+                }
+                val uri = runCatching {
+                    androidx.core.content.FileProvider.getUriForFile(app, app.getString(R.string.clipboard_provider_authority), file)
+                }.getOrNull() ?: return@post
+                val now = ime.currentInputEditorInfo
+                val accepts = now != null && editor != null && now.packageName == editor.packageName && now.fieldId == editor.fieldId &&
+                    androidx.core.view.inputmethod.EditorInfoCompat.getContentMimeTypes(now)
+                    .any { android.content.ClipDescription.compareMimeTypes("image/gif", it) }
+                val sent = accepts && runCatching {
+                    androidx.core.view.inputmethod.InputConnectionCompat.commitContent(ime.currentInputConnection, now!!,
+                        androidx.core.view.inputmethod.InputContentInfoCompat(uri, android.content.ClipDescription("GIF", arrayOf("image/gif")), null),
+                        androidx.core.view.inputmethod.InputConnectionCompat.INPUT_CONTENT_GRANT_READ_URI_PERMISSION, null)
+                }.getOrDefault(false)
+                if (!sent) {
+                    // like WM Keyboard: the clipboard keeps it within reach
+                    runCatching {
+                        (app.getSystemService(Context.CLIPBOARD_SERVICE) as android.content.ClipboardManager)
+                            .setPrimaryClip(android.content.ClipData.newUri(app.contentResolver, "GIF", uri))
+                    }
+                    KeyboardSwitcher.getInstance().showToast(context.getString(R.string.fork_gif_copied), true)
+                }
+            }
+        }.start()
+    }
 
     /** Open the search bar: the keyboard types into it instead of the app. */
     fun startClipSearch() {
@@ -756,7 +885,7 @@ class DynamicToolbarController(private val context: Context) {
             ime.mKeyboardActionListener.onCodeInput(KeyCode.ALPHA, Constants.NOT_A_COORDINATE, Constants.NOT_A_COORDINATE, false)
         clipSearch.start(RichInputMethodManager.getInstance().combiningRulesExtraValueOfCurrentSubtype)
         expandedBeforeSearch = before
-        tb.showSearch { endClipSearch(null) }
+        tb.showSearch({ endClipSearch(null) }, gifMode)
         updateSearchResults()
         setExpanded(true, true)
     }
@@ -765,6 +894,11 @@ class DynamicToolbarController(private val context: Context) {
     fun endClipSearch(paste: String?) {
         if (!clipSearch.isActive) return
         clipSearch.stop()
+        if (gifMode) {
+            gifMode = false
+            gifRequest++
+            handler.removeCallbacks(gifSearchSoon)
+        }
         toolbar?.hideSearch()
         refreshPasteChips()
         if (!expandedBeforeSearch) setExpanded(false, true)
@@ -774,6 +908,12 @@ class DynamicToolbarController(private val context: Context) {
     /** Key input while searching. Returns true if it was used for the search and must not reach the app. */
     fun onKeyEvent(event: Event): Boolean {
         if (!clipSearch.isActive) return false
+        if (event.codePoint == Constants.CODE_ENTER && gifMode) {
+            // enter searches right away
+            handler.removeCallbacks(gifSearchSoon)
+            runGifSearch()
+            return true
+        }
         if (event.codePoint == Constants.CODE_ENTER) {
             // enter pastes the first match
             val first = matches().firstOrNull()
@@ -802,6 +942,15 @@ class DynamicToolbarController(private val context: Context) {
 
     private fun updateSearchResults() {
         val tb = toolbar ?: return
+        if (gifMode) {
+            // the request waits until typing pauses
+            if (clipSearch.query.trim() != gifQuery) {
+                handler.removeCallbacks(gifSearchSoon)
+                handler.postDelayed(gifSearchSoon, if (gifQuery == null) 0L else 700L)
+            }
+            tb.setGifResults(clipSearch.query, gifResults, gifStatus) { sendGif(it) }
+            return
+        }
         tb.setSearchState(clipSearch.query, matches(), context.getString(R.string.fork_clip_search_empty)) { endClipSearch(it) }
     }
 
@@ -820,11 +969,29 @@ class DynamicToolbarController(private val context: Context) {
             }
             // AI commands as chips, run on the text before the cursor
             ToolbarItems.AI -> {
-                val commands = helium314.keyboard.fork.slate.SlateCommands.custom(context.prefs())
+                // most used first
+                val commands = helium314.keyboard.fork.slate.SlateCommands.byUse(context.prefs(),
+                    helium314.keyboard.fork.slate.SlateCommands.custom(context.prefs())) { it.trigger }
                 toolbar?.showCommandChips(commands.map { it.trigger }, onPick = { i ->
                     toolbar?.hideChipBar()
                     slate?.runOnText(commands[i])
                 }, onBack = { toolbar?.hideChipBar(); applyChipState() })
+                return
+            }
+            // AI translation of the text before the cursor, target languages as chips (most used first)
+            ToolbarItems.TRANSLATE -> {
+                val targets = helium314.keyboard.fork.slate.SlateCommands.byUse(context.prefs(), TRANSLATE_TARGETS) { "→ " + it.first }
+                toolbar?.showCommandChips(targets.map { "→ " + it.first }, onPick = { i ->
+                    toolbar?.hideChipBar()
+                    val (label, language) = targets[i]
+                    slate?.runOnText(helium314.keyboard.fork.slate.SlateCommand("→ $label",
+                        "Translate the text to $language. Keep the meaning, tone, line breaks, names and numbers. " +
+                            "Output only the translation.", isBuiltIn = false))
+                }, onBack = { toolbar?.hideChipBar(); applyChipState() })
+                return
+            }
+            ToolbarItems.GIF -> {
+                startGifSearch()
                 return
             }
             ToolbarItems.MORE -> {
@@ -850,6 +1017,11 @@ class DynamicToolbarController(private val context: Context) {
     }
 
     companion object {
+        /** chip label to language name for the model */
+        private val TRANSLATE_TARGETS = listOf(
+            "한국어" to "Korean", "English" to "English", "日本語" to "Japanese", "中文" to "Simplified Chinese",
+            "Español" to "Spanish", "Français" to "French", "Deutsch" to "German", "Tiếng Việt" to "Vietnamese",
+        )
         private const val TAG = "DynamicToolbar"
         const val TOOL_NONE = 0
         const val TOOL_CLIPBOARD = 1
@@ -861,5 +1033,27 @@ class DynamicToolbarController(private val context: Context) {
             private set
         // material 3 "emphasized decelerate"-like curve
         private val EMPHASIZED = PathInterpolator(0.2f, 0f, 0f, 1f)
+    }
+}
+
+/** fork: the toolbar wave over the keys, in its own view so the keys are not redrawn every frame; takes no touches */
+private class WaveLayer(context: Context) : View(context) {
+    var drawable: DotWaveDrawable? = null
+
+    init {
+        isClickable = false
+        isFocusable = false
+        importantForAccessibility = IMPORTANT_FOR_ACCESSIBILITY_NO
+    }
+
+    fun highFrameRate(on: Boolean) {
+        if (android.os.Build.VERSION.SDK_INT >= 35)
+            setRequestedFrameRate(if (on) REQUESTED_FRAME_RATE_CATEGORY_HIGH else REQUESTED_FRAME_RATE_CATEGORY_DEFAULT)
+    }
+
+    override fun onDraw(canvas: android.graphics.Canvas) {
+        val d = drawable ?: return
+        d.setBounds(0, 0, width, height)
+        d.draw(canvas)
     }
 }

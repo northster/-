@@ -108,6 +108,21 @@ object SlateCommands {
             command.trigger.length <= MAX_TRIGGER_LENGTH && command.prompt.length <= MAX_PROMPT_LENGTH &&
             command.trigger.startsWith(prefix) && command.trigger.length > prefix.length && ' ' !in command.trigger
 
+    private const val PREF_USAGE = "fork_slate_usage"
+
+    /** a command was run: counted, so the toolbar lists the most used ones first */
+    fun countUse(prefs: SharedPreferences, trigger: String) {
+        val usage = runCatching { JSONObject(prefs.getString(PREF_USAGE, "{}")!!) }.getOrElse { JSONObject() }
+        usage.put(trigger, usage.optInt(trigger) + 1)
+        prefs.edit { putString(PREF_USAGE, usage.toString()) }
+    }
+
+    /** [commands] with the most used first; the ones never used keep their order */
+    fun <T> byUse(prefs: SharedPreferences, commands: List<T>, trigger: (T) -> String): List<T> {
+        val usage = runCatching { JSONObject(prefs.getString(PREF_USAGE, "{}")!!) }.getOrElse { JSONObject() }
+        return commands.sortedByDescending { usage.optInt(trigger(it)) }
+    }
+
     /** all commands, longest trigger first so "?formal" wins over a "?form" */
     fun all(prefs: SharedPreferences): List<SlateCommand> =
         (builtIns(prefs) + custom(prefs)).sortedByDescending { it.trigger.length }

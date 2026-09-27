@@ -5,6 +5,8 @@ import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
+import androidx.compose.foundation.layout.fillMaxWidth
 import helium314.keyboard.latin.utils.getActivity
 import helium314.keyboard.latin.utils.prefs
 import androidx.compose.ui.res.stringResource
@@ -62,6 +64,9 @@ fun DynamicToolbarScreen(
             GlowPrefs.GLOW_WIDTH,
             GlowPrefs.GLOW_DOT_SIZE,
             GlowPrefs.GLOW_DOT_SPACING,
+            R.string.fork_cat_gif,
+            helium314.keyboard.fork.gif.GifClient.PREF_KLIPY_KEY,
+            helium314.keyboard.fork.gif.GifClient.PREF_GIPHY_KEY,
             // HeliBoard's own toolbar (suggestion strip modes) is not shown: it must stay hidden for the dynamic toolbar
         )
     SearchSettingsScreen(
@@ -213,7 +218,47 @@ fun createDynamicToolbarSettings(context: Context) = listOf(
     Setting(context, GlowPrefs.GLOW_DOT_SPACING, R.string.fork_glow_dot_spacing) {
         GlowSlider(it, GlowPrefs.DEFAULT_GLOW_DOT_SPACING, 2.5f..12f, 0.5f, ::dp)
     },
+    Setting(context, helium314.keyboard.fork.gif.GifClient.PREF_KLIPY_KEY, R.string.fork_gif_klipy_key) {
+        GifKeyPreference(it.title, it.key, "partner.klipy.com")
+    },
+    Setting(context, helium314.keyboard.fork.gif.GifClient.PREF_GIPHY_KEY, R.string.fork_gif_giphy_key) {
+        GifKeyPreference(it.title, it.key, "developers.giphy.com")
+    },
 )
+
+/** a GIF provider's API key, stored encrypted; shown as its last characters */
+@Composable
+private fun GifKeyPreference(title: String, pref: String, site: String) {
+    val ctx = androidx.compose.ui.platform.LocalContext.current
+    val prefs = ctx.prefs()
+    var editing by androidx.compose.runtime.remember { androidx.compose.runtime.mutableStateOf(false) }
+    var refresh by androidx.compose.runtime.remember { androidx.compose.runtime.mutableIntStateOf(0) }
+    val saved = androidx.compose.runtime.remember(refresh) { helium314.keyboard.fork.gif.GifClient.key(prefs, pref) }
+    helium314.keyboard.settings.preferences.Preference(
+        name = title,
+        description = if (saved != null) "••••" + saved.takeLast(4) else stringResource(R.string.fork_gif_key_none, site),
+        onClick = { editing = true },
+    )
+    if (editing) {
+        var text by androidx.compose.runtime.remember { androidx.compose.runtime.mutableStateOf(saved.orEmpty()) }
+        helium314.keyboard.settings.dialogs.ThreeButtonAlertDialog(
+            onDismissRequest = { editing = false },
+            onConfirmed = {
+                if (!helium314.keyboard.fork.gif.GifClient.setKey(prefs, pref, text))
+                    android.widget.Toast.makeText(ctx, R.string.fork_slate_key_failed, android.widget.Toast.LENGTH_LONG).show()
+                refresh++
+            },
+            neutralButtonText = if (saved != null) stringResource(R.string.delete) else null,
+            onNeutral = { helium314.keyboard.fork.gif.GifClient.setKey(prefs, pref, ""); refresh++ },
+            title = { androidx.compose.material3.Text(title) },
+            content = {
+                androidx.compose.material3.OutlinedTextField(text, { text = it.trim() }, singleLine = true,
+                    modifier = androidx.compose.ui.Modifier.fillMaxWidth(),
+                    supportingText = { androidx.compose.material3.Text(stringResource(R.string.fork_gif_key_help, site)) })
+            },
+        )
+    }
+}
 
 private fun percent(v: Float) = "${(100 * v).roundToInt()}%"
 private fun ms(v: Float) = "${v.roundToInt()} ms"

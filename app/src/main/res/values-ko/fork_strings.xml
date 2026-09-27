@@ -273,7 +273,7 @@
     <string name="fork_smart_calc">입력하면서 계산</string>
     <string name="fork_smart_calc_summary">"12*4" 입력 시 48 제안</string>
     <string name="fork_smart_currency">통화 변환</string>
-    <string name="fork_smart_currency_summary">"10달러", "$10", "5만원" 입력 시 원화나 달러 금액 제안. 환율은 하루 두 번 받아와요</string>
+    <string name="fork_smart_currency_summary">"10달러", "$10", "5만원" 입력 시 원화나 달러 금액 제안. 환율은 코인베이스 실시간 시세를 1시간마다 받아와요</string>
     <string name="fork_smart_units">단위 변환</string>
     <string name="fork_smart_units_summary">"1 ft"는 미터로, "30평"은 제곱미터로 제안</string>
     <string name="fork_clip_pinned_only">고정한 클립만 보기</string>
@@ -352,4 +352,16 @@
     <string name="fork_toolbar_settings">설정</string>
     <string name="fork_glow_color">글로우 색</string>
     <string name="fork_glow_color_default">기본 (하늘색)</string>
+    <string name="fork_smart_rates_from">환율: %1$s · %2$s 기준</string>
+    <string name="fork_cat_gif">GIF</string>
+    <string name="fork_gif_klipy_key">KLIPY API 키</string>
+    <string name="fork_gif_giphy_key">GIPHY API 키</string>
+    <string name="fork_gif_key_none">설정 안 됨. %1$s에서 무료로 받을 수 있어요</string>
+    <string name="fork_gif_key_help">%1$s에서 무료로 발급. 암호화해서 저장해요.</string>
+    <string name="fork_gif_search_hint">GIF 검색</string>
+    <string name="fork_gif_no_key">GIF를 쓰려면 툴바 설정에 KLIPY나 GIPHY API 키를 넣어 주세요</string>
+    <string name="fork_gif_failed">GIF를 불러오지 못했어요</string>
+    <string name="fork_gif_nothing">찾은 GIF가 없어요</string>
+    <string name="fork_gif_sending">GIF 보내는 중…</string>
+    <string name="fork_gif_copied">이 입력란은 GIF를 받지 않아요. 클립보드에 복사했어요</string>
 </resources>

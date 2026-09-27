@@ -367,14 +367,16 @@ class DynamicToolbarView @JvmOverloads constructor(
         }.start()
     }
 
-    fun showSearch(onClose: () -> Unit) {
+    /** [gif]: GIF search, the results are GIF previews */
+    fun showSearch(onClose: () -> Unit, gif: Boolean = false) {
         val colors = Settings.getValues().mColors
         searchBar.removeAllViews()
-        searchBar.addView(iconButton(R.drawable.ic_dot_search, context.getString(R.string.fork_clip_search)) { },
+        searchBar.addView(iconButton(if (gif) R.drawable.ic_dot_gif else R.drawable.ic_dot_search,
+            context.getString(if (gif) R.string.fork_toolbar_gif else R.string.fork_clip_search)) { },
             LinearLayout.LayoutParams((40 * density).toInt(), LayoutParams.MATCH_PARENT))
         queryView.setTextColor(colors.get(ColorType.KEY_TEXT))
         queryView.setHintTextColor(colors.get(ColorType.KEY_HINT_TEXT))
-        queryView.hint = context.getString(R.string.fork_clip_search_hint)
+        queryView.hint = context.getString(if (gif) R.string.fork_gif_search_hint else R.string.fork_clip_search_hint)
         KeyboardTypeface.applyToTextView(queryView)
         searchBar.addView(queryView, LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT))
         searchBar.addView(resultScroll, LinearLayout.LayoutParams(0, LayoutParams.MATCH_PARENT, 1f))
@@ -410,6 +412,66 @@ class DynamicToolbarView @JvmOverloads constructor(
             results.addView(chip(text.replace('\n', ' '), i == 0 && query.isNotEmpty(), 180) { onPick(text) }, chipParams())
         }
         resultScroll.scrollTo(0, 0)
+    }
+
+    /**
+     * GIF search results: animated previews at the toolbar's height ([items] null while loading, [status] instead of
+     * results when there are none).
+     */
+    fun setGifResults(query: String, items: List<helium314.keyboard.fork.gif.GifItem>?, status: String?,
+                      onPick: (helium314.keyboard.fork.gif.GifItem) -> Unit) {
+        queryView.text = query
+        results.removeAllViews()
+        if (items.isNullOrEmpty()) {
+            results.addView(TextView(context).apply {
+                text = status ?: "…"
+                setTextSize(TypedValue.COMPLEX_UNIT_SP, 13f)
+                setTextColor(Settings.getValues().mColors.get(ColorType.KEY_HINT_TEXT))
+                gravity = Gravity.CENTER_VERTICAL
+                setPadding((10 * density).toInt(), 0, 0, 0)
+            }, LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT))
+            resultScroll.scrollTo(0, 0)
+            return
+        }
+        val h = (height - 6 * density).toInt().coerceAtLeast((30 * density).toInt())
+        for (item in items) {
+            val view = ImageView(context).apply {
+                scaleType = ImageView.ScaleType.CENTER_CROP
+                contentDescription = context.getString(R.string.fork_toolbar_gif)
+                clipToOutline = true
+                background = android.graphics.drawable.GradientDrawable().apply {
+                    cornerRadius = 6 * density
+                    setColor(Settings.getValues().mColors.get(ColorType.KEY_BACKGROUND))
+                }
+                setOnClickListener { onPick(item) }
+            }
+            val w = (h * item.aspectRatio.coerceIn(0.6f, 2.2f)).toInt()
+            results.addView(view, LinearLayout.LayoutParams(w, h).apply { marginStart = (4 * density).toInt() })
+            loadGifPreview(view, item.previewUrl)
+        }
+        resultScroll.scrollTo(0, 0)
+    }
+
+    /** downloads a preview and shows it, animated from Android 9 on (first frame before) */
+    private fun loadGifPreview(view: ImageView, url: String) {
+        view.tag = url
+        Thread {
+            val bytes = runCatching { helium314.keyboard.fork.gif.GifClient.bytes(url) }.getOrNull() ?: return@Thread
+            val drawable: android.graphics.drawable.Drawable? = runCatching {
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.P) {
+                    android.graphics.ImageDecoder.decodeDrawable(android.graphics.ImageDecoder.createSource(java.nio.ByteBuffer.wrap(bytes)))
+                } else {
+                    android.graphics.BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+                        ?.let { android.graphics.drawable.BitmapDrawable(resources, it) }
+                }
+            }.getOrNull()
+            if (drawable != null) view.post {
+                if (view.tag != url || !view.isAttachedToWindow) return@post
+                view.setImageDrawable(drawable)
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.P && drawable is android.graphics.drawable.AnimatedImageDrawable)
+                    drawable.start()
+            }
+        }.start()
     }
 
     val isSearchShown get() = searchBar.visibility == View.VISIBLE
