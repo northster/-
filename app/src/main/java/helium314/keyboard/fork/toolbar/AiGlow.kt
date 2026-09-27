@@ -6,14 +6,13 @@ import android.animation.AnimatorListenerAdapter
 import android.animation.ValueAnimator
 import android.graphics.Canvas
 import android.graphics.ColorFilter
-import android.graphics.Matrix
 import android.graphics.Paint
 import android.graphics.PixelFormat
 import android.graphics.RectF
-import android.graphics.SweepGradient
 import android.graphics.drawable.Drawable
 import android.view.View
 import android.view.animation.LinearInterpolator
+import helium314.keyboard.latin.utils.prefs
 
 /**
  * fork: pastel gradient glow along the whole keyboard border (toolbar included) while an AI command or translation
@@ -21,7 +20,10 @@ import android.view.animation.LinearInterpolator
  * slowly around the border, and it fades in and out.
  */
 class AiGlow(private val host: View, private val bounds: () -> RectF?) {
-    private val drawable = GlowDrawable(host.resources.displayMetrics.density)
+    private val drawable = GlowPrefs.glow(host.context.prefs()).let {
+        // the same dot grid as the other glows
+        GlowDrawable(host.resources.displayMetrics.density, it.spacingDp, it.dotDp)
+    }
     private var spin: ValueAnimator? = null
     private var fade: ValueAnimator? = null
     private var shown = false
@@ -69,37 +71,50 @@ class AiGlow(private val host: View, private val bounds: () -> RectF?) {
         host.invalidate()
     }
 
-    private class GlowDrawable(private val density: Float) : Drawable() {
+    /** dots of the glow's grid along the square border, pastel colors turning around it, fading inwards */
+    private class GlowDrawable(private val density: Float, private val spacingDp: Float, private val dotDp: Float) : Drawable() {
         var angle = 0f
         var fade = 0f
-        private val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply { style = Paint.Style.STROKE }
-        private val matrix = Matrix()
-        private val rect = RectF()
-        private var shader: SweepGradient? = null
-        private var shaderCenter = Pair(Float.NaN, Float.NaN)
+        private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
 
         override fun draw(canvas: Canvas) {
             if (fade <= 0f || bounds.isEmpty) return
+            val spacing = spacingDp * density
+            val r = dotDp * density
+            val w = bounds.width().toFloat()
+            val h = bounds.height().toFloat()
             val cx = bounds.exactCenterX()
             val cy = bounds.exactCenterY()
-            if (shaderCenter != Pair(cx, cy)) {
-                shader = SweepGradient(cx, cy, COLORS, null)
-                shaderCenter = Pair(cx, cy)
+            val cols = (w / spacing).toInt()
+            val rows = (h / spacing).toInt()
+            // the grid centered in the bounds, so the outer dots sit the same distance from every edge
+            val left = bounds.left + (w - (cols - 1) * spacing) / 2
+            val top = bounds.top + (h - (rows - 1) * spacing) / 2
+            for (row in 0 until rows) {
+                val fromTop = row
+                val fromBottom = rows - 1 - row
+                for (col in 0 until cols) {
+                    val depth = minOf(fromTop, fromBottom, col, cols - 1 - col)
+                    if (depth >= DEPTH) continue
+                    val x = left + col * spacing
+                    val y = top + row * spacing
+                    // color from the direction around the center, turning with [angle]
+                    val a = ((Math.toDegrees(kotlin.math.atan2((y - cy).toDouble(), (x - cx).toDouble())) + 360 + angle) % 360) / 360.0
+                    paint.color = colorAt(a.toFloat())
+                    paint.alpha = (255 * fade * FALLOFF[depth]).toInt()
+                    canvas.drawCircle(x, y, r, paint)
+                }
             }
-            matrix.setRotate(angle, cx, cy)
-            shader!!.setLocalMatrix(matrix)
-            paint.shader = shader
-            // a bright line at the edge, fading inwards
-            val steps = 7
-            val step = 2.2f * density
-            for (i in 0 until steps) {
-                val inset = step * i + step / 2
-                rect.set(bounds.left + inset, bounds.top + inset, bounds.right - inset, bounds.bottom - inset)
-                paint.strokeWidth = step
-                paint.alpha = (255 * fade * (1f - i / steps.toFloat()).let { it * it }).toInt()
-                val radius = (14 * density - inset).coerceAtLeast(0f)
-                canvas.drawRoundRect(rect, radius, radius, paint)
-            }
+        }
+
+        private fun colorAt(t: Float): Int {
+            val pos = t * (COLORS.size - 1)
+            val i = pos.toInt().coerceIn(0, COLORS.size - 2)
+            val f = pos - i
+            val c1 = COLORS[i]
+            val c2 = COLORS[i + 1]
+            fun ch(shift: Int) = (((c1 shr shift) and 0xFF) * (1 - f) + ((c2 shr shift) and 0xFF) * f).toInt()
+            return (0xFF shl 24) or (ch(16) shl 16) or (ch(8) shl 8) or ch(0)
         }
 
         override fun setAlpha(alpha: Int) { }
@@ -108,6 +123,9 @@ class AiGlow(private val host: View, private val bounds: () -> RectF?) {
         override fun getOpacity() = PixelFormat.TRANSLUCENT
 
         companion object {
+            /** rows of dots from the edge inwards, and how bright each is */
+            private const val DEPTH = 4
+            private val FALLOFF = floatArrayOf(1f, 0.55f, 0.25f, 0.08f)
             /** pink, peach, butter, mint, sky, periwinkle, lavender, back to pink */
             private val COLORS = intArrayOf(
                 0xFFFFB3C7.toInt(), 0xFFFFD6A5.toInt(), 0xFFFDFFB6.toInt(), 0xFFCAFFBF.toInt(),

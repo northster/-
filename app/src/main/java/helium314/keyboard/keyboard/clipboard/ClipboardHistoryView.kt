@@ -394,6 +394,8 @@ class ClipboardHistoryView @JvmOverloads constructor(
                 cornerRadius = 22 * density
                 setColor(colors.get(if (primary) ColorType.ACTION_KEY_BACKGROUND else ColorType.KEY_BACKGROUND))
             }
+            // floating over the list with a soft shadow, like the emoji panel's buttons
+            elevation = 6 * density
             setOnClickListener {
                 keyboardActionListener.onPressKey(KeyCode.NOT_SPECIFIED, 0, 1, HapticEvent.KEY_PRESS)
                 action()
@@ -401,10 +403,10 @@ class ClipboardHistoryView @JvmOverloads constructor(
         }
         val bar = LinearLayout(context).apply {
             orientation = HORIZONTAL
-            val p = (10 * density).toInt()
+            val p = (12 * density).toInt()
             setPadding(p, p, p, p)
-            setBackgroundColor(colors.get(ColorType.MAIN_BACKGROUND))
-            isClickable = true
+            clipToPadding = false
+            clipChildren = false
         }
         val all = button(context.getString(R.string.fork_clip_select_all), false) {
             clipboardAdapter.selectAll(clipboardAdapter.selected.size < clipboardAdapter.itemCount)

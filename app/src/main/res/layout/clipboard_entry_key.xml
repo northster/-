@@ -2,34 +2,20 @@
 <!--
     SPDX-License-Identifier: GPL-3.0-only
 -->
-<LinearLayout
+<!-- fork: the pin (a check mark while selecting) lies over the top left corner of the card instead of taking a column -->
+<FrameLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-    <!-- fork: pin toggle at the top left (a check mark while clips are selected for deletion) -->
-    <ImageView
-            android:id="@+id/clipboard_entry_pinned_icon"
-            android:contentDescription="@string/fork_clip_pin"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:padding="6dp"
-            android:scaleType="fitCenter"
-            android:layout_gravity="top"
-            android:layout_marginTop="2dp"
-            android:layout_marginStart="2dp"/>
+        android:layout_height="wrap_content">
 
     <!-- Provide audio and haptic feedback by ourselves based on the keyboard settings.
          We just need to ignore the system's audio and haptic feedback settings. -->
     <LinearLayout
-        android:layout_width="0dp"
-        android:layout_weight="1"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="6dp"
         android:layout_marginBottom="6dp"
-        android:layout_marginStart="2dp"
-        android:layout_marginEnd="10dp"
+        android:layout_marginHorizontal="10dp"
         android:hapticFeedbackEnabled="false"
         android:soundEffectsEnabled="false"
         android:orientation="vertical">
@@ -48,7 +34,16 @@
             android:maxLines="4"/>
     </LinearLayout>
 
-    <!-- fork: pin / delete right on the card -->
+    <ImageView
+            android:id="@+id/clipboard_entry_pinned_icon"
+            android:contentDescription="@string/fork_clip_pin"
+            android:layout_width="26dp"
+            android:layout_height="26dp"
+            android:padding="5dp"
+            android:scaleType="fitCenter"
+            android:layout_gravity="top|start"/>
+
+    <!-- old card buttons, no longer shown -->
     <LinearLayout
         android:id="@+id/clipboard_entry_actions"
         android:visibility="gone"
@@ -59,8 +54,6 @@
             android:id="@+id/clipboard_entry_pin"
             android:layout_width="28dp"
             android:layout_height="28dp"
-            android:padding="6dp"
-            android:scaleType="fitCenter"
             android:background="@null"
             android:contentDescription="@string/fork_clip_pin"
             android:src="@drawable/ic_dot_pin"/>
@@ -68,11 +61,9 @@
             android:id="@+id/clipboard_entry_delete"
             android:layout_width="28dp"
             android:layout_height="28dp"
-            android:padding="6dp"
-            android:scaleType="fitCenter"
             android:background="@null"
             android:contentDescription="@string/delete"
             android:src="@drawable/ic_dot_trash"/>
     </LinearLayout>
 
-</LinearLayout>
+</FrameLayout>

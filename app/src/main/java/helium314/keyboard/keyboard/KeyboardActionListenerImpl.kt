@@ -294,7 +294,20 @@ class KeyboardActionListenerImpl(private val latinIME: LatinIME, private val inp
         latinIME.dynamicToolbar.onSwipe(up)
     }
 
-    override fun onSpaceCursorMove(steps: Int): Boolean = onMoveCursorHorizontally(steps)
+    // fork: arrow keys, like WM Keyboard, instead of setting the selection. The app then moves its cursor itself and
+    //  remembers the column: moving up / down afterwards keeps it (with setSelection the app still had the column
+    //  from before the sideways moves, and a line down went back to it, often the start of the line)
+    override fun onSpaceCursorMove(steps: Int): Boolean {
+        if (steps == 0) return false
+        inputLogic.finishInput() // a word or Hangul syllable being composed ends where it is
+        if (steps < 0) gestureMoveBackHaptics() else gestureMoveForwardHaptics()
+        // the finger's direction on screen, also in right-to-left text
+        val code = if (steps < 0) KeyCode.ARROW_LEFT else KeyCode.ARROW_RIGHT
+        repeat(abs(steps)) {
+            onCodeInput(code, Constants.NOT_A_COORDINATE, Constants.NOT_A_COORDINATE, false)
+        }
+        return true
+    }
 
     override fun onSpaceCursorStart() {
         if (helium314.keyboard.fork.ForkSettings.isVirtualCaretEnabled()) latinIME.mVirtualCaret.start()

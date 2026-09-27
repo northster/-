@@ -345,7 +345,8 @@ class DynamicToolbarController(private val context: Context) {
             TOOL_CLIPBOARD -> {
                 val actions = ClipAction.enabled(context.prefs())
                 tb.showToolHeader(context.getString(R.string.fork_toolbar_clipboard), actions.map { it.icon(context) to it.label(context) },
-                    onBack = ::backToKeyboard, onAction = { i -> onClipAction(actions[i]) })
+                    onBack = ::backToKeyboard, onAction = { i -> onClipAction(actions[i]) },
+                    endItems = ToolbarItems.endItems, onEndItem = ::onItemClicked)
             }
             TOOL_EMOJI -> {
                 val emoji = KeyboardSwitcher.getInstance().emojiPalettesView ?: return
@@ -786,7 +787,9 @@ class DynamicToolbarController(private val context: Context) {
         if (!kv.isShown || kv.height == 0) return
         val tb = toolbar
         val params = GlowPrefs.wave(prefs)
-        val wave = DotWave(context.resources.displayMetrics.density, params, up)
+        // opening while a glow shows (clip, smart chip): the wave is in the glow's color
+        val color = if (up && hintGlow != null) hintGlowColor else android.graphics.Color.WHITE
+        val wave = DotWave(context.resources.displayMetrics.density, params, up, color)
         val drawable = DotWaveDrawable(wave)
         val loc = IntArray(2)
         kv.getLocationOnScreen(loc)

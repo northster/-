@@ -556,7 +556,8 @@ class DynamicToolbarView @JvmOverloads constructor(
 
     /** [button]: a text button at the right end, in the enter key's colors (translation: translate) */
     fun showToolHeader(title: String, actions: List<Pair<android.graphics.drawable.Drawable?, String>>, onBack: () -> Unit,
-                       onAction: (Int) -> Unit, button: Pair<String, () -> Unit>? = null) {
+                       onAction: (Int) -> Unit, button: Pair<String, () -> Unit>? = null,
+                       endItems: List<ToolbarItem> = emptyList(), onEndItem: (ToolbarItem) -> Unit = {}) {
         val colors = Settings.getValues().mColors
         header.removeAllViews()
         val size = LinearLayout.LayoutParams((48 * density).toInt(), LayoutParams.MATCH_PARENT)
@@ -579,6 +580,17 @@ class DynamicToolbarView @JvmOverloads constructor(
             val button = iconButton(icon, label) { onAction(i) }
             headerActions.add(button)
             header.addView(button, LinearLayout.LayoutParams((44 * density).toInt(), LayoutParams.MATCH_PARENT))
+        }
+        // | undo redo at the right end, like the tools row
+        if (endItems.isNotEmpty()) {
+            header.addView(View(context).apply { setBackgroundColor(colors.get(ColorType.KEY_HINT_TEXT)) },
+                LinearLayout.LayoutParams((1 * density).toInt().coerceAtLeast(1), (18 * density).toInt()).apply {
+                    marginStart = (4 * density).toInt()
+                    marginEnd = (4 * density).toInt()
+                })
+            for (item in endItems)
+                header.addView(iconButton(item.icon, context.getString(item.label)) { onEndItem(item) },
+                    LinearLayout.LayoutParams((44 * density).toInt(), LayoutParams.MATCH_PARENT))
         }
         if (button != null) header.addView(TextView(context).apply {
             text = button.first

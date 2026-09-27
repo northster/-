@@ -125,7 +125,14 @@ class ClipboardAdapter(
             if (historyEntry.filename != null) {
                 historyEntry.setImageAndDescription(contentImageView, contentTextView)
             } else {
-                contentTextView.text = historyEntry.text?.take(1000) // truncate displayed text for performance reasons
+                // truncate displayed text for performance reasons; fork: the first line starts after the pin lying
+                //  over the corner, without a blank line for it
+                contentTextView.text = historyEntry.text?.take(1000)?.let { text ->
+                    android.text.SpannableString(text).apply {
+                        val indent = (16 * contentTextView.resources.displayMetrics.density).toInt()
+                        setSpan(android.text.style.LeadingMarginSpan.Standard(indent, 0), 0, length, 0)
+                    }
+                }
                 // fork: Korean font for clips with Hangul
                 contentTextView.typeface = helium314.keyboard.keyboard.KeyboardTypeface.resolve(contentTextView.text,
                     itemTypeFace ?: Typeface.DEFAULT)
@@ -139,7 +146,8 @@ class ClipboardAdapter(
                 pinnedIconView.alpha = if (isSelected) 1f else 0.35f
                 itemView.alpha = if (isSelected) 1f else 0.75f
             } else {
-                pinnedIconView.setImageResource(R.drawable.ic_dot_pin)
+                // pinned: filled in the enter key's color
+                pinnedIconView.setImageResource(if (historyEntry.isPinned) R.drawable.ic_dot_pin_filled else R.drawable.ic_dot_pin)
                 colors.setColor(pinnedIconView, if (historyEntry.isPinned) ColorType.ACTION_KEY_BACKGROUND else ColorType.KEY_HINT_TEXT)
                 pinnedIconView.alpha = if (historyEntry.isPinned) 1f else 0.45f
                 itemView.alpha = 1f

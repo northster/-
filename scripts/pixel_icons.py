@@ -36,7 +36,6 @@ MAP = {
     'translate': 'languages',
     'more': 'more-horizontal',
     'question': 'circle-question',
-    'settings': 'settings-cog-2',
     'emoji_recents': 'clock',
     'emoji_people': 'user',
     'emoji_nature': 'leaf',
@@ -53,6 +52,21 @@ MAP = {
 # (two stars). The key icons are the hand drawn ones of scripts/dot_icons.py.
 OWN_FROM_DOT_ICONS = ['shift', 'shift_filled', 'shift_locked', 'globe', 'space', 'gif', 'backspace']
 OWN = {
+    # a gear: ring with eight teeth and a hole
+    'settings': """
+....oooo....
+..o.oooo.o..
+.oooo..oooo.
+..o......o..
+.oo..oo..oo.
+ooo.o..o.ooo
+ooo.o..o.ooo
+.oo..oo..oo.
+..o......o..
+.oooo..oooo.
+..o.oooo.o..
+....oooo....
+""",
     'sparkles': """
 ..........o.
 .........ooo
@@ -174,6 +188,21 @@ def own(art):
     return grid
 
 
+def center(grid):
+    """the dots moved so there is as much room left as right and above as below (icons line up in a row)"""
+    cells = [(x, y) for y in range(12) for x in range(12) if grid[y][x]]
+    if not cells:
+        return grid
+    left, right = min(x for x, _ in cells), max(x for x, _ in cells)
+    top, bottom = min(y for _, y in cells), max(y for _, y in cells)
+    dx = (11 - right - left) // 2
+    dy = (11 - bottom - top) // 2
+    out = [[False] * 12 for _ in range(12)]
+    for x, y in cells:
+        out[y + dy][x + dx] = True
+    return out
+
+
 def halve(grid):
     """24x24 -> 12x12: a dot where at least 2 of the 4 pixels are set, at the offset that loses the least"""
     best, best_err = None, None
@@ -213,6 +242,8 @@ def main():
     for name, pix in MAP.items():
         svg = open(os.path.join(src, pix + '.svg')).read()
         icons[name] = (raster(svg), f'pixelarticons {pix} (MIT)')
+    # pinned clips: the bookmark filled in
+    icons['pin_filled'] = (filled(icons['pin'][0]), 'pixelarticons bookmark, filled (MIT)')
     icons = {name: (halve(grid), source) for name, (grid, source) in icons.items()}
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
     import dot_icons
@@ -220,6 +251,7 @@ def main():
     own_art.update(OWN)
     for name, art in own_art.items():
         icons[name] = (own(art), 'own drawing')
+    icons = {name: (center(grid), source) for name, (grid, source) in icons.items()}
     for name, (grid, source) in icons.items():
         open(os.path.join(out, f'ic_dot_{name}.xml'), 'w').write(xml(grid, source))
     print(len(icons), 'icons')

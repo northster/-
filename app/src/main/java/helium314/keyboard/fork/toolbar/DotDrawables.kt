@@ -142,8 +142,9 @@ class DotGlowDrawable(private val color: Int, private val density: Float, privat
  * Positions are in screen coordinates and shared by all views, so the wave runs on from the keyboard into the toolbar.
  * Every view draws it with its own screen position as origin.
  */
-class DotWave(private val density: Float, private val params: GlowPrefs.Wave, val up: Boolean) {
-    private val paint = Paint(Paint.ANTI_ALIAS_FLAG).also { it.color = android.graphics.Color.WHITE }
+class DotWave(private val density: Float, private val params: GlowPrefs.Wave, val up: Boolean,
+              color: Int = android.graphics.Color.WHITE) {
+    private val paint = Paint(Paint.ANTI_ALIAS_FLAG).also { it.color = color }
     val thicknessPx get() = params.thicknessDp * density
     val isRipple get() = params.rippleDepthDp > 0f
     val rippleDepthPx get() = params.rippleDepthDp * density
