@@ -29,12 +29,12 @@ object GlowPrefs {
     const val WAVE_DURATION = "fork_wave_duration"
     const val WAVE_BRIGHTNESS = "fork_wave_brightness"
     const val WAVE_THICKNESS = "fork_wave_thickness"
-    /** [SHAPE_LINE] (straight band) or [SHAPE_ARC] (curved front, the middle leads) */
+    /** [SHAPE_LINE] (straight band) or [SHAPE_RIPPLE] (ring spreading from below the keyboard) */
     const val WAVE_SHAPE = "fork_wave_shape"
     const val SHAPE_LINE = "line"
-    const val SHAPE_ARC = "arc"
-    /** radius of the arc front, dp: small = strongly curved, large = almost flat */
-    const val WAVE_ARC_RADIUS = "fork_wave_arc_radius"
+    const val SHAPE_RIPPLE = "ripple"
+    /** how far below the keyboard the ripple's center is, dp: small = round ring, large = almost flat */
+    const val WAVE_RIPPLE_DEPTH = "fork_wave_ripple_depth"
 
     const val DEFAULT_GLOW = true
     const val DEFAULT_GLOW_MAX = 0.85f
@@ -48,7 +48,7 @@ object GlowPrefs {
     const val DEFAULT_WAVE_DURATION = 450f
     const val DEFAULT_WAVE_BRIGHTNESS = 0.9f
     const val DEFAULT_WAVE_THICKNESS = 28f
-    const val DEFAULT_WAVE_ARC_RADIUS = 220f
+    const val DEFAULT_WAVE_RIPPLE_DEPTH = 120f
 
     /** everything the glow drawable needs, read once when it is (re)created */
     data class Glow(
@@ -56,10 +56,10 @@ object GlowPrefs {
         val height: Float, val width: Float, val dotDp: Float, val spacingDp: Float, val fromBottom: Boolean,
     )
 
-    /** [arcRadiusDp] 0 = straight band */
+    /** [rippleDepthDp] 0 = straight band */
     data class Wave(
         val durationMs: Long, val brightness: Float, val thicknessDp: Float, val dotDp: Float, val spacingDp: Float,
-        val arcRadiusDp: Float,
+        val rippleDepthDp: Float,
     )
 
     fun glowEnabled(prefs: SharedPreferences) = prefs.getBoolean(GLOW, DEFAULT_GLOW)
@@ -86,7 +86,7 @@ object GlowPrefs {
         thicknessDp = prefs.getFloat(WAVE_THICKNESS, DEFAULT_WAVE_THICKNESS).coerceIn(2f, 200f),
         dotDp = prefs.getFloat(GLOW_DOT_SIZE, DEFAULT_GLOW_DOT_SIZE).coerceIn(0.3f, 4f),
         spacingDp = prefs.getFloat(GLOW_DOT_SPACING, DEFAULT_GLOW_DOT_SPACING).coerceIn(2f, 16f),
-        arcRadiusDp = if (prefs.getString(WAVE_SHAPE, SHAPE_LINE) == SHAPE_ARC)
-            prefs.getFloat(WAVE_ARC_RADIUS, DEFAULT_WAVE_ARC_RADIUS).coerceIn(20f, 2000f) else 0f,
+        rippleDepthDp = if (prefs.getString(WAVE_SHAPE, SHAPE_LINE) == SHAPE_RIPPLE)
+            prefs.getFloat(WAVE_RIPPLE_DEPTH, DEFAULT_WAVE_RIPPLE_DEPTH).coerceIn(5f, 2000f) else 0f,
     )
 }

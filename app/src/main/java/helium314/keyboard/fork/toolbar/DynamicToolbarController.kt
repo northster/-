@@ -534,8 +534,8 @@ class DynamicToolbarController(private val context: Context) {
 
     /**
      * White dot wave: opening runs from the keyboard bottom up and on through the toolbar, closing runs from
-     * the keyboard top down. Positions are in screen coordinates, so the wave keeps going across both views
-     * while the toolbar slides.
+     * the keyboard top down, as a straight band or a ripple from below the keyboard. Positions are in screen
+     * coordinates, so the wave keeps going across both views while the toolbar slides.
      */
     private fun startWave(up: Boolean) {
         stopWave()
@@ -550,28 +550,52 @@ class DynamicToolbarController(private val context: Context) {
         val drawable = DotWaveDrawable(wave)
         val loc = IntArray(2)
         kv.getLocationOnScreen(loc)
+        val kvLeft = loc[0].toFloat()
         val kvTop = loc[1].toFloat()
         val kvBottom = kvTop + kv.height
         frame.getLocationOnScreen(loc)
         val toolbarTop = loc[1].toFloat() - (tb?.height ?: 0)
-        // the whole band, arc ends included, has to leave the far edge
-        val thickness = wave.thicknessPx + wave.maxLag(kv.width.toFloat())
-        // the front starts at one edge and moves until the whole band has left the far edge
-        val start = if (up) kvBottom else kvTop
-        val end = if (up) toolbarTop - thickness else kvBottom + thickness
+        val thickness = wave.thicknessPx
+        val start: Float
+        val end: Float
+        if (wave.isRipple) {
+            // center hidden below the middle of the keyboard's bottom edge
+            wave.centerX = kvLeft + kv.width / 2f
+            wave.centerY = kvBottom + wave.rippleDepthPx
+            val halfWidth = kv.width / 2f
+            if (up) {
+                // from touching the bottom edge until the whole band is past the toolbar's top corners
+                start = wave.rippleDepthPx
+                end = kotlin.math.hypot(halfWidth, wave.centerY - toolbarTop) + thickness
+            } else {
+                // from the keyboard's top corners back into the center, until the band is below the keyboard
+                start = kotlin.math.hypot(halfWidth, wave.centerY - kvTop)
+                end = wave.rippleDepthPx - thickness
+            }
+        } else {
+            // the front starts at one edge and moves until the whole band has left the far edge
+            start = if (up) kvBottom else kvTop
+            end = if (up) toolbarTop - thickness else kvBottom + thickness
+        }
+        wave.position = start
+        drawable.originX = kvLeft
+        drawable.originY = kvTop
         kv.setForkOverlay(drawable)
         waveAnimator = ValueAnimator.ofFloat(start, end).apply {
             duration = params.durationMs
-            interpolator = android.view.animation.LinearInterpolator()
+            // a ripple slows down as it spreads out, and speeds up drawing back in
+            interpolator = when {
+                !wave.isRipple -> android.view.animation.LinearInterpolator()
+                up -> android.view.animation.DecelerateInterpolator(1.3f)
+                else -> android.view.animation.AccelerateInterpolator(1.3f)
+            }
             addUpdateListener {
-                val front = it.animatedValue as Float
+                wave.position = it.animatedValue as Float
                 kv.getLocationOnScreen(loc)
-                drawable.front = front - loc[1]
+                drawable.originX = loc[0].toFloat()
+                drawable.originY = loc[1].toFloat()
                 kv.invalidateAllKeys()
-                if (up && tb != null && tb.visibility == View.VISIBLE) {
-                    tb.getLocationOnScreen(loc)
-                    tb.setWave(wave, front - loc[1])
-                }
+                if (up && tb != null && tb.visibility == View.VISIBLE) tb.setWave(wave)
             }
             addListener(object : AnimatorListenerAdapter() {
                 override fun onAnimationEnd(animation: Animator) {
@@ -587,7 +611,7 @@ class DynamicToolbarController(private val context: Context) {
         waveAnimator = null
         a?.cancel()
         KeyboardSwitcher.getInstance().mainKeyboardView?.setForkOverlay(null)
-        toolbar?.setWave(null, 0f)
+        toolbar?.setWave(null)
     }
 
     private val handler = android.os.Handler(android.os.Looper.getMainLooper())

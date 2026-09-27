@@ -232,9 +232,6 @@
     <string name="fork_clip_code_test_text">[Web발신] 인증번호 [482913]를 입력해주세요. 타인에게 알려주지 마세요. 문의 1588-1234</string>
     <string name="fork_wave_shape">파동 모양</string>
     <string name="fork_wave_shape_line">직선</string>
-    <string name="fork_wave_shape_arc">반원(호)</string>
-    <string name="fork_wave_arc_radius">호 반지름</string>
-    <string name="fork_wave_arc_radius_summary">작을수록 둥글고, 클수록 평평해요</string>
     <string name="fork_glow_position">글로우 위치</string>
     <string name="fork_glow_position_top">위</string>
     <string name="fork_glow_position_bottom">아래</string>
@@ -252,4 +249,7 @@
     <string name="fork_smart_kind_link">링크</string>
     <string name="fork_smart_kind_phone">전화번호</string>
     <string name="fork_smart_kind_email">메일</string>
+    <string name="fork_wave_shape_ripple">물결(원)</string>
+    <string name="fork_wave_ripple_depth">물결 중심 깊이</string>
+    <string name="fork_wave_ripple_depth_summary">키보드 아래 얼마나 깊은 곳에서 퍼져 나올지: 얕을수록 둥글고, 깊을수록 평평해요</string>
 </resources>

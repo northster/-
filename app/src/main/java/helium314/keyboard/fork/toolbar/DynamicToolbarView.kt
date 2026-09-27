@@ -291,19 +291,21 @@ class DynamicToolbarView @JvmOverloads constructor(
 
     /** wave running up from the keyboard into the toolbar, drawn over the toolbar contents */
     private var wave: DotWave? = null
-    private var waveFront = 0f
 
-    /** [front] in this view's coordinates, null wave to stop */
-    fun setWave(wave: DotWave?, front: Float) {
+    /** show the current state of [wave] (positions are on screen), null to stop */
+    fun setWave(wave: DotWave?) {
         if (wave == null && this.wave == null) return
         this.wave = wave
-        waveFront = front
         invalidate()
     }
 
+    private val screenPos = IntArray(2)
+
     override fun dispatchDraw(canvas: android.graphics.Canvas) {
         super.dispatchDraw(canvas)
-        wave?.draw(canvas, 0f, width.toFloat(), 0f, height.toFloat(), waveFront, width / 2f)
+        val w = wave ?: return
+        getLocationOnScreen(screenPos)
+        w.draw(canvas, screenPos[0].toFloat(), screenPos[1].toFloat(), width.toFloat(), height.toFloat())
     }
 
     override fun onInterceptTouchEvent(ev: android.view.MotionEvent): Boolean {

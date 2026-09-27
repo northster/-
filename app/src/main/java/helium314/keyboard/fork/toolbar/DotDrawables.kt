@@ -100,48 +100,44 @@ class DotGlowDrawable(color: Int, private val density: Float, private val params
 }
 
 /**
- * A band of white dots sweeping over a view: the brightest dots are the front, the band fades out behind it over
- * the wave's thickness. The front is straight, or an arc whose middle leads (arc radius set). [up] = moving up, so the tail is below the front.
- * Shared by the keyboard (as an overlay drawable) and the toolbar, so the wave runs on from one into the other.
+ * White dots sweeping over the keyboard and the toolbar when the toolbar opens ([up]) or closes.
+ * - Straight: a band whose front row is the brightest, fading out behind it.
+ * - Ripple ([GlowPrefs.Wave.rippleDepthDp] > 0): a ring around a center hidden below the keyboard, like a ripple coming
+ *   from under the screen edge. Opening, it spreads out and runs up into the toolbar; closing, it draws back into
+ *   its center, so it runs down the keyboard.
+ * Positions are in screen coordinates and shared by all views, so the wave runs on from the keyboard into the toolbar.
+ * Every view draws it with its own screen position as origin.
  */
 class DotWave(private val density: Float, private val params: GlowPrefs.Wave, val up: Boolean) {
     private val paint = Paint(Paint.ANTI_ALIAS_FLAG).also { it.color = android.graphics.Color.WHITE }
     val thicknessPx get() = params.thicknessDp * density
+    val isRipple get() = params.rippleDepthDp > 0f
+    val rippleDepthPx get() = params.rippleDepthDp * density
+    /** straight: y of the front, ripple: radius of the ring (screen coordinates) */
+    var position = 0f
+    /** ripple center, screen coordinates */
+    var centerX = 0f
+    var centerY = 0f
 
-    /** how far the front's ends trail behind its middle (arc shape), 0 for a straight band */
-    fun maxLag(width: Float): Float {
-        val r = params.arcRadiusDp * density
-        if (r <= 0f) return 0f
-        val half = width / 2
-        return if (half >= r) r else r - sqrt(r * r - half * half)
-    }
-
-    /** trailing distance of the front at [dx] from the middle: a circle of the arc radius, flat beyond it */
-    private fun lag(dx: Float): Float {
-        val r = params.arcRadiusDp * density
-        if (r <= 0f) return 0f
-        val d = kotlin.math.abs(dx)
-        return if (d >= r) r else r - sqrt(r * r - d * d)
-    }
-
-    /** [front] is where the middle of the front is, [centerX] the horizontal middle, both in canvas coordinates */
-    fun draw(canvas: Canvas, left: Float, right: Float, top: Float, bottom: Float, front: Float, centerX: Float) {
+    /** draw into a view whose top left is at [originX], [originY] on screen, [width] x [height] */
+    fun draw(canvas: Canvas, originX: Float, originY: Float, width: Float, height: Float) {
         val spacing = params.spacingDp * density
         val r = params.dotDp * density
         val thickness = thicknessPx
-        val reach = thickness + maxLag(right - left)
-        // rows that can hold a part of the band
-        val from = maxOf(top, if (up) front else front - reach)
-        val to = minOf(bottom, if (up) front + reach else front)
-        if (from >= to) return
-        // rows on the same grid as the glow, so the dots line up
-        var y = top + spacing / 2 + (((from - top - spacing / 2) / spacing).toInt().coerceAtLeast(0)) * spacing
-        while (y <= to) {
-            var x = left + spacing / 2
-            while (x < right) {
-                // the front at this column trails behind the middle by lag(), the band fades out behind the front
-                val localFront = if (up) front + lag(x - centerX) else front - lag(x - centerX)
-                val behind = (if (up) y - localFront else localFront - y) / thickness
+        // the dot grid is the glow's, so the dots line up
+        var y = spacing / 2
+        while (y < height) {
+            val sy = originY + y
+            var x = spacing / 2
+            while (x < width) {
+                // how far behind the front this dot is, in band thicknesses: 0 = front (brightest), 1 = end of the band
+                val behind = if (isRipple) {
+                    val d = kotlin.math.hypot(originX + x - centerX, sy - centerY)
+                    // spreading: the band is inside the ring; drawing back: outside
+                    (if (up) position - d else d - position) / thickness
+                } else {
+                    (if (up) sy - position else position - sy) / thickness
+                }
                 if (behind in 0f..1f) {
                     paint.alpha = (255 * params.brightness * (1f - behind).pow(1.6f)).toInt().coerceIn(0, 255)
                     if (paint.alpha > 0) canvas.drawCircle(x, y, r, paint)
@@ -153,13 +149,16 @@ class DotWave(private val density: Float, private val params: GlowPrefs.Wave, va
     }
 }
 
-/** [DotWave] as a drawable, for the keyboard view's overlay. [front] is in the drawable's coordinates. */
+/** [DotWave] as a drawable, for the keyboard view's overlay. [originX], [originY]: the view's position on screen. */
 class DotWaveDrawable(private val wave: DotWave) : Drawable() {
-    var front = 0f
+    var originX = 0f
+    var originY = 0f
 
     override fun draw(canvas: Canvas) {
-        wave.draw(canvas, bounds.left.toFloat(), bounds.right.toFloat(), bounds.top.toFloat(), bounds.bottom.toFloat(), front,
-            bounds.exactCenterX())
+        canvas.save()
+        canvas.translate(bounds.left.toFloat(), bounds.top.toFloat())
+        wave.draw(canvas, originX, originY, bounds.width().toFloat(), bounds.height().toFloat())
+        canvas.restore()
     }
 
     override fun setAlpha(alpha: Int) { }

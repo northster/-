@@ -49,7 +49,7 @@ fun DynamicToolbarScreen(
             GlowPrefs.WAVE_BRIGHTNESS,
             GlowPrefs.WAVE_THICKNESS,
             GlowPrefs.WAVE_SHAPE,
-            if (prefs.getString(GlowPrefs.WAVE_SHAPE, GlowPrefs.SHAPE_LINE) == GlowPrefs.SHAPE_ARC) GlowPrefs.WAVE_ARC_RADIUS else null,
+            if (prefs.getString(GlowPrefs.WAVE_SHAPE, GlowPrefs.SHAPE_LINE) == GlowPrefs.SHAPE_RIPPLE) GlowPrefs.WAVE_RIPPLE_DEPTH else null,
             R.string.fork_cat_glow,
             GlowPrefs.GLOW,
             GlowPrefs.GLOW_TEST_UNTIL,
@@ -164,11 +164,11 @@ fun createDynamicToolbarSettings(context: Context) = listOf(
         val ctx = androidx.compose.ui.platform.LocalContext.current
         helium314.keyboard.settings.preferences.InlineChoicePreference(setting.title, setting.key, listOf(
             ctx.getString(R.string.fork_wave_shape_line) to GlowPrefs.SHAPE_LINE,
-            ctx.getString(R.string.fork_wave_shape_arc) to GlowPrefs.SHAPE_ARC,
+            ctx.getString(R.string.fork_wave_shape_ripple) to GlowPrefs.SHAPE_RIPPLE,
         ), GlowPrefs.SHAPE_LINE)
     },
-    Setting(context, GlowPrefs.WAVE_ARC_RADIUS, R.string.fork_wave_arc_radius, R.string.fork_wave_arc_radius_summary) {
-        GlowSlider(it, GlowPrefs.DEFAULT_WAVE_ARC_RADIUS, 40f..1200f, 10f, ::dp)
+    Setting(context, GlowPrefs.WAVE_RIPPLE_DEPTH, R.string.fork_wave_ripple_depth, R.string.fork_wave_ripple_depth_summary) {
+        GlowSlider(it, GlowPrefs.DEFAULT_WAVE_RIPPLE_DEPTH, 10f..1000f, 10f, ::dp)
     },
     Setting(context, GlowPrefs.GLOW, R.string.fork_glow, R.string.fork_glow_summary) {
         SwitchPreference(it, GlowPrefs.DEFAULT_GLOW) { DynamicToolbarController.current?.onGlowSettingsChanged() }

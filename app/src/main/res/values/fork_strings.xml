@@ -235,9 +235,6 @@
     <string name="fork_clip_code_test_text">[Web] Your verification code is [482913]. Do not share it. Help: 1588-1234</string>
     <string name="fork_wave_shape">Wave shape</string>
     <string name="fork_wave_shape_line">Straight</string>
-    <string name="fork_wave_shape_arc">Arc</string>
-    <string name="fork_wave_arc_radius">Arc radius</string>
-    <string name="fork_wave_arc_radius_summary">Smaller is rounder, larger is flatter</string>
     <string name="fork_glow_position">Glow position</string>
     <string name="fork_glow_position_top">Top</string>
     <string name="fork_glow_position_bottom">Bottom</string>
@@ -255,4 +252,7 @@
     <string name="fork_smart_kind_link">Link</string>
     <string name="fork_smart_kind_phone">Phone</string>
     <string name="fork_smart_kind_email">Mail</string>
+    <string name="fork_wave_shape_ripple">Ripple</string>
+    <string name="fork_wave_ripple_depth">Ripple center depth</string>
+    <string name="fork_wave_ripple_depth_summary">How far below the keyboard the ripple starts: shallow is round, deep is flat</string>
 </resources>
