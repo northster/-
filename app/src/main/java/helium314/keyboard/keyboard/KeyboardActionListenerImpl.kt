@@ -150,9 +150,15 @@ class KeyboardActionListenerImpl(private val latinIME: LatinIME, private val inp
         }
         latinIME.onEvent(event)
         metaAfterCodeInput(primaryCode)
+        // fork: look at the typed text for smart chips / commands after every key. The app reports no cursor move
+        // while a Hangul syllable is being composed in place (럴 -> 러), so "10달러" was only seen after a space.
+        latinIME.dynamicToolbar?.onTextChangedSoon()
     }
 
-    override fun onTextInput(text: String?) = latinIME.onTextInput(text)
+    override fun onTextInput(text: String?) {
+        latinIME.onTextInput(text)
+        latinIME.dynamicToolbar?.onTextChangedSoon() // fork, see onCodeInput
+    }
 
     override fun onContent(content: InputContentInfoCompat) {
         val editorInfo = latinIME.currentInputEditorInfo

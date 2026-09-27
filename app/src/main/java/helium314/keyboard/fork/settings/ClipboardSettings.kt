@@ -237,6 +237,12 @@ fun createForkClipboardSettings(context: Context) = listOf(
     Setting(context, helium314.keyboard.fork.smart.SmartPrefs.DEBUG, R.string.fork_smart_debug, R.string.fork_smart_debug_summary) {
         SwitchPreference(it, false)
     },
+    Setting(context, helium314.keyboard.fork.ForkSettings.PREF_EMOJI_DICT_LINK, R.string.fork_emoji_dict,
+        R.string.fork_emoji_dict_summary) { setting ->
+        helium314.keyboard.settings.preferences.Preference(name = setting.title, description = setting.description,
+            onClick = { helium314.keyboard.settings.SettingsDestination.navigateTo(helium314.keyboard.settings.SettingsDestination.Dictionaries) },
+        ) { helium314.keyboard.latin.utils.NextScreenIcon() }
+    },
     Setting(context, ClipPrefs.SCREENSHOTS, R.string.fork_clip_screenshots, R.string.fork_clip_screenshots_summary) { setting ->
         val ctx = LocalContext.current
         val launcher = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->

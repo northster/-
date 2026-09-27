@@ -117,6 +117,7 @@ fun AppearanceScreen(
         helium314.keyboard.fork.emoji.EmojiTabs.PREF,
         Settings.PREF_EMOJI_KEY_FIT,
         Settings.PREF_EMOJI_SKIN_TONE,
+        ForkSettings.PREF_EMOJI_DICT_LINK,
         // fork: fonts by script
         R.string.fork_cat_fonts,
         SettingsWithoutKey.CUSTOM_FONT,

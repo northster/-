@@ -346,4 +346,6 @@
     <string name="fork_typo_reset">학습 초기화</string>
     <string name="fork_typo_reset_summary">키 크기를 바꾼 뒤처럼 처음부터 다시 배워요</string>
     <string name="fork_typo_reset_confirm">지금까지 배운 터치 위치와 오타를 모두 지울까요?</string>
+    <string name="fork_emoji_dict">이모지 검색 사전</string>
+    <string name="fork_emoji_dict_summary">이모지 패널의 🔍 검색에는 언어별 이모지 사전이 필요해요. 여기서 추가해요</string>
 </resources>

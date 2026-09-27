@@ -123,8 +123,8 @@ fun MainSettingsScreen(
                     R.drawable.ic_settings_correction, onClickTextCorrection),
                 entry(R.string.fork_screen_typo, stringResource(R.string.fork_desc_typo),
                     R.drawable.ic_settings_gesture, onClickTypo),
-                entry(R.string.dictionary_settings_category, stringResource(R.string.fork_desc_dictionaries),
-                    R.drawable.ic_dictionary, onClickDictionaries),
+                // fork: no dictionary entry: word suggestions are off, the only dictionary still used is the emoji
+                //  search one, reached from Size & fonts > emoji (ForkSettings.PREF_EMOJI_DICT_LINK)
                 if (JniUtils.sHaveGestureLib)
                     entry(R.string.settings_screen_gesture, stringResource(R.string.fork_desc_gesture),
                         R.drawable.ic_settings_gesture, onClickGestureTyping)

@@ -79,6 +79,9 @@ object ForkSettings {
     /** emojis per row in the emoji panel, 0 = automatic (from key size) */
     const val PREF_EMOJI_COLUMNS = "fork_emoji_columns"
 
+    /** settings entry that opens the dictionaries screen, where the emoji search dictionary is added (no stored value) */
+    const val PREF_EMOJI_DICT_LINK = "fork_emoji_dict_link"
+
     /** type Hangul (and other composed text) without the app's composing underline */
     const val PREF_HIDE_COMPOSING_UNDERLINE = "fork_hide_composing_underline"
     const val DEFAULT_HIDE_COMPOSING_UNDERLINE = true

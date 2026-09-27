@@ -349,4 +349,6 @@
     <string name="fork_typo_reset">Forget what was learned</string>
     <string name="fork_typo_reset_summary">Starts learning again, e.g. after changing the key size</string>
     <string name="fork_typo_reset_confirm">Forget all touches and typos learned so far?</string>
+    <string name="fork_emoji_dict">Emoji search dictionary</string>
+    <string name="fork_emoji_dict_summary">The 🔍 in the emoji panel needs an emoji dictionary for your language; add one here</string>
 </resources>
