@@ -58,7 +58,7 @@ class DotBorderDrawable(
  * [intensity] 0..1 is animated for a slow breathing.
  */
 class DotGlowDrawable(private val color: Int, private val density: Float) : Drawable() {
-    private val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply { this.color = color }
+    private val paint = Paint(Paint.ANTI_ALIAS_FLAG).also { it.color = color } // not apply: inside it "color" would be the paint's own (black)
     var intensity = 1f
         set(value) { field = value; invalidateSelf() }
 
@@ -97,7 +97,7 @@ class DotGlowDrawable(private val color: Int, private val density: Float) : Draw
 
 /** A single dot in the top left corner of the keyboard, drawn over the keys. */
 class CornerDotDrawable(private val color: Int, private val density: Float) : Drawable() {
-    private val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply { this.color = color }
+    private val paint = Paint(Paint.ANTI_ALIAS_FLAG).also { it.color = color } // not apply: inside it "color" would be the paint's own (black)
     var intensity = 1f
         set(value) { field = value; invalidateSelf() }
 
@@ -115,7 +115,7 @@ class CornerDotDrawable(private val color: Int, private val density: Float) : Dr
 /** Vertical scrollbar made of dots on the right edge of a list: faint track, bright thumb. */
 class DotScrollbarDecoration(private val color: Int, private val density: Float) :
     androidx.recyclerview.widget.RecyclerView.ItemDecoration() {
-    private val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply { this.color = color }
+    private val paint = Paint(Paint.ANTI_ALIAS_FLAG).also { it.color = color } // not apply: inside it "color" would be the paint's own (black)
 
     override fun onDrawOver(c: Canvas, parent: androidx.recyclerview.widget.RecyclerView,
                             state: androidx.recyclerview.widget.RecyclerView.State) {
