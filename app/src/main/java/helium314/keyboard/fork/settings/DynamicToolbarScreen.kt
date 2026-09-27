@@ -31,10 +31,7 @@ fun DynamicToolbarScreen(
     val b = (ctx.getActivity() as? helium314.keyboard.settings.SettingsActivity)?.prefChanged?.collectAsState()
     if ((b?.value ?: 0) < 0)
         helium314.keyboard.latin.utils.Log.v("irrelevant", "stupid way to trigger recomposition on preference change")
-    SearchSettingsScreen(
-        onClickBack = onClickBack,
-        title = stringResource(R.string.settings_screen_toolbar),
-        settings = listOf(
+    val items = listOf(
             R.string.fork_cat_gesture,
             ForkSettings.PREF_TOOLBAR_SWIPE_ENABLED,
             ForkSettings.PREF_SWIPE_MIN_DISTANCE_DP,
@@ -51,9 +48,12 @@ fun DynamicToolbarScreen(
             GlowPrefs.WAVE_DURATION,
             GlowPrefs.WAVE_BRIGHTNESS,
             GlowPrefs.WAVE_THICKNESS,
+            GlowPrefs.WAVE_SHAPE,
+            if (prefs.getString(GlowPrefs.WAVE_SHAPE, GlowPrefs.SHAPE_LINE) == GlowPrefs.SHAPE_ARC) GlowPrefs.WAVE_ARC_RADIUS else null,
             R.string.fork_cat_glow,
             GlowPrefs.GLOW,
             GlowPrefs.GLOW_TEST_UNTIL,
+            GlowPrefs.GLOW_POSITION,
             GlowPrefs.GLOW_MAX,
             GlowPrefs.GLOW_MIN,
             GlowPrefs.GLOW_PERIOD,
@@ -65,7 +65,14 @@ fun DynamicToolbarScreen(
             helium314.keyboard.fork.clipboard.ClipAction.PREF,
             R.string.fork_cat_classic_toolbar,
         ) + helium314.keyboard.settings.screens.classicToolbarItems(prefs)
-    )
+    SearchSettingsScreen(
+        onClickBack = onClickBack,
+        title = stringResource(R.string.settings_screen_toolbar),
+        settings = items,
+        extraActions = { KeyboardPreviewToggle() },
+    ) {
+        KeyboardPreviewScaffold { helium314.keyboard.settings.SettingsSections(items) }
+    }
 }
 
 fun createDynamicToolbarSettings(context: Context) = listOf(
@@ -153,6 +160,16 @@ fun createDynamicToolbarSettings(context: Context) = listOf(
     Setting(context, GlowPrefs.WAVE_THICKNESS, R.string.fork_wave_thickness) {
         GlowSlider(it, GlowPrefs.DEFAULT_WAVE_THICKNESS, 4f..120f, 2f, ::dp)
     },
+    Setting(context, GlowPrefs.WAVE_SHAPE, R.string.fork_wave_shape) { setting ->
+        val ctx = androidx.compose.ui.platform.LocalContext.current
+        helium314.keyboard.settings.preferences.InlineChoicePreference(setting.title, setting.key, listOf(
+            ctx.getString(R.string.fork_wave_shape_line) to GlowPrefs.SHAPE_LINE,
+            ctx.getString(R.string.fork_wave_shape_arc) to GlowPrefs.SHAPE_ARC,
+        ), GlowPrefs.SHAPE_LINE)
+    },
+    Setting(context, GlowPrefs.WAVE_ARC_RADIUS, R.string.fork_wave_arc_radius, R.string.fork_wave_arc_radius_summary) {
+        GlowSlider(it, GlowPrefs.DEFAULT_WAVE_ARC_RADIUS, 40f..1200f, 10f, ::dp)
+    },
     Setting(context, GlowPrefs.GLOW, R.string.fork_glow, R.string.fork_glow_summary) {
         SwitchPreference(it, GlowPrefs.DEFAULT_GLOW) { DynamicToolbarController.current?.onGlowSettingsChanged() }
     },
@@ -164,6 +181,13 @@ fun createDynamicToolbarSettings(context: Context) = listOf(
             DynamicToolbarController.current?.refreshPasteChips()
             android.widget.Toast.makeText(ctx, R.string.fork_clip_hint_test_started, android.widget.Toast.LENGTH_LONG).show()
         })
+    },
+    Setting(context, GlowPrefs.GLOW_POSITION, R.string.fork_glow_position) { setting ->
+        val ctx = androidx.compose.ui.platform.LocalContext.current
+        helium314.keyboard.settings.preferences.InlineChoicePreference(setting.title, setting.key, listOf(
+            ctx.getString(R.string.fork_glow_position_top) to GlowPrefs.POSITION_TOP,
+            ctx.getString(R.string.fork_glow_position_bottom) to GlowPrefs.POSITION_BOTTOM,
+        ), GlowPrefs.POSITION_TOP) { DynamicToolbarController.current?.onGlowSettingsChanged() }
     },
     Setting(context, GlowPrefs.GLOW_MAX, R.string.fork_glow_max) {
         GlowSlider(it, GlowPrefs.DEFAULT_GLOW_MAX, 0.05f..1f, 0.05f, ::percent)

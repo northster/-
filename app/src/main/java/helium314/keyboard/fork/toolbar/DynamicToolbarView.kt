@@ -143,28 +143,60 @@ class DynamicToolbarView @JvmOverloads constructor(
     }
 
     /**
-     * Paste chips instead of the tools: [text] (or an image thumbnail for [imageUri]) and a [code] found in it.
-     * [onBack] goes back to the tools.
+     * Paste chips instead of the tools: [text] (or an image thumbnail for [imageUri]) and what was found in it.
+     * With [smart] chips the clip moves to the left and the [actions] (code, open, call, mail) sit on the right,
+     * otherwise a found code is shown as a chip before the centered clip. [onBack] goes back to the tools.
      */
-    fun showChipBar(text: String?, code: String?, imageUri: android.net.Uri?, onPaste: (String?) -> Unit, onBack: () -> Unit) {
+    fun showChipBar(
+        text: String?, actions: List<helium314.keyboard.fork.clipboard.ClipPrefs.SmartAction>, smart: Boolean,
+        imageUri: android.net.Uri?, onPaste: (String?) -> Unit,
+        onAction: (helium314.keyboard.fork.clipboard.ClipPrefs.SmartAction) -> Unit, onBack: () -> Unit,
+    ) {
         chipBar.removeAllViews()
         chips.removeAllViews()
+        val side = (48 * density).toInt()
         chipBar.addView(iconButton(R.drawable.ic_dot_left, context.getString(R.string.fork_tool_back)) { onBack() },
-            LinearLayout.LayoutParams((48 * density).toInt(), LayoutParams.MATCH_PARENT))
-        if (imageUri != null) {
-            chips.addView(imageChip(imageUri) { onPaste(null) }, chipParams())
-        } else if (text != null) {
-            if (code != null && code != text.trim())
-                chips.addView(chip(code, true, 120, border = true) { onPaste(code) }, chipParams())
-            chips.addView(chip(text.replace('\n', ' '), false, 200, border = true) { onPaste(text) }, chipParams())
+            LinearLayout.LayoutParams(side, LayoutParams.MATCH_PARENT))
+        val code = actions.firstOrNull { it is helium314.keyboard.fork.clipboard.ClipPrefs.SmartAction.Code }?.value
+        if (smart && imageUri == null && text != null && actions.isNotEmpty()) {
+            // smart chips: the clip on the left, what can be done with it on the right
+            chips.gravity = Gravity.START or Gravity.CENTER_VERTICAL
+            chips.addView(chip(text.replace('\n', ' '), false, 400, border = true) { onPaste(text) }, chipParams())
+            chipBar.addView(chips, LinearLayout.LayoutParams(0, LayoutParams.MATCH_PARENT, 1f))
+            val actionRow = LinearLayout(context).apply {
+                orientation = LinearLayout.HORIZONTAL
+                gravity = Gravity.CENTER_VERTICAL
+                setPadding(0, 0, (8 * density).toInt(), 0)
+            }
+            actions.forEach { action ->
+                val isCode = action is helium314.keyboard.fork.clipboard.ClipPrefs.SmartAction.Code
+                actionRow.addView(chip(actionLabel(action), isCode, 160, border = true) { onAction(action) }, chipParams())
+            }
+            chipBar.addView(actionRow, LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT))
+        } else {
+            chips.gravity = Gravity.CENTER
+            if (imageUri != null) {
+                chips.addView(imageChip(imageUri) { onPaste(null) }, chipParams())
+            } else if (text != null) {
+                if (code != null && code != text.trim())
+                    chips.addView(chip(code, true, 120, border = true) { onPaste(code) }, chipParams())
+                chips.addView(chip(text.replace('\n', ' '), false, 200, border = true) { onPaste(text) }, chipParams())
+            }
+            chipBar.addView(chips, LinearLayout.LayoutParams(0, LayoutParams.MATCH_PARENT, 1f))
+            // balance the back button so the chips are centered
+            chipBar.addView(View(context), LinearLayout.LayoutParams(side, LayoutParams.MATCH_PARENT))
         }
-        chipBar.addView(chips, LinearLayout.LayoutParams(0, LayoutParams.MATCH_PARENT, 1f))
-        // balance the back button so the chips are centered
-        chipBar.addView(View(context), LinearLayout.LayoutParams((48 * density).toInt(), LayoutParams.MATCH_PARENT))
         if (header.visibility != VISIBLE && searchBar.visibility != VISIBLE) {
             row.visibility = GONE
             chipBar.visibility = VISIBLE
         }
+    }
+
+    private fun actionLabel(action: helium314.keyboard.fork.clipboard.ClipPrefs.SmartAction) = when (action) {
+        is helium314.keyboard.fork.clipboard.ClipPrefs.SmartAction.Code -> action.value
+        is helium314.keyboard.fork.clipboard.ClipPrefs.SmartAction.Link -> context.getString(R.string.fork_smart_open)
+        is helium314.keyboard.fork.clipboard.ClipPrefs.SmartAction.Phone -> context.getString(R.string.fork_smart_call)
+        is helium314.keyboard.fork.clipboard.ClipPrefs.SmartAction.Email -> context.getString(R.string.fork_smart_mail)
     }
 
     fun hideChipBar() {
@@ -271,7 +303,7 @@ class DynamicToolbarView @JvmOverloads constructor(
 
     override fun dispatchDraw(canvas: android.graphics.Canvas) {
         super.dispatchDraw(canvas)
-        wave?.draw(canvas, 0f, width.toFloat(), 0f, height.toFloat(), waveFront)
+        wave?.draw(canvas, 0f, width.toFloat(), 0f, height.toFloat(), waveFront, width / 2f)
     }
 
     override fun onInterceptTouchEvent(ev: android.view.MotionEvent): Boolean {

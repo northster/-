@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
@@ -70,12 +71,11 @@ fun SearchSettingsScreen(
         content = {
             if (content != null) content()
             else {
-                Scaffold(
-                    contentWindowInsets = WindowInsets.safeDrawing.only(WindowInsetsSides.Bottom)
-                ) { innerPadding ->
+                // fork: insets applied while laying out, see KeyboardPreviewScaffold
+                run {
                     Column(
-                        Modifier.verticalScroll(rememberScrollState()).then(Modifier.padding(innerPadding))
-                            .padding(bottom = 24.dp)
+                        Modifier.fillMaxSize().windowInsetsPadding(WindowInsets.safeDrawing.only(WindowInsetsSides.Bottom))
+                            .verticalScroll(rememberScrollState()).padding(bottom = 24.dp)
                     ) {
                         SettingsSections(settings)
                     }

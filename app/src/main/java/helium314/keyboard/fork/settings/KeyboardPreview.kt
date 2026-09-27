@@ -5,19 +5,18 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.imePadding
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -54,15 +53,13 @@ fun KeyboardPreviewScaffold(content: @Composable ColumnScope.() -> Unit) {
     if ((b?.value ?: 0) < 0)
         Log.v("irrelevant", "stupid way to trigger recomposition on preference change")
     val showPreview = ctx.prefs().getBoolean(ForkSettings.PREF_SHOW_KEYBOARD_PREVIEW, false)
-    Scaffold(
-        contentWindowInsets = WindowInsets.safeDrawing.only(WindowInsetsSides.Bottom),
-        bottomBar = { if (showPreview) KeyboardPreviewField() },
-    ) { innerPadding ->
-        Column(
-            Modifier.verticalScroll(rememberScrollState()).then(Modifier.padding(innerPadding)).padding(bottom = 24.dp)
-        ) {
+    // Insets are applied while laying out, not read while composing: that recomposed the whole screen on every frame
+    // the keyboard or the dynamic toolbar moved, on the main thread the keyboard shares with the settings.
+    Column(Modifier.fillMaxSize().windowInsetsPadding(WindowInsets.safeDrawing.only(WindowInsetsSides.Bottom))) {
+        Column(Modifier.weight(1f).verticalScroll(rememberScrollState()).padding(bottom = 24.dp)) {
             content()
         }
+        if (showPreview) KeyboardPreviewField()
     }
 }
 
@@ -77,7 +74,7 @@ private fun KeyboardPreviewField() {
         keyboardController?.show()
     }
     Surface(color = MaterialTheme.colorScheme.background) {
-        Column(Modifier.imePadding().navigationBarsPadding()) {
+        Column {
             HorizontalDivider(color = s.border)
             OutlinedTextField(
                 value = text,

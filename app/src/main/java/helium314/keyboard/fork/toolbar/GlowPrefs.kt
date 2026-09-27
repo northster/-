@@ -11,10 +11,14 @@ object GlowPrefs {
     const val GLOW_MIN = "fork_glow_min"
     /** one full breath (dim -> bright -> dim), ms */
     const val GLOW_PERIOD = "fork_glow_period"
-    /** how far down the keyboard the glow reaches, fraction of its height */
+    /** how far into the keyboard the glow reaches from its edge, fraction of the keyboard height */
     const val GLOW_HEIGHT = "fork_glow_height"
     /** how wide the glow is, fraction of the keyboard width */
     const val GLOW_WIDTH = "fork_glow_width"
+    /** edge the glow comes from, [POSITION_TOP] or [POSITION_BOTTOM] */
+    const val GLOW_POSITION = "fork_glow_position"
+    const val POSITION_TOP = "top"
+    const val POSITION_BOTTOM = "bottom"
     const val GLOW_DOT_SIZE = "fork_glow_dot_size"
     const val GLOW_DOT_SPACING = "fork_glow_dot_spacing"
     /** until this time (ms) a test chip is offered, to see the glow without copying anything */
@@ -25,6 +29,12 @@ object GlowPrefs {
     const val WAVE_DURATION = "fork_wave_duration"
     const val WAVE_BRIGHTNESS = "fork_wave_brightness"
     const val WAVE_THICKNESS = "fork_wave_thickness"
+    /** [SHAPE_LINE] (straight band) or [SHAPE_ARC] (curved front, the middle leads) */
+    const val WAVE_SHAPE = "fork_wave_shape"
+    const val SHAPE_LINE = "line"
+    const val SHAPE_ARC = "arc"
+    /** radius of the arc front, dp: small = strongly curved, large = almost flat */
+    const val WAVE_ARC_RADIUS = "fork_wave_arc_radius"
 
     const val DEFAULT_GLOW = true
     const val DEFAULT_GLOW_MAX = 0.85f
@@ -38,14 +48,19 @@ object GlowPrefs {
     const val DEFAULT_WAVE_DURATION = 450f
     const val DEFAULT_WAVE_BRIGHTNESS = 0.9f
     const val DEFAULT_WAVE_THICKNESS = 28f
+    const val DEFAULT_WAVE_ARC_RADIUS = 220f
 
     /** everything the glow drawable needs, read once when it is (re)created */
     data class Glow(
         val maxAlpha: Float, val minAlpha: Float, val periodMs: Long,
-        val height: Float, val width: Float, val dotDp: Float, val spacingDp: Float,
+        val height: Float, val width: Float, val dotDp: Float, val spacingDp: Float, val fromBottom: Boolean,
     )
 
-    data class Wave(val durationMs: Long, val brightness: Float, val thicknessDp: Float, val dotDp: Float, val spacingDp: Float)
+    /** [arcRadiusDp] 0 = straight band */
+    data class Wave(
+        val durationMs: Long, val brightness: Float, val thicknessDp: Float, val dotDp: Float, val spacingDp: Float,
+        val arcRadiusDp: Float,
+    )
 
     fun glowEnabled(prefs: SharedPreferences) = prefs.getBoolean(GLOW, DEFAULT_GLOW)
     fun waveEnabled(prefs: SharedPreferences) = prefs.getBoolean(WAVE, DEFAULT_WAVE)
@@ -60,6 +75,7 @@ object GlowPrefs {
             width = prefs.getFloat(GLOW_WIDTH, DEFAULT_GLOW_WIDTH).coerceIn(0.05f, 2f),
             dotDp = prefs.getFloat(GLOW_DOT_SIZE, DEFAULT_GLOW_DOT_SIZE).coerceIn(0.3f, 4f),
             spacingDp = prefs.getFloat(GLOW_DOT_SPACING, DEFAULT_GLOW_DOT_SPACING).coerceIn(2f, 16f),
+            fromBottom = prefs.getString(GLOW_POSITION, POSITION_TOP) == POSITION_BOTTOM,
         )
     }
 
@@ -70,5 +86,7 @@ object GlowPrefs {
         thicknessDp = prefs.getFloat(WAVE_THICKNESS, DEFAULT_WAVE_THICKNESS).coerceIn(2f, 200f),
         dotDp = prefs.getFloat(GLOW_DOT_SIZE, DEFAULT_GLOW_DOT_SIZE).coerceIn(0.3f, 4f),
         spacingDp = prefs.getFloat(GLOW_DOT_SPACING, DEFAULT_GLOW_DOT_SPACING).coerceIn(2f, 16f),
+        arcRadiusDp = if (prefs.getString(WAVE_SHAPE, SHAPE_LINE) == SHAPE_ARC)
+            prefs.getFloat(WAVE_ARC_RADIUS, DEFAULT_WAVE_ARC_RADIUS).coerceIn(20f, 2000f) else 0f,
     )
 }

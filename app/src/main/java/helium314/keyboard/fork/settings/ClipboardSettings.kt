@@ -91,6 +91,24 @@ fun createForkClipboardSettings(context: Context) = listOf(
     Setting(context, ClipPrefs.PASTE_CHIP, R.string.fork_clip_paste_chip, R.string.fork_clip_paste_chip_summary) {
         SwitchPreference(it, ClipPrefs.DEFAULT_PASTE_CHIP)
     },
+    Setting(context, ClipPrefs.SMART_CHIPS, R.string.fork_smart_chips, R.string.fork_smart_chips_summary) {
+        SwitchPreference(it, ClipPrefs.DEFAULT_SMART_CHIPS)
+    },
+    Setting(context, ClipPrefs.CODE_AUTO_OPEN, R.string.fork_code_auto_open, R.string.fork_code_auto_open_summary) {
+        SwitchPreference(it, ClipPrefs.DEFAULT_CODE_AUTO_OPEN)
+    },
+    Setting(context, ClipPrefs.CODE_TEST_UNTIL, R.string.fork_code_test, R.string.fork_code_test_summary) { setting ->
+        val ctx = LocalContext.current
+        helium314.keyboard.settings.preferences.Preference(name = setting.title, description = setting.description, onClick = {
+            ctx.prefs().edit { putLong(ClipPrefs.CODE_TEST_UNTIL, System.currentTimeMillis() + 30_000) }
+            // same process as the keyboard: if it is running, apply right away
+            helium314.keyboard.fork.toolbar.DynamicToolbarController.current?.refreshPasteChips()
+            Toast.makeText(ctx, R.string.fork_code_test_started, Toast.LENGTH_LONG).show()
+        })
+    },
+    Setting(context, ClipPrefs.SMART_TESTER, R.string.fork_smart_tester, R.string.fork_smart_tester_summary) { setting ->
+        SmartChipTester(setting.title, setting.description)
+    },
     Setting(context, ClipPrefs.SCREENSHOTS, R.string.fork_clip_screenshots, R.string.fork_clip_screenshots_summary) { setting ->
         val ctx = LocalContext.current
         val launcher = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
@@ -167,5 +185,42 @@ fun IntChoicePreference(name: String, read: () -> Int, choices: List<Int>, label
                 )
             }
         }
+    }
+}
+
+/** paste or type a message and see what the smart chips find in it, nothing is stored */
+@Composable
+private fun SmartChipTester(title: String, description: String?) {
+    val s = LocalShadcn.current
+    val ctx = LocalContext.current
+    var text by androidx.compose.runtime.remember { androidx.compose.runtime.mutableStateOf(ctx.getString(R.string.fork_clip_code_test_text)) }
+    val actions = androidx.compose.runtime.remember(text) { ClipPrefs.findActions(text) }
+    Column(Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 12.dp)) {
+        Text(title, style = MaterialTheme.typography.bodyLarge)
+        if (description != null) Text(description, style = MaterialTheme.typography.bodyMedium, color = s.mutedForeground)
+        androidx.compose.material3.OutlinedTextField(
+            value = text,
+            onValueChange = { text = it },
+            modifier = Modifier.fillMaxWidth().padding(top = 8.dp),
+            textStyle = MaterialTheme.typography.bodyMedium,
+            shape = MaterialTheme.shapes.medium,
+            minLines = 2,
+            colors = androidx.compose.material3.OutlinedTextFieldDefaults.colors(
+                focusedBorderColor = s.ring,
+                unfocusedBorderColor = s.input,
+                cursorColor = s.foreground,
+            ),
+        )
+        val found = if (actions.isEmpty()) stringResource(R.string.fork_smart_found_nothing)
+            else actions.joinToString("\n") { action ->
+                val kind = when (action) {
+                    is ClipPrefs.SmartAction.Code -> R.string.fork_smart_kind_code
+                    is ClipPrefs.SmartAction.Link -> R.string.fork_smart_kind_link
+                    is ClipPrefs.SmartAction.Phone -> R.string.fork_smart_kind_phone
+                    is ClipPrefs.SmartAction.Email -> R.string.fork_smart_kind_email
+                }
+                "${ctx.getString(kind)}: ${action.value}"
+            }
+        Text(found, style = MaterialTheme.typography.bodyMedium, modifier = Modifier.padding(top = 8.dp))
     }
 }

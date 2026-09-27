@@ -17,6 +17,14 @@ object ClipPrefs {
     const val SCREENSHOTS = "fork_clip_screenshots"
     /** show the latest clip / a code found in it as chips on the dynamic toolbar */
     const val PASTE_CHIP = "fork_clip_paste_chip"
+    /** actions for what the clip contains (open link, call, mail, paste the code) next to the paste chip */
+    const val SMART_CHIPS = "fork_clip_smart_chips"
+    /** open the toolbar right away when a copied text contains a verification code */
+    const val CODE_AUTO_OPEN = "fork_clip_code_auto_open"
+    /** until this time (ms) a test message with a code is offered as if it was just copied */
+    const val CODE_TEST_UNTIL = "fork_clip_code_test_until"
+    /** settings entry with a text field that shows what the smart chips find, nothing is stored */
+    const val SMART_TESTER = "fork_clip_smart_tester"
 
     const val DEFAULT_RETENTION_HOURS = 24
     const val DEFAULT_MAX_ITEMS = 100
@@ -24,6 +32,8 @@ object ClipPrefs {
     const val DEFAULT_PREVIEW_LINES = 4
     const val DEFAULT_SCREENSHOTS = false
     const val DEFAULT_PASTE_CHIP = true
+    const val DEFAULT_SMART_CHIPS = true
+    const val DEFAULT_CODE_AUTO_OPEN = true
 
     val retentionChoices = listOf(1, 6, 24, 72, 168, 0)
     val maxItemChoices = listOf(20, 50, 100, 200, 500, 0)
@@ -39,19 +49,54 @@ object ClipPrefs {
     fun previewLines(prefs: SharedPreferences) = prefs.getInt(PREVIEW_LINES, DEFAULT_PREVIEW_LINES).coerceIn(1, 12)
     fun screenshots(prefs: SharedPreferences) = prefs.getBoolean(SCREENSHOTS, DEFAULT_SCREENSHOTS)
     fun pasteChip(prefs: SharedPreferences) = prefs.getBoolean(PASTE_CHIP, DEFAULT_PASTE_CHIP)
+    fun smartChips(prefs: SharedPreferences) = prefs.getBoolean(SMART_CHIPS, DEFAULT_SMART_CHIPS)
+    fun codeAutoOpen(prefs: SharedPreferences) = prefs.getBoolean(CODE_AUTO_OPEN, DEFAULT_CODE_AUTO_OPEN)
 
-    private val otpRegex = Regex("""(?<![\d-])(\d{4,8})(?![\d-])""")
+    // Google writes codes as G-123456, the code is the digits
+    private val otpRegex = Regex("""(?:(?<=\bG-)|(?<![\d-]))(\d{4,8})(?![\d-])""")
 
-    /** A verification code in [text]: a lone 4-8 digit number, preferring one near a code keyword. */
+    /** A verification code in [text]: a lone 4-8 digit number, preferring one near a code keyword, not part of a phone number. */
     fun findCode(text: String?): String? {
-        if (text.isNullOrBlank() || text.length > 500) return null
-        val matches = otpRegex.findAll(text).map { it.groupValues[1] }.toList()
+        if (text.isNullOrBlank() || text.length > 2000) return null
+        val phones = phoneRegex.findAll(text).map { it.range }.toList()
+        val matches = otpRegex.findAll(text).filter { m -> phones.none { m.range.first in it } }.toList()
         if (matches.isEmpty()) return null
-        if (matches.size == 1) return matches[0]
+        if (matches.size == 1) return matches[0].groupValues[1]
         val keyword = Regex("(?i)(인증|코드|번호|code|otp|pin|verification)")
-        return matches.firstOrNull { m ->
-            val i = text.indexOf(m)
-            keyword.containsMatchIn(text.substring((i - 30).coerceAtLeast(0), i))
-        } ?: matches.first()
+        return (matches.firstOrNull { m ->
+            keyword.containsMatchIn(text.substring((m.range.first - 30).coerceAtLeast(0), m.range.first))
+        } ?: matches.first()).groupValues[1]
+    }
+
+    /** something in a clip the keyboard can act on, shown as a chip right of the clip */
+    sealed class SmartAction(val value: String) {
+        /** verification code, pasted */
+        class Code(value: String) : SmartAction(value)
+        /** web address, opened */
+        class Link(value: String) : SmartAction(value)
+        /** phone number, opened in the dialer */
+        class Phone(value: String) : SmartAction(value)
+        /** mail address, opened in a mail app */
+        class Email(value: String) : SmartAction(value)
+    }
+
+    private val linkRegex = Regex("""(?i)\b(?:https?://|www\.)[^\s<>"']+""")
+    private val emailRegex = Regex("""(?<![\w.+-])[\w.+-]+@[\w-]+(?:\.[\w-]+)*\.[a-zA-Z]{2,}""")
+    // 010-1234-5678, 02 123 4567, 01012345678, +82 10-1234-5678, 1588-1234 (service numbers need the dash).
+    private val phoneRegex = Regex("""(?<![\d-])(?:(?:\+\d{1,3}[- ]?\d{1,2}|0\d{1,2})[- .]?\d{3,4}[- .]?\d{4}|1\d{3}-\d{4})(?![\d-])""")
+
+    /** What [text] contains: a code first (it is what people copy a message for), then link, phone number, mail. */
+    fun findActions(text: String?): List<SmartAction> {
+        if (text.isNullOrBlank() || text.length > 2000) return emptyList()
+        val actions = mutableListOf<SmartAction>()
+        findCode(text)?.let { actions.add(SmartAction.Code(it)) }
+        val email = emailRegex.find(text)?.value
+        // a link that is part of a mail address is not a link
+        linkRegex.find(text)?.value?.trimEnd('.', ',', ')', ']', '!', '?')
+            ?.takeIf { email == null || !email.contains(it.removePrefix("www.")) }
+            ?.let { actions.add(SmartAction.Link(it)) }
+        phoneRegex.find(text)?.value?.let { actions.add(SmartAction.Phone(it)) }
+        email?.let { actions.add(SmartAction.Email(it)) }
+        return actions
     }
 }

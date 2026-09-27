@@ -8,16 +8,17 @@ import androidx.annotation.DrawableRes
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -78,70 +79,75 @@ fun MainSettingsScreen(
         settings = emptyList(),
     ) {
         val ctx = LocalContext.current
-        val enabledSubtypes = SubtypeSettings.getEnabledSubtypes(true)
+        // fork: computed once, not again on every recomposition
+        val subtypeNames = androidx.compose.runtime.remember {
+            SubtypeSettings.getEnabledSubtypes(true).joinToString(", ") { it.displayName() }
+        }
         val setupState by SettingsActivity.imeSetupState.collectAsState()
         val appName = stringResource(R.string.english_ime_name)
-        Scaffold(contentWindowInsets = WindowInsets.safeDrawing.only(WindowInsetsSides.Bottom)) { innerPadding ->
-            Column(
-                Modifier.verticalScroll(rememberScrollState()).then(Modifier.padding(innerPadding)).padding(bottom = 24.dp)
-            ) {
-                when (setupState) {
-                    ImeSetupState.NOT_ENABLED -> SetupAlert(
-                        title = stringResource(R.string.fork_setup_not_enabled_title),
-                        description = stringResource(R.string.fork_setup_not_enabled_desc, appName),
-                        actionText = stringResource(R.string.fork_setup_not_enabled_action),
-                        onAction = { openImeSettings(ctx) },
-                        modifier = Modifier.padding(top = 8.dp),
-                    )
-                    ImeSetupState.NOT_CURRENT -> SetupAlert(
-                        title = stringResource(R.string.fork_setup_not_current_title),
-                        description = stringResource(R.string.fork_setup_not_current_desc, appName),
-                        actionText = stringResource(R.string.fork_setup_not_current_action),
-                        onAction = { showImePicker(ctx) },
-                        modifier = Modifier.padding(top = 8.dp),
-                    )
-                    ImeSetupState.OK -> {}
-                }
-                TestField()
-
-                SettingsSection(stringResource(R.string.fork_main_input), listOfNotNull(
-                    entry(R.string.language_and_layouts_title, enabledSubtypes.joinToString(", ") { it.displayName() },
-                        R.drawable.ic_settings_languages, onClickLanguage),
-                    entry(R.string.settings_screen_preferences, stringResource(R.string.fork_desc_preferences),
-                        R.drawable.ic_settings_preferences, onClickPreferences),
-                    entry(R.string.settings_screen_correction, stringResource(R.string.fork_desc_correction),
-                        R.drawable.ic_settings_correction, onClickTextCorrection),
-                    entry(R.string.dictionary_settings_category, stringResource(R.string.fork_desc_dictionaries),
-                        R.drawable.ic_dictionary, onClickDictionaries),
-                    if (JniUtils.sHaveGestureLib)
-                        entry(R.string.settings_screen_gesture, stringResource(R.string.fork_desc_gesture),
-                            R.drawable.ic_settings_gesture, onClickGestureTyping)
-                    else null,
-                    // we don't even show the menu if data gathering phase ended more than 2 weeks ago
-                    if (JniUtils.sHaveGestureLib && System.currentTimeMillis() < END_DATE_EPOCH_MILLIS + TWO_WEEKS_IN_MILLIS)
-                        entry(R.string.gesture_data_screen, null, R.drawable.ic_settings_gesture, onClickDataGathering)
-                    else null,
-                ))
-                SettingsSection(stringResource(R.string.fork_main_look), listOf(
-                    entry(R.string.fork_theme_colors, stringResource(R.string.fork_desc_theme_colors),
-                        R.drawable.ic_settings_appearance, onClickThemeColors),
-                    entry(R.string.settings_screen_appearance, stringResource(R.string.fork_desc_appearance),
-                        R.drawable.ic_settings_appearance, onClickAppearance),
-                    entry(R.string.settings_screen_secondary_layouts, stringResource(R.string.fork_desc_layouts),
-                        R.drawable.ic_settings_layout, onClickLayouts),
-                ))
-                SettingsSection(stringResource(R.string.fork_main_toolbar), listOf(
-                    // fork: dynamic and HeliBoard toolbar settings are one screen
-                    entry(R.string.settings_screen_toolbar, stringResource(R.string.fork_desc_dynamic_toolbar),
-                        R.drawable.ic_settings_toolbar, onClickDynamicToolbar),
-                ))
-                SettingsSection(stringResource(R.string.fork_main_more), listOf(
-                    entry(R.string.settings_screen_advanced, stringResource(R.string.fork_desc_advanced),
-                        R.drawable.ic_settings_advanced, onClickAdvanced),
-                    entry(R.string.settings_screen_about, stringResource(R.string.fork_desc_about),
-                        R.drawable.ic_settings_about, onClickAbout),
-                ))
+        // fork: the bottom inset (keyboard, dynamic toolbar) is applied while laying out. Reading Scaffold's
+        // innerPadding here recomposed the whole screen on every frame the keyboard or toolbar moved, on the
+        // main thread the keyboard shares with this activity.
+        Column(
+            Modifier.fillMaxSize().windowInsetsPadding(WindowInsets.safeDrawing.only(WindowInsetsSides.Bottom))
+                .verticalScroll(rememberScrollState()).padding(bottom = 24.dp)
+        ) {
+            when (setupState) {
+                ImeSetupState.NOT_ENABLED -> SetupAlert(
+                    title = stringResource(R.string.fork_setup_not_enabled_title),
+                    description = stringResource(R.string.fork_setup_not_enabled_desc, appName),
+                    actionText = stringResource(R.string.fork_setup_not_enabled_action),
+                    onAction = { openImeSettings(ctx) },
+                    modifier = Modifier.padding(top = 8.dp),
+                )
+                ImeSetupState.NOT_CURRENT -> SetupAlert(
+                    title = stringResource(R.string.fork_setup_not_current_title),
+                    description = stringResource(R.string.fork_setup_not_current_desc, appName),
+                    actionText = stringResource(R.string.fork_setup_not_current_action),
+                    onAction = { showImePicker(ctx) },
+                    modifier = Modifier.padding(top = 8.dp),
+                )
+                ImeSetupState.OK -> {}
             }
+            TestField()
+
+            SettingsSection(stringResource(R.string.fork_main_input), listOfNotNull(
+                entry(R.string.language_and_layouts_title, subtypeNames,
+                    R.drawable.ic_settings_languages, onClickLanguage),
+                entry(R.string.settings_screen_preferences, stringResource(R.string.fork_desc_preferences),
+                    R.drawable.ic_settings_preferences, onClickPreferences),
+                entry(R.string.settings_screen_correction, stringResource(R.string.fork_desc_correction),
+                    R.drawable.ic_settings_correction, onClickTextCorrection),
+                entry(R.string.dictionary_settings_category, stringResource(R.string.fork_desc_dictionaries),
+                    R.drawable.ic_dictionary, onClickDictionaries),
+                if (JniUtils.sHaveGestureLib)
+                    entry(R.string.settings_screen_gesture, stringResource(R.string.fork_desc_gesture),
+                        R.drawable.ic_settings_gesture, onClickGestureTyping)
+                else null,
+                // we don't even show the menu if data gathering phase ended more than 2 weeks ago
+                if (JniUtils.sHaveGestureLib && System.currentTimeMillis() < END_DATE_EPOCH_MILLIS + TWO_WEEKS_IN_MILLIS)
+                    entry(R.string.gesture_data_screen, null, R.drawable.ic_settings_gesture, onClickDataGathering)
+                else null,
+            ))
+            SettingsSection(stringResource(R.string.fork_main_look), listOf(
+                entry(R.string.fork_theme_colors, stringResource(R.string.fork_desc_theme_colors),
+                    R.drawable.ic_settings_appearance, onClickThemeColors),
+                entry(R.string.settings_screen_appearance, stringResource(R.string.fork_desc_appearance),
+                    R.drawable.ic_settings_appearance, onClickAppearance),
+                entry(R.string.settings_screen_secondary_layouts, stringResource(R.string.fork_desc_layouts),
+                    R.drawable.ic_settings_layout, onClickLayouts),
+            ))
+            SettingsSection(stringResource(R.string.fork_main_toolbar), listOf(
+                // fork: dynamic and HeliBoard toolbar settings are one screen
+                entry(R.string.settings_screen_toolbar, stringResource(R.string.fork_desc_dynamic_toolbar),
+                    R.drawable.ic_settings_toolbar, onClickDynamicToolbar),
+            ))
+            SettingsSection(stringResource(R.string.fork_main_more), listOf(
+                entry(R.string.settings_screen_advanced, stringResource(R.string.fork_desc_advanced),
+                    R.drawable.ic_settings_advanced, onClickAdvanced),
+                entry(R.string.settings_screen_about, stringResource(R.string.fork_desc_about),
+                    R.drawable.ic_settings_about, onClickAbout),
+            ))
         }
     }
 }

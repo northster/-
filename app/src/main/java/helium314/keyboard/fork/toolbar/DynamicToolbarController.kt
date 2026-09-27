@@ -59,6 +59,10 @@ class DynamicToolbarController(private val context: Context) {
     private var dismissedChipKey: String? = null
     /** recent clip offered as a paste chip, null if none */
     private var chip: ClipboardHistoryManager.RecentClip? = null
+    /** key of the clip the toolbar was opened for (verification code), opened only once per clip */
+    private var autoOpenedKey: String? = null
+    /** the toolbar was opened for a code and closes again once the chip is used or dismissed */
+    private var autoOpened = false
     /** dot glow behind the keys while a chip waits behind the collapsed toolbar */
     private var hintAnimator: ValueAnimator? = null
     /** white dot wave over the keyboard (and the toolbar) when the toolbar opens / closes */
@@ -81,7 +85,10 @@ class DynamicToolbarController(private val context: Context) {
     private val frameLayoutListener = View.OnLayoutChangeListener { _, _, _, _, _, _, _, _, _ ->
         updatePosition()
         // the keyboard may not have been visible yet when the chip was found
-        if (chip != null) setHint(hintWanted())
+        if (chip != null) {
+            setHint(hintWanted())
+            autoOpenForCode()
+        }
     }
 
     /** Called with every new input view (first start, theme change, display / fold state change). */
@@ -135,6 +142,7 @@ class DynamicToolbarController(private val context: Context) {
         }
         // closing the toolbar while it shows a paste chip dismisses the chip
         if (!expanded && toolbar?.isChipBarShown == true) dismissChip()
+        if (!expanded) autoOpened = false
         isExpanded = expanded
         applyChipState()
         context.prefs().edit { putBoolean(ForkSettings.PREF_TOOLBAR_EXPANDED, expanded) }
@@ -370,7 +378,10 @@ class DynamicToolbarController(private val context: Context) {
         val prefs = context.prefs()
         val now = System.currentTimeMillis()
         val testUntil = prefs.getLong(GlowPrefs.GLOW_TEST_UNTIL, 0)
+        val codeTestUntil = prefs.getLong(ClipPrefs.CODE_TEST_UNTIL, 0)
         val clip = when {
+            now < codeTestUntil -> ClipboardHistoryManager.RecentClip(context.getString(R.string.fork_clip_code_test_text), null,
+                codeTestUntil - ClipboardHistoryManager.RECENT_TIME_MILLIS)
             now < testUntil -> ClipboardHistoryManager.RecentClip(context.getString(R.string.fork_clip_hint_test_text), null,
                 testUntil - ClipboardHistoryManager.RECENT_TIME_MILLIS)
             ClipPrefs.pasteChip(prefs) -> ime.clipboardHistoryManager.getRecentClip()
@@ -383,6 +394,31 @@ class DynamicToolbarController(private val context: Context) {
             handler.postDelayed(chipExpiry, left.coerceAtLeast(0) + 500)
         }
         applyChipState()
+        autoOpenForCode()
+    }
+
+    /** a verification code was copied: open the toolbar so its chip is right there */
+    private fun autoOpenForCode() {
+        val c = chip ?: return
+        if (c.key == autoOpenedKey || isExpanded || toolActive || clipSearch.isActive || !isUsable()) return
+        if (!ClipPrefs.codeAutoOpen(context.prefs()) || ClipPrefs.findCode(c.text) == null) return
+        Log.i(TAG, "opening the toolbar for a verification code")
+        autoOpenedKey = c.key
+        setExpanded(true, true)
+        autoOpened = true
+        startWave(true)
+    }
+
+    /** the chip was used or dismissed: back to the tools, or closed again if it was opened for a code */
+    private fun closeChip() {
+        dismissChip()
+        if (autoOpened) {
+            autoOpened = false
+            setExpanded(false, true)
+            startWave(false)
+        } else {
+            applyChipState()
+        }
     }
 
     private fun dismissChip() {
@@ -400,19 +436,48 @@ class DynamicToolbarController(private val context: Context) {
         val c = chip
         val busy = toolActive || clipSearch.isActive
         if (c != null && isExpanded && !busy) {
-            tb.showChipBar(c.text?.take(300), ClipPrefs.findCode(c.text), c.imageUri,
+            val prefs = context.prefs()
+            val actions = if (c.imageUri == null) ClipPrefs.findActions(c.text) else emptyList()
+            tb.showChipBar(c.text?.take(300), actions, ClipPrefs.smartChips(prefs), c.imageUri,
                 onPaste = { text -> if (c.screenshot != null) pasteScreenshot(c.screenshot) else pasteChip(text) },
-                onBack = { dismissChip(); applyChipState() })
+                onAction = ::onSmartAction,
+                onBack = { closeChip() })
         } else {
             tb.hideChipBar()
         }
         setHint(hintWanted())
     }
 
+    private fun onSmartAction(action: ClipPrefs.SmartAction) {
+        if (action is ClipPrefs.SmartAction.Code) {
+            pasteChip(action.value)
+            return
+        }
+        val uri = when (action) {
+            is ClipPrefs.SmartAction.Link ->
+                if (action.value.contains("://")) action.value else "https://${action.value}"
+            is ClipPrefs.SmartAction.Phone -> "tel:" + action.value.filter { it.isDigit() || it == '+' }
+            is ClipPrefs.SmartAction.Email -> "mailto:" + action.value
+            else -> return
+        }
+        val intent = android.content.Intent(
+            if (action is ClipPrefs.SmartAction.Phone) android.content.Intent.ACTION_DIAL
+            else if (action is ClipPrefs.SmartAction.Email) android.content.Intent.ACTION_SENDTO
+            else android.content.Intent.ACTION_VIEW,
+            android.net.Uri.parse(uri)
+        ).addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK)
+        closeChip()
+        try {
+            context.startActivity(intent)
+        } catch (e: android.content.ActivityNotFoundException) {
+            Log.w(TAG, "no app for $uri")
+            KeyboardSwitcher.getInstance().showToast(context.getString(R.string.fork_smart_no_app), true)
+        }
+    }
+
     private fun pasteChip(text: String?) {
         val ime = latinIME ?: return
-        dismissChip()
-        applyChipState()
+        closeChip()
         if (text != null) ime.onTextInput(text)
         else ime.mKeyboardActionListener.onCodeInput(KeyCode.CLIPBOARD_PASTE, Constants.NOT_A_COORDINATE, Constants.NOT_A_COORDINATE, false)
     }
@@ -420,8 +485,7 @@ class DynamicToolbarController(private val context: Context) {
     /** screenshots aren't on the clipboard: add to the clipboard history (our own file) and paste that */
     private fun pasteScreenshot(shot: ScreenshotWatcher.Screenshot) {
         val ime = latinIME ?: return
-        dismissChip()
-        applyChipState()
+        closeChip()
         val dao = ClipboardDao.getInstance(context) ?: return
         val time = System.currentTimeMillis()
         dao.addClipUri(time, false, shot.uri, android.content.ClipDescription(shot.name, arrayOf(shot.mime)), context)
@@ -490,7 +554,8 @@ class DynamicToolbarController(private val context: Context) {
         val kvBottom = kvTop + kv.height
         frame.getLocationOnScreen(loc)
         val toolbarTop = loc[1].toFloat() - (tb?.height ?: 0)
-        val thickness = wave.thicknessPx
+        // the whole band, arc ends included, has to leave the far edge
+        val thickness = wave.thicknessPx + wave.maxLag(kv.width.toFloat())
         // the front starts at one edge and moves until the whole band has left the far edge
         val start = if (up) kvBottom else kvTop
         val end = if (up) toolbarTop - thickness else kvBottom + thickness
