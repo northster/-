@@ -79,7 +79,11 @@ class DynamicToolbarController(private val context: Context) {
     /** whether the app should currently be resized for the toolbar */
     private var insetsIncludeToolbar = isExpanded
 
-    private val frameLayoutListener = View.OnLayoutChangeListener { _, _, _, _, _, _, _, _, _ -> updatePosition() }
+    private val frameLayoutListener = View.OnLayoutChangeListener { _, _, _, _, _, _, _, _, _ ->
+        updatePosition()
+        // the keyboard may not have been visible yet when the chip was found
+        if (chip != null) setHint(hintWanted())
+    }
 
     /** Called with every new input view (first start, theme change, display / fold state change). */
     fun attach(newInputView: View) {
@@ -87,6 +91,7 @@ class DynamicToolbarController(private val context: Context) {
         if (toolActive) {
             // the new input view starts with the letters, restore the state from before the tool
             toolActive = false
+            toolKind = TOOL_NONE
             if (!expandedBeforeTool) setExpanded(false, false)
         }
         keyboardFrame?.removeOnLayoutChangeListener(frameLayoutListener)
@@ -236,31 +241,68 @@ class DynamicToolbarController(private val context: Context) {
 
     // ---------------------------------------------------------------- tool header (clipboard panel)
 
-    /** Called by KeyboardSwitcher when the clipboard panel is shown. */
-    fun onClipboardShown() {
+    /** tool whose header is shown, see TOOL_* */
+    private var toolKind = TOOL_NONE
+
+    /** Called by KeyboardSwitcher when the clipboard or emoji panel is shown. */
+    fun onToolShown(tool: Int) {
         val tb = toolbar ?: return
         if (clipSearch.isActive) return
         if (!toolActive) {
             toolActive = true
             expandedBeforeTool = isExpanded
         }
-        val actions = ClipAction.enabled(context.prefs())
-        tb.showToolHeader(context.getString(R.string.fork_toolbar_clipboard), actions.map { it.icon(context) to it.label(context) },
-            onBack = ::backToKeyboard) { i -> onClipAction(actions[i]) }
-        tb.onHeaderSwipe = { up -> setClipboardPanelTall(up) }
+        if (toolKind != tool) {
+            // another panel, not tall
+            panelAnimator?.cancel()
+            isClipboardPanelTall = false
+        }
+        toolKind = tool
+        when (tool) {
+            TOOL_CLIPBOARD -> {
+                val actions = ClipAction.enabled(context.prefs())
+                tb.showToolHeader(context.getString(R.string.fork_toolbar_clipboard), actions.map { it.icon(context) to it.label(context) },
+                    onBack = ::backToKeyboard) { i -> onClipAction(actions[i]) }
+            }
+            TOOL_EMOJI -> {
+                val emoji = KeyboardSwitcher.getInstance().emojiPalettesView ?: return
+                val tabs = (0 until emoji.forkTabCount()).map { emoji.forkTabIcon(it) to emoji.forkTabDescription(it) }
+                tb.showEmojiHeader(tabs, emoji.forkCurrentTab(), onBack = ::backToKeyboard,
+                    onTab = { i ->
+                        latinIME?.mKeyboardActionListener?.onPressKey(KeyCode.NOT_SPECIFIED, 0, 1, helium314.keyboard.event.HapticEvent.KEY_PRESS)
+                        emoji.forkSelectTab(i)
+                    },
+                    onLongTab = { i ->
+                        // long press on recents clears them, like before
+                        if (emoji.forkIsRecentsTab(i)) { emoji.forkClearRecents(); true } else false
+                    })
+            }
+        }
+        tb.onHeaderSwipe = { up -> setPanelTall(up) }
         setExpanded(true, true)
     }
 
-    /** Make the clipboard panel cover about 2/3 of the screen (true) or go back to its normal height. */
-    fun setClipboardPanelTall(tall: Boolean) {
-        val panel = KeyboardSwitcher.getInstance().clipboardHistoryView ?: return
+    /** the emoji panel changed its category, e.g. when opened */
+    fun onEmojiTabChanged(index: Int) {
+        if (toolKind == TOOL_EMOJI) toolbar?.setEmojiTabSelected(index)
+    }
+
+    private fun currentPanel(): ForkTallPanel? = when (toolKind) {
+        TOOL_CLIPBOARD -> KeyboardSwitcher.getInstance().clipboardHistoryView
+        TOOL_EMOJI -> KeyboardSwitcher.getInstance().emojiPalettesView
+        else -> null
+    }
+
+    /** Make the open panel cover about 2/3 of the screen (true) or go back to its normal height. */
+    fun setPanelTall(tall: Boolean) {
+        val panel = currentPanel() ?: return
         if (tall == isClipboardPanelTall || !toolActive) return
         isClipboardPanelTall = tall
         panelAnimator?.cancel()
         val normal = panel.forkNormalHeight()
         val screen = context.resources.displayMetrics.heightPixels
         val target = if (tall) maxOf(normal, screen * 2 / 3 - (toolbar?.height ?: 0)) else normal
-        val start = maxOf(panel.height, normal)
+        val start = maxOf(panel.forkCurrentHeight(), normal)
         panelAnimator = ValueAnimator.ofInt(start, target).apply {
             duration = 220
             interpolator = EMPHASIZED
@@ -269,17 +311,18 @@ class DynamicToolbarController(private val context: Context) {
         }
     }
 
-    /** back key: shrinks a tall clipboard panel first. Returns true if it was used. */
+    /** back key: shrinks a tall panel first. Returns true if it was used. */
     fun onBackKey(): Boolean {
         if (!isClipboardPanelTall) return false
-        setClipboardPanelTall(false)
+        setPanelTall(false)
         return true
     }
 
-    /** Called by KeyboardSwitcher when the clipboard panel is replaced by something else. */
-    fun onClipboardHidden() {
+    /** Called by KeyboardSwitcher when the letters (or something else without a header) are shown again. */
+    fun onToolHidden() {
         panelAnimator?.cancel()
         isClipboardPanelTall = false
+        toolKind = TOOL_NONE
         if (!toolActive) return
         toolActive = false
         toolbar?.hideToolHeader()
@@ -343,7 +386,7 @@ class DynamicToolbarController(private val context: Context) {
         } else {
             tb.hideChipBar()
         }
-        setHint(c != null && !isExpanded && !busy && isUsable())
+        setHint(hintWanted())
     }
 
     private fun pasteChip(text: String?) {
@@ -366,36 +409,52 @@ class DynamicToolbarController(private val context: Context) {
         ime.mKeyboardActionListener.onContent(entry.getContentInfo(context))
     }
 
+    /** the glow is drawn on the keyboard view, layered over its (opaque) background and under the keys */
+    private var hintGlowView: View? = null
+    private var hintGlowOriginalBackground: android.graphics.drawable.Drawable? = null
+
+    private fun hintWanted() = chip != null && !isExpanded && !toolActive && !clipSearch.isActive && isUsable()
+
     private fun setHint(on: Boolean) {
-        val host = KeyboardSwitcher.getInstance().wrapperView
+        val switcher = KeyboardSwitcher.getInstance()
+        val dotHost = switcher.wrapperView
+        val glowHost: View? = switcher.mainKeyboardView
         val shown = hintGlow != null || hintDot != null
-        if (on == shown && (!on || host === hintHost)) return
+        val sameHosts = hintHost === dotHost && (hintGlow == null || hintGlowView === glowHost)
+        if (on == shown && (!on || sameHosts)) return
         // remove the old one
         hintAnimator?.cancel()
-        hintHost?.let { h ->
-            if (hintGlow != null && h.background === hintGlow) h.background = null
-            hintDot?.let { h.overlay.remove(it) }
-        }
+        hintGlowView?.let { v -> if (v.background === hintGlowLayer) v.background = hintGlowOriginalBackground }
+        hintHost?.let { h -> hintDot?.let { h.overlay.remove(it) } }
         hintGlow = null
+        hintGlowLayer = null
+        hintGlowView = null
+        hintGlowOriginalBackground = null
         hintDot = null
         hintHost = null
-        if (!on || host == null) return
+        if (!on || dotHost == null) return
         val enter = Settings.getValues().mColors.get(helium314.keyboard.latin.common.ColorType.ACTION_KEY_BACKGROUND)
         val density = context.resources.displayMetrics.density
-        hintHost = host
+        hintHost = dotHost
         val setIntensity: (Float) -> Unit
-        if (ClipPrefs.chipHint(context.prefs()) == ClipPrefs.HINT_DOT) {
+        if (ClipPrefs.chipHint(context.prefs()) == ClipPrefs.HINT_DOT || glowHost == null) {
             // over the keys, top left corner
-            val dot = CornerDotDrawable(enter, density).apply { setBounds(0, 0, host.width, host.height) }
-            host.overlay.add(dot)
+            val dot = CornerDotDrawable(enter, density).apply { setBounds(0, 0, dotHost.width, dotHost.height) }
+            dotHost.overlay.add(dot)
             hintDot = dot
             setIntensity = { dot.intensity = it }
         } else {
-            // behind the keys (the wrapper has no background of its own), visible between them
+            // behind the keys, visible between them: on top of the keyboard view's own background
             val glowDrawable = DotGlowDrawable(enter, density)
-            host.background = glowDrawable
+            val original = glowHost.background
+            val layer = if (original != null) android.graphics.drawable.LayerDrawable(arrayOf(original, glowDrawable))
+                else android.graphics.drawable.LayerDrawable(arrayOf(glowDrawable))
+            hintGlowOriginalBackground = original
+            glowHost.background = layer
+            hintGlowView = glowHost
+            hintGlowLayer = layer
             hintGlow = glowDrawable
-            setIntensity = { glowDrawable.intensity = it }
+            setIntensity = { glowDrawable.intensity = it; glowHost.invalidate() }
         }
         // slow breathing, noticed without being in the way
         hintAnimator = ValueAnimator.ofFloat(0.3f, 1f).apply {
@@ -406,6 +465,8 @@ class DynamicToolbarController(private val context: Context) {
             start()
         }
     }
+
+    private var hintGlowLayer: android.graphics.drawable.Drawable? = null
 
     private val handler = android.os.Handler(android.os.Looper.getMainLooper())
     private val chipExpiry = Runnable { refreshPasteChips() }
@@ -498,6 +559,10 @@ class DynamicToolbarController(private val context: Context) {
 
     companion object {
         private const val TAG = "DynamicToolbar"
+        const val TOOL_NONE = 0
+        const val TOOL_CLIPBOARD = 1
+        const val TOOL_EMOJI = 2
+
         /** the controller of the running keyboard service */
         @JvmStatic
         var current: DynamicToolbarController? = null

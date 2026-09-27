@@ -285,6 +285,13 @@ class KeyboardActionListenerImpl(private val latinIME: LatinIME, private val inp
 
     override fun onSpaceCursorMove(steps: Int): Boolean = onMoveCursorHorizontally(steps)
 
+    // fork: one arrow key press per line, like Samsung / Apple keyboards
+    override fun onSpaceCursorMoveVertically(steps: Int): Boolean {
+        if (steps == 0) return false
+        repeat(kotlin.math.abs(steps)) { onMoveCursorVertically(if (steps < 0) -1 else 1) }
+        return true
+    }
+
     private fun onLanguageSlide(steps: Int): Boolean {
         if (abs(steps) < settings.current.mLanguageSwipeDistance) return false
         val subtypes = SubtypeSettings.getEnabledSubtypes(true)

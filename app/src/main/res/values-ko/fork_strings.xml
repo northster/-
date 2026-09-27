@@ -154,4 +154,6 @@
     <string name="fork_clip_chip_hint">붙여넣기 칩 알림</string>
     <string name="fork_clip_chip_hint_glow">키 뒤 점 글로우</string>
     <string name="fork_clip_chip_hint_dot">왼쪽 위 점</string>
+    <string name="fork_emoji_columns">한 줄 이모지 개수</string>
+    <string name="fork_auto">자동</string>
 </resources>

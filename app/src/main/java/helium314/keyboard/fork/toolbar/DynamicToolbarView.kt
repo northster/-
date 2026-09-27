@@ -317,6 +317,63 @@ class DynamicToolbarView @JvmOverloads constructor(
         header.visibility = VISIBLE
     }
 
+    private val emojiTabs = ArrayList<ImageView>()
+    private var emojiTabScroll: HorizontalScrollView? = null
+
+    /**
+     * Emoji header: back to the keyboard stays on the left, the category tabs scroll sideways next to it.
+     * [tabs] are icon resource and description.
+     */
+    fun showEmojiHeader(tabs: List<Pair<Int, String>>, selected: Int, onBack: () -> Unit,
+                        onTab: (Int) -> Unit, onLongTab: (Int) -> Boolean) {
+        val colors = Settings.getValues().mColors
+        header.removeAllViews()
+        emojiTabs.clear()
+        header.addView(iconButton(R.drawable.ic_dot_keyboard, context.getString(R.string.fork_tool_back)) { onBack() },
+            LinearLayout.LayoutParams((48 * density).toInt(), LayoutParams.MATCH_PARENT))
+        header.addView(View(context).apply { setBackgroundColor(colors.get(ColorType.KEY_HINT_TEXT)) },
+            LinearLayout.LayoutParams((1 * density).toInt().coerceAtLeast(1), (18 * density).toInt()).apply {
+                marginStart = (4 * density).toInt()
+                marginEnd = (4 * density).toInt()
+            })
+        val strip = LinearLayout(context).apply {
+            orientation = LinearLayout.HORIZONTAL
+            gravity = Gravity.CENTER_VERTICAL
+        }
+        tabs.forEachIndexed { i, (icon, label) ->
+            val tab = ImageView(context).apply {
+                setImageResource(icon)
+                contentDescription = label
+                scaleType = ImageView.ScaleType.CENTER_INSIDE
+                ripple.let { if (it != 0) setBackgroundResource(it) else background = null }
+                setOnClickListener { onTab(i) }
+                setOnLongClickListener { onLongTab(i) }
+            }
+            emojiTabs.add(tab)
+            strip.addView(tab, LinearLayout.LayoutParams((46 * density).toInt(), LayoutParams.MATCH_PARENT))
+        }
+        val scroll = HorizontalScrollView(context).apply {
+            isHorizontalScrollBarEnabled = false
+            addView(strip, LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT))
+        }
+        emojiTabScroll = scroll
+        header.addView(scroll, LinearLayout.LayoutParams(0, LayoutParams.MATCH_PARENT, 1f))
+        setEmojiTabSelected(selected)
+        row.visibility = GONE
+        searchBar.visibility = GONE
+        chipBar.visibility = GONE
+        header.visibility = VISIBLE
+    }
+
+    fun setEmojiTabSelected(index: Int) {
+        val colors = Settings.getValues().mColors
+        emojiTabs.forEachIndexed { i, tab ->
+            colors.setColor(tab, if (i == index) ColorType.EMOJI_CATEGORY_SELECTED else ColorType.EMOJI_CATEGORY)
+        }
+        val tab = emojiTabs.getOrNull(index) ?: return
+        emojiTabScroll?.post { emojiTabScroll?.smoothScrollTo((tab.left - (48 * density).toInt()).coerceAtLeast(0), 0) }
+    }
+
     fun hideToolHeader() {
         header.visibility = GONE
         if (searchBar.visibility != VISIBLE) row.visibility = VISIBLE

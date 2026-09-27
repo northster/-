@@ -114,6 +114,7 @@ fun AppearanceScreen(
         Settings.PREF_FONT_SCALE,
         Settings.PREF_HINT_FONT_SCALE,
         Settings.PREF_EMOJI_FONT_SCALE,
+        ForkSettings.PREF_EMOJI_COLUMNS,
         Settings.PREF_EMOJI_KEY_FIT,
         Settings.PREF_EMOJI_SKIN_TONE,
         // fork: fonts by script
@@ -318,6 +319,14 @@ fun createAppearanceSettings(context: Context) = listOf(
             step = 0.01f,
             live = true,
         ) { ForkLive.requestReload() }
+    },
+    Setting(context, ForkSettings.PREF_EMOJI_COLUMNS, R.string.fork_emoji_columns) { setting ->
+        val ctx = LocalContext.current
+        helium314.keyboard.fork.settings.IntChoicePreference(setting.title, { ctx.prefs().getInt(setting.key, 0) },
+            listOf(0, 6, 7, 8, 9, 10, 11), { if (it == 0) ctx.getString(R.string.fork_auto) else it.toString() }) {
+            ctx.prefs().edit { putInt(setting.key, it) }
+            KeyboardSwitcher.getInstance().setThemeNeedsReload()
+        }
     },
     Setting(context, Settings.PREF_EMOJI_KEY_FIT, R.string.prefs_emoji_key_fit) {
         SwitchPreference(it, Defaults.PREF_EMOJI_KEY_FIT) { KeyboardSwitcher.getInstance().setThemeNeedsReload() }

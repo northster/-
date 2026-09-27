@@ -1,9 +1,10 @@
 [
+  // fork: no key back to the letters (it is on the toolbar), space a bit wider than delete and right next to it
   [
-    { "label": "alpha", "width": 0.15 },
-    { "$": "keyboard_state_selector", "emojiSearchAvailable": { "label": "emoji_search", "width": 0.15 }},
-    { "label": "space", "width": -1 },
-    { "label": "delete", "width": 0.15 },
-    { "label": "action", "width": 0.15 }
+    {"$": "keyboard_state_selector", "emojiSearchAvailable": {"label": "emoji_search", "width": 0.15}},
+    {"type": "placeholder", "width": -1},
+    {"label": "space", "width": 0.2},
+    {"label": "delete", "width": 0.15},
+    {"label": "action", "width": 0.15}
   ]
 ]

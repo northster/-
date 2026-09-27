@@ -157,4 +157,6 @@
     <string name="fork_clip_chip_hint">Paste chip hint</string>
     <string name="fork_clip_chip_hint_glow">Dot glow behind the keys</string>
     <string name="fork_clip_chip_hint_dot">Dot in the corner</string>
+    <string name="fork_emoji_columns">Emojis per row</string>
+    <string name="fork_auto">Auto</string>
 </resources>

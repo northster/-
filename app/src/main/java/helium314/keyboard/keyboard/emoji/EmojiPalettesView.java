@@ -68,7 +68,7 @@ import static helium314.keyboard.latin.common.Constants.NOT_A_COORDINATE;
  * Because of the above reasons, this class doesn't extend {@link KeyboardView}.
  */
 public final class EmojiPalettesView extends LinearLayout
-        implements View.OnClickListener, EmojiViewCallback {
+        implements View.OnClickListener, EmojiViewCallback, helium314.keyboard.fork.toolbar.ForkTallPanel {
     private static final class PagerViewHolder extends RecyclerView.ViewHolder {
         private long mCategoryId;
 
@@ -232,7 +232,65 @@ public final class EmojiPalettesView extends LinearLayout
         final int height = ResourceUtils.getSecondaryKeyboardHeight(res, Settings.getValues())
                 + getPaddingTop() + getPaddingBottom();
         mEmojiCategoryPageIndicatorView.mWidth = width;
-        setMeasuredDimension(width, height);
+        setMeasuredDimension(width, Math.max(height, mForkExpandedHeight));
+    }
+
+    // ---- fork: taller panel from the toolbar header, see ForkTallPanel
+    private int mForkExpandedHeight = 0;
+    private int mForkNormalPagerHeight = 0;
+
+    @Override
+    public int forkNormalHeight() {
+        return ResourceUtils.getSecondaryKeyboardHeight(getResources(), Settings.getValues()) + getPaddingTop() + getPaddingBottom();
+    }
+
+    @Override
+    public int forkCurrentHeight() {
+        return getHeight();
+    }
+
+    @Override
+    public void setForkExpandedHeight(int height) {
+        if (height == mForkExpandedHeight || !initialized) return;
+        mForkExpandedHeight = height;
+        final ViewGroup.LayoutParams lp = mPager.getLayoutParams();
+        lp.height = height > 0 ? mForkNormalPagerHeight + height - forkNormalHeight() : mForkNormalPagerHeight;
+        mPager.setLayoutParams(lp);
+        requestLayout();
+    }
+
+    // ---- fork: category tabs are shown on the dynamic toolbar
+    public int forkTabCount() {
+        return mEmojiCategory.getShownCategories().size();
+    }
+
+    public int forkTabIcon(int index) {
+        return mEmojiCategory.getCategoryTabIcon(mEmojiCategory.getShownCategories().get(index).getCategory());
+    }
+
+    public String forkTabDescription(int index) {
+        return mEmojiCategory.getAccessibilityDescription(mEmojiCategory.getShownCategories().get(index).getCategory());
+    }
+
+    public int forkCurrentTab() {
+        return mEmojiCategory.getTabIdFromCategoryId(mEmojiCategory.getCurrentCategory());
+    }
+
+    public void forkSelectTab(int index) {
+        final EmojiCategory.Category category = mEmojiCategory.getShownCategories().get(index).getCategory();
+        if (category != mEmojiCategory.getCurrentCategory()) {
+            setCurrentCategory(category, false);
+            updateEmojiCategoryPageIdView();
+        }
+    }
+
+    /** long press on the recents tab */
+    public boolean forkIsRecentsTab(int index) {
+        return mEmojiCategory.getShownCategories().get(index).getCategory() == EmojiCategory.Category.RECENTS;
+    }
+
+    public void forkClearRecents() {
+        clearRecentKeys();
     }
 
     private void addTab(LinearLayout host, EmojiCategory.Category category) {
@@ -269,7 +327,9 @@ public final class EmojiPalettesView extends LinearLayout
 
         mPager = findViewById(R.id.emoji_pager);
         mPager.setAdapter(new PagerAdapter(mPager));
+        mPager.setUserInputEnabled(false); // fork: categories change with the tabs on the toolbar, not by swiping
         mEmojiLayoutParams.setEmojiListProperties(mPager);
+        mForkNormalPagerHeight = mPager.getLayoutParams().height;
         mEmojiCategoryPageIndicatorView = findViewById(R.id.emoji_category_page_id_view);
         mEmojiLayoutParams.setCategoryPageIdViewProperties(mEmojiCategoryPageIndicatorView);
         setCurrentCategory(mEmojiCategory.getCurrentCategory(), true);
@@ -366,7 +426,9 @@ public final class EmojiPalettesView extends LinearLayout
         setupBottomRowKeyboard(editorInfo, keyboardActionListener);
         final KeyDrawParams params = new KeyDrawParams();
         params.updateParams(mEmojiLayoutParams.getBottomRowKeyboardHeight(), keyVisualAttr);
+        mForkExpandedHeight = 0;
         new EmojiLayoutParams(getResources()).setEmojiListProperties(mPager); // necessary when floating
+        mForkNormalPagerHeight = mPager.getLayoutParams().height;
         setupSidePadding();
         initDictionaryFacilitator();
     }
@@ -422,6 +484,7 @@ public final class EmojiPalettesView extends LinearLayout
 
     public void stopEmojiPalettes() {
         if (!initialized) return;
+        setForkExpandedHeight(0);
         getRecentsKeyboard().flushPendingRecentKeys();
     }
 
@@ -462,6 +525,10 @@ public final class EmojiPalettesView extends LinearLayout
                 if (current instanceof ImageView)
                     Settings.getValues().mColors.setColor((ImageView) current, ColorType.EMOJI_CATEGORY_SELECTED);
             }
+            // fork: tabs on the dynamic toolbar
+            final helium314.keyboard.fork.toolbar.DynamicToolbarController toolbar =
+                    helium314.keyboard.fork.toolbar.DynamicToolbarController.getCurrent();
+            if (toolbar != null) toolbar.onEmojiTabChanged(forkCurrentTab());
         }
     }
 

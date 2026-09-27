@@ -230,6 +230,8 @@ public final class RichInputConnection implements PrivateCommandPerformer {
      */
     public boolean resetCachesUponCursorMoveAndReturnSuccess(final int newSelStart,
             final int newSelEnd, final boolean shouldFinishComposition) {
+        // fork: the cursor moved away from the plain composing text, it must not be deleted on the next input
+        mPlainComposingLength = 0;
         mComposingText.setLength(0);
         final boolean didReloadTextSuccessfully = reloadTextCache();
         if (!didReloadTextSuccessfully) {
@@ -257,6 +259,7 @@ public final class RichInputConnection implements PrivateCommandPerformer {
      * @return true if successful
      */
     private boolean reloadTextCache() {
+        mPlainComposingLength = 0; // fork
         mCommittedTextBeforeComposingText.setLength(0);
         // Clearing composing text was not in original AOSP and OpenBoard, but why? should actually
         // be necessary when reloading text. Only when called by setSelection, mComposingText isn't

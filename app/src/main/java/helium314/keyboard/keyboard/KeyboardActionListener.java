@@ -130,6 +130,9 @@ public interface KeyboardActionListener {
     /** fork: finger moved while in space long press cursor mode. @return true if the steps were consumed */
     boolean onSpaceCursorMove(int steps);
 
+    /** fork: space long press cursor mode, moving the finger up / down moves the cursor by lines */
+    boolean onSpaceCursorMoveVertically(int steps);
+
     KeyboardActionListener EMPTY_LISTENER = new Adapter();
 
     enum SwipeAction { NONE, MOVE_CURSOR, SWITCH_LANGUAGE, TOGGLE_NUMPAD, TOGGLE_DPAD, HIDE_KEYBOARD, TOUCHPAD_MODE }
@@ -190,6 +193,10 @@ public interface KeyboardActionListener {
         public void resetMetaState() {}
         @Override
         public void onToolbarSwipe(boolean up) {}
+        @Override
+        public boolean onSpaceCursorMoveVertically(int steps) {
+            return false;
+        }
         @Override
         public boolean onSpaceCursorMove(int steps) {
             return false;

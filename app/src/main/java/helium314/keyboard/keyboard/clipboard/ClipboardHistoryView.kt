@@ -49,7 +49,8 @@ class ClipboardHistoryView @JvmOverloads constructor(
         defStyle: Int = R.attr.clipboardHistoryViewStyle
 ) : LinearLayout(context, attrs, defStyle), View.OnClickListener,
     ClipboardDao.Listener, OnKeyEventListener,
-    View.OnLongClickListener, SharedPreferences.OnSharedPreferenceChangeListener {
+    View.OnLongClickListener, SharedPreferences.OnSharedPreferenceChangeListener,
+    helium314.keyboard.fork.toolbar.ForkTallPanel {
 
     private val clipboardLayoutParams = ClipboardLayoutParams(context)
     private val pinIconId: Int
@@ -90,7 +91,7 @@ class ClipboardHistoryView @JvmOverloads constructor(
     /** fork: taller panel (swipe up on the toolbar header), 0 = normal height */
     private var forkExpandedHeight = 0
 
-    fun setForkExpandedHeight(height: Int) {
+    override fun setForkExpandedHeight(height: Int) {
         if (height == forkExpandedHeight || !this::clipboardRecyclerView.isInitialized) return
         forkExpandedHeight = height
         if (height > 0) {
@@ -102,7 +103,9 @@ class ClipboardHistoryView @JvmOverloads constructor(
     }
 
     /** normal height of the panel */
-    fun forkNormalHeight() = ResourceUtils.getSecondaryKeyboardHeight(resources, Settings.getValues()) + paddingTop + paddingBottom
+    override fun forkCurrentHeight() = height
+
+    override fun forkNormalHeight() = ResourceUtils.getSecondaryKeyboardHeight(resources, Settings.getValues()) + paddingTop + paddingBottom
 
     @SuppressLint("ClickableViewAccessibility")
     private fun initialize() { // needs to be delayed for access to ClipboardStrip, which is not a child of this view

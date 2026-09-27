@@ -867,7 +867,7 @@ public final class PointerTracker implements PointerTrackerQueue.Element,
         mInSpaceCursorMode = true;
         mKeySwipeAllowed = true;
         sInKeySwipe = true;
-        mInHorizontalSwipe = true; // horizontal only, vertical movement is ignored
+        mInHorizontalSwipe = true; // keeps other swipe handling away, vertical moves are handled in onKeySwipe
         mInVerticalSwipe = false;
         mStartX = mLastX;
         mStartY = mLastY;
@@ -1028,6 +1028,12 @@ public final class PointerTracker implements PointerTrackerQueue.Element,
             final int steps = (x - mStartX) / sPointerStep;
             if (steps != 0 && sListener.onSpaceCursorMove(steps)) {
                 mStartX += steps * sPointerStep;
+            }
+            // up / down by lines, needs a longer move than one character
+            final int lineStep = sPointerStep * 3;
+            final int stepsY = (y - mStartY) / lineStep;
+            if (stepsY != 0 && sListener.onSpaceCursorMoveVertically(stepsY)) {
+                mStartY += stepsY * lineStep;
             }
             return;
         }

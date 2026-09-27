@@ -86,6 +86,16 @@ fun getEmojiKeyDimensions(params: KeyboardParams, context: Context): Pair<Float,
     var keyHeight =
         emojiKeyboardHeight * params.mDefaultRowHeight * Settings.getValues().mKeyboardHeightScale // still apply height scale to key
 
+    // fork: fixed number of emojis per row. A bit less than width / columns, so the grid (which fills the width
+    //  with whole keys) gets exactly that many columns, the key height follows the width.
+    val columns = context.prefs().getInt(helium314.keyboard.fork.ForkSettings.PREF_EMOJI_COLUMNS, 0)
+    if (columns > 0) {
+        val newWidth = ResourceUtils.getKeyboardWidth(context, Settings.getValues()) * 0.93f / columns
+        keyHeight *= newWidth / keyWidth
+        keyWidth = newWidth
+        return keyWidth to keyHeight
+    }
+
     if (Settings.getValues().mEmojiKeyFit) {
         keyWidth *= Settings.getValues().mFontSizeMultiplierEmoji
         keyHeight *= Settings.getValues().mFontSizeMultiplierEmoji

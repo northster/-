@@ -76,6 +76,9 @@ object ForkSettings {
     fun sizeDp(prefs: SharedPreferences, key: String): Float =
         if (prefs.contains(key)) prefs.getFloat(key, SIZE_UNSET) else SIZE_UNSET
 
+    /** emojis per row in the emoji panel, 0 = automatic (from key size) */
+    const val PREF_EMOJI_COLUMNS = "fork_emoji_columns"
+
     /** type Hangul (and other composed text) without the app's composing underline */
     const val PREF_HIDE_COMPOSING_UNDERLINE = "fork_hide_composing_underline"
     const val DEFAULT_HIDE_COMPOSING_UNDERLINE = true
