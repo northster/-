@@ -36,7 +36,7 @@ class TranslatePanel(
     private val onClose: () -> Unit,
 ) : FrameLayout(context) {
     private val density = resources.displayMetrics.density
-    private val colors = Settings.getValues().mColors
+    private val palette = Settings.getValues().mColors
 
     /** label on the chip to the name the model gets */
     class Option(val label: String, val prompt: String)
@@ -53,7 +53,7 @@ class TranslatePanel(
     }
 
     init {
-        setBackgroundColor(colors.get(ColorType.MAIN_BACKGROUND))
+        setBackgroundColor(palette.get(ColorType.MAIN_BACKGROUND))
         isClickable = true // touches stay here, the keys below don't get them
         val scroll = ScrollView(context).apply { isVerticalScrollBarEnabled = false }
         scroll.addView(content, LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT))
@@ -129,7 +129,7 @@ class TranslatePanel(
     private fun label(text: String, sp: Float, color: ColorType) = TextView(context).apply {
         this.text = text
         setTextSize(TypedValue.COMPLEX_UNIT_SP, sp)
-        setTextColor(colors.get(color))
+        setTextColor(palette.get(color))
         KeyboardTypeface.applyToTextView(this)
     }
 
@@ -139,11 +139,11 @@ class TranslatePanel(
         gravity = Gravity.CENTER
         setTextSize(TypedValue.COMPLEX_UNIT_SP, 14f)
         KeyboardTypeface.applyToTextView(this)
-        setTextColor(colors.get(if (selected) ColorType.ACTION_KEY_ICON else ColorType.KEY_TEXT))
+        setTextColor(palette.get(if (selected) ColorType.ACTION_KEY_ICON else ColorType.KEY_TEXT))
         setPadding(dp(14), 0, dp(14), 0)
         background = GradientDrawable().apply {
             cornerRadius = dp(16).toFloat()
-            setColor(colors.get(if (selected) ColorType.ACTION_KEY_BACKGROUND else ColorType.KEY_BACKGROUND))
+            setColor(palette.get(if (selected) ColorType.ACTION_KEY_BACKGROUND else ColorType.KEY_BACKGROUND))
         }
         setOnClickListener { onClick() }
     }
