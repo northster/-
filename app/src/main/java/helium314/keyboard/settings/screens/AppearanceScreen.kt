@@ -259,8 +259,8 @@ fun createAppearanceSettings(context: Context) = listOf(
     Setting(context, ForkSettings.PREF_TOOLBAR_HEIGHT_DP, R.string.fork_size_toolbar_height) { setting ->
         DpSliderPreference(setting.title, ForkSize.TOOLBAR_HEIGHT)
     },
-    Setting(context, Settings.PREF_KEYBOARD_HEIGHT_SCALE_PREFIX, R.string.fork_size_height) { setting ->
-        DpSliderPreference(setting.title, ForkSize.HEIGHT)
+    Setting(context, Settings.PREF_KEYBOARD_HEIGHT_SCALE_PREFIX, R.string.fork_size_key_height, R.string.fork_size_key_height_summary) { setting ->
+        DpSliderPreference(setting.title, ForkSize.KEY_HEIGHT, setting.description)
     },
     Setting(context, Settings.PREF_BOTTOM_ROW_SCALE_PREFIX, R.string.prefs_bottom_row_scale) { setting ->
         InlineSliderPreference(

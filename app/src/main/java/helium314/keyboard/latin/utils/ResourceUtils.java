@@ -19,6 +19,7 @@ import android.view.WindowInsets;
 import android.view.WindowManager;
 import android.view.WindowMetrics;
 
+import helium314.keyboard.keyboard.internal.KeyboardParams;
 import helium314.keyboard.latin.R;
 import helium314.keyboard.latin.settings.SettingsValues;
 
@@ -72,13 +73,41 @@ public final class ResourceUtils {
         if (settingsValues.mIsFloatingKeyboard) {
             return settingsValues.mFloatingHeight;
         }
-        if (settingsValues.mForkHeightDp > 0) { // fork: height set in dp, number row adds a row on top
-            final DisplayMetrics dm = res.getDisplayMetrics();
-            final float height = settingsValues.mForkHeightDp * dm.density * (settingsValues.mShowsNumberRow ? 1.25f : 1f);
-            return (int) Math.min(height, dm.heightPixels * 0.7f);
-        }
-        int defaultKeyboardHeight = getDefaultKeyboardHeight(res, settingsValues.mShowsNumberRow);
-        return (int)(defaultKeyboardHeight * settingsValues.mKeyboardHeightScale);
+        // fork: the height follows from the key height, paddings are added instead of taken from the keys
+        final int[] v = getForkVerticalMetrics(res, settingsValues);
+        final int rows = KeyboardParams.DEFAULT_KEYBOARD_ROWS + (settingsValues.mShowsNumberRow ? 1 : 0);
+        final int height = v[0] + v[1] + rows * (getForkKeyHeight(res, settingsValues) + v[2]) - v[2];
+        return (int) Math.min(height, res.getDisplayMetrics().heightPixels * 0.7f);
+    }
+
+    /**
+     * fork: height the old scale setting gave the keyboard (without number row).
+     * Sizes that are not set in dp are taken as a share of it, like before.
+     */
+    private static float getForkReferenceHeight(final Resources res, final SettingsValues sv) {
+        return getDefaultKeyboardHeight(res, false) * sv.mKeyboardHeightScale;
+    }
+
+    /** fork: top padding, bottom padding and vertical key gap in px, for the main keyboard and the panels */
+    public static int[] getForkVerticalMetrics(final Resources res, final SettingsValues sv) {
+        final float density = res.getDisplayMetrics().density;
+        final float ref = getForkReferenceHeight(res, sv);
+        final int top = sv.mForkTopPaddingDp >= 0 ? Math.round(sv.mForkTopPaddingDp * density)
+                : (int) (res.getFraction(R.fraction.config_keyboard_top_padding_holo, 1, 1) * ref);
+        final int bottom = sv.mForkBottomPaddingDp >= 0 ? Math.round(sv.mForkBottomPaddingDp * density)
+                : (int) (res.getFraction(R.fraction.config_keyboard_bottom_padding_holo, 1, 1) * ref * sv.mBottomPaddingScale);
+        final int gap = sv.mForkKeyGapVDp >= 0 ? Math.round(sv.mForkKeyGapVDp * density)
+                : (int) (res.getFraction(R.fraction.config_key_vertical_gap_holo, 1, 1) * ref * sv.mKeyGapScale);
+        return new int[] { top, bottom, gap };
+    }
+
+    /** fork: visible height of a letter key in px */
+    public static int getForkKeyHeight(final Resources res, final SettingsValues sv) {
+        if (sv.mForkKeyHeightDp > 0)
+            return Math.round(sv.mForkKeyHeightDp * res.getDisplayMetrics().density);
+        final int[] v = getForkVerticalMetrics(res, sv);
+        final float ref = getForkReferenceHeight(res, sv);
+        return Math.max(1, (int) ((ref - v[0] - v[1] + v[2]) / KeyboardParams.DEFAULT_KEYBOARD_ROWS) - v[2]);
     }
 
     public static int getDefaultKeyboardHeight(final Resources res, final boolean showsNumberRow) {

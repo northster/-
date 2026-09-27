@@ -24,16 +24,13 @@ internal class EmojiLayoutParams(res: Resources) {
         val sv = Settings.getValues()
         val defaultKeyboardHeight = ResourceUtils.getSecondaryKeyboardHeight(res, sv)
 
-        val density = res.displayMetrics.density
-        // fork: sizes set in dp apply here too
-        val keyVerticalGap = if (sv.mForkKeyGapVDp >= 0) (sv.mForkKeyGapVDp * density).toInt()
-            else (res.getFraction(R.fraction.config_key_vertical_gap_holo,
+        // fork: same vertical sizes as the main keyboard (ResourceUtils.getForkVerticalMetrics)
+        val forkV = if (sv.mIsFloatingKeyboard) null else ResourceUtils.getForkVerticalMetrics(res, sv)
+        val keyVerticalGap = forkV?.get(2) ?: (res.getFraction(R.fraction.config_key_vertical_gap_holo,
             defaultKeyboardHeight, defaultKeyboardHeight) * sv.mKeyGapScale).toInt()
-        val bottomPadding = if (sv.mForkBottomPaddingDp >= 0) (sv.mForkBottomPaddingDp * density).toInt()
-            else (res.getFraction(R.fraction.config_keyboard_bottom_padding_holo,
+        val bottomPadding = forkV?.get(1) ?: (res.getFraction(R.fraction.config_keyboard_bottom_padding_holo,
             defaultKeyboardHeight, defaultKeyboardHeight) * sv.mBottomPaddingScale).toInt()
-        val topPadding = if (sv.mForkTopPaddingDp >= 0) (sv.mForkTopPaddingDp * density).toInt()
-            else res.getFraction(R.fraction.config_keyboard_top_padding_holo,
+        val topPadding = forkV?.get(0) ?: res.getFraction(R.fraction.config_keyboard_top_padding_holo,
             defaultKeyboardHeight, defaultKeyboardHeight).toInt()
 
         val rowCount = KeyboardParams.DEFAULT_KEYBOARD_ROWS + if (sv.mShowsNumberRow) 1 else 0

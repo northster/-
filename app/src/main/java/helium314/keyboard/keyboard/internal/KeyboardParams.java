@@ -205,13 +205,14 @@ public class KeyboardParams {
         }
     }
 
-    // fork: see ForkSettings.PREF_KB_HEIGHT_DP etc.
+    // fork: see ForkSettings.PREF_KEY_HEIGHT_DP etc. Vertical sizes are the ones the keyboard height was built from.
     private void applyForkDpPaddings(final Context context, final SettingsValues sv) {
         final float density = context.getResources().getDisplayMetrics().density;
-        if (sv.mForkBottomPaddingDp >= 0)
-            mBottomPadding = Math.round(sv.mForkBottomPaddingDp * density);
-        if (sv.mForkTopPaddingDp >= 0)
-            mTopPadding = Math.round(sv.mForkTopPaddingDp * density);
+        if (!sv.mIsFloatingKeyboard) {
+            final int[] v = ResourceUtils.getForkVerticalMetrics(context.getResources(), sv);
+            mTopPadding = v[0];
+            mBottomPadding = v[1];
+        }
         if (sv.mForkSidePaddingDp >= 0) {
             mLeftPadding = Math.round(sv.mForkSidePaddingDp * density);
             mRightPadding = mLeftPadding;
@@ -224,8 +225,8 @@ public class KeyboardParams {
             mHorizontalGap = Math.round(sv.mForkKeyGapHDp * density);
             mRelativeHorizontalGap = (float) mHorizontalGap / width;
         }
-        if (sv.mForkKeyGapVDp >= 0 && height > 0) {
-            mVerticalGap = Math.round(sv.mForkKeyGapVDp * density);
+        if (!sv.mIsFloatingKeyboard && height > 0) {
+            mVerticalGap = ResourceUtils.getForkVerticalMetrics(context.getResources(), sv)[2];
             mRelativeVerticalGap = (float) mVerticalGap / height;
         }
     }

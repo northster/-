@@ -139,4 +139,6 @@
     <string name="fork_tool_back">Back to keyboard</string>
     <string name="fork_size_top_padding">Top padding</string>
     <string name="fork_size_toolbar_height">Toolbar height</string>
+    <string name="fork_size_key_height">Key height</string>
+    <string name="fork_size_key_height_summary">Height of a letter key. Paddings and gaps are added on top, the keyboard grows instead of the keys shrinking</string>
 </resources>

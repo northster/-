@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.edit
 import helium314.keyboard.fork.ForkLive
 import helium314.keyboard.fork.ForkSettings
+import helium314.keyboard.keyboard.internal.KeyboardParams
 import helium314.keyboard.latin.R
 import helium314.keyboard.latin.settings.Settings
 import helium314.keyboard.latin.settings.createPrefKeyForBooleanSettings
@@ -50,7 +51,7 @@ enum class ForkSize(
     val range: ClosedFloatingPointRange<Float>,
     val step: Float,
 ) {
-    HEIGHT(ForkSettings.PREF_KB_HEIGHT_DP, createPrefKeyForBooleanSettings(Settings.PREF_KEYBOARD_HEIGHT_SCALE_PREFIX, 0, 2), 120f..420f, 1f),
+    KEY_HEIGHT(ForkSettings.PREF_KEY_HEIGHT_DP, createPrefKeyForBooleanSettings(Settings.PREF_KEYBOARD_HEIGHT_SCALE_PREFIX, 0, 2), 24f..90f, 0.5f),
     BOTTOM_PADDING(ForkSettings.PREF_BOTTOM_PADDING_DP, createPrefKeyForBooleanSettings(Settings.PREF_BOTTOM_PADDING_SCALE_PREFIX, 0, 2), 0f..48f, 0.5f),
     SIDE_PADDING(ForkSettings.PREF_SIDE_PADDING_DP, createPrefKeyForBooleanSettings(Settings.PREF_SIDE_PADDING_SCALE_PREFIX, 0, 3), 0f..80f, 0.5f),
     KEY_GAP_H(ForkSettings.PREF_KEY_GAP_H_DP, createPrefKeyForBooleanSettings(Settings.PREF_KEY_GAP_SCALE_PREFIX, 0, 2), 0f..16f, 0.5f),
@@ -63,18 +64,20 @@ enum class ForkSize(
         ForkSettings.sizeDp(prefs, dpKey).takeIf { it >= 0 }?.let { return it }
         val res = context.resources
         val dm = res.displayMetrics
-        val heightPx = if (this == HEIGHT) null else HEIGHT.effectiveDp(context, prefs) * dm.density
+        // sizes that are not in dp yet are a share of the height the old scale setting gave, see ResourceUtils
+        val refPx = ResourceUtils.getDefaultKeyboardHeight(res, false) * Settings.readHeightScale(prefs, false, false)
         val widthPx = dm.widthPixels.toFloat()
         fun fraction(id: Int, base: Float) = res.getFraction(id, 1, 1) * base
+        fun px(size: ForkSize) = size.effectiveDp(context, prefs) * dm.density
         val px = when (this) {
-            HEIGHT -> ResourceUtils.getDefaultKeyboardHeight(res, false) * Settings.readHeightScale(prefs, false, false)
-            BOTTOM_PADDING -> fraction(R.fraction.config_keyboard_bottom_padding_holo, heightPx!!) *
+            KEY_HEIGHT -> (refPx - px(TOP_PADDING) - px(BOTTOM_PADDING) + px(KEY_GAP_V)) / KeyboardParams.DEFAULT_KEYBOARD_ROWS - px(KEY_GAP_V)
+            BOTTOM_PADDING -> fraction(R.fraction.config_keyboard_bottom_padding_holo, refPx) *
                     Settings.readBottomPaddingScale(prefs, false, false)
             SIDE_PADDING -> fraction(R.fraction.config_keyboard_left_padding, widthPx) *
                     Settings.readSidePaddingScale(prefs, false, false, false)
             KEY_GAP_H -> fraction(R.fraction.config_key_horizontal_gap_holo, widthPx) * Settings.readKeyGapScale(prefs, false, false)
-            KEY_GAP_V -> fraction(R.fraction.config_key_vertical_gap_holo, heightPx!!) * Settings.readKeyGapScale(prefs, false, false)
-            TOP_PADDING -> fraction(R.fraction.config_keyboard_top_padding_holo, heightPx!!)
+            KEY_GAP_V -> fraction(R.fraction.config_key_vertical_gap_holo, refPx) * Settings.readKeyGapScale(prefs, false, false)
+            TOP_PADDING -> fraction(R.fraction.config_keyboard_top_padding_holo, refPx)
             TOOLBAR_HEIGHT -> res.getDimension(R.dimen.fork_dynamic_toolbar_height)
         }
         return ((px / dm.density) / step).roundToInt() * step
@@ -93,7 +96,7 @@ enum class ForkSize(
 
 /** Slider in dp, changes are written and shown on the keyboard while dragging. */
 @Composable
-fun DpSliderPreference(name: String, size: ForkSize) {
+fun DpSliderPreference(name: String, size: ForkSize, description: String? = null) {
     val ctx = LocalContext.current
     val prefs = ctx.prefs()
     val b = (ctx.getActivity() as? SettingsActivity)?.prefChanged?.collectAsState()
@@ -104,7 +107,11 @@ fun DpSliderPreference(name: String, size: ForkSize) {
     val s = LocalShadcn.current
     Column(Modifier.fillMaxWidth().padding(start = 16.dp, end = 8.dp, top = 12.dp, bottom = 4.dp)) {
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Text(name, style = MaterialTheme.typography.bodyLarge, modifier = Modifier.weight(1f))
+            Column(Modifier.weight(1f)) {
+                Text(name, style = MaterialTheme.typography.bodyLarge)
+                if (description != null)
+                    Text(description, style = MaterialTheme.typography.bodySmall, color = s.mutedForeground)
+            }
             val shown = if (size.step < 1f && value % 1f != 0f) "%.1f".format(value) else value.roundToInt().toString()
             Text("$shown dp", style = MaterialTheme.typography.bodyMedium, color = s.mutedForeground)
             TextButton(

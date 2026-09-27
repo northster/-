@@ -4,7 +4,15 @@ package helium314.keyboard.fork
 import android.content.Context
 import android.content.SharedPreferences
 import helium314.keyboard.fork.gesture.SwipeThresholds
+import androidx.core.content.edit
+import helium314.keyboard.keyboard.internal.KeyboardParams
+import helium314.keyboard.latin.R
+import helium314.keyboard.latin.settings.Defaults
+import helium314.keyboard.latin.settings.Settings
+import helium314.keyboard.latin.settings.createPrefKeyForBooleanSettings
+import helium314.keyboard.latin.utils.ResourceUtils
 import helium314.keyboard.latin.utils.prefs
+import kotlin.math.roundToInt
 
 /**
  * Settings that are specific to this fork. Kept separate from HeliBoard's Settings / Defaults
@@ -47,7 +55,11 @@ object ForkSettings {
 
     // ---- keyboard size in dp (Appearance & size). Absent = HeliBoard's scale values still apply,
     //      so sizes set before the dp sliders existed are kept until a slider is moved.
-    const val PREF_KB_HEIGHT_DP = "fork_kb_height_dp"
+    /** visible height of a letter key. The keyboard height follows from it plus paddings and gaps. */
+    const val PREF_KEY_HEIGHT_DP = "fork_key_height_dp"
+    /** total keyboard height in dp, only used by builds before the key height existed (migrated) */
+    private const val PREF_KB_HEIGHT_DP = "fork_kb_height_dp"
+    private const val PREF_KEY_HEIGHT_MIGRATED = "fork_key_height_migrated"
     const val PREF_BOTTOM_PADDING_DP = "fork_bottom_padding_dp"
     const val PREF_SIDE_PADDING_DP = "fork_side_padding_dp"
     const val PREF_KEY_GAP_H_DP = "fork_key_gap_h_dp"
@@ -88,7 +100,49 @@ object ForkSettings {
         density = context.resources.displayMetrics.density
         appPrefs.registerOnSharedPreferenceChangeListener(listener)
         cachedSwipeEnabled = appPrefs.getBoolean(PREF_TOOLBAR_SWIPE_ENABLED, DEFAULT_TOOLBAR_SWIPE_ENABLED)
+        runCatching { migrateToKeyHeight(context) }
         initialized = true
+    }
+
+    /**
+     * The keyboard height used to be set as a whole, and paddings / gaps were taken from it.
+     * Now the key height is set and the rest is added. Convert once so the keyboard looks the same as before:
+     * key height from the old total height, paddings and vertical gap frozen at their old px values.
+     */
+    private fun migrateToKeyHeight(context: Context) {
+        val prefs = appPrefs
+        if (prefs.getBoolean(PREF_KEY_HEIGHT_MIGRATED, false)) return
+        val heightScaleKey = createPrefKeyForBooleanSettings(Settings.PREF_KEYBOARD_HEIGHT_SCALE_PREFIX, 0, 2)
+        val numberRow = prefs.getBoolean(Settings.PREF_SHOW_NUMBER_ROW, Defaults.PREF_SHOW_NUMBER_ROW)
+        val customized = numberRow || prefs.contains(PREF_KB_HEIGHT_DP) || prefs.contains(heightScaleKey)
+            || prefs.contains(PREF_TOP_PADDING_DP) || prefs.contains(PREF_BOTTOM_PADDING_DP) || prefs.contains(PREF_KEY_GAP_V_DP)
+            || prefs.contains(createPrefKeyForBooleanSettings(Settings.PREF_BOTTOM_PADDING_SCALE_PREFIX, 0, 2))
+            || prefs.contains(createPrefKeyForBooleanSettings(Settings.PREF_KEY_GAP_SCALE_PREFIX, 0, 2))
+        if (customized && !prefs.contains(PREF_KEY_HEIGHT_DP)) {
+            val res = context.resources
+            val dm = res.displayMetrics
+            val d = dm.density
+            val oldDp = sizeDp(prefs, PREF_KB_HEIGHT_DP)
+            val height = if (oldDp > 0) minOf(oldDp * d * (if (numberRow) 1.25f else 1f), dm.heightPixels * 0.7f)
+                else ResourceUtils.getDefaultKeyboardHeight(res, numberRow) * Settings.readHeightScale(prefs, false, false)
+            fun frac(id: Int) = res.getFraction(id, 1, 1) * height
+            val top = sizeDp(prefs, PREF_TOP_PADDING_DP).takeIf { it >= 0 }?.times(d)
+                ?: frac(R.fraction.config_keyboard_top_padding_holo)
+            val bottom = sizeDp(prefs, PREF_BOTTOM_PADDING_DP).takeIf { it >= 0 }?.times(d)
+                ?: (frac(R.fraction.config_keyboard_bottom_padding_holo) * Settings.readBottomPaddingScale(prefs, false, false))
+            val gap = sizeDp(prefs, PREF_KEY_GAP_V_DP).takeIf { it >= 0 }?.times(d)
+                ?: (frac(R.fraction.config_key_vertical_gap_holo) * Settings.readKeyGapScale(prefs, false, false))
+            val rows = KeyboardParams.DEFAULT_KEYBOARD_ROWS + if (numberRow) 1 else 0
+            val key = (height - top - bottom + gap) / rows - gap
+            fun half(px: Float) = (px / d * 2).roundToInt() / 2f
+            prefs.edit {
+                putFloat(PREF_KEY_HEIGHT_DP, half(key).coerceAtLeast(20f))
+                putFloat(PREF_TOP_PADDING_DP, half(top))
+                putFloat(PREF_BOTTOM_PADDING_DP, half(bottom))
+                putFloat(PREF_KEY_GAP_V_DP, half(gap))
+            }
+        }
+        prefs.edit { remove(PREF_KB_HEIGHT_DP); putBoolean(PREF_KEY_HEIGHT_MIGRATED, true) }
     }
 
     @JvmStatic

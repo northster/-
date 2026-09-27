@@ -136,4 +136,6 @@
     <string name="fork_tool_back">키보드로 돌아가기</string>
     <string name="fork_size_top_padding">위 여백</string>
     <string name="fork_size_toolbar_height">툴바 높이</string>
+    <string name="fork_size_key_height">키 높이</string>
+    <string name="fork_size_key_height_summary">글자 키 한 개의 높이. 여백과 간격은 여기에 더해져서, 늘려도 키가 작아지지 않고 키보드가 커져요</string>
 </resources>
