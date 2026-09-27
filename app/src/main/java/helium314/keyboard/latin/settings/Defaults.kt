@@ -165,7 +165,7 @@ object Defaults {
     const val PREF_URL_DETECTION = false
     const val PREF_DONT_SHOW_MISSING_DICTIONARY_DIALOG = false
     const val PREF_TOOLBAR_MODE = "HIDDEN" // fork: replaced by the dynamic toolbar
-    const val PREF_TOOLBAR_HIDING_GLOBAL = false // fork: keep the clipboard panel's edit row (select, copy, paste, arrows)
+    const val PREF_TOOLBAR_HIDING_GLOBAL = true // fork: clipboard actions are on the dynamic toolbar header (ClipAction)
     const val PREF_TOOLBAR_SWIPE_DOWN_TO_HIDE = false
     const val PREF_QUICK_PIN_TOOLBAR_KEYS = false
     val PREF_PINNED_TOOLBAR_KEYS = defaultPinnedToolbarPref

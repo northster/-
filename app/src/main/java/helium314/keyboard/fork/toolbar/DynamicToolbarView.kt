@@ -22,7 +22,8 @@ import helium314.keyboard.latin.settings.Settings
 /**
  * The toolbar shown above the keyboard. It only draws buttons, state and animation are handled
  * by [DynamicToolbarController].
- * Two contents: the normal row (paste chips + item buttons) and the clipboard search bar.
+ * Three contents: the normal row (paste chips + item buttons), the header of an open tool
+ * (back to keyboard | tool name | actions, like Samsung's keyboard) and the clipboard search bar.
  */
 class DynamicToolbarView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null
@@ -39,6 +40,13 @@ class DynamicToolbarView @JvmOverloads constructor(
     private val buttons = LinearLayout(context).apply {
         orientation = LinearLayout.HORIZONTAL
         gravity = Gravity.CENTER_VERTICAL
+    }
+
+    // header of an open tool (clipboard panel)
+    private val header = LinearLayout(context).apply {
+        orientation = LinearLayout.HORIZONTAL
+        gravity = Gravity.CENTER_VERTICAL
+        visibility = GONE
     }
 
     // search bar
@@ -66,14 +74,18 @@ class DynamicToolbarView @JvmOverloads constructor(
         addView(row, LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT))
         resultScroll.addView(results, LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT))
         addView(searchBar, LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT))
+        addView(header, LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT))
     }
 
     private val ripple get() = TypedValue().also {
         context.theme.resolveAttribute(android.R.attr.selectableItemBackgroundBorderless, it, true)
     }.resourceId
 
-    private fun iconButton(icon: Int, label: String, onClick: () -> Unit) = ImageButton(context).apply {
-        setImageResource(icon)
+    private fun iconButton(icon: Int, label: String, onClick: () -> Unit) =
+        iconButton(androidx.core.content.ContextCompat.getDrawable(context, icon), label, onClick)
+
+    private fun iconButton(icon: android.graphics.drawable.Drawable?, label: String, onClick: () -> Unit) = ImageButton(context).apply {
+        setImageDrawable(icon)
         contentDescription = label
         scaleType = ImageView.ScaleType.CENTER_INSIDE
         ripple.let { if (it != 0) setBackgroundResource(it) else background = null }
@@ -138,6 +150,7 @@ class DynamicToolbarView @JvmOverloads constructor(
         searchBar.addView(iconButton(R.drawable.ic_close, context.getString(android.R.string.cancel)) { onClose() },
             LinearLayout.LayoutParams((40 * density).toInt(), LayoutParams.MATCH_PARENT))
         row.visibility = GONE
+        header.visibility = GONE
         searchBar.visibility = VISIBLE
     }
 
@@ -168,4 +181,36 @@ class DynamicToolbarView @JvmOverloads constructor(
     }
 
     val isSearchShown get() = searchBar.visibility == View.VISIBLE
+
+    /** Header of an open tool: back to the keyboard, the tool's name, its actions on the right. */
+    fun showToolHeader(title: String, actions: List<Pair<android.graphics.drawable.Drawable?, String>>, onBack: () -> Unit, onAction: (Int) -> Unit) {
+        val colors = Settings.getValues().mColors
+        header.removeAllViews()
+        val size = LinearLayout.LayoutParams((48 * density).toInt(), LayoutParams.MATCH_PARENT)
+        header.addView(iconButton(R.drawable.ic_fork_keyboard, context.getString(R.string.fork_tool_back)) { onBack() }, size)
+        header.addView(View(context).apply { setBackgroundColor(colors.get(ColorType.KEY_HINT_TEXT)) },
+            LinearLayout.LayoutParams((1 * density).toInt().coerceAtLeast(1), (18 * density).toInt()).apply {
+                marginStart = (4 * density).toInt()
+                marginEnd = (12 * density).toInt()
+            })
+        header.addView(TextView(context).apply {
+            text = title
+            setSingleLine()
+            ellipsize = TextUtils.TruncateAt.END
+            setTextSize(TypedValue.COMPLEX_UNIT_SP, 17f)
+            setTextColor(colors.get(ColorType.KEY_TEXT))
+            KeyboardTypeface.applyToTextView(this)
+        }, LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f))
+        actions.forEachIndexed { i, (icon, label) ->
+            header.addView(iconButton(icon, label) { onAction(i) }, LinearLayout.LayoutParams((44 * density).toInt(), LayoutParams.MATCH_PARENT))
+        }
+        row.visibility = GONE
+        searchBar.visibility = GONE
+        header.visibility = VISIBLE
+    }
+
+    fun hideToolHeader() {
+        header.visibility = GONE
+        if (searchBar.visibility != VISIBLE) row.visibility = VISIBLE
+    }
 }

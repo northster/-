@@ -59,7 +59,6 @@ class ClipboardHistoryView @JvmOverloads constructor(
     private lateinit var placeholderView: TextView
     private val toolbarKeys = mutableListOf<ImageButton>()
     private lateinit var clipboardAdapter: ClipboardAdapter
-    private var searchButton: ImageButton? = null
     private var infoPanel: View? = null
 
     lateinit var keyboardActionListener: KeyboardActionListener
@@ -106,19 +105,6 @@ class ClipboardHistoryView @JvmOverloads constructor(
             placeholderView = this@ClipboardHistoryView.placeholderView
         }
         val clipboardStrip = KeyboardSwitcher.getInstance().clipboardStrip
-        // fork: search, types into a search bar on the dynamic toolbar
-        searchButton = ImageButton(context, null, R.attr.suggestionWordStyle).apply {
-            setImageResource(R.drawable.sym_keyboard_search_lxx)
-            scaleType = android.widget.ImageView.ScaleType.CENTER_INSIDE
-            contentDescription = context.getString(R.string.fork_clip_search)
-            setOnClickListener {
-                keyboardActionListener.onPressKey(KeyCode.NOT_SPECIFIED, 0, 1, HapticEvent.KEY_PRESS)
-                helium314.keyboard.fork.toolbar.DynamicToolbarController.current?.startClipSearch()
-            }
-            colors.setColor(this, ColorType.TOOL_BAR_KEY)
-            colors.setBackground(this, ColorType.STRIP_BACKGROUND)
-        }
-        clipboardStrip.addView(searchButton)
         toolbarKeys.forEach {
             clipboardStrip.addView(it)
             it.setOnClickListener(this@ClipboardHistoryView)
@@ -141,7 +127,6 @@ class ClipboardHistoryView @JvmOverloads constructor(
         // set layout params
         val toolbarKeyLayoutParams = LayoutParams(resources.getDimensionPixelSize(R.dimen.config_suggestions_strip_edge_key_width), LayoutParams.MATCH_PARENT)
         toolbarKeys.forEach { it.layoutParams = toolbarKeyLayoutParams }
-        searchButton?.layoutParams = LayoutParams(toolbarKeyLayoutParams)
     }
 
     private fun setupBottomRowKeyboard(editorInfo: EditorInfo, listener: KeyboardActionListener) {

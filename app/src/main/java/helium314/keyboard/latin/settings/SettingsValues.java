@@ -132,6 +132,7 @@ public class SettingsValues {
     // fork: sizes in dp, ForkSettings.SIZE_UNSET (< 0) when the scale values above apply
     public final float mForkHeightDp;
     public final float mForkBottomPaddingDp;
+    public final float mForkTopPaddingDp;
     public final float mForkSidePaddingDp;
     public final float mForkKeyGapHDp;
     public final float mForkKeyGapVDp;
@@ -332,6 +333,7 @@ public class SettingsValues {
         mForkHeightDp = mIsFloatingKeyboard ? ForkSettings.SIZE_UNSET : ForkSettings.sizeDp(prefs, ForkSettings.PREF_KB_HEIGHT_DP);
         mForkBottomPaddingDp = mIsFloatingKeyboard ? ForkSettings.SIZE_UNSET : ForkSettings.sizeDp(prefs, ForkSettings.PREF_BOTTOM_PADDING_DP);
         mForkSidePaddingDp = ForkSettings.sizeDp(prefs, ForkSettings.PREF_SIDE_PADDING_DP);
+        mForkTopPaddingDp = mIsFloatingKeyboard ? ForkSettings.SIZE_UNSET : ForkSettings.sizeDp(prefs, ForkSettings.PREF_TOP_PADDING_DP);
         mForkKeyGapHDp = ForkSettings.sizeDp(prefs, ForkSettings.PREF_KEY_GAP_H_DP);
         mForkKeyGapVDp = ForkSettings.sizeDp(prefs, ForkSettings.PREF_KEY_GAP_V_DP);
         mLongPressSymbolsForNumpad = prefs.getBoolean(Settings.PREFS_LONG_PRESS_SYMBOLS_FOR_NUMPAD, Defaults.PREFS_LONG_PRESS_SYMBOLS_FOR_NUMPAD);

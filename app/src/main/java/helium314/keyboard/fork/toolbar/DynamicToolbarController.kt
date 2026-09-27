@@ -10,6 +10,7 @@ import android.view.animation.PathInterpolator
 import androidx.core.content.edit
 import helium314.keyboard.event.Event
 import helium314.keyboard.fork.ForkSettings
+import helium314.keyboard.fork.clipboard.ClipAction
 import helium314.keyboard.fork.clipboard.ClipPrefs
 import helium314.keyboard.fork.clipboard.ClipSearch
 import helium314.keyboard.keyboard.internal.keyboard_parser.floris.KeyCode
@@ -48,6 +49,10 @@ class DynamicToolbarController(private val context: Context) {
     private val clipSearch = ClipSearch()
     /** toolbar state before the search opened it */
     private var expandedBeforeSearch = false
+    /** a tool (clipboard panel) is open and the toolbar shows its header */
+    private var toolActive = false
+    /** toolbar state before the tool opened it */
+    private var expandedBeforeTool = false
     /** clip already pasted from a chip, not offered again */
     private var dismissedChipText: String? = null
     private var keyboardFrame: View? = null
@@ -66,6 +71,11 @@ class DynamicToolbarController(private val context: Context) {
     /** Called with every new input view (first start, theme change, display / fold state change). */
     fun attach(newInputView: View) {
         if (clipSearch.isActive) endClipSearch(null)
+        if (toolActive) {
+            // the new input view starts with the letters, restore the state from before the tool
+            toolActive = false
+            if (!expandedBeforeTool) setExpanded(false, false)
+        }
         keyboardFrame?.removeOnLayoutChangeListener(frameLayoutListener)
         animator?.cancel()
         inputView = newInputView
@@ -73,6 +83,7 @@ class DynamicToolbarController(private val context: Context) {
         keyboardFrame = newInputView.findViewById<View>(R.id.main_keyboard_frame)?.also {
             it.addOnLayoutChangeListener(frameLayoutListener)
         }
+        applyHeight()
         toolbar?.setItems(ToolbarItems.defaultItems, ::onItemClicked)
         refreshPasteChips()
         // restore persisted state without animation
@@ -85,6 +96,12 @@ class DynamicToolbarController(private val context: Context) {
 
     fun setExpanded(expanded: Boolean, animate: Boolean) {
         if (expanded == isExpanded) return
+        if (!expanded && toolActive) {
+            // collapsing closes the tool
+            expandedBeforeTool = false
+            backToKeyboard()
+            return
+        }
         if (!expanded && clipSearch.isActive) {
             // collapsing closes the search
             expandedBeforeSearch = false
@@ -186,6 +203,58 @@ class DynamicToolbarController(private val context: Context) {
         return expandedTop()
     }
 
+    /** toolbar height from settings (Appearance & size), default from resources */
+    fun applyHeight() {
+        val tb = toolbar ?: return
+        val dp = ForkSettings.sizeDp(context.prefs(), ForkSettings.PREF_TOOLBAR_HEIGHT_DP)
+        val px = if (dp > 0) (dp * context.resources.displayMetrics.density).toInt()
+            else context.resources.getDimensionPixelSize(R.dimen.fork_dynamic_toolbar_height)
+        val lp = tb.layoutParams ?: return
+        if (lp.height == px) return
+        lp.height = px
+        tb.layoutParams = lp
+        tb.post { updatePosition(); requestInsetsUpdate() }
+    }
+
+    // ---------------------------------------------------------------- tool header (clipboard panel)
+
+    /** Called by KeyboardSwitcher when the clipboard panel is shown. */
+    fun onClipboardShown() {
+        val tb = toolbar ?: return
+        if (clipSearch.isActive) return
+        if (!toolActive) {
+            toolActive = true
+            expandedBeforeTool = isExpanded
+        }
+        val actions = ClipAction.enabled(context.prefs())
+        tb.showToolHeader(context.getString(R.string.fork_toolbar_clipboard), actions.map { it.icon(context) to it.label(context) },
+            onBack = ::backToKeyboard) { i -> onClipAction(actions[i]) }
+        setExpanded(true, true)
+    }
+
+    /** Called by KeyboardSwitcher when the clipboard panel is replaced by something else. */
+    fun onClipboardHidden() {
+        if (!toolActive) return
+        toolActive = false
+        toolbar?.hideToolHeader()
+        if (!expandedBeforeTool) setExpanded(false, true)
+    }
+
+    private fun backToKeyboard() {
+        val ime = latinIME ?: return
+        ime.mKeyboardActionListener.onCodeInput(KeyCode.ALPHA, Constants.NOT_A_COORDINATE, Constants.NOT_A_COORDINATE, false)
+    }
+
+    private fun onClipAction(action: ClipAction) {
+        val ime = latinIME ?: return
+        if (action == ClipAction.SEARCH) {
+            startClipSearch()
+            return
+        }
+        val code = action.code() ?: return
+        ime.mKeyboardActionListener.onCodeInput(code, Constants.NOT_A_COORDINATE, Constants.NOT_A_COORDINATE, false)
+    }
+
     // ---------------------------------------------------------------- clipboard: paste chips and search
 
     private val latinIME get() = context as? LatinIME
@@ -214,11 +283,17 @@ class DynamicToolbarController(private val context: Context) {
         val ime = latinIME ?: return
         val tb = toolbar ?: return
         if (clipSearch.isActive) return
+        // the search takes over from the clipboard header, keep the toolbar state from before the panel
+        val before = if (toolActive) expandedBeforeTool else isExpanded
+        if (toolActive) {
+            toolActive = false
+            tb.hideToolHeader()
+        }
         // letters instead of the clipboard panel
         if (KeyboardSwitcher.getInstance().isShowingClipboardHistory)
             ime.mKeyboardActionListener.onCodeInput(KeyCode.ALPHA, Constants.NOT_A_COORDINATE, Constants.NOT_A_COORDINATE, false)
         clipSearch.start(RichInputMethodManager.getInstance().combiningRulesExtraValueOfCurrentSubtype)
-        expandedBeforeSearch = isExpanded
+        expandedBeforeSearch = before
         tb.showSearch { endClipSearch(null) }
         updateSearchResults()
         setExpanded(true, true)

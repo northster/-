@@ -98,10 +98,12 @@ fun AppearanceScreen(
         R.string.fork_cat_size,
         Settings.PREF_KEYBOARD_HEIGHT_SCALE_PREFIX,
         Settings.PREF_BOTTOM_ROW_SCALE_PREFIX,
+        ForkSettings.PREF_TOP_PADDING_DP,
         Settings.PREF_BOTTOM_PADDING_SCALE_PREFIX,
         Settings.PREF_SIDE_PADDING_SCALE_PREFIX,
         Settings.PREF_KEY_GAP_SCALE_PREFIX,
         ForkSettings.PREF_KEY_GAP_V_DP,
+        ForkSettings.PREF_TOOLBAR_HEIGHT_DP,
         Settings.PREF_ENABLE_SPLIT_KEYBOARD,
         Settings.PREF_SPLIT_SPACER_SCALE_PREFIX,
         R.string.fork_cat_font,
@@ -250,6 +252,12 @@ fun createAppearanceSettings(context: Context) = listOf(
     },
     Setting(context, ForkSettings.PREF_KEY_GAP_V_DP, R.string.fork_size_key_gap_v) { setting ->
         DpSliderPreference(setting.title, ForkSize.KEY_GAP_V)
+    },
+    Setting(context, ForkSettings.PREF_TOP_PADDING_DP, R.string.fork_size_top_padding) { setting ->
+        DpSliderPreference(setting.title, ForkSize.TOP_PADDING)
+    },
+    Setting(context, ForkSettings.PREF_TOOLBAR_HEIGHT_DP, R.string.fork_size_toolbar_height) { setting ->
+        DpSliderPreference(setting.title, ForkSize.TOOLBAR_HEIGHT)
     },
     Setting(context, Settings.PREF_KEYBOARD_HEIGHT_SCALE_PREFIX, R.string.fork_size_height) { setting ->
         DpSliderPreference(setting.title, ForkSize.HEIGHT)

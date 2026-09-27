@@ -45,8 +45,8 @@ import kotlin.math.roundToInt
  */
 enum class ForkSize(
     val dpKey: String,
-    /** HeliBoard scale pref this dp value replaces (single size profile, so only index 0) */
-    val legacyKey: String,
+    /** HeliBoard scale pref this dp value replaces (single size profile, so only index 0), null if there was none */
+    val legacyKey: String?,
     val range: ClosedFloatingPointRange<Float>,
     val step: Float,
 ) {
@@ -54,7 +54,9 @@ enum class ForkSize(
     BOTTOM_PADDING(ForkSettings.PREF_BOTTOM_PADDING_DP, createPrefKeyForBooleanSettings(Settings.PREF_BOTTOM_PADDING_SCALE_PREFIX, 0, 2), 0f..48f, 0.5f),
     SIDE_PADDING(ForkSettings.PREF_SIDE_PADDING_DP, createPrefKeyForBooleanSettings(Settings.PREF_SIDE_PADDING_SCALE_PREFIX, 0, 3), 0f..80f, 0.5f),
     KEY_GAP_H(ForkSettings.PREF_KEY_GAP_H_DP, createPrefKeyForBooleanSettings(Settings.PREF_KEY_GAP_SCALE_PREFIX, 0, 2), 0f..16f, 0.5f),
-    KEY_GAP_V(ForkSettings.PREF_KEY_GAP_V_DP, createPrefKeyForBooleanSettings(Settings.PREF_KEY_GAP_SCALE_PREFIX, 0, 2), 0f..24f, 0.5f);
+    KEY_GAP_V(ForkSettings.PREF_KEY_GAP_V_DP, createPrefKeyForBooleanSettings(Settings.PREF_KEY_GAP_SCALE_PREFIX, 0, 2), 0f..24f, 0.5f),
+    TOP_PADDING(ForkSettings.PREF_TOP_PADDING_DP, null, 0f..40f, 0.5f),
+    TOOLBAR_HEIGHT(ForkSettings.PREF_TOOLBAR_HEIGHT_DP, null, 32f..72f, 1f);
 
     /** dp value the keyboard uses now: the dp pref, or what the scale pref results in on this screen */
     fun effectiveDp(context: Context, prefs: SharedPreferences = context.prefs()): Float {
@@ -72,6 +74,8 @@ enum class ForkSize(
                     Settings.readSidePaddingScale(prefs, false, false, false)
             KEY_GAP_H -> fraction(R.fraction.config_key_horizontal_gap_holo, widthPx) * Settings.readKeyGapScale(prefs, false, false)
             KEY_GAP_V -> fraction(R.fraction.config_key_vertical_gap_holo, heightPx!!) * Settings.readKeyGapScale(prefs, false, false)
+            TOP_PADDING -> fraction(R.fraction.config_keyboard_top_padding_holo, heightPx!!)
+            TOOLBAR_HEIGHT -> res.getDimension(R.dimen.fork_dynamic_toolbar_height)
         }
         return ((px / dm.density) / step).roundToInt() * step
     }
@@ -81,10 +85,10 @@ enum class ForkSize(
         remove(dpKey)
         // the gap scale is shared by both gaps, keep it while the other gap still depends on it
         val other = when (this@ForkSize) { KEY_GAP_H -> KEY_GAP_V; KEY_GAP_V -> KEY_GAP_H; else -> null }
-        if (other == null || prefs.contains(other.dpKey)) remove(legacyKey)
+        if (legacyKey != null && (other == null || prefs.contains(other.dpKey))) remove(legacyKey)
     }
 
-    fun isDefault(prefs: SharedPreferences) = !prefs.contains(dpKey) && !prefs.contains(legacyKey)
+    fun isDefault(prefs: SharedPreferences) = !prefs.contains(dpKey) && (legacyKey == null || !prefs.contains(legacyKey))
 }
 
 /** Slider in dp, changes are written and shown on the keyboard while dragging. */

@@ -32,7 +32,8 @@ internal class EmojiLayoutParams(res: Resources) {
         val bottomPadding = if (sv.mForkBottomPaddingDp >= 0) (sv.mForkBottomPaddingDp * density).toInt()
             else (res.getFraction(R.fraction.config_keyboard_bottom_padding_holo,
             defaultKeyboardHeight, defaultKeyboardHeight) * sv.mBottomPaddingScale).toInt()
-        val topPadding = res.getFraction(R.fraction.config_keyboard_top_padding_holo,
+        val topPadding = if (sv.mForkTopPaddingDp >= 0) (sv.mForkTopPaddingDp * density).toInt()
+            else res.getFraction(R.fraction.config_keyboard_top_padding_holo,
             defaultKeyboardHeight, defaultKeyboardHeight).toInt()
 
         val rowCount = KeyboardParams.DEFAULT_KEYBOARD_ROWS + if (sv.mShowsNumberRow) 1 else 0

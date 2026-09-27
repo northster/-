@@ -210,6 +210,8 @@ public class KeyboardParams {
         final float density = context.getResources().getDisplayMetrics().density;
         if (sv.mForkBottomPaddingDp >= 0)
             mBottomPadding = Math.round(sv.mForkBottomPaddingDp * density);
+        if (sv.mForkTopPaddingDp >= 0)
+            mTopPadding = Math.round(sv.mForkTopPaddingDp * density);
         if (sv.mForkSidePaddingDp >= 0) {
             mLeftPadding = Math.round(sv.mForkSidePaddingDp * density);
             mRightPadding = mLeftPadding;

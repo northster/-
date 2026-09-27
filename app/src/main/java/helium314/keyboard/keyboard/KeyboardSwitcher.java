@@ -6,6 +6,8 @@
 
 package helium314.keyboard.keyboard;
 
+import helium314.keyboard.fork.toolbar.DynamicToolbarController;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -251,6 +253,15 @@ public final class KeyboardSwitcher {
         mSuggestionStripView.setVisibility(stripVisibility);
         mClipboardHistoryView.setVisibility(View.GONE);
         mClipboardHistoryView.stopClipboardHistory();
+        notifyForkClipboard(false);
+    }
+
+    /** fork: the dynamic toolbar shows a header (back | name | actions) while the clipboard panel is open */
+    private static void notifyForkClipboard(boolean shown) {
+        final DynamicToolbarController toolbar = DynamicToolbarController.getCurrent();
+        if (toolbar == null) return;
+        if (shown) toolbar.onClipboardShown();
+        else toolbar.onClipboardHidden();
     }
 
     public void toggleLayout(@NonNull LayoutDirective.Utility layout, int autoCapsFlags, @Nullable RecapitalizeMode recapitalizeMode) {
@@ -314,6 +325,7 @@ public final class KeyboardSwitcher {
 
                 mClipboardHistoryView.stopClipboardHistory();
                 mClipboardHistoryView.setVisibility(View.GONE);
+                notifyForkClipboard(false);
 
                 mMainKeyboardFrame.setVisibility(View.VISIBLE);
                 mKeyboardView.setVisibility(View.VISIBLE);
@@ -614,6 +626,8 @@ public final class KeyboardSwitcher {
         if (mLatinIME == null || !mLatinIME.isInputViewShown() || mKeyboardView == null)
             return;
         reloadMainKeyboard();
+        final DynamicToolbarController toolbar = DynamicToolbarController.getCurrent();
+        if (toolbar != null) toolbar.applyHeight();
     }
 
     public void setThemeNeedsReload() {
@@ -675,6 +689,7 @@ public final class KeyboardSwitcher {
             mEmojiPalettesView.startEmojiPalettes(mKeyboardView.getKeyVisualAttribute(),
                 mLatinIME.getCurrentInputEditorInfo(), mLatinIME.mKeyboardActionListener);
             mEmojiPalettesView.setVisibility(View.VISIBLE);
+            notifyForkClipboard(false);
         }
 
         @Override
@@ -696,6 +711,7 @@ public final class KeyboardSwitcher {
             mClipboardHistoryView.startClipboardHistory(mLatinIME.getClipboardHistoryManager(), mKeyboardView.getKeyVisualAttribute(),
                 mLatinIME.getCurrentInputEditorInfo(), mLatinIME.mKeyboardActionListener);
             mClipboardHistoryView.setVisibility(View.VISIBLE);
+            notifyForkClipboard(true);
         }
 
         @Override

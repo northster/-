@@ -131,4 +131,9 @@
     <string name="fork_clip_screenshots_denied">사진 접근 권한이 허용되지 않았어요</string>
     <string name="fork_clip_abc_after">붙여넣은 뒤 자판으로 돌아가기</string>
     <string name="fork_clip_abc_after_summary">클립을 붙여넣으면 클립보드 패널을 닫기</string>
+    <string name="fork_clip_actions">클립보드 툴바 버튼</string>
+    <string name="fork_clip_actions_summary">클립보드를 열었을 때 툴바 오른쪽에 보일 버튼</string>
+    <string name="fork_tool_back">키보드로 돌아가기</string>
+    <string name="fork_size_top_padding">위 여백</string>
+    <string name="fork_size_toolbar_height">툴바 높이</string>
 </resources>

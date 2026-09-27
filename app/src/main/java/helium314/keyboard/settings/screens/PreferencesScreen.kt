@@ -81,6 +81,7 @@ fun PreferencesScreen(
         R.string.settings_category_clipboard_history,
         Settings.PREF_ENABLE_CLIPBOARD_HISTORY,
         // fork: retention in hours, size limits, layout of the panel, paste chips, screenshots
+        helium314.keyboard.fork.clipboard.ClipAction.PREF,
         if (clipboardHistoryEnabled) ClipPrefs.RETENTION_HOURS else null,
         if (clipboardHistoryEnabled) ClipPrefs.MAX_ITEMS else null,
         if (clipboardHistoryEnabled) ClipPrefs.COLUMNS else null,

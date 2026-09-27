@@ -134,4 +134,9 @@
     <string name="fork_clip_screenshots_denied">Photo access was not granted</string>
     <string name="fork_clip_abc_after">Back to letters after pasting</string>
     <string name="fork_clip_abc_after_summary">Close the clipboard panel after a clip is pasted</string>
+    <string name="fork_clip_actions">Clipboard toolbar buttons</string>
+    <string name="fork_clip_actions_summary">Buttons on the right of the toolbar while the clipboard is open</string>
+    <string name="fork_tool_back">Back to keyboard</string>
+    <string name="fork_size_top_padding">Top padding</string>
+    <string name="fork_size_toolbar_height">Toolbar height</string>
 </resources>

@@ -22,6 +22,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.content.edit
+import helium314.keyboard.fork.clipboard.ClipAction
 import helium314.keyboard.fork.clipboard.ClipPrefs
 import helium314.keyboard.fork.clipboard.ScreenshotWatcher
 import helium314.keyboard.latin.R
@@ -37,6 +38,9 @@ import helium314.keyboard.settings.preferences.SwitchPreference
 
 /** fork: clipboard history settings, shown in the clipboard section of the preferences screen */
 fun createForkClipboardSettings(context: Context) = listOf(
+    Setting(context, ClipAction.PREF, R.string.fork_clip_actions, R.string.fork_clip_actions_summary) { setting ->
+        ClipActionsPreference(setting.title, setting.description)
+    },
     Setting(context, ClipPrefs.RETENTION_HOURS, R.string.fork_clip_retention) { setting ->
         val ctx = LocalContext.current
         IntChoicePreference(setting.title, { ClipPrefs.retentionHours(ctx.prefs()) }, ClipPrefs.retentionChoices, {
@@ -97,6 +101,40 @@ fun createForkClipboardSettings(context: Context) = listOf(
         })
     },
 )
+
+/** fork: which actions the toolbar header shows while the clipboard panel is open */
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+fun ClipActionsPreference(name: String, description: String?) {
+    val ctx = LocalContext.current
+    val prefs = ctx.prefs()
+    val b = (ctx.getActivity() as? SettingsActivity)?.prefChanged?.collectAsState()
+    if ((b?.value ?: 0) < 0)
+        Log.v("irrelevant", "stupid way to trigger recomposition on preference change")
+    val enabled = ClipAction.enabled(prefs)
+    val s = LocalShadcn.current
+    Column(Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 12.dp)) {
+        Text(name, style = MaterialTheme.typography.bodyLarge)
+        if (description != null)
+            Text(description, style = MaterialTheme.typography.bodyMedium, color = s.mutedForeground)
+        FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.padding(top = 8.dp)) {
+            ClipAction.entries.forEach { action ->
+                val on = action in enabled
+                FilterChip(
+                    selected = on,
+                    onClick = { ClipAction.setEnabled(prefs, action, !on) },
+                    label = { Text(action.label(ctx), style = MaterialTheme.typography.labelLarge) },
+                    shape = MaterialTheme.shapes.small,
+                    colors = FilterChipDefaults.filterChipColors(
+                        selectedContainerColor = s.primary,
+                        selectedLabelColor = s.primaryForeground,
+                        labelColor = s.foreground,
+                    ),
+                )
+            }
+        }
+    }
+}
 
 /** fork: a choice between numbers, as chips */
 @OptIn(ExperimentalLayoutApi::class)
