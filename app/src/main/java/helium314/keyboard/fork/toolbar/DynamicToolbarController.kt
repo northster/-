@@ -345,7 +345,7 @@ class DynamicToolbarController(private val context: Context) {
             TOOL_CLIPBOARD -> {
                 val actions = ClipAction.enabled(context.prefs())
                 tb.showToolHeader(context.getString(R.string.fork_toolbar_clipboard), actions.map { it.icon(context) to it.label(context) },
-                    onBack = ::backToKeyboard) { i -> onClipAction(actions[i]) }
+                    onBack = ::backToKeyboard, onAction = { i -> onClipAction(actions[i]) })
             }
             TOOL_EMOJI -> {
                 val emoji = KeyboardSwitcher.getInstance().emojiPalettesView ?: return
