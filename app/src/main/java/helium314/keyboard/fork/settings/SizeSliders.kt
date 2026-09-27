@@ -57,6 +57,7 @@ enum class ForkSize(
     KEY_GAP_H(ForkSettings.PREF_KEY_GAP_H_DP, createPrefKeyForBooleanSettings(Settings.PREF_KEY_GAP_SCALE_PREFIX, 0, 2), 0f..16f, 0.5f),
     KEY_GAP_V(ForkSettings.PREF_KEY_GAP_V_DP, createPrefKeyForBooleanSettings(Settings.PREF_KEY_GAP_SCALE_PREFIX, 0, 2), 0f..24f, 0.5f),
     TOP_PADDING(ForkSettings.PREF_TOP_PADDING_DP, null, 0f..40f, 0.5f),
+    BOTTOM_ROW(ForkSettings.PREF_BOTTOM_ROW_DP, createPrefKeyForBooleanSettings(Settings.PREF_BOTTOM_ROW_SCALE_PREFIX, 0, 2), 24f..90f, 0.5f),
     TOOLBAR_HEIGHT(ForkSettings.PREF_TOOLBAR_HEIGHT_DP, null, 32f..72f, 1f);
 
     /** dp value the keyboard uses now: the dp pref, or what the scale pref results in on this screen */
@@ -78,6 +79,12 @@ enum class ForkSize(
             KEY_GAP_H -> fraction(R.fraction.config_key_horizontal_gap_holo, widthPx) * Settings.readKeyGapScale(prefs, false, false)
             KEY_GAP_V -> fraction(R.fraction.config_key_vertical_gap_holo, refPx) * Settings.readKeyGapScale(prefs, false, false)
             TOP_PADDING -> fraction(R.fraction.config_keyboard_top_padding_holo, refPx)
+            BOTTOM_ROW -> {
+                // what the old scale gave: the bottom row takes a share of 4 rows, the others the rest
+                val scale = Settings.readBottomRowScale(prefs, false, false)
+                val gap = px(KEY_GAP_V)
+                (px(KEY_HEIGHT) + gap) * 3 * scale / (4 - scale) - gap
+            }
             TOOLBAR_HEIGHT -> res.getDimension(R.dimen.fork_dynamic_toolbar_height)
         }
         return ((px / dm.density) / step).roundToInt() * step

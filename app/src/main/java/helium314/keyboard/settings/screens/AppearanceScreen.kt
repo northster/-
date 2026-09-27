@@ -268,15 +268,8 @@ fun createAppearanceSettings(context: Context) = listOf(
     Setting(context, Settings.PREF_KEYBOARD_HEIGHT_SCALE_PREFIX, R.string.fork_size_key_height, R.string.fork_size_key_height_summary) { setting ->
         DpSliderPreference(setting.title, ForkSize.KEY_HEIGHT, setting.description)
     },
-    Setting(context, Settings.PREF_BOTTOM_ROW_SCALE_PREFIX, R.string.prefs_bottom_row_scale) { setting ->
-        InlineSliderPreference(
-            name = setting.title,
-            key = createPrefKeyForBooleanSettings(setting.key, 0, 2),
-            default = Defaults.PREF_BOTTOM_ROW_SCALE[0],
-            range = 0.5f..2f,
-            step = 0.01f,
-            live = true,
-        ) { ForkLive.requestReload() }
+    Setting(context, Settings.PREF_BOTTOM_ROW_SCALE_PREFIX, R.string.fork_size_bottom_row) { setting ->
+        DpSliderPreference(setting.title, ForkSize.BOTTOM_ROW)
     },
     Setting(context, Settings.PREF_BOTTOM_PADDING_SCALE_PREFIX, R.string.fork_size_bottom_padding) { setting ->
         DpSliderPreference(setting.title, ForkSize.BOTTOM_PADDING)

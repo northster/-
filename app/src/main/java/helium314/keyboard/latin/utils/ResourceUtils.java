@@ -76,7 +76,10 @@ public final class ResourceUtils {
         // fork: the height follows from the key height, paddings are added instead of taken from the keys
         final int[] v = getForkVerticalMetrics(res, settingsValues);
         final int rows = KeyboardParams.DEFAULT_KEYBOARD_ROWS + (settingsValues.mShowsNumberRow ? 1 : 0);
-        final int height = v[0] + v[1] + rows * (getForkKeyHeight(res, settingsValues) + v[2]) - v[2];
+        final int key = getForkKeyHeight(res, settingsValues);
+        int height = v[0] + v[1] + rows * (key + v[2]) - v[2];
+        if (settingsValues.mForkBottomRowDp > 0) // bottom row with its own height
+            height += Math.round(settingsValues.mForkBottomRowDp * res.getDisplayMetrics().density) - key;
         return (int) Math.min(height, res.getDisplayMetrics().heightPixels * 0.7f);
     }
 

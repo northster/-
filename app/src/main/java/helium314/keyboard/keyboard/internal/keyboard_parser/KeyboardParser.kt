@@ -80,7 +80,11 @@ class KeyboardParser(private val params: KeyboardParams, private val context: Co
         }
         // rescale without changing keyboard height
         if (params.mId.element.takesFunctionalKeys) {
-            val bottomRowScale = Settings.getValues().mBottomRowScale
+            val sv = Settings.getValues()
+            // fork: bottom row height set in dp, other rows share the rest (the keyboard height already includes it)
+            val bottomRowScale = if (sv.mForkBottomRowDp > 0 && params.mBaseHeight > 0 && keysInRows.size > 1)
+                keysInRows.size * (sv.mForkBottomRowDp * context.resources.displayMetrics.density + params.mVerticalGap) / params.mBaseHeight
+            else sv.mBottomRowScale
             val otherRowScale = (keysInRows.size - bottomRowScale) / (keysInRows.size - 1)
             keysInRows.forEachIndexed { i, row ->
                 row.forEach { it.mHeight *= if (i == keysInRows.lastIndex) bottomRowScale else otherRowScale }

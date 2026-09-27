@@ -65,6 +65,8 @@ object ForkSettings {
     const val PREF_KEY_GAP_H_DP = "fork_key_gap_h_dp"
     const val PREF_KEY_GAP_V_DP = "fork_key_gap_v_dp"
     const val PREF_TOP_PADDING_DP = "fork_top_padding_dp"
+    /** height of the bottom row keys (space bar row), replaces HeliBoard's bottom row scale once set */
+    const val PREF_BOTTOM_ROW_DP = "fork_bottom_row_dp"
     /** height of the dynamic toolbar */
     const val PREF_TOOLBAR_HEIGHT_DP = "fork_toolbar_height_dp"
     const val SIZE_UNSET = -1f

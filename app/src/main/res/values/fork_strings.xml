@@ -153,4 +153,5 @@
     <string name="fork_cat_classic_toolbar">HeliBoard toolbar</string>
     <string name="fork_hide_composing_underline">No underline while typing</string>
     <string name="fork_hide_composing_underline_summary">The letter being composed is written as normal text, so apps don\'t underline it. Turn off if an app deletes or doubles letters</string>
+    <string name="fork_size_bottom_row">Bottom row key height</string>
 </resources>

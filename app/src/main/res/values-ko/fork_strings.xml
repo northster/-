@@ -150,4 +150,5 @@
     <string name="fork_cat_classic_toolbar">HeliBoard 툴바</string>
     <string name="fork_hide_composing_underline">입력 중 밑줄 없애기</string>
     <string name="fork_hide_composing_underline_summary">조합 중인 글자를 일반 글자로 써서 앱이 밑줄을 긋지 않게 해요. 어떤 앱에서 글자가 지워지거나 두 번 써지면 꺼 주세요</string>
+    <string name="fork_size_bottom_row">하단 행 키 높이</string>
 </resources>

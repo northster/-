@@ -131,6 +131,7 @@ public class SettingsValues {
     public final float mSidePaddingScale;
     // fork: sizes in dp, ForkSettings.SIZE_UNSET (< 0) when the scale values above apply
     public final float mForkKeyHeightDp;
+    public final float mForkBottomRowDp;
     public final float mForkBottomPaddingDp;
     public final float mForkTopPaddingDp;
     public final float mForkSidePaddingDp;
@@ -331,6 +332,7 @@ public class SettingsValues {
         mBottomPaddingScale = mIsFloatingKeyboard ? 0f : Settings.readBottomPaddingScale(prefs, isLandscape, isFolded);
         mSidePaddingScale = Settings.readSidePaddingScale(prefs, isLandscape, mIsSplitKeyboardEnabled, isFolded);
         mForkKeyHeightDp = ForkSettings.sizeDp(prefs, ForkSettings.PREF_KEY_HEIGHT_DP);
+        mForkBottomRowDp = ForkSettings.sizeDp(prefs, ForkSettings.PREF_BOTTOM_ROW_DP);
         mForkBottomPaddingDp = mIsFloatingKeyboard ? ForkSettings.SIZE_UNSET : ForkSettings.sizeDp(prefs, ForkSettings.PREF_BOTTOM_PADDING_DP);
         mForkSidePaddingDp = ForkSettings.sizeDp(prefs, ForkSettings.PREF_SIDE_PADDING_DP);
         mForkTopPaddingDp = mIsFloatingKeyboard ? ForkSettings.SIZE_UNSET : ForkSettings.sizeDp(prefs, ForkSettings.PREF_TOP_PADDING_DP);
