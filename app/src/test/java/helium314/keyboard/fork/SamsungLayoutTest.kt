@@ -36,4 +36,15 @@ class SamsungLayoutTest {
         assertEquals(listOf("€", "£", "¥", "₩", "/", "~", "`", "¤", "°", "♡"), rows[1].map { it.label })
         assertEquals(listOf("_", "\\", "|", "《", "》", "¡", "¿"), rows[2].map { it.label })
     }
+
+    @Test fun emojiBottomRowsParse() {
+        // comment lines must start at column 0, otherwise the json is invalid and the file shows up as keys
+        for (name in listOf("emoji_bottom_row.json", "emoji_bottom_row_with_action.json")) {
+            val text = asset("emoji_bottom/$name")
+            assertTrue(text.trimStart().startsWith("["))
+            val rows = LayoutParser.parseJsonString(text)
+            assertEquals(1, rows.size)
+            assertTrue(rows[0].size >= 3) // spacer, space, delete (, action)
+        }
+    }
 }
