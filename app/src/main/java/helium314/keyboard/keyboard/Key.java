@@ -1202,12 +1202,13 @@ public class Key implements Comparable<Key> {
                     KeyCode.EMOJI_SEARCH:
                 actionFlags |= ACTION_FLAGS_NO_KEY_PREVIEW; // no preview even if icon!
             }
-            if (mCode == KeyCode.SETTINGS || mCode == KeyCode.LANGUAGE_SWITCH)
+            // fork: not for the language switch key, pressing it right after typing would highlight / type a space
+            if (mCode == KeyCode.SETTINGS)
                 actionFlags |= ACTION_FLAGS_ALT_CODE_WHILE_TYPING;
             mActionFlags = actionFlags;
 
             final int altCodeInAttr; // settings and language switch keys have alt code space, all others nothing
-            if (mCode == KeyCode.SETTINGS || mCode == KeyCode.LANGUAGE_SWITCH || mCode == KeyCode.EMOJI || mCode == KeyCode.CLIPBOARD)
+            if (mCode == KeyCode.SETTINGS || mCode == KeyCode.EMOJI || mCode == KeyCode.CLIPBOARD) // fork: language switch removed
                 altCodeInAttr = Constants.CODE_SPACE;
             else
                 altCodeInAttr = KeyCode.NOT_SPECIFIED;
