@@ -381,4 +381,11 @@
     <string name="fork_translate_result">Result</string>
     <string name="fork_translate_replace">Replace the text</string>
     <string name="fork_translate_keep">Keep the original, translation below</string>
+    <string name="fork_screen_translate">AI translation</string>
+    <string name="fork_desc_translate">Language, style and purpose the translation panel starts with</string>
+    <string name="fork_screen_gif">GIF</string>
+    <string name="fork_desc_gif">GIF search API keys (KLIPY, GIPHY)</string>
+    <string name="fork_gif_screen_summary">The GIF button on the toolbar searches with KLIPY (used first) or GIPHY. Both need a free API key.</string>
+    <string name="fork_translate_screen_summary">The translate button on the toolbar opens a panel over the keys. It starts with these choices and remembers the last ones used. Uses the Gemini API keys of AI commands.</string>
+    <string name="fork_translate_keep_summary">The translation goes under the original instead of replacing it</string>
 </resources>

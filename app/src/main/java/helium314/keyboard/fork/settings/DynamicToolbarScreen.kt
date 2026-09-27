@@ -7,6 +7,9 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.ui.unit.dp
 import helium314.keyboard.latin.utils.getActivity
 import helium314.keyboard.latin.utils.prefs
 import androidx.compose.ui.res.stringResource
@@ -67,9 +70,6 @@ fun DynamicToolbarScreen(
             R.string.fork_cat_autofill,
             DynamicToolbarController.PREF_AUTOFILL,
             DynamicToolbarController.PREF_AUTOFILL_OPEN,
-            R.string.fork_cat_gif,
-            helium314.keyboard.fork.gif.GifClient.PREF_KLIPY_KEY,
-            helium314.keyboard.fork.gif.GifClient.PREF_GIPHY_KEY,
             // HeliBoard's own toolbar (suggestion strip modes) is not shown: it must stay hidden for the dynamic toolbar
         )
     SearchSettingsScreen(
@@ -227,6 +227,19 @@ fun createDynamicToolbarSettings(context: Context) = listOf(
     Setting(context, DynamicToolbarController.PREF_AUTOFILL_OPEN, R.string.fork_autofill_open, R.string.fork_autofill_open_summary) {
         SwitchPreference(it, true)
     },
+    Setting(context, helium314.keyboard.fork.translate.TranslatePanel.PREF_LANGUAGE, R.string.fork_translate_language) {
+        TranslateChoice(it, helium314.keyboard.fork.translate.TranslatePanel.LANGUAGES)
+    },
+    Setting(context, helium314.keyboard.fork.translate.TranslatePanel.PREF_STYLE, R.string.fork_translate_style) {
+        TranslateChoice(it, helium314.keyboard.fork.translate.TranslatePanel.STYLES)
+    },
+    Setting(context, helium314.keyboard.fork.translate.TranslatePanel.PREF_PURPOSE, R.string.fork_translate_purpose) {
+        TranslateChoice(it, helium314.keyboard.fork.translate.TranslatePanel.PURPOSES)
+    },
+    Setting(context, helium314.keyboard.fork.translate.TranslatePanel.PREF_KEEP, R.string.fork_translate_keep,
+        R.string.fork_translate_keep_summary) {
+        SwitchPreference(it, false)
+    },
     Setting(context, helium314.keyboard.fork.gif.GifClient.PREF_KLIPY_KEY, R.string.fork_gif_klipy_key) {
         GifKeyPreference(it.title, it.key, "partner.klipy.com")
     },
@@ -237,7 +250,7 @@ fun createDynamicToolbarSettings(context: Context) = listOf(
 
 /** a GIF provider's API key, stored encrypted; shown as its last characters */
 @Composable
-private fun GifKeyPreference(title: String, pref: String, site: String) {
+internal fun GifKeyPreference(title: String, pref: String, site: String) {
     val ctx = androidx.compose.ui.platform.LocalContext.current
     val prefs = ctx.prefs()
     var editing by androidx.compose.runtime.remember { androidx.compose.runtime.mutableStateOf(false) }
@@ -285,3 +298,46 @@ private fun GlowSlider(setting: Setting, default: Float, range: ClosedFloatingPo
         step = step,
     ) { DynamicToolbarController.current?.onGlowSettingsChanged() }
 }
+
+/** a translation default: the panel starts with it (and remembers what was used last) */
+@Composable
+private fun TranslateChoice(setting: Setting, options: List<helium314.keyboard.fork.translate.TranslatePanel.Option>) {
+    helium314.keyboard.settings.preferences.InlineChoicePreference(setting.title, setting.key,
+        options.map { it.label to it.label }, options.first().label)
+}
+
+/** Tools > GIF: the KLIPY / GIPHY keys */
+@Composable
+fun GifScreen(onClickBack: () -> Unit) {
+    val items = listOf(helium314.keyboard.fork.gif.GifClient.PREF_KLIPY_KEY, helium314.keyboard.fork.gif.GifClient.PREF_GIPHY_KEY)
+    SearchSettingsScreen(onClickBack = onClickBack, title = stringResource(R.string.fork_screen_gif), settings = items) {
+        androidx.compose.foundation.layout.Column {
+            androidx.compose.material3.Text(stringResource(R.string.fork_gif_screen_summary),
+                style = androidx.compose.material3.MaterialTheme.typography.bodyMedium,
+                color = helium314.keyboard.latin.utils.LocalShadcn.current.mutedForeground,
+                modifier = androidx.compose.ui.Modifier.padding(horizontal = 16.dp, vertical = 12.dp))
+            helium314.keyboard.settings.SettingsSections(items)
+        }
+    }
+}
+
+/** Tools > translation: what the translation panel starts with */
+@Composable
+fun TranslateScreen(onClickBack: () -> Unit) {
+    val items = listOf(
+        helium314.keyboard.fork.translate.TranslatePanel.PREF_LANGUAGE,
+        helium314.keyboard.fork.translate.TranslatePanel.PREF_STYLE,
+        helium314.keyboard.fork.translate.TranslatePanel.PREF_PURPOSE,
+        helium314.keyboard.fork.translate.TranslatePanel.PREF_KEEP,
+    )
+    SearchSettingsScreen(onClickBack = onClickBack, title = stringResource(R.string.fork_screen_translate), settings = items) {
+        androidx.compose.foundation.layout.Column(androidx.compose.ui.Modifier.verticalScroll(androidx.compose.foundation.rememberScrollState())) {
+            androidx.compose.material3.Text(stringResource(R.string.fork_translate_screen_summary),
+                style = androidx.compose.material3.MaterialTheme.typography.bodyMedium,
+                color = helium314.keyboard.latin.utils.LocalShadcn.current.mutedForeground,
+                modifier = androidx.compose.ui.Modifier.padding(horizontal = 16.dp, vertical = 12.dp))
+            helium314.keyboard.settings.SettingsSections(items)
+        }
+    }
+}
+

@@ -192,13 +192,13 @@ class TranslatePanel(
     }
 
     companion object {
-        private const val PREF_LANGUAGE = "fork_translate_language"
-        private const val PREF_STYLE = "fork_translate_style"
-        private const val PREF_PURPOSE = "fork_translate_purpose"
-        private const val PREF_KEEP = "fork_translate_keep"
+        const val PREF_LANGUAGE = "fork_translate_language"
+        const val PREF_STYLE = "fork_translate_style"
+        const val PREF_PURPOSE = "fork_translate_purpose"
+        const val PREF_KEEP = "fork_translate_keep"
         private const val PREF_USE = "fork_translate_usage_"
 
-        private val LANGUAGES = listOf(
+        val LANGUAGES = listOf(
             Option("한국어", "Korean"), Option("English", "English"), Option("日本語", "Japanese"),
             Option("中文(简体)", "Simplified Chinese"), Option("中文(繁體)", "Traditional Chinese"),
             Option("Español", "Spanish"), Option("Français", "French"), Option("Deutsch", "German"),
@@ -206,7 +206,7 @@ class TranslatePanel(
             Option("Русский", "Russian"), Option("Italiano", "Italian"), Option("Português", "Portuguese"),
             Option("العربية", "Arabic"), Option("हिन्दी", "Hindi"),
         )
-        private val STYLES = listOf(
+        val STYLES = listOf(
             Option("자연스럽게", ""),
             Option("존댓말", "Use a polite, respectful register (in Korean: 존댓말, 해요체)."),
             Option("반말", "Use a casual register between close friends (in Korean: 반말)."),
@@ -215,7 +215,7 @@ class TranslatePanel(
             Option("간결하게", "Make it short and concise."),
             Option("직역", "Translate literally, as close to the original wording as possible."),
         )
-        private val PURPOSES = listOf(
+        val PURPOSES = listOf(
             Option("일반", ""),
             Option("채팅", "It is a chat message: keep it natural and conversational, as a native speaker would text."),
             Option("이메일", "It is an email: use the conventions of an email in that language."),

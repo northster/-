@@ -33,6 +33,7 @@ MAP = {
     'close': 'close',
     'keyboard': 'keyboard',
     'sparkles': 'sparkles',
+    'zap': 'zap',
     'translate': 'languages',
     'more': 'more-horizontal',
     'question': 'circle-question',
