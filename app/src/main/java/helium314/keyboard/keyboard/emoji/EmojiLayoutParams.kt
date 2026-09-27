@@ -19,6 +19,8 @@ internal class EmojiLayoutParams(res: Resources) {
     val emojiKeyboardHeight: Int
     private val emojiCategoryPageIdViewHeight: Int
     val bottomRowKeyboardHeight: Int
+    /** fork: space below the bottom row, the emoji list reaches into it */
+    val bottomPaddingPx: Int
 
     init {
         val sv = Settings.getValues()
@@ -33,6 +35,7 @@ internal class EmojiLayoutParams(res: Resources) {
         val topPadding = forkV?.get(0) ?: res.getFraction(R.fraction.config_keyboard_top_padding_holo,
             defaultKeyboardHeight, defaultKeyboardHeight).toInt()
 
+        bottomPaddingPx = bottomPadding
         val rowCount = KeyboardParams.DEFAULT_KEYBOARD_ROWS + if (sv.mShowsNumberRow) 1 else 0
         bottomRowKeyboardHeight = (defaultKeyboardHeight - bottomPadding - topPadding) / rowCount - keyVerticalGap / 2
 

@@ -402,6 +402,19 @@ class DynamicToolbarController(private val context: Context) {
             tb.hideChipBar()
         }
         setHint(hintWanted())
+        showChipDiagnostics()
+    }
+
+    /** while "try the chip hint" runs: what the keyboard thinks, on screen (no adb needed) */
+    private fun showChipDiagnostics() {
+        if (System.currentTimeMillis() >= context.prefs().getLong(ClipPrefs.HINT_TEST_UNTIL, 0)) return
+        fun yn(b: Boolean) = if (b) "O" else "X"
+        val kv = KeyboardSwitcher.getInstance().mainKeyboardView
+        val text = "chip ${yn(chip != null)} · 툴바 접힘 ${yn(!isExpanded)} · 도구 없음 ${yn(!toolActive)} · " +
+            "검색 아님 ${yn(!clipSearch.isActive)} · 키보드 ${yn(keyboardFrame != null && isUsable())} · " +
+            "알림 ${yn(hintView != null)} (${ClipPrefs.chipHint(context.prefs())}, ${kv?.width ?: 0}x${kv?.height ?: 0})"
+        Log.i(TAG, "chip diagnostics: $text")
+        KeyboardSwitcher.getInstance().showToast(text, false)
     }
 
     private fun pasteChip(text: String?) {

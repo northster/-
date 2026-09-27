@@ -102,6 +102,8 @@ fun createForkClipboardSettings(context: Context) = listOf(
         val ctx = LocalContext.current
         helium314.keyboard.settings.preferences.Preference(name = setting.title, description = setting.description, onClick = {
             ctx.prefs().edit { putLong(ClipPrefs.HINT_TEST_UNTIL, System.currentTimeMillis() + 30_000) }
+            // same process as the keyboard: if it is running, apply right away
+            helium314.keyboard.fork.toolbar.DynamicToolbarController.current?.refreshPasteChips()
             Toast.makeText(ctx, R.string.fork_clip_hint_test_started, Toast.LENGTH_LONG).show()
         })
     },

@@ -249,7 +249,9 @@ public final class EmojiPalettesView extends LinearLayout
 
     private int forkOverlayHeight() {
         final ViewGroup.LayoutParams indicator = findViewById(R.id.emoji_category_page_id_view).getLayoutParams();
-        return mEmojiLayoutParams.getBottomRowKeyboardHeight() + (indicator != null ? Math.max(indicator.height, 0) : 0);
+        // bottom row, indicator and the bottom padding below them: the list reaches the bottom of the panel
+        return mEmojiLayoutParams.getBottomRowKeyboardHeight() + mEmojiLayoutParams.getBottomPaddingPx()
+                + (indicator != null ? Math.max(indicator.height, 0) : 0);
     }
 
     /** the list reaches down behind the bottom row */
