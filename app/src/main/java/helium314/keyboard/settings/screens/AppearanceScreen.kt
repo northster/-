@@ -115,6 +115,7 @@ fun AppearanceScreen(
         Settings.PREF_HINT_FONT_SCALE,
         Settings.PREF_EMOJI_FONT_SCALE,
         ForkSettings.PREF_EMOJI_COLUMNS,
+        helium314.keyboard.fork.emoji.EmojiTabs.PREF,
         Settings.PREF_EMOJI_KEY_FIT,
         Settings.PREF_EMOJI_SKIN_TONE,
         // fork: fonts by script

@@ -325,7 +325,7 @@ class DynamicToolbarView @JvmOverloads constructor(
      * [tabs] are icon resource and description.
      */
     fun showEmojiHeader(tabs: List<Pair<Int, String>>, selected: Int, onBack: () -> Unit,
-                        onTab: (Int) -> Unit, onLongTab: (Int) -> Boolean) {
+                        onTab: (Int) -> Unit, onLongTab: (Int) -> Boolean, onSearch: () -> Unit) {
         val colors = Settings.getValues().mColors
         header.removeAllViews()
         emojiTabs.clear()
@@ -358,6 +358,13 @@ class DynamicToolbarView @JvmOverloads constructor(
         }
         emojiTabScroll = scroll
         header.addView(scroll, LinearLayout.LayoutParams(0, LayoutParams.MATCH_PARENT, 1f))
+        // search always stays on the right
+        header.addView(View(context).apply { setBackgroundColor(colors.get(ColorType.KEY_HINT_TEXT)) },
+            LinearLayout.LayoutParams((1 * density).toInt().coerceAtLeast(1), (18 * density).toInt()).apply {
+                marginStart = (4 * density).toInt()
+            })
+        header.addView(iconButton(R.drawable.ic_dot_search, context.getString(R.string.fork_emoji_search)) { onSearch() },
+            LinearLayout.LayoutParams((48 * density).toInt(), LayoutParams.MATCH_PARENT))
         setEmojiTabSelected(selected)
         row.visibility = GONE
         searchBar.visibility = GONE

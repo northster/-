@@ -122,6 +122,10 @@ public final class EmojiPalettesView extends LinearLayout
             });
 
             emojiRecyclerView.setPersistentDrawingCache(PERSISTENT_NO_CACHE);
+            // fork: dotted scrollbar on the right instead of the page indicator below
+            emojiRecyclerView.setVerticalScrollBarEnabled(false);
+            emojiRecyclerView.addItemDecoration(new helium314.keyboard.fork.toolbar.DotScrollbarDecoration(
+                    mColors.get(ColorType.EMOJI_CATEGORY_SELECTED), getResources().getDisplayMetrics().density));
             return viewHolder;
         }
 
@@ -265,7 +269,13 @@ public final class EmojiPalettesView extends LinearLayout
     }
 
     public int forkTabIcon(int index) {
-        return mEmojiCategory.getCategoryTabIcon(mEmojiCategory.getShownCategories().get(index).getCategory());
+        // dot matrix icons instead of the theme's
+        return helium314.keyboard.fork.emoji.EmojiTabs.INSTANCE.icon(mEmojiCategory.getShownCategories().get(index).getCategory());
+    }
+
+    /** emoji search needs an emoji dictionary for one of the enabled languages */
+    public boolean forkCanSearch() {
+        return !DictionaryInfoUtils.getLocalesWithEmojiDicts(getContext()).isEmpty();
     }
 
     public String forkTabDescription(int index) {
@@ -331,6 +341,7 @@ public final class EmojiPalettesView extends LinearLayout
         mEmojiLayoutParams.setEmojiListProperties(mPager);
         mForkNormalPagerHeight = mPager.getLayoutParams().height;
         mEmojiCategoryPageIndicatorView = findViewById(R.id.emoji_category_page_id_view);
+        mEmojiCategoryPageIndicatorView.setVisibility(INVISIBLE); // fork: replaced by the dotted scrollbar
         mEmojiLayoutParams.setCategoryPageIdViewProperties(mEmojiCategoryPageIndicatorView);
         setCurrentCategory(mEmojiCategory.getCurrentCategory(), true);
         mEmojiCategoryPageIndicatorView.setColors(mColors.get(ColorType.EMOJI_CATEGORY_SELECTED), mColors.get(ColorType.STRIP_BACKGROUND));

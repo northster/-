@@ -63,7 +63,6 @@ class DynamicToolbarController(private val context: Context) {
     private var hintAnimator: ValueAnimator? = null
     private var hintGlow: DotGlowDrawable? = null
     private var hintDot: CornerDotDrawable? = null
-    private var hintHost: View? = null
     /** clipboard panel made taller by swiping up on the header */
     private var panelAnimator: ValueAnimator? = null
     var isClipboardPanelTall = false
@@ -275,6 +274,11 @@ class DynamicToolbarController(private val context: Context) {
                     onLongTab = { i ->
                         // long press on recents clears them, like before
                         if (emoji.forkIsRecentsTab(i)) { emoji.forkClearRecents(); true } else false
+                    },
+                    onSearch = {
+                        if (emoji.forkCanSearch())
+                            latinIME?.mKeyboardActionListener?.onCodeInput(KeyCode.EMOJI_SEARCH, Constants.NOT_A_COORDINATE, Constants.NOT_A_COORDINATE, false)
+                        else KeyboardSwitcher.getInstance().showToast(context.getString(R.string.fork_emoji_search_needs_dict), true)
                     })
             }
         }
@@ -409,64 +413,54 @@ class DynamicToolbarController(private val context: Context) {
         ime.mKeyboardActionListener.onContent(entry.getContentInfo(context))
     }
 
-    /** the glow is drawn on the keyboard view, layered over its (opaque) background and under the keys */
-    private var hintGlowView: View? = null
-    private var hintGlowOriginalBackground: android.graphics.drawable.Drawable? = null
-
     private fun hintWanted() = chip != null && !isExpanded && !toolActive && !clipSearch.isActive && isUsable()
 
+    /** keyboard view that draws the hint */
+    private var hintView: helium314.keyboard.keyboard.KeyboardView? = null
+    private var hintStyle: String? = null
+
     private fun setHint(on: Boolean) {
-        val switcher = KeyboardSwitcher.getInstance()
-        val dotHost = switcher.wrapperView
-        val glowHost: View? = switcher.mainKeyboardView
-        val shown = hintGlow != null || hintDot != null
-        val sameHosts = hintHost === dotHost && (hintGlow == null || hintGlowView === glowHost)
-        if (on == shown && (!on || sameHosts)) return
+        val kv = KeyboardSwitcher.getInstance().mainKeyboardView
+        val style = ClipPrefs.chipHint(context.prefs())
+        val shown = hintView != null
+        if (on == shown && (!on || (hintView === kv && hintStyle == style))) return
         // remove the old one
         hintAnimator?.cancel()
-        hintGlowView?.let { v -> if (v.background === hintGlowLayer) v.background = hintGlowOriginalBackground }
-        hintHost?.let { h -> hintDot?.let { h.overlay.remove(it) } }
+        hintView?.setForkDecorations(null, null)
+        hintView = null
         hintGlow = null
-        hintGlowLayer = null
-        hintGlowView = null
-        hintGlowOriginalBackground = null
         hintDot = null
-        hintHost = null
-        if (!on || dotHost == null) return
+        if (!on || kv == null) return
         val enter = Settings.getValues().mColors.get(helium314.keyboard.latin.common.ColorType.ACTION_KEY_BACKGROUND)
         val density = context.resources.displayMetrics.density
-        hintHost = dotHost
+        hintView = kv
+        hintStyle = style
         val setIntensity: (Float) -> Unit
-        if (ClipPrefs.chipHint(context.prefs()) == ClipPrefs.HINT_DOT || glowHost == null) {
+        if (style == ClipPrefs.HINT_DOT) {
             // over the keys, top left corner
-            val dot = CornerDotDrawable(enter, density).apply { setBounds(0, 0, dotHost.width, dotHost.height) }
-            dotHost.overlay.add(dot)
+            val dot = CornerDotDrawable(enter, density)
+            kv.setForkDecorations(null, dot)
             hintDot = dot
             setIntensity = { dot.intensity = it }
         } else {
-            // behind the keys, visible between them: on top of the keyboard view's own background
+            // under the keys, visible between them
             val glowDrawable = DotGlowDrawable(enter, density)
-            val original = glowHost.background
-            val layer = if (original != null) android.graphics.drawable.LayerDrawable(arrayOf(original, glowDrawable))
-                else android.graphics.drawable.LayerDrawable(arrayOf(glowDrawable))
-            hintGlowOriginalBackground = original
-            glowHost.background = layer
-            hintGlowView = glowHost
-            hintGlowLayer = layer
+            kv.setForkDecorations(glowDrawable, null)
             hintGlow = glowDrawable
-            setIntensity = { glowDrawable.intensity = it; glowHost.invalidate() }
+            setIntensity = { glowDrawable.intensity = it }
         }
         // slow breathing, noticed without being in the way
         hintAnimator = ValueAnimator.ofFloat(0.3f, 1f).apply {
             duration = 1200
             repeatMode = ValueAnimator.REVERSE
             repeatCount = ValueAnimator.INFINITE
-            addUpdateListener { setIntensity(it.animatedValue as Float) }
+            addUpdateListener {
+                setIntensity(it.animatedValue as Float)
+                kv.invalidateAllKeys()
+            }
             start()
         }
     }
-
-    private var hintGlowLayer: android.graphics.drawable.Drawable? = null
 
     private val handler = android.os.Handler(android.os.Looper.getMainLooper())
     private val chipExpiry = Runnable { refreshPasteChips() }

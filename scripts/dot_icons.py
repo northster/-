@@ -284,6 +284,118 @@ o..o........
 oo...oo...oo
 oo...oo...oo
 """,
+'emoji_recents': """
+...oooo...
+.oo....oo.
+.o...o..o.
+o....o...o
+o....o...o
+o....ooo.o
+o........o
+.o......o.
+.oo....oo.
+...oooo...
+""",
+'emoji_people': """
+....oo....
+...oooo...
+...oooo...
+....oo....
+..oooooo..
+.o.oooo.o.
+o..oooo..o
+...o..o...
+...o..o...
+...o..o...
+""",
+'emoji_nature': """
+......oooo
+....oo...o
+...o.....o
+..o.....o.
+..o....o..
+.o....o...
+.o...o....
+.o..o.....
+..oo......
+.o........
+""",
+'emoji_food': """
+..o..o....
+...o..o...
+..o..o....
+..........
+oooooooo..
+o......ooo
+o......o.o
+o......ooo
+.o....o...
+..oooo....
+""",
+'emoji_travel': """
+..oooooo..
+.o......o.
+o........o
+oooooooooo
+o.oo..oo.o
+o.oo..oo.o
+oooooooooo
+.oo....oo.
+""",
+'emoji_activities': """
+...oooo...
+.oo.o..oo.
+.o..o...o.
+o...o....o
+oooooooooo
+o....o...o
+.o...o..o.
+.oo..o.oo.
+...oooo...
+""",
+'emoji_objects': """
+...oooo...
+..o....o..
+.o......o.
+.o......o.
+.o......o.
+..o....o..
+...o..o...
+...oooo...
+...oooo...
+....oo....
+""",
+'emoji_symbols': """
+..o..o..
+..o..o..
+oooooooo
+..o..o..
+..o..o..
+oooooooo
+..o..o..
+..o..o..
+""",
+'emoji_flags': """
+ooooooooo
+o.......o
+o.......o
+o.......o
+ooooooooo
+o........
+o........
+o........
+o........
+""",
+'emoji_emoticons': """
+......o...
+..o....o..
+........o.
+........o.
+........o.
+..o.....o.
+.......o..
+......o...
+""",
 }
 
 def xml(name, art, r=0.8):

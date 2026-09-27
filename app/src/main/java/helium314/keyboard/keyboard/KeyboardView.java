@@ -279,6 +279,23 @@ public class KeyboardView extends View {
         }
     }
 
+    // fork: paste chip hints (see DynamicToolbarController), drawn with the keys so setKeyboard and
+    //  background changes don't remove them. Changes need invalidateAllKeys().
+    @Nullable private Drawable mForkUnderlay;
+    @Nullable private Drawable mForkOverlay;
+
+    public void setForkDecorations(@Nullable final Drawable underlay, @Nullable final Drawable overlay) {
+        mForkUnderlay = underlay;
+        mForkOverlay = overlay;
+        invalidateAllKeys();
+    }
+
+    private void drawForkDecoration(@Nullable final Drawable drawable, @NonNull final Canvas canvas) {
+        if (drawable == null) return;
+        drawable.setBounds(0, 0, getWidth(), getHeight());
+        drawable.draw(canvas);
+    }
+
     private void onDrawKeyboard(@NonNull final Canvas canvas) {
         final Keyboard keyboard = getKeyboard();
         if (keyboard == null) {
@@ -300,10 +317,12 @@ public class KeyboardView extends View {
                 canvas.drawColor(Color.BLACK, PorterDuff.Mode.CLEAR);
                 background.draw(canvas);
             }
+            drawForkDecoration(mForkUnderlay, canvas); // fork: under the keys
             // Draw all keys.
             for (final Key key : keyboard.getSortedKeys()) {
                 onDrawKey(key, canvas, paint);
             }
+            drawForkDecoration(mForkOverlay, canvas); // fork: over the keys
         } else {
             for (final Key key : mInvalidatedKeys) {
                 if (!keyboard.hasKey(key)) {

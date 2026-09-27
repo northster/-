@@ -111,3 +111,29 @@ class CornerDotDrawable(private val color: Int, private val density: Float) : Dr
     @Deprecated("Deprecated in Java")
     override fun getOpacity() = PixelFormat.TRANSLUCENT
 }
+
+/** Vertical scrollbar made of dots on the right edge of a list: faint track, bright thumb. */
+class DotScrollbarDecoration(private val color: Int, private val density: Float) :
+    androidx.recyclerview.widget.RecyclerView.ItemDecoration() {
+    private val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply { this.color = color }
+
+    override fun onDrawOver(c: Canvas, parent: androidx.recyclerview.widget.RecyclerView,
+                            state: androidx.recyclerview.widget.RecyclerView.State) {
+        val range = parent.computeVerticalScrollRange()
+        val extent = parent.computeVerticalScrollExtent()
+        if (range <= extent || extent <= 0) return
+        val offset = parent.computeVerticalScrollOffset()
+        val spacing = 4f * density
+        val r = 1f * density
+        val x = parent.width - 3f * density
+        val top = 4f * density
+        val length = parent.height - 8f * density
+        val count = (length / spacing).toInt() + 1
+        val thumbDots = (count * extent.toFloat() / range).toInt().coerceIn(2, count)
+        val first = ((count - thumbDots) * offset.toFloat() / (range - extent)).toInt().coerceIn(0, count - thumbDots)
+        for (i in 0 until count) {
+            paint.alpha = if (i in first until first + thumbDots) 230 else 50
+            c.drawCircle(x, top + i * spacing, r, paint)
+        }
+    }
+}

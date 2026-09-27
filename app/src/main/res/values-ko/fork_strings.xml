@@ -156,4 +156,10 @@
     <string name="fork_clip_chip_hint_dot">왼쪽 위 점</string>
     <string name="fork_emoji_columns">한 줄 이모지 개수</string>
     <string name="fork_auto">자동</string>
+    <string name="fork_emoji_search">이모지 검색</string>
+    <string name="fork_emoji_search_needs_dict">이모지 검색에는 이모지 사전이 필요해요: 설정 > 입력 > 사전에서 추가하세요</string>
+    <string name="fork_emoji_tabs">이모지 탭</string>
+    <string name="fork_emoji_tabs_summary">탭 순서와 보일 탭을 정해요</string>
+    <string name="fork_move_up">위로</string>
+    <string name="fork_move_down">아래로</string>
 </resources>

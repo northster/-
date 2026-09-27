@@ -159,4 +159,10 @@
     <string name="fork_clip_chip_hint_dot">Dot in the corner</string>
     <string name="fork_emoji_columns">Emojis per row</string>
     <string name="fork_auto">Auto</string>
+    <string name="fork_emoji_search">Search emoji</string>
+    <string name="fork_emoji_search_needs_dict">Emoji search needs an emoji dictionary: Settings > Input > Dictionaries</string>
+    <string name="fork_emoji_tabs">Emoji tabs</string>
+    <string name="fork_emoji_tabs_summary">Order and which tabs are shown</string>
+    <string name="fork_move_up">Move up</string>
+    <string name="fork_move_down">Move down</string>
 </resources>

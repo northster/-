@@ -40,19 +40,11 @@ internal class EmojiCategory(private val context: Context, private val layoutSet
         emojiPaletteViewAttr.getResourceId(Category.entries[i].iconAttr, 0)
     }
 
-    val shownCategories = listOfNotNull(
-        CategoryProperties(Category.RECENTS),
-        CategoryProperties(Category.SMILEYS),
-        CategoryProperties(Category.PEOPLE),
-        CategoryProperties(Category.NATURE),
-        CategoryProperties(Category.FOOD),
-        CategoryProperties(Category.TRAVEL_PLACES),
-        CategoryProperties(Category.ACTIVITIES),
-        CategoryProperties(Category.OBJECTS),
-        CategoryProperties(Category.SYMBOLS),
-        if (canShowFlagEmoji()) CategoryProperties(Category.FLAGS) else null,
-        CategoryProperties(Category.EMOTICONS)
-    )
+    // fork: order and visibility of the tabs from settings (EmojiTabs)
+    val shownCategories = helium314.keyboard.fork.emoji.EmojiTabs.shown(prefs)
+        .filter { it != Category.FLAGS || canShowFlagEmoji() }
+        .ifEmpty { listOf(Category.SMILEYS) }
+        .map { CategoryProperties(it) }
 
     private val categoryKeyboardMap = ConcurrentHashMap<Long, DynamicGridKeyboard>()
 
