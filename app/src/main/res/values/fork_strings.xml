@@ -154,9 +154,6 @@
     <string name="fork_hide_composing_underline">No underline while typing</string>
     <string name="fork_hide_composing_underline_summary">The letter being composed is written as normal text, so apps don\'t underline it. Turn off if an app deletes or doubles letters</string>
     <string name="fork_size_bottom_row">Bottom row key height</string>
-    <string name="fork_clip_chip_hint">Paste chip hint</string>
-    <string name="fork_clip_chip_hint_glow">Dot glow behind the keys</string>
-    <string name="fork_clip_chip_hint_dot">Dot in the corner</string>
     <string name="fork_emoji_columns">Emojis per row</string>
     <string name="fork_auto">Auto</string>
     <string name="fork_emoji_search">Search emoji</string>
@@ -211,8 +208,24 @@
     <string name="fork_layout_name">Name of the new layout</string>
     <string name="fork_layout_discard">There are unsaved changes. Discard them?</string>
     <string name="fork_layout_discard_confirm">Discard</string>
-    <string name="fork_clip_hint_test">Try the chip hint</string>
-    <string name="fork_clip_hint_test_summary">Shows the hint with a test chip for 30 seconds</string>
-    <string name="fork_clip_hint_test_started">Tap a text field now, with the toolbar closed. The hint shows for 30 seconds.</string>
+    <string name="fork_clip_hint_test">Try the glow</string>
+    <string name="fork_clip_hint_test_summary">Shows the glow with a test chip for 30 seconds</string>
+    <string name="fork_clip_hint_test_started">Tap a text field now, with the toolbar closed. The glow shows for 30 seconds.</string>
     <string name="fork_clip_hint_test_text">Test chip</string>
+    <string name="fork_cat_wave">Wave when opening / closing</string>
+    <string name="fork_cat_glow">Paste chip glow</string>
+    <string name="fork_wave">Dot wave</string>
+    <string name="fork_wave_summary">A white dot wave runs up into the toolbar when it opens and down the keyboard when it closes</string>
+    <string name="fork_wave_duration">Wave duration</string>
+    <string name="fork_wave_brightness">Wave brightness</string>
+    <string name="fork_wave_thickness">Wave thickness</string>
+    <string name="fork_glow">Glow for a waiting paste chip</string>
+    <string name="fork_glow_summary">The keys glow from the top while a copied item waits behind the closed toolbar</string>
+    <string name="fork_glow_max">Maximum brightness</string>
+    <string name="fork_glow_min">Minimum brightness</string>
+    <string name="fork_glow_period">Breathing time (dim to bright to dim)</string>
+    <string name="fork_glow_height">Glow height</string>
+    <string name="fork_glow_width">Glow width</string>
+    <string name="fork_glow_dot_size">Dot size (glow and wave)</string>
+    <string name="fork_glow_dot_spacing">Dot spacing (glow and wave)</string>
 </resources>

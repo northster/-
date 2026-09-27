@@ -151,9 +151,6 @@
     <string name="fork_hide_composing_underline">입력 중 밑줄 없애기</string>
     <string name="fork_hide_composing_underline_summary">조합 중인 글자를 일반 글자로 써서 앱이 밑줄을 긋지 않게 해요. 어떤 앱에서 글자가 지워지거나 두 번 써지면 꺼 주세요</string>
     <string name="fork_size_bottom_row">하단 행 키 높이</string>
-    <string name="fork_clip_chip_hint">붙여넣기 칩 알림</string>
-    <string name="fork_clip_chip_hint_glow">키 뒤 점 글로우</string>
-    <string name="fork_clip_chip_hint_dot">왼쪽 위 점</string>
     <string name="fork_emoji_columns">한 줄 이모지 개수</string>
     <string name="fork_auto">자동</string>
     <string name="fork_emoji_search">이모지 검색</string>
@@ -208,8 +205,24 @@
     <string name="fork_layout_name">새 레이아웃 이름</string>
     <string name="fork_layout_discard">저장하지 않은 변경 사항이 있어요. 버리고 나갈까요?</string>
     <string name="fork_layout_discard_confirm">버리기</string>
-    <string name="fork_clip_hint_test">칩 알림 미리보기</string>
-    <string name="fork_clip_hint_test_summary">30초 동안 테스트 칩으로 알림을 보여줘요</string>
-    <string name="fork_clip_hint_test_started">지금 아무 입력칸이나 눌러 키보드를 여세요(툴바는 접은 상태). 30초 동안 알림이 보여요.</string>
+    <string name="fork_clip_hint_test">글로우 미리보기</string>
+    <string name="fork_clip_hint_test_summary">30초 동안 테스트 칩으로 글로우를 보여줘요</string>
+    <string name="fork_clip_hint_test_started">지금 아무 입력칸이나 눌러 키보드를 여세요(툴바는 접은 상태). 30초 동안 글로우가 보여요.</string>
     <string name="fork_clip_hint_test_text">테스트 칩</string>
+    <string name="fork_cat_wave">열고 닫을 때 파동</string>
+    <string name="fork_cat_glow">붙여넣기 칩 글로우</string>
+    <string name="fork_wave">도트 파동</string>
+    <string name="fork_wave_summary">툴바를 열면 흰색 점 파동이 툴바까지 올라가고, 닫으면 키보드 위에서 아래로 내려가요</string>
+    <string name="fork_wave_duration">파동 시간</string>
+    <string name="fork_wave_brightness">파동 밝기</string>
+    <string name="fork_wave_thickness">파동 두께</string>
+    <string name="fork_glow">칩 대기 중 글로우</string>
+    <string name="fork_glow_summary">툴바가 닫힌 상태에서 붙여넣을 항목이 있으면 키보드 위쪽이 은은하게 빛나요</string>
+    <string name="fork_glow_max">최대 밝기</string>
+    <string name="fork_glow_min">최소 밝기</string>
+    <string name="fork_glow_period">숨쉬기 속도 (어두움→밝음→어두움)</string>
+    <string name="fork_glow_height">글로우 높이</string>
+    <string name="fork_glow_width">글로우 너비</string>
+    <string name="fork_glow_dot_size">점 크기 (글로우·파동)</string>
+    <string name="fork_glow_dot_spacing">점 간격 (글로우·파동)</string>
 </resources>

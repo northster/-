@@ -12,7 +12,7 @@ import android.graphics.drawable.Drawable
 import kotlin.math.pow
 import kotlin.math.sqrt
 
-// fork: dot matrix drawables for the paste chip and its hints, to go with the dot matrix icons and fonts
+// fork: dot matrix drawables for the paste chip, its glow and the toolbar wave, to go with the dot matrix icons and fonts
 
 /** Rounded pill filled with [fill], outlined by a row of dots in [dotColor] instead of a line. */
 class DotBorderDrawable(
@@ -54,10 +54,10 @@ class DotBorderDrawable(
 }
 
 /**
- * Dot grid glowing from the top center of the keyboard, drawn behind the keys (only visible between them).
- * [intensity] 0..1 is animated for a slow breathing.
+ * Dot grid glowing from the top center of the keyboard, drawn behind the keys (and on their surfaces).
+ * [intensity] 0..1 is animated for a slow breathing between [GlowPrefs.Glow.minAlpha] and [GlowPrefs.Glow.maxAlpha].
  */
-class DotGlowDrawable(private val color: Int, private val density: Float) : Drawable() {
+class DotGlowDrawable(color: Int, private val density: Float, private val params: GlowPrefs.Glow) : Drawable() {
     private val paint = Paint(Paint.ANTI_ALIAS_FLAG).also { it.color = color } // not apply: inside it "color" would be the paint's own (black)
     var intensity = 1f
         set(value) { field = value; invalidateSelf() }
@@ -66,12 +66,13 @@ class DotGlowDrawable(private val color: Int, private val density: Float) : Draw
         val w = bounds.width().toFloat()
         val h = bounds.height().toFloat()
         if (w <= 0f || h <= 0f) return
-        val spacing = 4.5f * density
-        val r = 1.1f * density
+        val spacing = params.spacingDp * density
+        val r = params.dotDp * density
         val cx = bounds.left + w / 2
         val top = bounds.top.toFloat()
-        val rx = w * 0.5f
-        val ry = h * 0.8f
+        val rx = w * 0.5f * params.width
+        val ry = h * params.height
+        val peak = 255 * (params.minAlpha + (params.maxAlpha - params.minAlpha) * intensity)
         var y = top + spacing / 2
         while (y < top + ry) {
             var x = bounds.left + spacing / 2
@@ -80,8 +81,8 @@ class DotGlowDrawable(private val color: Int, private val density: Float) : Draw
                 val dy = (y - top) / ry
                 val d = sqrt(dx * dx + dy * dy)
                 if (d < 1f) {
-                    paint.alpha = (220 * intensity * (1f - d).pow(1.2f)).toInt().coerceIn(0, 255)
-                    canvas.drawCircle(x, y, r, paint)
+                    paint.alpha = (peak * (1f - d).pow(1.2f)).toInt().coerceIn(0, 255)
+                    if (paint.alpha > 0) canvas.drawCircle(x, y, r, paint)
                 }
                 x += spacing
             }
@@ -95,19 +96,52 @@ class DotGlowDrawable(private val color: Int, private val density: Float) : Draw
     override fun getOpacity() = PixelFormat.TRANSLUCENT
 }
 
-/** A single dot in the top left corner of the keyboard, drawn over the keys. */
-class CornerDotDrawable(private val color: Int, private val density: Float) : Drawable() {
-    private val paint = Paint(Paint.ANTI_ALIAS_FLAG).also { it.color = color } // not apply: inside it "color" would be the paint's own (black)
-    var intensity = 1f
-        set(value) { field = value; invalidateSelf() }
+/**
+ * A band of white dots sweeping over a view: the brightest row is the front at [front] (view coordinates),
+ * the band fades out behind it over the wave's thickness. [up] = moving up, so the tail is below the front.
+ * Shared by the keyboard (as an overlay drawable) and the toolbar, so the wave runs on from one into the other.
+ */
+class DotWave(private val density: Float, private val params: GlowPrefs.Wave, val up: Boolean) {
+    private val paint = Paint(Paint.ANTI_ALIAS_FLAG).also { it.color = android.graphics.Color.WHITE }
+    val thicknessPx get() = params.thicknessDp * density
+
+    fun draw(canvas: Canvas, left: Float, right: Float, top: Float, bottom: Float, front: Float) {
+        val spacing = params.spacingDp * density
+        val r = params.dotDp * density
+        val thickness = thicknessPx
+        // the band: [front, front + thickness] when going up, [front - thickness, front] going down
+        val from = maxOf(top, if (up) front else front - thickness)
+        val to = minOf(bottom, if (up) front + thickness else front)
+        if (from >= to) return
+        // rows on the same grid as the glow, so the dots line up
+        var y = top + spacing / 2 + (((from - top - spacing / 2) / spacing).toInt().coerceAtLeast(0)) * spacing
+        while (y <= to) {
+            val behind = if (up) (y - front) / thickness else (front - y) / thickness
+            if (behind in 0f..1f) {
+                paint.alpha = (255 * params.brightness * (1f - behind).pow(1.6f)).toInt().coerceIn(0, 255)
+                if (paint.alpha > 0) {
+                    var x = left + spacing / 2
+                    while (x < right) {
+                        canvas.drawCircle(x, y, r, paint)
+                        x += spacing
+                    }
+                }
+            }
+            y += spacing
+        }
+    }
+}
+
+/** [DotWave] as a drawable, for the keyboard view's overlay. [front] is in the drawable's coordinates. */
+class DotWaveDrawable(private val wave: DotWave) : Drawable() {
+    var front = 0f
 
     override fun draw(canvas: Canvas) {
-        paint.alpha = (255 * intensity).toInt().coerceIn(0, 255)
-        canvas.drawCircle(bounds.left + 10f * density, bounds.top + 8f * density, 3.5f * density, paint)
+        wave.draw(canvas, bounds.left.toFloat(), bounds.right.toFloat(), bounds.top.toFloat(), bounds.bottom.toFloat(), front)
     }
 
     override fun setAlpha(alpha: Int) { }
-    override fun setColorFilter(colorFilter: ColorFilter?) { paint.colorFilter = colorFilter }
+    override fun setColorFilter(colorFilter: ColorFilter?) { }
     @Deprecated("Deprecated in Java")
     override fun getOpacity() = PixelFormat.TRANSLUCENT
 }

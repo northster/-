@@ -1,0 +1,74 @@
+// SPDX-License-Identifier: GPL-3.0-only
+package helium314.keyboard.fork.toolbar
+
+import android.content.SharedPreferences
+
+/** fork: settings of the paste chip glow and of the wave when the toolbar opens / closes (toolbar screen). */
+object GlowPrefs {
+    /** glow behind the keys while a paste chip waits behind the collapsed toolbar */
+    const val GLOW = "fork_glow_enabled"
+    const val GLOW_MAX = "fork_glow_max"
+    const val GLOW_MIN = "fork_glow_min"
+    /** one full breath (dim -> bright -> dim), ms */
+    const val GLOW_PERIOD = "fork_glow_period"
+    /** how far down the keyboard the glow reaches, fraction of its height */
+    const val GLOW_HEIGHT = "fork_glow_height"
+    /** how wide the glow is, fraction of the keyboard width */
+    const val GLOW_WIDTH = "fork_glow_width"
+    const val GLOW_DOT_SIZE = "fork_glow_dot_size"
+    const val GLOW_DOT_SPACING = "fork_glow_dot_spacing"
+    /** until this time (ms) a test chip is offered, to see the glow without copying anything */
+    const val GLOW_TEST_UNTIL = "fork_clip_hint_test_until"
+
+    /** white dot wave running over the keyboard when the toolbar opens (up, into the toolbar) or closes (down) */
+    const val WAVE = "fork_wave_enabled"
+    const val WAVE_DURATION = "fork_wave_duration"
+    const val WAVE_BRIGHTNESS = "fork_wave_brightness"
+    const val WAVE_THICKNESS = "fork_wave_thickness"
+
+    const val DEFAULT_GLOW = true
+    const val DEFAULT_GLOW_MAX = 0.85f
+    const val DEFAULT_GLOW_MIN = 0.25f
+    const val DEFAULT_GLOW_PERIOD = 2400f
+    const val DEFAULT_GLOW_HEIGHT = 0.8f
+    const val DEFAULT_GLOW_WIDTH = 1f
+    const val DEFAULT_GLOW_DOT_SIZE = 1.1f
+    const val DEFAULT_GLOW_DOT_SPACING = 4.5f
+    const val DEFAULT_WAVE = true
+    const val DEFAULT_WAVE_DURATION = 450f
+    const val DEFAULT_WAVE_BRIGHTNESS = 0.9f
+    const val DEFAULT_WAVE_THICKNESS = 28f
+
+    /** everything the glow drawable needs, read once when it is (re)created */
+    data class Glow(
+        val maxAlpha: Float, val minAlpha: Float, val periodMs: Long,
+        val height: Float, val width: Float, val dotDp: Float, val spacingDp: Float,
+    )
+
+    data class Wave(val durationMs: Long, val brightness: Float, val thicknessDp: Float, val dotDp: Float, val spacingDp: Float)
+
+    fun glowEnabled(prefs: SharedPreferences) = prefs.getBoolean(GLOW, DEFAULT_GLOW)
+    fun waveEnabled(prefs: SharedPreferences) = prefs.getBoolean(WAVE, DEFAULT_WAVE)
+
+    fun glow(prefs: SharedPreferences): Glow {
+        val max = prefs.getFloat(GLOW_MAX, DEFAULT_GLOW_MAX).coerceIn(0f, 1f)
+        return Glow(
+            maxAlpha = max,
+            minAlpha = prefs.getFloat(GLOW_MIN, DEFAULT_GLOW_MIN).coerceIn(0f, max),
+            periodMs = prefs.getFloat(GLOW_PERIOD, DEFAULT_GLOW_PERIOD).toLong().coerceIn(200, 20_000),
+            height = prefs.getFloat(GLOW_HEIGHT, DEFAULT_GLOW_HEIGHT).coerceIn(0.05f, 1f),
+            width = prefs.getFloat(GLOW_WIDTH, DEFAULT_GLOW_WIDTH).coerceIn(0.05f, 2f),
+            dotDp = prefs.getFloat(GLOW_DOT_SIZE, DEFAULT_GLOW_DOT_SIZE).coerceIn(0.3f, 4f),
+            spacingDp = prefs.getFloat(GLOW_DOT_SPACING, DEFAULT_GLOW_DOT_SPACING).coerceIn(2f, 16f),
+        )
+    }
+
+    /** the wave uses the glow's dot grid, so both look like one dot matrix */
+    fun wave(prefs: SharedPreferences) = Wave(
+        durationMs = prefs.getFloat(WAVE_DURATION, DEFAULT_WAVE_DURATION).toLong().coerceIn(50, 5000),
+        brightness = prefs.getFloat(WAVE_BRIGHTNESS, DEFAULT_WAVE_BRIGHTNESS).coerceIn(0f, 1f),
+        thicknessDp = prefs.getFloat(WAVE_THICKNESS, DEFAULT_WAVE_THICKNESS).coerceIn(2f, 200f),
+        dotDp = prefs.getFloat(GLOW_DOT_SIZE, DEFAULT_GLOW_DOT_SIZE).coerceIn(0.3f, 4f),
+        spacingDp = prefs.getFloat(GLOW_DOT_SPACING, DEFAULT_GLOW_DOT_SPACING).coerceIn(2f, 16f),
+    )
+}

@@ -284,8 +284,16 @@ public class KeyboardView extends View {
     @Nullable private Drawable mForkUnderlay;
     @Nullable private Drawable mForkOverlay;
 
-    public void setForkDecorations(@Nullable final Drawable underlay, @Nullable final Drawable overlay) {
+    /** fork: drawn under the keys and on their surfaces (paste chip glow) */
+    public void setForkUnderlay(@Nullable final Drawable underlay) {
+        if (mForkUnderlay == underlay) return;
         mForkUnderlay = underlay;
+        invalidateAllKeys();
+    }
+
+    /** fork: drawn over the keys (toolbar wave) */
+    public void setForkOverlay(@Nullable final Drawable overlay) {
+        if (mForkOverlay == overlay) return;
         mForkOverlay = overlay;
         invalidateAllKeys();
     }

@@ -17,12 +17,6 @@ object ClipPrefs {
     const val SCREENSHOTS = "fork_clip_screenshots"
     /** show the latest clip / a code found in it as chips on the dynamic toolbar */
     const val PASTE_CHIP = "fork_clip_paste_chip"
-    /** how a waiting paste chip is shown while the toolbar is collapsed */
-    const val CHIP_HINT = "fork_clip_chip_hint"
-    /** until this time (ms) a test chip is offered, to see the hint without copying anything */
-    const val HINT_TEST_UNTIL = "fork_clip_hint_test_until"
-    const val HINT_GLOW = "glow"
-    const val HINT_DOT = "dot"
 
     const val DEFAULT_RETENTION_HOURS = 24
     const val DEFAULT_MAX_ITEMS = 100
@@ -45,7 +39,6 @@ object ClipPrefs {
     fun previewLines(prefs: SharedPreferences) = prefs.getInt(PREVIEW_LINES, DEFAULT_PREVIEW_LINES).coerceIn(1, 12)
     fun screenshots(prefs: SharedPreferences) = prefs.getBoolean(SCREENSHOTS, DEFAULT_SCREENSHOTS)
     fun pasteChip(prefs: SharedPreferences) = prefs.getBoolean(PASTE_CHIP, DEFAULT_PASTE_CHIP)
-    fun chipHint(prefs: SharedPreferences) = prefs.getString(CHIP_HINT, HINT_GLOW) ?: HINT_GLOW
 
     private val otpRegex = Regex("""(?<![\d-])(\d{4,8})(?![\d-])""")
 

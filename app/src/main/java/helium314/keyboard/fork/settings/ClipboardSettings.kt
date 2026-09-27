@@ -91,22 +91,6 @@ fun createForkClipboardSettings(context: Context) = listOf(
     Setting(context, ClipPrefs.PASTE_CHIP, R.string.fork_clip_paste_chip, R.string.fork_clip_paste_chip_summary) {
         SwitchPreference(it, ClipPrefs.DEFAULT_PASTE_CHIP)
     },
-    Setting(context, ClipPrefs.CHIP_HINT, R.string.fork_clip_chip_hint) { setting ->
-        val ctx = LocalContext.current
-        helium314.keyboard.settings.preferences.InlineChoicePreference(setting.title, setting.key, listOf(
-            ctx.getString(R.string.fork_clip_chip_hint_glow) to ClipPrefs.HINT_GLOW,
-            ctx.getString(R.string.fork_clip_chip_hint_dot) to ClipPrefs.HINT_DOT,
-        ), ClipPrefs.HINT_GLOW)
-    },
-    Setting(context, ClipPrefs.HINT_TEST_UNTIL, R.string.fork_clip_hint_test, R.string.fork_clip_hint_test_summary) { setting ->
-        val ctx = LocalContext.current
-        helium314.keyboard.settings.preferences.Preference(name = setting.title, description = setting.description, onClick = {
-            ctx.prefs().edit { putLong(ClipPrefs.HINT_TEST_UNTIL, System.currentTimeMillis() + 30_000) }
-            // same process as the keyboard: if it is running, apply right away
-            helium314.keyboard.fork.toolbar.DynamicToolbarController.current?.refreshPasteChips()
-            Toast.makeText(ctx, R.string.fork_clip_hint_test_started, Toast.LENGTH_LONG).show()
-        })
-    },
     Setting(context, ClipPrefs.SCREENSHOTS, R.string.fork_clip_screenshots, R.string.fork_clip_screenshots_summary) { setting ->
         val ctx = LocalContext.current
         val launcher = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->

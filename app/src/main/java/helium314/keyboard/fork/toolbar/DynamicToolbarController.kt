@@ -59,10 +59,10 @@ class DynamicToolbarController(private val context: Context) {
     private var dismissedChipKey: String? = null
     /** recent clip offered as a paste chip, null if none */
     private var chip: ClipboardHistoryManager.RecentClip? = null
-    /** hint (dot glow behind the keys, or a corner dot) while a chip waits behind the collapsed toolbar */
+    /** dot glow behind the keys while a chip waits behind the collapsed toolbar */
     private var hintAnimator: ValueAnimator? = null
-    private var hintGlow: DotGlowDrawable? = null
-    private var hintDot: CornerDotDrawable? = null
+    /** white dot wave over the keyboard (and the toolbar) when the toolbar opens / closes */
+    private var waveAnimator: ValueAnimator? = null
     /** clipboard panel made taller by swiping up on the header */
     private var panelAnimator: ValueAnimator? = null
     var isClipboardPanelTall = false
@@ -98,6 +98,7 @@ class DynamicToolbarController(private val context: Context) {
         inputView = newInputView
         toolbar = newInputView.findViewById(R.id.dynamic_toolbar)
         setHint(false)
+        stopWave()
         panelAnimator?.cancel()
         isClipboardPanelTall = false
         keyboardFrame = newInputView.findViewById<View>(R.id.main_keyboard_frame)?.also {
@@ -112,7 +113,11 @@ class DynamicToolbarController(private val context: Context) {
         updatePosition()
     }
 
-    fun onSwipe(up: Boolean) = setExpanded(up, true)
+    fun onSwipe(up: Boolean) {
+        val before = isExpanded
+        setExpanded(up, true)
+        if (isExpanded != before) startWave(isExpanded)
+    }
 
     fun setExpanded(expanded: Boolean, animate: Boolean) {
         if (expanded == isExpanded) return
@@ -364,7 +369,7 @@ class DynamicToolbarController(private val context: Context) {
         handler.removeCallbacks(chipExpiry)
         val prefs = context.prefs()
         val now = System.currentTimeMillis()
-        val testUntil = prefs.getLong(ClipPrefs.HINT_TEST_UNTIL, 0)
+        val testUntil = prefs.getLong(GlowPrefs.GLOW_TEST_UNTIL, 0)
         val clip = when {
             now < testUntil -> ClipboardHistoryManager.RecentClip(context.getString(R.string.fork_clip_hint_test_text), null,
                 testUntil - ClipboardHistoryManager.RECENT_TIME_MILLIS)
@@ -390,7 +395,7 @@ class DynamicToolbarController(private val context: Context) {
     private fun applyChipState() {
         Log.i(TAG, "chip state: chip=${chip != null} expanded=$isExpanded tool=$toolActive search=${clipSearch.isActive} " +
             "usable=${keyboardFrame != null && isUsable()} toolbar=${toolbar != null} " +
-            "keyboardView=${KeyboardSwitcher.getInstance().mainKeyboardView != null} hint=${ClipPrefs.chipHint(context.prefs())}")
+            "keyboardView=${KeyboardSwitcher.getInstance().mainKeyboardView != null} glow=${GlowPrefs.glowEnabled(context.prefs())}")
         val tb = toolbar ?: return
         val c = chip
         val busy = toolActive || clipSearch.isActive
@@ -402,19 +407,6 @@ class DynamicToolbarController(private val context: Context) {
             tb.hideChipBar()
         }
         setHint(hintWanted())
-        showChipDiagnostics()
-    }
-
-    /** while "try the chip hint" runs: what the keyboard thinks, on screen (no adb needed) */
-    private fun showChipDiagnostics() {
-        if (System.currentTimeMillis() >= context.prefs().getLong(ClipPrefs.HINT_TEST_UNTIL, 0)) return
-        fun yn(b: Boolean) = if (b) "O" else "X"
-        val kv = KeyboardSwitcher.getInstance().mainKeyboardView
-        val text = "chip ${yn(chip != null)} · 툴바 접힘 ${yn(!isExpanded)} · 도구 없음 ${yn(!toolActive)} · " +
-            "검색 아님 ${yn(!clipSearch.isActive)} · 키보드 ${yn(keyboardFrame != null && isUsable())} · " +
-            "알림 ${yn(hintView != null)} (${ClipPrefs.chipHint(context.prefs())}, ${kv?.width ?: 0}x${kv?.height ?: 0})"
-        Log.i(TAG, "chip diagnostics: $text")
-        KeyboardSwitcher.getInstance().showToast(text, false)
     }
 
     private fun pasteChip(text: String?) {
@@ -437,54 +429,100 @@ class DynamicToolbarController(private val context: Context) {
         ime.mKeyboardActionListener.onContent(entry.getContentInfo(context))
     }
 
-    private fun hintWanted() = chip != null && !isExpanded && !toolActive && !clipSearch.isActive && isUsable()
+    private fun hintWanted() = GlowPrefs.glowEnabled(context.prefs()) && chip != null && !isExpanded && !toolActive && !clipSearch.isActive && isUsable()
 
-    /** keyboard view that draws the hint */
+    /** keyboard view that draws the glow */
     private var hintView: helium314.keyboard.keyboard.KeyboardView? = null
-    private var hintStyle: String? = null
+
+    /** glow settings changed: show the glow again with them */
+    fun onGlowSettingsChanged() {
+        setHint(false)
+        refreshPasteChips()
+    }
 
     private fun setHint(on: Boolean) {
         val kv = KeyboardSwitcher.getInstance().mainKeyboardView
-        val style = ClipPrefs.chipHint(context.prefs())
-        Log.i(TAG, "hint ${if (on) "on" else "off"} ($style), keyboard view ${kv != null}")
-        val shown = hintView != null
-        if (on == shown && (!on || (hintView === kv && hintStyle == style))) return
+        Log.i(TAG, "glow ${if (on) "on" else "off"}, keyboard view ${kv != null}")
+        if (on == (hintView != null) && (!on || hintView === kv)) return
         // remove the old one
         hintAnimator?.cancel()
-        hintView?.setForkDecorations(null, null)
+        hintView?.setForkUnderlay(null)
         hintView = null
-        hintGlow = null
-        hintDot = null
         if (!on || kv == null) return
         val enter = Settings.getValues().mColors.get(helium314.keyboard.latin.common.ColorType.ACTION_KEY_BACKGROUND)
-        val density = context.resources.displayMetrics.density
+        val params = GlowPrefs.glow(context.prefs())
+        // under the keys and on their surfaces
+        val glow = DotGlowDrawable(enter, context.resources.displayMetrics.density, params)
+        kv.setForkUnderlay(glow)
         hintView = kv
-        hintStyle = style
-        val setIntensity: (Float) -> Unit
-        if (style == ClipPrefs.HINT_DOT) {
-            // over the keys, top left corner
-            val dot = CornerDotDrawable(enter, density)
-            kv.setForkDecorations(null, dot)
-            hintDot = dot
-            setIntensity = { dot.intensity = it }
-        } else {
-            // under the keys, visible between them
-            val glowDrawable = DotGlowDrawable(enter, density)
-            kv.setForkDecorations(glowDrawable, null)
-            hintGlow = glowDrawable
-            setIntensity = { glowDrawable.intensity = it }
-        }
         // slow breathing, noticed without being in the way
-        hintAnimator = ValueAnimator.ofFloat(0.3f, 1f).apply {
-            duration = 1200
+        hintAnimator = ValueAnimator.ofFloat(0f, 1f).apply {
+            duration = (params.periodMs / 2).coerceAtLeast(1)
             repeatMode = ValueAnimator.REVERSE
             repeatCount = ValueAnimator.INFINITE
             addUpdateListener {
-                setIntensity(it.animatedValue as Float)
+                glow.intensity = it.animatedValue as Float
                 kv.invalidateAllKeys()
             }
             start()
         }
+    }
+
+    /**
+     * White dot wave: opening runs from the keyboard bottom up and on through the toolbar, closing runs from
+     * the keyboard top down. Positions are in screen coordinates, so the wave keeps going across both views
+     * while the toolbar slides.
+     */
+    private fun startWave(up: Boolean) {
+        stopWave()
+        val prefs = context.prefs()
+        if (!GlowPrefs.waveEnabled(prefs)) return
+        val kv = KeyboardSwitcher.getInstance().mainKeyboardView ?: return
+        val frame = keyboardFrame ?: return
+        if (!kv.isShown || kv.height == 0) return
+        val tb = toolbar
+        val params = GlowPrefs.wave(prefs)
+        val wave = DotWave(context.resources.displayMetrics.density, params, up)
+        val drawable = DotWaveDrawable(wave)
+        val loc = IntArray(2)
+        kv.getLocationOnScreen(loc)
+        val kvTop = loc[1].toFloat()
+        val kvBottom = kvTop + kv.height
+        frame.getLocationOnScreen(loc)
+        val toolbarTop = loc[1].toFloat() - (tb?.height ?: 0)
+        val thickness = wave.thicknessPx
+        // the front starts at one edge and moves until the whole band has left the far edge
+        val start = if (up) kvBottom else kvTop
+        val end = if (up) toolbarTop - thickness else kvBottom + thickness
+        kv.setForkOverlay(drawable)
+        waveAnimator = ValueAnimator.ofFloat(start, end).apply {
+            duration = params.durationMs
+            interpolator = android.view.animation.LinearInterpolator()
+            addUpdateListener {
+                val front = it.animatedValue as Float
+                kv.getLocationOnScreen(loc)
+                drawable.front = front - loc[1]
+                kv.invalidateAllKeys()
+                if (up && tb != null && tb.visibility == View.VISIBLE) {
+                    tb.getLocationOnScreen(loc)
+                    tb.setWave(wave, front - loc[1])
+                }
+            }
+            addListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationEnd(animation: Animator) {
+                    if (waveAnimator === animation) stopWave()
+                }
+            })
+            start()
+        }
+    }
+
+    private fun stopWave() {
+        val a = waveAnimator
+        waveAnimator = null
+        a?.cancel()
+        KeyboardSwitcher.getInstance().mainKeyboardView?.setForkOverlay(null)
+        toolbar?.setWave(null, 0f)
     }
 
     private val handler = android.os.Handler(android.os.Looper.getMainLooper())

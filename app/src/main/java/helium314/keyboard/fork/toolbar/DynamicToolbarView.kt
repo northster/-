@@ -257,6 +257,23 @@ class DynamicToolbarView @JvmOverloads constructor(
     private var swipeHandled = false
     private val touchSlop = android.view.ViewConfiguration.get(context).scaledTouchSlop
 
+    /** wave running up from the keyboard into the toolbar, drawn over the toolbar contents */
+    private var wave: DotWave? = null
+    private var waveFront = 0f
+
+    /** [front] in this view's coordinates, null wave to stop */
+    fun setWave(wave: DotWave?, front: Float) {
+        if (wave == null && this.wave == null) return
+        this.wave = wave
+        waveFront = front
+        invalidate()
+    }
+
+    override fun dispatchDraw(canvas: android.graphics.Canvas) {
+        super.dispatchDraw(canvas)
+        wave?.draw(canvas, 0f, width.toFloat(), 0f, height.toFloat(), waveFront)
+    }
+
     override fun onInterceptTouchEvent(ev: android.view.MotionEvent): Boolean {
         if (header.visibility != VISIBLE || onHeaderSwipe == null) return false
         when (ev.actionMasked) {

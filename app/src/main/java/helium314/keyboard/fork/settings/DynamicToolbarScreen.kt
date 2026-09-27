@@ -8,8 +8,13 @@ import androidx.compose.runtime.getValue
 import helium314.keyboard.latin.utils.getActivity
 import helium314.keyboard.latin.utils.prefs
 import androidx.compose.ui.res.stringResource
+import androidx.core.content.edit
+import kotlin.math.roundToInt
 import helium314.keyboard.fork.ForkSettings
 import helium314.keyboard.fork.gesture.SwipeThresholds
+import helium314.keyboard.fork.toolbar.DynamicToolbarController
+import helium314.keyboard.fork.toolbar.GlowPrefs
+import helium314.keyboard.settings.preferences.InlineSliderPreference
 import helium314.keyboard.latin.R
 import helium314.keyboard.settings.SearchSettingsScreen
 import helium314.keyboard.settings.Setting
@@ -41,6 +46,21 @@ fun DynamicToolbarScreen(
             ForkSettings.PREF_TOOLBAR_ANIM_DURATION,
             ForkSettings.PREF_TOOLBAR_SMOOTH_RESIZE,
             ForkSettings.PREF_TOOLBAR_OVERLAY,
+            R.string.fork_cat_wave,
+            GlowPrefs.WAVE,
+            GlowPrefs.WAVE_DURATION,
+            GlowPrefs.WAVE_BRIGHTNESS,
+            GlowPrefs.WAVE_THICKNESS,
+            R.string.fork_cat_glow,
+            GlowPrefs.GLOW,
+            GlowPrefs.GLOW_TEST_UNTIL,
+            GlowPrefs.GLOW_MAX,
+            GlowPrefs.GLOW_MIN,
+            GlowPrefs.GLOW_PERIOD,
+            GlowPrefs.GLOW_HEIGHT,
+            GlowPrefs.GLOW_WIDTH,
+            GlowPrefs.GLOW_DOT_SIZE,
+            GlowPrefs.GLOW_DOT_SPACING,
             R.string.fork_cat_tool_header,
             helium314.keyboard.fork.clipboard.ClipAction.PREF,
             R.string.fork_cat_classic_toolbar,
@@ -121,4 +141,66 @@ fun createDynamicToolbarSettings(context: Context) = listOf(
         R.string.fork_toolbar_overlay, R.string.fork_toolbar_overlay_summary) {
         SwitchPreference(it, ForkSettings.DEFAULT_TOOLBAR_OVERLAY)
     },
+    Setting(context, GlowPrefs.WAVE, R.string.fork_wave, R.string.fork_wave_summary) {
+        SwitchPreference(it, GlowPrefs.DEFAULT_WAVE)
+    },
+    Setting(context, GlowPrefs.WAVE_DURATION, R.string.fork_wave_duration) {
+        GlowSlider(it, GlowPrefs.DEFAULT_WAVE_DURATION, 100f..2000f, 50f, ::ms)
+    },
+    Setting(context, GlowPrefs.WAVE_BRIGHTNESS, R.string.fork_wave_brightness) {
+        GlowSlider(it, GlowPrefs.DEFAULT_WAVE_BRIGHTNESS, 0.1f..1f, 0.05f, ::percent)
+    },
+    Setting(context, GlowPrefs.WAVE_THICKNESS, R.string.fork_wave_thickness) {
+        GlowSlider(it, GlowPrefs.DEFAULT_WAVE_THICKNESS, 4f..120f, 2f, ::dp)
+    },
+    Setting(context, GlowPrefs.GLOW, R.string.fork_glow, R.string.fork_glow_summary) {
+        SwitchPreference(it, GlowPrefs.DEFAULT_GLOW) { DynamicToolbarController.current?.onGlowSettingsChanged() }
+    },
+    Setting(context, GlowPrefs.GLOW_TEST_UNTIL, R.string.fork_clip_hint_test, R.string.fork_clip_hint_test_summary) { setting ->
+        val ctx = androidx.compose.ui.platform.LocalContext.current
+        helium314.keyboard.settings.preferences.Preference(name = setting.title, description = setting.description, onClick = {
+            ctx.prefs().edit { putLong(GlowPrefs.GLOW_TEST_UNTIL, System.currentTimeMillis() + 30_000) }
+            // same process as the keyboard: if it is running, apply right away
+            DynamicToolbarController.current?.refreshPasteChips()
+            android.widget.Toast.makeText(ctx, R.string.fork_clip_hint_test_started, android.widget.Toast.LENGTH_LONG).show()
+        })
+    },
+    Setting(context, GlowPrefs.GLOW_MAX, R.string.fork_glow_max) {
+        GlowSlider(it, GlowPrefs.DEFAULT_GLOW_MAX, 0.05f..1f, 0.05f, ::percent)
+    },
+    Setting(context, GlowPrefs.GLOW_MIN, R.string.fork_glow_min) {
+        GlowSlider(it, GlowPrefs.DEFAULT_GLOW_MIN, 0f..1f, 0.05f, ::percent)
+    },
+    Setting(context, GlowPrefs.GLOW_PERIOD, R.string.fork_glow_period) {
+        GlowSlider(it, GlowPrefs.DEFAULT_GLOW_PERIOD, 400f..8000f, 100f, ::ms)
+    },
+    Setting(context, GlowPrefs.GLOW_HEIGHT, R.string.fork_glow_height) {
+        GlowSlider(it, GlowPrefs.DEFAULT_GLOW_HEIGHT, 0.1f..1f, 0.05f, ::percent)
+    },
+    Setting(context, GlowPrefs.GLOW_WIDTH, R.string.fork_glow_width) {
+        GlowSlider(it, GlowPrefs.DEFAULT_GLOW_WIDTH, 0.2f..2f, 0.05f, ::percent)
+    },
+    Setting(context, GlowPrefs.GLOW_DOT_SIZE, R.string.fork_glow_dot_size) {
+        GlowSlider(it, GlowPrefs.DEFAULT_GLOW_DOT_SIZE, 0.4f..3f, 0.1f, ::dp)
+    },
+    Setting(context, GlowPrefs.GLOW_DOT_SPACING, R.string.fork_glow_dot_spacing) {
+        GlowSlider(it, GlowPrefs.DEFAULT_GLOW_DOT_SPACING, 2.5f..12f, 0.5f, ::dp)
+    },
 )
+
+private fun percent(v: Float) = "${(100 * v).roundToInt()}%"
+private fun ms(v: Float) = "${v.roundToInt()} ms"
+private fun dp(v: Float) = "${(v * 10).roundToInt() / 10f} dp"
+
+/** slider for a glow / wave value; a running glow is redrawn with the new value right away */
+@Composable
+private fun GlowSlider(setting: Setting, default: Float, range: ClosedFloatingPointRange<Float>, step: Float, format: (Float) -> String) {
+    InlineSliderPreference(
+        name = setting.title,
+        key = setting.key,
+        default = default,
+        range = range,
+        format = format,
+        step = step,
+    ) { DynamicToolbarController.current?.onGlowSettingsChanged() }
+}

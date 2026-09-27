@@ -89,8 +89,6 @@ fun PreferencesScreen(
         if (clipboardHistoryEnabled) Settings.PREF_CLIPBOARD_HISTORY_PINNED_FIRST else null,
         Settings.PREF_ABC_AFTER_CLIP,
         ClipPrefs.PASTE_CHIP,
-        ClipPrefs.CHIP_HINT,
-        ClipPrefs.HINT_TEST_UNTIL,
         if (clipboardHistoryEnabled) ClipPrefs.SCREENSHOTS else null,
         if (clipboardHistoryEnabled) Settings.PREF_CLIPBOARD_USE_FILES else null,
         if (clipboardHistoryEnabled && prefs.getBoolean(Settings.PREF_CLIPBOARD_USE_FILES, Defaults.PREF_CLIPBOARD_USE_FILES))
