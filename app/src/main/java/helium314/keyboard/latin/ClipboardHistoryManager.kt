@@ -95,12 +95,24 @@ class ClipboardHistoryManager(
     }
 
     /** fork: the primary clip if it was copied recently, for the paste chip on the dynamic toolbar */
-    class RecentClip(val text: String?, val imageUri: android.net.Uri?, val timestamp: Long) {
+    class RecentClip(val text: String?, val imageUri: android.net.Uri?, val timestamp: Long,
+                     /** not on the clipboard, a new screenshot (pasted through the clipboard history) */
+                     val screenshot: helium314.keyboard.fork.clipboard.ScreenshotWatcher.Screenshot? = null) {
         /** identifies the clip, a dismissed chip is not offered again */
         val key get() = "$timestamp:${text?.hashCode() ?: imageUri?.toString()}"
     }
 
     fun getRecentClip(): RecentClip? {
+        // fork: a screenshot counts as a recent clip too (like Samsung's keyboard), the newer one wins
+        val clip = getRecentPrimaryClip()
+        val shot = helium314.keyboard.fork.clipboard.ScreenshotWatcher.latest(latinIME)
+            ?.takeIf { System.currentTimeMillis() - it.timeMillis <= RECENT_TIME_MILLIS }
+        if (shot != null && (clip == null || shot.timeMillis > clip.timestamp))
+            return RecentClip(null, shot.uri, shot.timeMillis, shot)
+        return clip
+    }
+
+    private fun getRecentPrimaryClip(): RecentClip? {
         if (tempPrimaryClip) return null
         val clipData = try { clipboardManager.primaryClip } catch (e: Exception) { null } ?: return null
         if (clipData.itemCount == 0) return null

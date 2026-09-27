@@ -91,6 +91,13 @@ fun createForkClipboardSettings(context: Context) = listOf(
     Setting(context, ClipPrefs.PASTE_CHIP, R.string.fork_clip_paste_chip, R.string.fork_clip_paste_chip_summary) {
         SwitchPreference(it, ClipPrefs.DEFAULT_PASTE_CHIP)
     },
+    Setting(context, ClipPrefs.CHIP_HINT, R.string.fork_clip_chip_hint) { setting ->
+        val ctx = LocalContext.current
+        helium314.keyboard.settings.preferences.InlineChoicePreference(setting.title, setting.key, listOf(
+            ctx.getString(R.string.fork_clip_chip_hint_glow) to ClipPrefs.HINT_GLOW,
+            ctx.getString(R.string.fork_clip_chip_hint_dot) to ClipPrefs.HINT_DOT,
+        ), ClipPrefs.HINT_GLOW)
+    },
     Setting(context, ClipPrefs.SCREENSHOTS, R.string.fork_clip_screenshots, R.string.fork_clip_screenshots_summary) { setting ->
         val ctx = LocalContext.current
         val launcher = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->

@@ -22,15 +22,4 @@
     <include
         android:id="@+id/main_keyboard_frame"
         layout="@layout/main_keyboard_frame" />
-    <!-- fork: glows on the keyboard's top edge while a paste chip waits behind the collapsed toolbar.
-         Drawn over the keys, not clickable, so touches go through. Placed by DynamicToolbarController. -->
-    <View
-        android:id="@+id/fork_chip_glow"
-        android:layout_width="match_parent"
-        android:layout_height="14dp"
-        android:layout_gravity="bottom"
-        android:clickable="false"
-        android:focusable="false"
-        android:importantForAccessibility="no"
-        android:visibility="gone" />
 </helium314.keyboard.latin.InputView>

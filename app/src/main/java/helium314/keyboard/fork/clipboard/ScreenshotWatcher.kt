@@ -24,6 +24,8 @@ import helium314.keyboard.latin.utils.prefs
  * Watches MediaStore while the keyboard service runs; needs the photo permission and file clips enabled.
  */
 class ScreenshotWatcher(private val context: Context) {
+    class Screenshot(val uri: Uri, val name: String, val mime: String, val timeMillis: Long)
+
     private val handler = Handler(Looper.getMainLooper())
     private var observer: ContentObserver? = null
     private var lastId = -1L
@@ -81,6 +83,7 @@ class ScreenshotWatcher(private val context: Context) {
                 val uri = ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id)
                 ClipboardDao.getInstance(context)?.addClipUri(System.currentTimeMillis(), false, uri,
                     ClipDescription(name, arrayOf(mime)), context)
+                helium314.keyboard.fork.toolbar.DynamicToolbarController.current?.refreshPasteChips()
             }
         } catch (e: Exception) {
             Log.w(TAG, "can't read screenshot", e)
@@ -92,6 +95,29 @@ class ScreenshotWatcher(private val context: Context) {
 
         val permission = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) Manifest.permission.READ_MEDIA_IMAGES
             else Manifest.permission.READ_EXTERNAL_STORAGE
+
+        /** newest screenshot if screenshots are enabled in settings and allowed, for the paste chip */
+        fun latest(context: Context): Screenshot? {
+            if (!ClipPrefs.screenshots(context.prefs()) || !hasPermission(context)) return null
+            val projection = mutableListOf(MediaStore.Images.Media._ID, MediaStore.Images.Media.DISPLAY_NAME,
+                MediaStore.Images.Media.DATE_ADDED, MediaStore.Images.Media.MIME_TYPE)
+            @Suppress("DEPRECATION")
+            projection.add(if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) MediaStore.Images.Media.RELATIVE_PATH
+                else MediaStore.Images.Media.DATA)
+            return try {
+                context.contentResolver.query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, projection.toTypedArray(),
+                    null, null, "${MediaStore.Images.Media.DATE_ADDED} DESC").use { c ->
+                    if (c == null || !c.moveToFirst()) return null
+                    val name = c.getString(1).orEmpty()
+                    val path = c.getString(4).orEmpty()
+                    if (!name.contains("screenshot", true) && !path.contains("screenshot", true)) return null
+                    Screenshot(ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, c.getLong(0)),
+                        name, c.getString(3) ?: "image/png", c.getLong(2) * 1000)
+                }
+            } catch (e: Exception) {
+                null
+            }
+        }
 
         fun hasPermission(context: Context) =
             ContextCompat.checkSelfPermission(context, permission) == PackageManager.PERMISSION_GRANTED

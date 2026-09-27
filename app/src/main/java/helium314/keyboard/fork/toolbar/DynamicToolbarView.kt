@@ -126,12 +126,16 @@ class DynamicToolbarView @JvmOverloads constructor(
         setOnClickListener { onClick() }
     }
 
-    /** key colored pill, [border] in the enter key color (paste chips) */
-    private fun chipBackground(highlight: Boolean, border: Boolean) = GradientDrawable().apply {
+    /** key colored pill, [border] as a dotted outline in the enter key color (paste chips) */
+    private fun chipBackground(highlight: Boolean, border: Boolean): android.graphics.drawable.Drawable {
         val colors = Settings.getValues().mColors
-        cornerRadius = 15 * density
-        setColor(if (highlight) colors.get(ColorType.ACTION_KEY_BACKGROUND) else colors.get(ColorType.KEY_BACKGROUND))
-        if (border) setStroke((1.5f * density).toInt().coerceAtLeast(1), colors.get(ColorType.ACTION_KEY_BACKGROUND))
+        val fill = if (highlight) colors.get(ColorType.ACTION_KEY_BACKGROUND) else colors.get(ColorType.KEY_BACKGROUND)
+        val enter = colors.get(ColorType.ACTION_KEY_BACKGROUND)
+        if (border) return DotBorderDrawable(fill, if (highlight) colors.get(ColorType.ACTION_KEY_ICON) else enter, density)
+        return GradientDrawable().apply {
+            cornerRadius = 15 * density
+            setColor(fill)
+        }
     }
 
     private fun chipParams() = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, (30 * density).toInt()).apply {
@@ -245,6 +249,45 @@ class DynamicToolbarView @JvmOverloads constructor(
     }
 
     val isSearchShown get() = searchBar.visibility == View.VISIBLE
+
+    /** vertical swipes on the tool header (true = up), e.g. to make the clipboard panel taller */
+    var onHeaderSwipe: ((Boolean) -> Unit)? = null
+    private var downY = 0f
+    private var downX = 0f
+    private var swipeHandled = false
+    private val touchSlop = android.view.ViewConfiguration.get(context).scaledTouchSlop
+
+    override fun onInterceptTouchEvent(ev: android.view.MotionEvent): Boolean {
+        if (header.visibility != VISIBLE || onHeaderSwipe == null) return false
+        when (ev.actionMasked) {
+            android.view.MotionEvent.ACTION_DOWN -> { downX = ev.x; downY = ev.y; swipeHandled = false }
+            android.view.MotionEvent.ACTION_MOVE -> {
+                val dy = ev.y - downY
+                if (!swipeHandled && kotlin.math.abs(dy) > touchSlop * 2 && kotlin.math.abs(dy) > kotlin.math.abs(ev.x - downX)) {
+                    swipeHandled = true
+                    onHeaderSwipe?.invoke(dy < 0)
+                    return true // children (buttons) get a cancel
+                }
+            }
+        }
+        return false
+    }
+
+    override fun onTouchEvent(event: android.view.MotionEvent): Boolean {
+        if (header.visibility != VISIBLE || onHeaderSwipe == null) return super.onTouchEvent(event)
+        // swipes starting on the header background (not on a button) end up here
+        when (event.actionMasked) {
+            android.view.MotionEvent.ACTION_DOWN -> { downX = event.x; downY = event.y; swipeHandled = false }
+            android.view.MotionEvent.ACTION_MOVE -> {
+                val dy = event.y - downY
+                if (!swipeHandled && kotlin.math.abs(dy) > touchSlop * 2 && kotlin.math.abs(dy) > kotlin.math.abs(event.x - downX)) {
+                    swipeHandled = true
+                    onHeaderSwipe?.invoke(dy < 0)
+                }
+            }
+        }
+        return true
+    }
 
     /** Header of an open tool: back to the keyboard, the tool's name, its actions on the right. */
     fun showToolHeader(title: String, actions: List<Pair<android.graphics.drawable.Drawable?, String>>, onBack: () -> Unit, onAction: (Int) -> Unit) {

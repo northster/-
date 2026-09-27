@@ -13,6 +13,7 @@ import helium314.keyboard.fork.ForkSettings
 import helium314.keyboard.fork.clipboard.ClipAction
 import helium314.keyboard.fork.clipboard.ClipPrefs
 import helium314.keyboard.fork.clipboard.ClipSearch
+import helium314.keyboard.fork.clipboard.ScreenshotWatcher
 import helium314.keyboard.keyboard.internal.keyboard_parser.floris.KeyCode
 import helium314.keyboard.latin.ClipboardHistoryManager
 import helium314.keyboard.latin.LatinIME
@@ -58,9 +59,15 @@ class DynamicToolbarController(private val context: Context) {
     private var dismissedChipKey: String? = null
     /** recent clip offered as a paste chip, null if none */
     private var chip: ClipboardHistoryManager.RecentClip? = null
-    /** glows on the keyboard's top edge while a chip waits behind the collapsed toolbar */
-    private var glow: View? = null
-    private var glowAnimator: ValueAnimator? = null
+    /** hint (dot glow behind the keys, or a corner dot) while a chip waits behind the collapsed toolbar */
+    private var hintAnimator: ValueAnimator? = null
+    private var hintGlow: DotGlowDrawable? = null
+    private var hintDot: CornerDotDrawable? = null
+    private var hintHost: View? = null
+    /** clipboard panel made taller by swiping up on the header */
+    private var panelAnimator: ValueAnimator? = null
+    var isClipboardPanelTall = false
+        private set
     private var keyboardFrame: View? = null
     private var inputView: View? = null
     private var animator: ValueAnimator? = null
@@ -86,8 +93,9 @@ class DynamicToolbarController(private val context: Context) {
         animator?.cancel()
         inputView = newInputView
         toolbar = newInputView.findViewById(R.id.dynamic_toolbar)
-        glowAnimator?.cancel()
-        glow = newInputView.findViewById(R.id.fork_chip_glow)
+        setHint(false)
+        panelAnimator?.cancel()
+        isClipboardPanelTall = false
         keyboardFrame = newInputView.findViewById<View>(R.id.main_keyboard_frame)?.also {
             it.addOnLayoutChangeListener(frameLayoutListener)
         }
@@ -179,7 +187,6 @@ class DynamicToolbarController(private val context: Context) {
         }
         val frameTop = frame.top + frame.translationY
         tb.translationY = frameTop - tb.bottom + hiddenFraction * tb.height
-        glow?.let { it.translationY = frameTop - it.top }
     }
 
     private fun requestInsetsUpdate() {
@@ -240,11 +247,39 @@ class DynamicToolbarController(private val context: Context) {
         val actions = ClipAction.enabled(context.prefs())
         tb.showToolHeader(context.getString(R.string.fork_toolbar_clipboard), actions.map { it.icon(context) to it.label(context) },
             onBack = ::backToKeyboard) { i -> onClipAction(actions[i]) }
+        tb.onHeaderSwipe = { up -> setClipboardPanelTall(up) }
         setExpanded(true, true)
+    }
+
+    /** Make the clipboard panel cover about 2/3 of the screen (true) or go back to its normal height. */
+    fun setClipboardPanelTall(tall: Boolean) {
+        val panel = KeyboardSwitcher.getInstance().clipboardHistoryView ?: return
+        if (tall == isClipboardPanelTall || !toolActive) return
+        isClipboardPanelTall = tall
+        panelAnimator?.cancel()
+        val normal = panel.forkNormalHeight()
+        val screen = context.resources.displayMetrics.heightPixels
+        val target = if (tall) maxOf(normal, screen * 2 / 3 - (toolbar?.height ?: 0)) else normal
+        val start = maxOf(panel.height, normal)
+        panelAnimator = ValueAnimator.ofInt(start, target).apply {
+            duration = 220
+            interpolator = EMPHASIZED
+            addUpdateListener { panel.setForkExpandedHeight((it.animatedValue as Int).takeIf { h -> h > normal } ?: 0) }
+            start()
+        }
+    }
+
+    /** back key: shrinks a tall clipboard panel first. Returns true if it was used. */
+    fun onBackKey(): Boolean {
+        if (!isClipboardPanelTall) return false
+        setClipboardPanelTall(false)
+        return true
     }
 
     /** Called by KeyboardSwitcher when the clipboard panel is replaced by something else. */
     fun onClipboardHidden() {
+        panelAnimator?.cancel()
+        isClipboardPanelTall = false
         if (!toolActive) return
         toolActive = false
         toolbar?.hideToolHeader()
@@ -303,12 +338,12 @@ class DynamicToolbarController(private val context: Context) {
         val busy = toolActive || clipSearch.isActive
         if (c != null && isExpanded && !busy) {
             tb.showChipBar(c.text?.take(300), ClipPrefs.findCode(c.text), c.imageUri,
-                onPaste = { text -> pasteChip(text) },
+                onPaste = { text -> if (c.screenshot != null) pasteScreenshot(c.screenshot) else pasteChip(text) },
                 onBack = { dismissChip(); applyChipState() })
         } else {
             tb.hideChipBar()
         }
-        setGlow(c != null && !isExpanded && !busy && isUsable())
+        setHint(c != null && !isExpanded && !busy && isUsable())
     }
 
     private fun pasteChip(text: String?) {
@@ -319,28 +354,55 @@ class DynamicToolbarController(private val context: Context) {
         else ime.mKeyboardActionListener.onCodeInput(KeyCode.CLIPBOARD_PASTE, Constants.NOT_A_COORDINATE, Constants.NOT_A_COORDINATE, false)
     }
 
-    private fun setGlow(on: Boolean) {
-        val g = glow ?: return
-        if (on == (g.visibility == View.VISIBLE)) return
-        glowAnimator?.cancel()
-        if (!on) {
-            g.visibility = View.GONE
-            return
+    /** screenshots aren't on the clipboard: add to the clipboard history (our own file) and paste that */
+    private fun pasteScreenshot(shot: ScreenshotWatcher.Screenshot) {
+        val ime = latinIME ?: return
+        dismissChip()
+        applyChipState()
+        val dao = ClipboardDao.getInstance(context) ?: return
+        val time = System.currentTimeMillis()
+        dao.addClipUri(time, false, shot.uri, android.content.ClipDescription(shot.name, arrayOf(shot.mime)), context)
+        val entry = dao.getAll().filter { it.filename != null }.maxByOrNull { it.timeStamp } ?: return
+        ime.mKeyboardActionListener.onContent(entry.getContentInfo(context))
+    }
+
+    private fun setHint(on: Boolean) {
+        val host = KeyboardSwitcher.getInstance().wrapperView
+        val shown = hintGlow != null || hintDot != null
+        if (on == shown && (!on || host === hintHost)) return
+        // remove the old one
+        hintAnimator?.cancel()
+        hintHost?.let { h ->
+            if (hintGlow != null && h.background === hintGlow) h.background = null
+            hintDot?.let { h.overlay.remove(it) }
         }
+        hintGlow = null
+        hintDot = null
+        hintHost = null
+        if (!on || host == null) return
         val enter = Settings.getValues().mColors.get(helium314.keyboard.latin.common.ColorType.ACTION_KEY_BACKGROUND)
-        g.background = android.graphics.drawable.GradientDrawable(
-            android.graphics.drawable.GradientDrawable.Orientation.TOP_BOTTOM,
-            intArrayOf(androidx.core.graphics.ColorUtils.setAlphaComponent(enter, 200),
-                androidx.core.graphics.ColorUtils.setAlphaComponent(enter, 70),
-                androidx.core.graphics.ColorUtils.setAlphaComponent(enter, 0)))
-        g.visibility = View.VISIBLE
-        updatePosition()
-        // slow breathing, so it is noticed without being in the way
-        glowAnimator = ValueAnimator.ofFloat(0.35f, 1f).apply {
-            duration = 1100
+        val density = context.resources.displayMetrics.density
+        hintHost = host
+        val setIntensity: (Float) -> Unit
+        if (ClipPrefs.chipHint(context.prefs()) == ClipPrefs.HINT_DOT) {
+            // over the keys, top left corner
+            val dot = CornerDotDrawable(enter, density).apply { setBounds(0, 0, host.width, host.height) }
+            host.overlay.add(dot)
+            hintDot = dot
+            setIntensity = { dot.intensity = it }
+        } else {
+            // behind the keys (the wrapper has no background of its own), visible between them
+            val glowDrawable = DotGlowDrawable(enter, density)
+            host.background = glowDrawable
+            hintGlow = glowDrawable
+            setIntensity = { glowDrawable.intensity = it }
+        }
+        // slow breathing, noticed without being in the way
+        hintAnimator = ValueAnimator.ofFloat(0.3f, 1f).apply {
+            duration = 1200
             repeatMode = ValueAnimator.REVERSE
             repeatCount = ValueAnimator.INFINITE
-            addUpdateListener { g.alpha = it.animatedValue as Float }
+            addUpdateListener { setIntensity(it.animatedValue as Float) }
             start()
         }
     }

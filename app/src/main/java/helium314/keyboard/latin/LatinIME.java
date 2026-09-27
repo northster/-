@@ -1708,13 +1708,24 @@ public class LatinIME extends InputMethodService implements
     // Hooks for hardware keyboard
     @Override
     public boolean onKeyDown(final int keyCode, final KeyEvent keyEvent) {
+        // fork: back shrinks a tall clipboard panel instead of closing the keyboard
+        if (keyCode == KeyEvent.KEYCODE_BACK && mDynamicToolbar != null && mDynamicToolbar.onBackKey()) {
+            mForkBackConsumed = true;
+            return true;
+        }
         if (mKeyboardActionListener.onKeyDown(keyCode, keyEvent))
             return true;
         return super.onKeyDown(keyCode, keyEvent);
     }
 
+    private boolean mForkBackConsumed = false;
+
     @Override
     public boolean onKeyUp(final int keyCode, final KeyEvent keyEvent) {
+        if (keyCode == KeyEvent.KEYCODE_BACK && mForkBackConsumed) {
+            mForkBackConsumed = false;
+            return true;
+        }
         if (mKeyboardActionListener.onKeyUp(keyCode, keyEvent))
             return true;
         return super.onKeyUp(keyCode, keyEvent);

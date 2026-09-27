@@ -84,8 +84,25 @@ class ClipboardHistoryView @JvmOverloads constructor(
         // The main keyboard expands to the entire this {@link KeyboardView}.
         val width = ResourceUtils.getKeyboardWidth(context, Settings.getValues()) + paddingLeft + paddingRight
         val height = ResourceUtils.getSecondaryKeyboardHeight(res, Settings.getValues()) + paddingTop + paddingBottom
-        setMeasuredDimension(width, height)
+        setMeasuredDimension(width, maxOf(height, forkExpandedHeight))
     }
+
+    /** fork: taller panel (swipe up on the toolbar header), 0 = normal height */
+    private var forkExpandedHeight = 0
+
+    fun setForkExpandedHeight(height: Int) {
+        if (height == forkExpandedHeight || !this::clipboardRecyclerView.isInitialized) return
+        forkExpandedHeight = height
+        if (height > 0) {
+            clipboardRecyclerView.layoutParams = clipboardRecyclerView.layoutParams.apply { this.height = height - paddingTop - paddingBottom }
+        } else {
+            clipboardLayoutParams.setListProperties(clipboardRecyclerView)
+        }
+        requestLayout()
+    }
+
+    /** normal height of the panel */
+    fun forkNormalHeight() = ResourceUtils.getSecondaryKeyboardHeight(resources, Settings.getValues()) + paddingTop + paddingBottom
 
     @SuppressLint("ClickableViewAccessibility")
     private fun initialize() { // needs to be delayed for access to ClipboardStrip, which is not a child of this view
@@ -208,6 +225,7 @@ class ClipboardHistoryView @JvmOverloads constructor(
 
     fun stopClipboardHistory() {
         if (!this::clipboardAdapter.isInitialized) return
+        setForkExpandedHeight(0)
         hideInfoPanel()
         clipboardRecyclerView.adapter = null
         clipboardHistoryManager.setHistoryChangeListener(null)

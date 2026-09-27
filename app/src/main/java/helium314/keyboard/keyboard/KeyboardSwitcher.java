@@ -510,6 +510,11 @@ public final class KeyboardSwitcher {
         return mKeyboardView;
     }
 
+    /** fork: for making the panel taller from the dynamic toolbar */
+    public helium314.keyboard.keyboard.clipboard.ClipboardHistoryView getClipboardHistoryView() {
+        return mClipboardHistoryView;
+    }
+
     public View getWrapperView() {
         return mKeyboardViewWrapper;
     }
