@@ -53,7 +53,7 @@ import helium314.keyboard.settings.screens.gesturedata.TWO_WEEKS_IN_MILLIS
 /**
  * fork: shadcn style main screen.
  *  - setup state (keyboard not enabled / not selected) is shown as an alert on top instead of a wizard
- *  - a text field to try the keyboard right away
+ *  - a text field to try the keyboard right away (at the bottom of every settings screen, see SearchScreen)
  *  - entries grouped into Input / Look / Toolbar / More, each with a short description
  */
 @Composable
@@ -85,12 +85,12 @@ fun MainSettingsScreen(
         }
         val setupState by SettingsActivity.imeSetupState.collectAsState()
         val appName = stringResource(R.string.english_ime_name)
-        // fork: the bottom inset (keyboard, dynamic toolbar) is applied while laying out. Reading Scaffold's
-        // innerPadding here recomposed the whole screen on every frame the keyboard or toolbar moved, on the
-        // main thread the keyboard shares with this activity.
+        // fork: the bottom inset (keyboard, dynamic toolbar) is taken by SearchScreen while laying out. Reading
+        // Scaffold's innerPadding here recomposed the whole screen on every frame the keyboard or toolbar moved, on
+        // the main thread the keyboard shares with this activity. The keyboard test field is at the bottom of every
+        // settings screen.
         Column(
-            Modifier.fillMaxSize().windowInsetsPadding(WindowInsets.safeDrawing.only(WindowInsetsSides.Bottom))
-                .verticalScroll(rememberScrollState()).padding(bottom = 24.dp)
+            Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(bottom = 24.dp)
         ) {
             when (setupState) {
                 ImeSetupState.NOT_ENABLED -> SetupAlert(
@@ -109,7 +109,6 @@ fun MainSettingsScreen(
                 )
                 ImeSetupState.OK -> {}
             }
-            TestField()
 
             SettingsSection(stringResource(R.string.fork_main_input), listOfNotNull(
                 entry(R.string.language_and_layouts_title, subtypeNames,
@@ -159,26 +158,6 @@ private fun entry(title: Int, description: String?, @DrawableRes icon: Int, onCl
         onClick = onClick,
         icon = icon
     ) { NextScreenIcon() }
-}
-
-/** shadcn Input to try the keyboard without leaving settings */
-@Composable
-private fun TestField() {
-    val s = LocalShadcn.current
-    var text by remember { mutableStateOf("") }
-    OutlinedTextField(
-        value = text,
-        onValueChange = { text = it },
-        modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp),
-        placeholder = { Text(stringResource(R.string.fork_test_field_hint), color = s.mutedForeground) },
-        shape = MaterialTheme.shapes.medium,
-        textStyle = MaterialTheme.typography.bodyLarge,
-        colors = OutlinedTextFieldDefaults.colors(
-            focusedBorderColor = s.ring,
-            unfocusedBorderColor = s.input,
-            cursorColor = s.foreground,
-        ),
-    )
 }
 
 private fun openImeSettings(ctx: Context) {

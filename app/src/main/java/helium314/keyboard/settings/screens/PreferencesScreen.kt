@@ -93,6 +93,12 @@ fun PreferencesScreen(
         ClipPrefs.CODE_AUTO_OPEN,
         ClipPrefs.CODE_TEST_UNTIL,
         ClipPrefs.SMART_TESTER,
+        ClipPrefs.CHIP_BORDER,
+        if (prefs.getBoolean(ClipPrefs.CHIP_BORDER, true)) ClipPrefs.CHIP_BORDER_STYLE else null,
+        if (prefs.getBoolean(ClipPrefs.CHIP_BORDER, true)) ClipPrefs.CHIP_BORDER_COLOR else null,
+        ClipPrefs.CHIP_BG_COLOR,
+        ClipPrefs.CHIP_TEXT_COLOR,
+        ClipPrefs.CHIP_RADIUS,
         if (clipboardHistoryEnabled) ClipPrefs.SCREENSHOTS else null,
         if (clipboardHistoryEnabled) Settings.PREF_CLIPBOARD_USE_FILES else null,
         if (clipboardHistoryEnabled && prefs.getBoolean(Settings.PREF_CLIPBOARD_USE_FILES, Defaults.PREF_CLIPBOARD_USE_FILES))

@@ -61,7 +61,7 @@ fun SearchSettingsScreen(
     onClickBack: () -> Unit,
     title: String,
     settings: List<Any?>,
-    extraActions: @Composable (() -> Unit)? = null, // fork: e.g. the keyboard preview toggle
+    extraActions: @Composable (() -> Unit)? = null, // fork: extra top bar buttons
     content: @Composable (ColumnScope.() -> Unit)? = null // overrides settings if not null
 ) {
     SearchScreen(
@@ -71,11 +71,10 @@ fun SearchSettingsScreen(
         content = {
             if (content != null) content()
             else {
-                // fork: insets applied while laying out, see KeyboardPreviewScaffold
+                // fork: no Scaffold here, the bottom inset is taken by SearchScreen while laying out
                 run {
                     Column(
-                        Modifier.fillMaxSize().windowInsetsPadding(WindowInsets.safeDrawing.only(WindowInsetsSides.Bottom))
-                            .verticalScroll(rememberScrollState()).padding(bottom = 24.dp)
+                        Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(bottom = 24.dp)
                     ) {
                         SettingsSections(settings)
                     }
@@ -122,7 +121,9 @@ fun <T: Any?> SearchScreen(
     var showSearch by remember { mutableStateOf(false) }
     Scaffold(contentWindowInsets = WindowInsets.safeDrawing.only(WindowInsetsSides.Horizontal + WindowInsetsSides.Top))
     { innerPadding ->
-        Column(Modifier.fillMaxSize().padding(innerPadding)) {
+        // fork: the bottom inset (keyboard, navigation bar) is taken here, while laying out, for the whole screen:
+        // the content above and the keyboard test field at the bottom
+        Column(Modifier.fillMaxSize().padding(innerPadding).windowInsetsPadding(WindowInsets.safeDrawing.only(WindowInsetsSides.Bottom))) {
 
             fun setShowSearch(value: Boolean) {
                 showSearch = value
@@ -192,22 +193,19 @@ fun <T: Any?> SearchScreen(
             }
             CompositionLocalProvider(LocalTextStyle provides MaterialTheme.typography.bodyLarge) {
                 if (searchText.text.isBlank() && content != null) {
-                    Column {
+                    Column(Modifier.weight(1f)) {
                         content()
                     }
                 } else {
                     val items = filteredItems(searchText.text)
-                    Scaffold(
-                        contentWindowInsets = WindowInsets.safeDrawing.only(WindowInsetsSides.Bottom)
-                    ) { innerPadding ->
-                        LazyColumn(contentPadding = innerPadding) {
-                            items(items) {
-                                itemContent(it)
-                            }
+                    LazyColumn(Modifier.weight(1f)) {
+                        items(items) {
+                            itemContent(it)
                         }
                     }
                 }
             }
+            helium314.keyboard.fork.settings.KeyboardTestField()
         }
     }
 }

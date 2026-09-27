@@ -5,6 +5,9 @@ import android.content.Context
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -49,22 +52,24 @@ fun createForkClipboardSettings(context: Context) = listOf(
     },
     Setting(context, ClipPrefs.RETENTION_HOURS, R.string.fork_clip_retention) { setting ->
         val ctx = LocalContext.current
-        IntChoicePreference(setting.title, { ClipPrefs.retentionHours(ctx.prefs()) }, ClipPrefs.retentionChoices, {
+        helium314.keyboard.settings.preferences.StepSliderPreference(setting.title, ClipPrefs.retentionChoices,
+            { ClipPrefs.retentionHours(ctx.prefs()) }, {
             when {
                 it == 0 -> ctx.getString(R.string.settings_no_limit)
                 it % 24 == 0 -> ctx.getString(R.string.fork_unit_days, it / 24)
                 else -> ctx.getString(R.string.fork_unit_hours, it)
             }
-        }) {
+        }, ClipPrefs.DEFAULT_RETENTION_HOURS) {
             ctx.prefs().edit { putInt(setting.key, it) }
             ClipboardDao.getInstance(ctx)?.clearOldClips(true)
         }
     },
     Setting(context, ClipPrefs.MAX_ITEMS, R.string.fork_clip_max_items) { setting ->
         val ctx = LocalContext.current
-        IntChoicePreference(setting.title, { ClipPrefs.maxItems(ctx.prefs()) }, ClipPrefs.maxItemChoices, {
+        helium314.keyboard.settings.preferences.StepSliderPreference(setting.title, ClipPrefs.maxItemChoices,
+            { ClipPrefs.maxItems(ctx.prefs()) }, {
             if (it == 0) ctx.getString(R.string.settings_no_limit) else it.toString()
-        }) {
+        }, ClipPrefs.DEFAULT_MAX_ITEMS) {
             ctx.prefs().edit { putInt(setting.key, it) }
             ClipboardDao.getInstance(ctx)?.clearOldClips(true)
         }
@@ -110,6 +115,37 @@ fun createForkClipboardSettings(context: Context) = listOf(
     },
     Setting(context, ClipPrefs.SMART_TESTER, R.string.fork_smart_tester, R.string.fork_smart_tester_summary) { setting ->
         SmartChipTester(setting.title, setting.description)
+    },
+    Setting(context, ClipPrefs.CHIP_BORDER, R.string.fork_chip_border) {
+        SwitchPreference(it, true)
+    },
+    Setting(context, ClipPrefs.CHIP_BORDER_STYLE, R.string.fork_chip_border_style) { setting ->
+        val ctx = LocalContext.current
+        helium314.keyboard.settings.preferences.InlineChoicePreference(setting.title, setting.key, listOf(
+            ctx.getString(R.string.fork_chip_border_dots) to ClipPrefs.BORDER_DOTS,
+            ctx.getString(R.string.fork_chip_border_dashed) to ClipPrefs.BORDER_DASHED,
+            ctx.getString(R.string.fork_chip_border_solid) to ClipPrefs.BORDER_SOLID,
+        ), ClipPrefs.BORDER_DOTS)
+    },
+    Setting(context, ClipPrefs.CHIP_BORDER_COLOR, R.string.fork_chip_border_color, R.string.fork_chip_color_auto_enter) { setting ->
+        ChipColorPreference(setting.title, setting.key, setting.description)
+    },
+    Setting(context, ClipPrefs.CHIP_BG_COLOR, R.string.fork_chip_bg_color, R.string.fork_chip_color_auto_key) { setting ->
+        ChipColorPreference(setting.title, setting.key, setting.description)
+    },
+    Setting(context, ClipPrefs.CHIP_TEXT_COLOR, R.string.fork_chip_text_color, R.string.fork_chip_color_auto_key) { setting ->
+        ChipColorPreference(setting.title, setting.key, setting.description)
+    },
+    Setting(context, ClipPrefs.CHIP_RADIUS, R.string.fork_chip_radius) { setting ->
+        val ctx = LocalContext.current
+        InlineSliderPreference(
+            name = setting.title,
+            key = setting.key,
+            default = ClipPrefs.DEFAULT_CHIP_RADIUS,
+            range = 0f..30f,
+            format = { ctx.getString(R.string.fork_unit_dp, it.toInt().toString()) },
+            step = 1f,
+        )
     },
     Setting(context, ClipPrefs.SCREENSHOTS, R.string.fork_clip_screenshots, R.string.fork_clip_screenshots_summary) { setting ->
         val ctx = LocalContext.current
@@ -225,4 +261,37 @@ private fun SmartChipTester(title: String, description: String?) {
             }
         Text(found, style = MaterialTheme.typography.bodyMedium, modifier = Modifier.padding(top = 8.dp))
     }
+}
+
+/** a chip color: swatch, or "theme" when not set; the picker's default button goes back to the theme color */
+@Composable
+private fun ChipColorPreference(title: String, key: String, autoDescription: String?) {
+    val ctx = LocalContext.current
+    val prefs = ctx.prefs()
+    val b = (ctx.getActivity() as? SettingsActivity)?.prefChanged?.collectAsState()
+    if ((b?.value ?: 0) < 0)
+        Log.v("irrelevant", "stupid way to trigger recomposition on preference change")
+    val set = prefs.contains(key)
+    val color = prefs.getInt(key, android.graphics.Color.GRAY)
+    var showDialog by androidx.compose.runtime.remember { androidx.compose.runtime.mutableStateOf(false) }
+    helium314.keyboard.settings.preferences.Preference(
+        name = title,
+        description = if (set) String.format("#%06X", 0xFFFFFF and color) else autoDescription,
+        onClick = { showDialog = true },
+    ) {
+        if (set) androidx.compose.foundation.layout.Box(
+            Modifier.padding(end = 8.dp).size(28.dp)
+                .background(androidx.compose.ui.graphics.Color(color), MaterialTheme.shapes.small)
+                .border(1.dp, LocalShadcn.current.border, MaterialTheme.shapes.small)
+        )
+    }
+    if (showDialog)
+        helium314.keyboard.settings.dialogs.ColorPickerDialog(
+            onDismissRequest = { showDialog = false },
+            initialColor = color,
+            title = title,
+            showDefault = set,
+            onDefault = { prefs.edit { remove(key) } },
+            onConfirmed = { prefs.edit { putInt(key, it) } },
+        )
 }

@@ -20,7 +20,8 @@ import androidx.compose.ui.unit.sp
 /**
  * fork: settings UI follows the shadcn/ui design system (zinc base color, "new-york" style):
  * neutral colors, 1px borders, 8dp radius, grouped cards, small muted labels.
- * Token values are the ones of shadcn/ui's zinc theme.
+ * Token values are the ones of shadcn/ui's zinc theme, except that cards are a step lighter than the page
+ * (and the page a step darker in light mode), so the grouped boxes stand out.
  */
 class ShadcnColors(
     val background: Color,
@@ -40,7 +41,7 @@ class ShadcnColors(
 )
 
 val ShadcnLight = ShadcnColors(
-    background = Color(0xFFFFFFFF),
+    background = Color(0xFFF4F4F5),
     foreground = Color(0xFF09090B),
     card = Color(0xFFFFFFFF),
     muted = Color(0xFFF4F4F5),
@@ -59,10 +60,10 @@ val ShadcnLight = ShadcnColors(
 val ShadcnDark = ShadcnColors(
     background = Color(0xFF09090B),
     foreground = Color(0xFFFAFAFA),
-    card = Color(0xFF09090B),
-    muted = Color(0xFF27272A),
+    card = Color(0xFF1C1C20),
+    muted = Color(0xFF2E2E33),
     mutedForeground = Color(0xFFA1A1AA),
-    border = Color(0xFF27272A),
+    border = Color(0xFF34343A),
     input = Color(0xFF27272A),
     primary = Color(0xFFFAFAFA),
     primaryForeground = Color(0xFF18181B),

@@ -23,6 +23,17 @@ object ClipPrefs {
     const val CODE_AUTO_OPEN = "fork_clip_code_auto_open"
     /** until this time (ms) a test message with a code is offered as if it was just copied */
     const val CODE_TEST_UNTIL = "fork_clip_code_test_until"
+    /** look of the paste / smart chips: border on, [BORDER_DOTS] / [BORDER_DASHED] / [BORDER_SOLID], colors (unset = theme) */
+    const val CHIP_BORDER = "fork_chip_border"
+    const val CHIP_BORDER_STYLE = "fork_chip_border_style"
+    const val BORDER_DOTS = "dots"
+    const val BORDER_DASHED = "dashed"
+    const val BORDER_SOLID = "solid"
+    const val CHIP_BORDER_COLOR = "fork_chip_border_color"
+    const val CHIP_BG_COLOR = "fork_chip_bg_color"
+    const val CHIP_TEXT_COLOR = "fork_chip_text_color"
+    const val CHIP_RADIUS = "fork_chip_radius"
+    const val DEFAULT_CHIP_RADIUS = 15f
     /** settings entry with a text field that shows what the smart chips find, nothing is stored */
     const val SMART_TESTER = "fork_clip_smart_tester"
 
@@ -35,8 +46,10 @@ object ClipPrefs {
     const val DEFAULT_SMART_CHIPS = true
     const val DEFAULT_CODE_AUTO_OPEN = true
 
-    val retentionChoices = listOf(1, 6, 24, 72, 168, 0)
-    val maxItemChoices = listOf(20, 50, 100, 200, 500, 0)
+    /** slider steps: hours one by one up to 6, then 8-12 in 2 h steps, 18 h, then days up to a week, 2 weeks, 30 days, 0 = no limit */
+    val retentionChoices = listOf(1, 2, 3, 4, 5, 6, 8, 10, 12, 18, 24, 48, 72, 96, 120, 144, 168, 336, 720, 0)
+    /** slider steps: tens up to 100, then coarser, 0 = no limit */
+    val maxItemChoices = listOf(10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 150, 200, 300, 500, 1000, 0)
 
     fun retentionHours(prefs: SharedPreferences): Int {
         if (prefs.contains(RETENTION_HOURS)) return prefs.getInt(RETENTION_HOURS, DEFAULT_RETENTION_HOURS)
@@ -49,6 +62,19 @@ object ClipPrefs {
     fun previewLines(prefs: SharedPreferences) = prefs.getInt(PREVIEW_LINES, DEFAULT_PREVIEW_LINES).coerceIn(1, 12)
     fun screenshots(prefs: SharedPreferences) = prefs.getBoolean(SCREENSHOTS, DEFAULT_SCREENSHOTS)
     fun pasteChip(prefs: SharedPreferences) = prefs.getBoolean(PASTE_CHIP, DEFAULT_PASTE_CHIP)
+    /** chip look; colors are null where the theme's (enter key / key) colors are used */
+    class ChipStyle(val border: Boolean, val borderStyle: String, val borderColor: Int?, val background: Int?,
+                    val text: Int?, val radiusDp: Float)
+
+    fun chipStyle(prefs: SharedPreferences) = ChipStyle(
+        border = prefs.getBoolean(CHIP_BORDER, true),
+        borderStyle = prefs.getString(CHIP_BORDER_STYLE, BORDER_DOTS) ?: BORDER_DOTS,
+        borderColor = if (prefs.contains(CHIP_BORDER_COLOR)) prefs.getInt(CHIP_BORDER_COLOR, 0) else null,
+        background = if (prefs.contains(CHIP_BG_COLOR)) prefs.getInt(CHIP_BG_COLOR, 0) else null,
+        text = if (prefs.contains(CHIP_TEXT_COLOR)) prefs.getInt(CHIP_TEXT_COLOR, 0) else null,
+        radiusDp = prefs.getFloat(CHIP_RADIUS, DEFAULT_CHIP_RADIUS).coerceIn(0f, 40f),
+    )
+
     fun smartChips(prefs: SharedPreferences) = prefs.getBoolean(SMART_CHIPS, DEFAULT_SMART_CHIPS)
     fun codeAutoOpen(prefs: SharedPreferences) = prefs.getBoolean(CODE_AUTO_OPEN, DEFAULT_CODE_AUTO_OPEN)
 

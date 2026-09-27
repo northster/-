@@ -25,7 +25,7 @@ import helium314.keyboard.settings.preferences.SwitchPreference
 fun DynamicToolbarScreen(
     onClickBack: () -> Unit,
 ) {
-    // fork: one toolbar screen, the dynamic toolbar first and HeliBoard's toolbar settings below
+    // fork: the dynamic toolbar's settings
     val ctx = androidx.compose.ui.platform.LocalContext.current
     val prefs = ctx.prefs()
     val b = (ctx.getActivity() as? helium314.keyboard.settings.SettingsActivity)?.prefChanged?.collectAsState()
@@ -63,13 +63,12 @@ fun DynamicToolbarScreen(
             GlowPrefs.GLOW_DOT_SPACING,
             R.string.fork_cat_tool_header,
             helium314.keyboard.fork.clipboard.ClipAction.PREF,
-            R.string.fork_cat_classic_toolbar,
-        ) + helium314.keyboard.settings.screens.classicToolbarItems(prefs)
+            // HeliBoard's own toolbar (suggestion strip modes) is not shown: it must stay hidden for the dynamic toolbar
+        )
     SearchSettingsScreen(
         onClickBack = onClickBack,
         title = stringResource(R.string.settings_screen_toolbar),
         settings = items,
-        extraActions = { KeyboardPreviewToggle() },
     ) {
         KeyboardPreviewScaffold { helium314.keyboard.settings.SettingsSections(items) }
     }

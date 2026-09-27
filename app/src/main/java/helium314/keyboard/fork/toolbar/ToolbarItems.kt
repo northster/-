@@ -20,6 +20,8 @@ object ToolbarItems {
     const val AI = "ai"
     const val TRANSLATE = "translate"
     const val MORE = "more"
+    const val UNDO = "undo"
+    const val REDO = "redo"
 
     /** Current toolbar content. Placeholders only for now. */
     val defaultItems = listOf(
@@ -27,5 +29,11 @@ object ToolbarItems {
         ToolbarItem(AI, R.drawable.ic_dot_sparkles, R.string.fork_toolbar_ai),
         ToolbarItem(TRANSLATE, R.drawable.ic_dot_translate, R.string.fork_toolbar_translate),
         ToolbarItem(MORE, R.drawable.ic_dot_more, R.string.fork_toolbar_more),
+    )
+
+    /** always at the right end of the toolbar, after a divider */
+    val endItems = listOf(
+        ToolbarItem(UNDO, R.drawable.ic_dot_undo, R.string.undo),
+        ToolbarItem(REDO, R.drawable.ic_dot_redo, R.string.redo),
     )
 }

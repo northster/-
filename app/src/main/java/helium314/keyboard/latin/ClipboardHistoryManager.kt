@@ -105,7 +105,7 @@ class ClipboardHistoryManager(
     fun getRecentClip(): RecentClip? {
         // fork: a screenshot counts as a recent clip too (like Samsung's keyboard), the newer one wins
         val clip = getRecentPrimaryClip()
-        val shot = helium314.keyboard.fork.clipboard.ScreenshotWatcher.latest(latinIME)
+        val shot = helium314.keyboard.fork.clipboard.ScreenshotWatcher.latest(latinIME, RECENT_TIME_MILLIS)
             ?.takeIf { System.currentTimeMillis() - it.timeMillis <= RECENT_TIME_MILLIS }
         if (shot != null && (clip == null || shot.timeMillis > clip.timestamp))
             return RecentClip(null, shot.uri, shot.timeMillis, shot)

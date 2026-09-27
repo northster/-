@@ -97,16 +97,19 @@ class ScreenshotWatcher(private val context: Context) {
             else Manifest.permission.READ_EXTERNAL_STORAGE
 
         /** newest screenshot if screenshots are enabled in settings and allowed, for the paste chip */
-        fun latest(context: Context): Screenshot? {
+        fun latest(context: Context, maxAgeMillis: Long): Screenshot? {
             if (!ClipPrefs.screenshots(context.prefs()) || !hasPermission(context)) return null
             val projection = mutableListOf(MediaStore.Images.Media._ID, MediaStore.Images.Media.DISPLAY_NAME,
                 MediaStore.Images.Media.DATE_ADDED, MediaStore.Images.Media.MIME_TYPE)
             @Suppress("DEPRECATION")
             projection.add(if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) MediaStore.Images.Media.RELATIVE_PATH
                 else MediaStore.Images.Media.DATA)
+            // only images added in the last minutes: runs when the keyboard opens, sorting the whole gallery was slow
+            val since = (System.currentTimeMillis() - maxAgeMillis) / 1000
             return try {
                 context.contentResolver.query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, projection.toTypedArray(),
-                    null, null, "${MediaStore.Images.Media.DATE_ADDED} DESC").use { c ->
+                    "${MediaStore.Images.Media.DATE_ADDED} >= ?", arrayOf(since.toString()),
+                    "${MediaStore.Images.Media.DATE_ADDED} DESC").use { c ->
                     if (c == null || !c.moveToFirst()) return null
                     val name = c.getString(1).orEmpty()
                     val path = c.getString(4).orEmpty()

@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-only
 package helium314.keyboard.settings.screens
 
-import helium314.keyboard.fork.settings.KeyboardPreviewToggle
 import helium314.keyboard.fork.settings.KeyboardPreviewScaffold
 import helium314.keyboard.fork.settings.ForkThemeSettings
 import androidx.compose.foundation.layout.WindowInsets
@@ -128,7 +127,6 @@ fun AppearanceScreen(
         onClickBack = onClickBack,
         title = stringResource(R.string.settings_screen_appearance),
         settings = items,
-        extraActions = { KeyboardPreviewToggle() },
     ) {
         KeyboardPreviewScaffold { SettingsSections(items) }
     }

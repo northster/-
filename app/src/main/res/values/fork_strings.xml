@@ -255,4 +255,15 @@
     <string name="fork_wave_shape_ripple">Ripple</string>
     <string name="fork_wave_ripple_depth">Ripple center depth</string>
     <string name="fork_wave_ripple_depth_summary">How far below the keyboard the ripple starts: shallow is round, deep is flat</string>
+    <string name="fork_chip_border">Chip outline</string>
+    <string name="fork_chip_border_style">Chip outline style</string>
+    <string name="fork_chip_border_dots">Dots</string>
+    <string name="fork_chip_border_dashed">Dashed</string>
+    <string name="fork_chip_border_solid">Solid</string>
+    <string name="fork_chip_border_color">Chip outline color</string>
+    <string name="fork_chip_bg_color">Chip background color</string>
+    <string name="fork_chip_text_color">Chip text color</string>
+    <string name="fork_chip_radius">Chip corner radius</string>
+    <string name="fork_chip_color_auto_enter">Theme (enter key color)</string>
+    <string name="fork_chip_color_auto_key">Theme (key colors)</string>
 </resources>

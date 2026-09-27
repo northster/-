@@ -55,46 +55,66 @@ class DotBorderDrawable(
 
 /**
  * Dot grid glowing from the top (or bottom) center of the keyboard, drawn behind the keys (and on their surfaces).
- * [intensity] 0..1 is animated for a slow breathing between [GlowPrefs.Glow.minAlpha] and [GlowPrefs.Glow.maxAlpha].
+ * The dots are drawn once into a bitmap; the breathing only changes the alpha the bitmap is drawn with. Drawing the
+ * dots themselves on every frame (and again for every key surface) kept the main thread busy enough to delay the
+ * keyboard showing up.
  */
-class DotGlowDrawable(color: Int, private val density: Float, private val params: GlowPrefs.Glow) : Drawable() {
-    private val paint = Paint(Paint.ANTI_ALIAS_FLAG).also { it.color = color } // not apply: inside it "color" would be the paint's own (black)
-    var intensity = 1f
-        set(value) { field = value; invalidateSelf() }
+class DotGlowDrawable(private val color: Int, private val density: Float, private val params: GlowPrefs.Glow) : Drawable() {
+    private val bitmapPaint = Paint(Paint.FILTER_BITMAP_FLAG)
+    private var bitmap: android.graphics.Bitmap? = null
+
+    /** 0..1, set by the breathing animation; returns whether what is drawn changed */
+    fun setIntensity(value: Float): Boolean {
+        val alpha = (255 * (params.minAlpha + (params.maxAlpha - params.minAlpha) * value)).toInt().coerceIn(0, 255)
+        if (alpha == bitmapPaint.alpha) return false
+        bitmapPaint.alpha = alpha
+        invalidateSelf()
+        return true
+    }
 
     override fun draw(canvas: Canvas) {
-        val w = bounds.width().toFloat()
-        val h = bounds.height().toFloat()
-        if (w <= 0f || h <= 0f) return
+        val w = bounds.width()
+        val h = bounds.height()
+        if (w <= 0 || h <= 0) return
+        val bmp = bitmap?.takeIf { it.width == w && it.height == h } ?: render(w, h).also { bitmap = it }
+        canvas.drawBitmap(bmp, bounds.left.toFloat(), bounds.top.toFloat(), bitmapPaint)
+    }
+
+    /** the dots at full brightness, fading out from the edge's center */
+    private fun render(width: Int, height: Int): android.graphics.Bitmap {
+        bitmap?.recycle()
+        val bmp = android.graphics.Bitmap.createBitmap(width, height, android.graphics.Bitmap.Config.ARGB_8888)
+        val c = Canvas(bmp)
+        val paint = Paint(Paint.ANTI_ALIAS_FLAG).also { it.color = color } // not apply: inside it "color" would be the paint's own (black)
+        val w = width.toFloat()
+        val h = height.toFloat()
         val spacing = params.spacingDp * density
         val r = params.dotDp * density
-        val cx = bounds.left + w / 2
-        val top = bounds.top.toFloat()
-        val bottom = bounds.bottom.toFloat()
+        val cx = w / 2
         val rx = w * 0.5f * params.width
         val ry = h * params.height
-        val peak = 255 * (params.minAlpha + (params.maxAlpha - params.minAlpha) * intensity)
         // rows counted from the edge the glow comes from
         var edgeDistance = spacing / 2
         while (edgeDistance < ry) {
-            val y = if (params.fromBottom) bottom - edgeDistance else top + edgeDistance
-            var x = bounds.left + spacing / 2
-            while (x < bounds.right) {
+            val y = if (params.fromBottom) h - edgeDistance else edgeDistance
+            var x = spacing / 2
+            while (x < w) {
                 val dx = (x - cx) / rx
                 val dy = edgeDistance / ry
                 val d = sqrt(dx * dx + dy * dy)
                 if (d < 1f) {
-                    paint.alpha = (peak * (1f - d).pow(1.2f)).toInt().coerceIn(0, 255)
-                    if (paint.alpha > 0) canvas.drawCircle(x, y, r, paint)
+                    paint.alpha = (255 * (1f - d).pow(1.2f)).toInt().coerceIn(0, 255)
+                    if (paint.alpha > 0) c.drawCircle(x, y, r, paint)
                 }
                 x += spacing
             }
             edgeDistance += spacing
         }
+        return bmp
     }
 
     override fun setAlpha(alpha: Int) { }
-    override fun setColorFilter(colorFilter: ColorFilter?) { paint.colorFilter = colorFilter }
+    override fun setColorFilter(colorFilter: ColorFilter?) { bitmapPaint.colorFilter = colorFilter }
     @Deprecated("Deprecated in Java")
     override fun getOpacity() = PixelFormat.TRANSLUCENT
 }
@@ -102,9 +122,9 @@ class DotGlowDrawable(color: Int, private val density: Float, private val params
 /**
  * White dots sweeping over the keyboard and the toolbar when the toolbar opens ([up]) or closes.
  * - Straight: a band whose front row is the brightest, fading out behind it.
- * - Ripple ([GlowPrefs.Wave.rippleDepthDp] > 0): a ring around a center hidden below the keyboard, like a ripple coming
- *   from under the screen edge. Opening, it spreads out and runs up into the toolbar; closing, it draws back into
- *   its center, so it runs down the keyboard.
+ * - Ripple ([GlowPrefs.Wave.rippleDepthDp] > 0): a ring spreading from a hidden center, like a ripple. Opening, the
+ *   center is below the keyboard and the ring runs up into the toolbar; closing, it is above the keyboard and the
+ *   ring runs down.
  * Positions are in screen coordinates and shared by all views, so the wave runs on from the keyboard into the toolbar.
  * Every view draws it with its own screen position as origin.
  */
@@ -133,8 +153,8 @@ class DotWave(private val density: Float, private val params: GlowPrefs.Wave, va
                 // how far behind the front this dot is, in band thicknesses: 0 = front (brightest), 1 = end of the band
                 val behind = if (isRipple) {
                     val d = kotlin.math.hypot(originX + x - centerX, sy - centerY)
-                    // spreading: the band is inside the ring; drawing back: outside
-                    (if (up) position - d else d - position) / thickness
+                    // the band is inside the spreading ring
+                    (position - d) / thickness
                 } else {
                     (if (up) sy - position else position - sy) / thickness
                 }

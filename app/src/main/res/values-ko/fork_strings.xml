@@ -252,4 +252,15 @@
     <string name="fork_wave_shape_ripple">물결(원)</string>
     <string name="fork_wave_ripple_depth">물결 중심 깊이</string>
     <string name="fork_wave_ripple_depth_summary">키보드 아래 얼마나 깊은 곳에서 퍼져 나올지: 얕을수록 둥글고, 깊을수록 평평해요</string>
+    <string name="fork_chip_border">칩 테두리</string>
+    <string name="fork_chip_border_style">칩 테두리 모양</string>
+    <string name="fork_chip_border_dots">점</string>
+    <string name="fork_chip_border_dashed">점선</string>
+    <string name="fork_chip_border_solid">실선</string>
+    <string name="fork_chip_border_color">칩 테두리 색</string>
+    <string name="fork_chip_bg_color">칩 배경 색</string>
+    <string name="fork_chip_text_color">칩 글자 색</string>
+    <string name="fork_chip_radius">칩 모서리 둥글기</string>
+    <string name="fork_chip_color_auto_enter">테마 (엔터 키 색)</string>
+    <string name="fork_chip_color_auto_key">테마 (키 색)</string>
 </resources>

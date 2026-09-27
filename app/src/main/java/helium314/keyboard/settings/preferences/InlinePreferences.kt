@@ -102,6 +102,56 @@ fun InlineSliderPreference(
     }
 }
 
+/**
+ * Slider over a list of [steps] that don't need to be evenly spaced (e.g. hours, then days), so small values get fine
+ * steps and large ones coarse steps. [current] is snapped to the nearest step; [onChanged] gets the step on release.
+ */
+@Composable
+fun StepSliderPreference(
+    name: String,
+    steps: List<Int>,
+    current: () -> Int,
+    format: (Int) -> String,
+    default: Int? = null,
+    onChanged: (Int) -> Unit,
+) {
+    val ctx = LocalContext.current
+    val b = (ctx.getActivity() as? SettingsActivity)?.prefChanged?.collectAsState()
+    if ((b?.value ?: 0) < 0)
+        Log.v("irrelevant", "stupid way to trigger recomposition on preference change")
+    val stored = current()
+    val storedIndex = steps.indexOf(stored).takeIf { it >= 0 } ?: steps.indices.minBy { kotlin.math.abs(steps[it] - stored) }
+    var index by remember(stored) { mutableFloatStateOf(storedIndex.toFloat()) }
+    val s = LocalShadcn.current
+    val step = steps[index.roundToInt().coerceIn(steps.indices)]
+    Column(Modifier.fillMaxWidth().padding(start = 16.dp, end = 8.dp, top = 12.dp, bottom = 4.dp)) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Text(name, style = MaterialTheme.typography.bodyLarge, modifier = Modifier.weight(1f))
+            Text(format(step), style = MaterialTheme.typography.bodyMedium, color = s.mutedForeground)
+            if (default != null)
+                TextButton(
+                    onClick = {
+                        index = steps.indexOf(default).coerceAtLeast(0).toFloat()
+                        onChanged(default)
+                    },
+                    enabled = step != default,
+                ) { Text(stringResource(R.string.button_default), style = MaterialTheme.typography.labelMedium) }
+        }
+        helium314.keyboard.settings.ScrollSafeSlider(
+            value = index,
+            onValueChange = { index = it.roundToInt().toFloat() },
+            onValueChangeFinished = { onChanged(steps[index.roundToInt().coerceIn(steps.indices)]) },
+            valueRange = 0f..(steps.size - 1).toFloat(),
+            modifier = Modifier.padding(end = 8.dp),
+            colors = SliderDefaults.colors(
+                thumbColor = s.primary,
+                activeTrackColor = s.primary,
+                inactiveTrackColor = s.muted,
+            ),
+        )
+    }
+}
+
 /** Options shown as chips in the row. */
 @OptIn(ExperimentalLayoutApi::class)
 @Composable

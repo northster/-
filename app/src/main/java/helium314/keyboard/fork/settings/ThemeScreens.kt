@@ -171,7 +171,6 @@ fun ThemeColorsScreen(onClickBack: () -> Unit) {
         onClickBack = onClickBack,
         title = stringResource(R.string.fork_theme_colors),
         settings = emptyList(),
-        extraActions = { KeyboardPreviewToggle() },
     ) {
         KeyboardPreviewScaffold {
             // ---- theme selection

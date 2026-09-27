@@ -112,7 +112,7 @@ class DynamicToolbarController(private val context: Context) {
             it.addOnLayoutChangeListener(frameLayoutListener)
         }
         applyHeight()
-        toolbar?.setItems(ToolbarItems.defaultItems, ::onItemClicked)
+        toolbar?.setItems(ToolbarItems.defaultItems, ToolbarItems.endItems, ::onItemClicked)
         refreshPasteChips()
         // restore persisted state without animation
         hiddenFraction = if (isExpanded) 0f else 1f
@@ -404,9 +404,8 @@ class DynamicToolbarController(private val context: Context) {
         if (!ClipPrefs.codeAutoOpen(context.prefs()) || ClipPrefs.findCode(c.text) == null) return
         Log.i(TAG, "opening the toolbar for a verification code")
         autoOpenedKey = c.key
-        setExpanded(true, true)
+        setExpanded(true, true) // no wave: that is for swipes
         autoOpened = true
-        startWave(true)
     }
 
     /** the chip was used or dismissed: back to the tools, or closed again if it was opened for a code */
@@ -415,7 +414,6 @@ class DynamicToolbarController(private val context: Context) {
         if (autoOpened) {
             autoOpened = false
             setExpanded(false, true)
-            startWave(false)
         } else {
             applyChipState()
         }
@@ -525,8 +523,8 @@ class DynamicToolbarController(private val context: Context) {
             repeatMode = ValueAnimator.REVERSE
             repeatCount = ValueAnimator.INFINITE
             addUpdateListener {
-                glow.intensity = it.animatedValue as Float
-                kv.invalidateAllKeys()
+                // redraw the keyboard only when the glow's alpha actually changed
+                if (glow.setIntensity(it.animatedValue as Float)) kv.invalidateAllKeys()
             }
             start()
         }
@@ -534,7 +532,7 @@ class DynamicToolbarController(private val context: Context) {
 
     /**
      * White dot wave: opening runs from the keyboard bottom up and on through the toolbar, closing runs from
-     * the keyboard top down, as a straight band or a ripple from below the keyboard. Positions are in screen
+     * the keyboard top down, as a straight band or a ripple from a center hidden beyond the edge it starts at. Positions are in screen
      * coordinates, so the wave keeps going across both views while the toolbar slides.
      */
     private fun startWave(up: Boolean) {
@@ -559,18 +557,19 @@ class DynamicToolbarController(private val context: Context) {
         val start: Float
         val end: Float
         if (wave.isRipple) {
-            // center hidden below the middle of the keyboard's bottom edge
-            wave.centerX = kvLeft + kv.width / 2f
-            wave.centerY = kvBottom + wave.rippleDepthPx
+            // center hidden below the middle of the keyboard's bottom edge (opening) or above its top edge (closing),
+            // the ring spreads from there, starting right at the edge
             val halfWidth = kv.width / 2f
+            wave.centerX = kvLeft + halfWidth
+            start = wave.rippleDepthPx
             if (up) {
-                // from touching the bottom edge until the whole band is past the toolbar's top corners
-                start = wave.rippleDepthPx
+                wave.centerY = kvBottom + wave.rippleDepthPx
+                // until the whole band is past the toolbar's top corners
                 end = kotlin.math.hypot(halfWidth, wave.centerY - toolbarTop) + thickness
             } else {
-                // from the keyboard's top corners back into the center, until the band is below the keyboard
-                start = kotlin.math.hypot(halfWidth, wave.centerY - kvTop)
-                end = wave.rippleDepthPx - thickness
+                wave.centerY = kvTop - wave.rippleDepthPx
+                // until the whole band is past the keyboard's bottom corners
+                end = kotlin.math.hypot(halfWidth, kvBottom - wave.centerY) + thickness
             }
         } else {
             // the front starts at one edge and moves until the whole band has left the far edge
@@ -583,12 +582,9 @@ class DynamicToolbarController(private val context: Context) {
         kv.setForkOverlay(drawable)
         waveAnimator = ValueAnimator.ofFloat(start, end).apply {
             duration = params.durationMs
-            // a ripple slows down as it spreads out, and speeds up drawing back in
-            interpolator = when {
-                !wave.isRipple -> android.view.animation.LinearInterpolator()
-                up -> android.view.animation.DecelerateInterpolator(1.3f)
-                else -> android.view.animation.AccelerateInterpolator(1.3f)
-            }
+            // a ripple slows down as it spreads out
+            interpolator = if (wave.isRipple) android.view.animation.DecelerateInterpolator(1.3f)
+                else android.view.animation.LinearInterpolator()
             addUpdateListener {
                 wave.position = it.animatedValue as Float
                 kv.getLocationOnScreen(loc)
@@ -692,6 +688,16 @@ class DynamicToolbarController(private val context: Context) {
                 val listener = (context as? helium314.keyboard.latin.LatinIME)?.mKeyboardActionListener ?: return
                 listener.onCodeInput(
                     helium314.keyboard.keyboard.internal.keyboard_parser.floris.KeyCode.CLIPBOARD,
+                    helium314.keyboard.latin.common.Constants.NOT_A_COORDINATE,
+                    helium314.keyboard.latin.common.Constants.NOT_A_COORDINATE, false
+                )
+                return
+            }
+            // the app's own undo / redo (Ctrl+Z / Ctrl+Shift+Z)
+            ToolbarItems.UNDO, ToolbarItems.REDO -> {
+                val listener = (context as? helium314.keyboard.latin.LatinIME)?.mKeyboardActionListener ?: return
+                listener.onCodeInput(
+                    if (item.id == ToolbarItems.UNDO) KeyCode.UNDO else KeyCode.REDO,
                     helium314.keyboard.latin.common.Constants.NOT_A_COORDINATE,
                     helium314.keyboard.latin.common.Constants.NOT_A_COORDINATE, false
                 )

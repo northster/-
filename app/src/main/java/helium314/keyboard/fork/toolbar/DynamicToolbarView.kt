@@ -18,6 +18,7 @@ import helium314.keyboard.keyboard.KeyboardTypeface
 import helium314.keyboard.latin.R
 import helium314.keyboard.latin.common.ColorType
 import helium314.keyboard.latin.settings.Settings
+import helium314.keyboard.latin.utils.prefs
 
 /**
  * The toolbar shown above the keyboard. It only draws buttons, state and animation are handled
@@ -99,13 +100,24 @@ class DynamicToolbarView @JvmOverloads constructor(
         Settings.getValues().mColors.setColor(this, ColorType.TOOL_BAR_KEY)
     }
 
-    fun setItems(items: List<ToolbarItem>, onClick: (ToolbarItem) -> Unit) {
+    fun setItems(items: List<ToolbarItem>, endItems: List<ToolbarItem>, onClick: (ToolbarItem) -> Unit) {
         buttons.removeAllViews()
         val colors = Settings.getValues().mColors
         colors.setBackground(this, ColorType.MAIN_BACKGROUND) // same as keyboard, looks like the keyboard grows
         for (item in items) {
             val button = iconButton(item.icon, context.getString(item.label)) { onClick(item) }.apply { tag = item.id }
             buttons.addView(button, LinearLayout.LayoutParams(0, LayoutParams.MATCH_PARENT, 1f))
+        }
+        // | undo redo, always at the right end
+        while (row.childCount > 1) row.removeViewAt(1)
+        row.addView(View(context).apply { setBackgroundColor(colors.get(ColorType.KEY_HINT_TEXT)) },
+            LinearLayout.LayoutParams((1 * density).toInt().coerceAtLeast(1), (18 * density).toInt()).apply {
+                marginStart = (4 * density).toInt()
+                marginEnd = (4 * density).toInt()
+            })
+        for (item in endItems) {
+            val button = iconButton(item.icon, context.getString(item.label)) { onClick(item) }.apply { tag = item.id }
+            row.addView(button, LinearLayout.LayoutParams((44 * density).toInt(), LayoutParams.MATCH_PARENT))
         }
     }
 
@@ -118,7 +130,8 @@ class DynamicToolbarView @JvmOverloads constructor(
         maxWidth = (maxWidthDp * density).toInt()
         setTextSize(TypedValue.COMPLEX_UNIT_SP, 14f)
         KeyboardTypeface.applyToTextView(this)
-        setTextColor(if (highlight) colors.get(ColorType.ACTION_KEY_ICON) else colors.get(ColorType.KEY_TEXT))
+        val style = helium314.keyboard.fork.clipboard.ClipPrefs.chipStyle(context.prefs())
+        setTextColor(if (highlight) colors.get(ColorType.ACTION_KEY_ICON) else style.text ?: colors.get(ColorType.KEY_TEXT))
         gravity = Gravity.CENTER_VERTICAL
         val h = (12 * density).toInt()
         setPadding(h, 0, h, 0)
@@ -126,15 +139,30 @@ class DynamicToolbarView @JvmOverloads constructor(
         setOnClickListener { onClick() }
     }
 
-    /** key colored pill, [border] as a dotted outline in the enter key color (paste chips) */
+    /**
+     * Pill in key colors. Paste / smart chips ([border]) follow the chip look settings: outline dotted, dashed or
+     * solid (or none), outline, fill and text colors (enter key and key colors unless set), corner radius.
+     * The highlighted chip (a code) keeps the enter key colors.
+     */
     private fun chipBackground(highlight: Boolean, border: Boolean): android.graphics.drawable.Drawable {
         val colors = Settings.getValues().mColors
-        val fill = if (highlight) colors.get(ColorType.ACTION_KEY_BACKGROUND) else colors.get(ColorType.KEY_BACKGROUND)
+        val style = helium314.keyboard.fork.clipboard.ClipPrefs.chipStyle(context.prefs())
         val enter = colors.get(ColorType.ACTION_KEY_BACKGROUND)
-        if (border) return DotBorderDrawable(fill, if (highlight) colors.get(ColorType.ACTION_KEY_ICON) else enter, density)
+        val fill = if (highlight) enter else if (border) style.background ?: colors.get(ColorType.KEY_BACKGROUND)
+            else colors.get(ColorType.KEY_BACKGROUND)
+        val radius = if (border) style.radiusDp else 15f
+        val lineColor = if (highlight) colors.get(ColorType.ACTION_KEY_ICON) else style.borderColor ?: enter
+        if (border && style.border && style.borderStyle == helium314.keyboard.fork.clipboard.ClipPrefs.BORDER_DOTS)
+            return DotBorderDrawable(fill, lineColor, density, radius)
         return GradientDrawable().apply {
-            cornerRadius = 15 * density
+            cornerRadius = radius * density
             setColor(fill)
+            if (border && style.border) {
+                val width = (1.5f * density).toInt().coerceAtLeast(1)
+                if (style.borderStyle == helium314.keyboard.fork.clipboard.ClipPrefs.BORDER_DASHED)
+                    setStroke(width, lineColor, 5 * density, 3 * density)
+                else setStroke(width, lineColor)
+            }
         }
     }
 
@@ -222,8 +250,8 @@ class DynamicToolbarView @JvmOverloads constructor(
                 override fun getOutline(view: View, outline: android.graphics.Outline) =
                     outline.setRoundRect(0, 0, view.width, view.height, 11 * density)
             }
-            try { setImageURI(uri) } catch (_: Exception) { } // permission may be gone
         }
+        loadThumbnail(thumb, uri, (22 * density).toInt())
         addView(thumb, LinearLayout.LayoutParams((22 * density).toInt(), (22 * density).toInt()))
         addView(TextView(context).apply {
             setText(R.string.fork_clip_paste)
@@ -233,6 +261,31 @@ class DynamicToolbarView @JvmOverloads constructor(
             setPadding((8 * density).toInt(), 0, 0, 0)
         }, LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT))
         setOnClickListener { onClick() }
+    }
+
+    /**
+     * Small thumbnail decoded off the main thread: setImageURI decoded the full screenshot while the keyboard
+     * was being shown, which delayed it noticeably.
+     */
+    private fun loadThumbnail(view: ImageView, uri: android.net.Uri, sizePx: Int) {
+        view.tag = uri
+        Thread {
+            val bitmap = try {
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+                    context.contentResolver.loadThumbnail(uri, android.util.Size(sizePx * 2, sizePx * 2), null)
+                } else {
+                    val bounds = android.graphics.BitmapFactory.Options().apply { inJustDecodeBounds = true }
+                    context.contentResolver.openInputStream(uri)?.use { android.graphics.BitmapFactory.decodeStream(it, null, bounds) }
+                    var sample = 1
+                    while (bounds.outWidth / (sample * 2) >= sizePx * 2 && bounds.outHeight / (sample * 2) >= sizePx * 2) sample *= 2
+                    val opts = android.graphics.BitmapFactory.Options().apply { inSampleSize = sample }
+                    context.contentResolver.openInputStream(uri)?.use { android.graphics.BitmapFactory.decodeStream(it, null, opts) }
+                }
+            } catch (_: Exception) {
+                null // permission may be gone
+            }
+            if (bitmap != null) view.post { if (view.tag == uri) view.setImageBitmap(bitmap) }
+        }.start()
     }
 
     fun showSearch(onClose: () -> Unit) {
