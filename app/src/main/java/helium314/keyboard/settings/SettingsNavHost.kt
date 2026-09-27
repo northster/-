@@ -140,6 +140,17 @@ fun SettingsNavHost(
         composable(SettingsDestination.Layouts) {
             SecondaryLayoutScreen(onClickBack = ::goBack)
         }
+        // fork: layout type screen and visual layout editor
+        composable(SettingsDestination.ForkLayoutType + "{type}") {
+            val type = runCatching { helium314.keyboard.latin.utils.LayoutType.valueOf(it.arguments?.getString("type")!!) }.getOrNull()
+            if (type != null) helium314.keyboard.fork.settings.layout.LayoutTypeScreen(type, onClickBack = ::goBack)
+        }
+        composable(SettingsDestination.ForkLayoutEdit + "{type}/{name}") {
+            val type = runCatching { helium314.keyboard.latin.utils.LayoutType.valueOf(it.arguments?.getString("type")!!) }.getOrNull()
+            val name = it.arguments?.getString("name")?.let { n -> android.net.Uri.decode(n) }
+            if (type != null && name != null)
+                helium314.keyboard.fork.settings.layout.LayoutEditorScreen(type, name, onClickBack = ::goBack)
+        }
         composable(SettingsDestination.Colors + "{theme}") {
             ColorsScreen(isNight = false, theme = it.arguments?.getString("theme"), onClickBack = ::goBack)
         }
@@ -175,6 +186,8 @@ object SettingsDestination {
     const val Languages = "languages"
     const val Subtype = "subtype/"
     const val Layouts = "layouts"
+    const val ForkLayoutType = "fork_layout_type/"
+    const val ForkLayoutEdit = "fork_layout_edit/"
     const val Dictionaries = "dictionaries"
     val navTarget = MutableStateFlow(Settings)
 

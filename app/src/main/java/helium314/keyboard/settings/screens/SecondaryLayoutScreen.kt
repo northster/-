@@ -50,21 +50,16 @@ fun createLayoutSettings(context: Context) = LayoutType.entries.filter { it != L
         val b = (ctx.getActivity() as? SettingsActivity)?.prefChanged?.collectAsState()
         if ((b?.value ?: 0) < 0)
             Log.v("irrelevant", "stupid way to trigger recomposition on preference change")
-        var showDialog by rememberSaveable { mutableStateOf(false) }
         val currentLayout = Settings.readDefaultLayoutName(layoutType, prefs)
         val displayName = if (LayoutUtilsCustom.isCustomLayout(currentLayout)) LayoutUtilsCustom.getDisplayName(currentLayout)
             else currentLayout.getStringResourceOrName("layout_", ctx)
+        // fork: a screen per layout type (explanation, previews, visual editor) instead of the picker dialog
         Preference(
             name = setting.title,
             description = displayName,
-            onClick = { showDialog = true }
-        )
-        if (showDialog)
-            LayoutPickerDialog(
-                onDismissRequest = { showDialog = false },
-                setting = setting,
-                layoutType = layoutType
-            )
+            onClick = { helium314.keyboard.settings.SettingsDestination.navigateTo(
+                helium314.keyboard.settings.SettingsDestination.ForkLayoutType + layoutType.name) }
+        ) { helium314.keyboard.latin.utils.NextScreenIcon() }
     }
 }
 
