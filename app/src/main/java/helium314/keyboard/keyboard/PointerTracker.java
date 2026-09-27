@@ -178,6 +178,9 @@ public final class PointerTracker implements PointerTrackerQueue.Element,
 
     // fork: vertical swipe anywhere on the keys expands / collapses the dynamic toolbar
     private final VerticalSwipeDetector mToolbarSwipeDetector = new VerticalSwipeDetector();
+    // fork: sideways fling -> one-handed keyboard
+    private final helium314.keyboard.fork.gesture.HorizontalFlingDetector mOneHandedFlingDetector =
+            new helium314.keyboard.fork.gesture.HorizontalFlingDetector();
     // fork: space was long pressed, moving the finger moves the cursor until the pointer goes up
     private boolean mInSpaceCursorMode = false;
 
@@ -700,6 +703,16 @@ public final class PointerTracker implements PointerTrackerQueue.Element,
         } else {
             mToolbarSwipeDetector.abort();
         }
+        // fork: not from space / delete (their own sideways swipes), not with gesture typing (a fast stroke is a word)
+        if (isOnlyPointer && key != null && mCurrentKey != null && !mIsTrackingForActionDisabled
+                && key.getCode() != Constants.CODE_SPACE && key.getCode() != KeyCode.DELETE
+                && !sGestureEnabler.shouldHandleGesture() && ForkSettings.isOneHandedSwipeEnabled()
+                && mKeyboard != null) {
+            mOneHandedFlingDetector.onDown(x, y, eventTime,
+                    mKeyboard.mOccupiedWidth * helium314.keyboard.fork.gesture.HorizontalFlingDetector.MIN_DISTANCE_FRACTION);
+        } else {
+            mOneHandedFlingDetector.abort();
+        }
         if (!sGestureEnabler.shouldHandleGesture()) {
             return;
         }
@@ -830,6 +843,7 @@ public final class PointerTracker implements PointerTrackerQueue.Element,
         final int trackersSize = sTrackers.size();
         for (int i = 0; i < trackersSize; ++i) {
             sTrackers.get(i).mToolbarSwipeDetector.abort();
+            sTrackers.get(i).mOneHandedFlingDetector.abort();
         }
     }
 
@@ -838,6 +852,13 @@ public final class PointerTracker implements PointerTrackerQueue.Element,
      * on release and let the listener expand / collapse the toolbar.
      */
     private void onToolbarSwipe(final boolean up) {
+        mOneHandedFlingDetector.abort();
+        cancelKeyForForkGesture();
+        sListener.onToolbarSwipe(up);
+    }
+
+    /** fork: a gesture (toolbar swipe, one-handed fling) took the pointer: the key does nothing on release */
+    private void cancelKeyForForkGesture() {
         sTimerProxy.cancelKeyTimersOf(this); // long press, key repeat
         final Key key = mCurrentKey;
         boolean finishSliding = mIsInSlidingKeyInput; // finger slid from a modifier onto other keys
@@ -861,7 +882,6 @@ public final class PointerTracker implements PointerTrackerQueue.Element,
         }
         mCurrentKey = null;
         cancelTrackingForAction(); // nothing will be input on up
-        sListener.onToolbarSwipe(up);
     }
 
     /** fork: long press on space -> move cursor by dragging, until the finger goes up */
@@ -892,6 +912,22 @@ public final class PointerTracker implements PointerTrackerQueue.Element,
         // fork: toolbar swipe detection has priority over everything else except already running gestures.
         // It runs even if key tracking was disabled (e.g. finger slid onto the next key row before the
         // swipe was recognized), the key input is cancelled anyway in that case.
+        if (mOneHandedFlingDetector.isTracking()) {
+            if (isShowingPopupKeysPanel() || mInSpaceCursorMode || mInVerticalSwipe || sInGesture
+                    || mCurrentRepeatingKeyCode != Constants.NOT_A_CODE) {
+                mOneHandedFlingDetector.abort();
+            } else {
+                final helium314.keyboard.fork.gesture.HorizontalFlingDetector.Result fling =
+                        mOneHandedFlingDetector.onMove(x, y, eventTime);
+                if (fling == helium314.keyboard.fork.gesture.HorizontalFlingDetector.Result.LEFT
+                        || fling == helium314.keyboard.fork.gesture.HorizontalFlingDetector.Result.RIGHT) {
+                    mToolbarSwipeDetector.abort();
+                    cancelKeyForForkGesture();
+                    sListener.onOneHandedSwipe(fling == helium314.keyboard.fork.gesture.HorizontalFlingDetector.Result.LEFT);
+                    return;
+                }
+            }
+        }
         if (mToolbarSwipeDetector.isTracking()) {
             if (isShowingPopupKeysPanel() || mInSpaceCursorMode || mInHorizontalSwipe || mInVerticalSwipe
                     || mCurrentRepeatingKeyCode != Constants.NOT_A_CODE || sInGesture) {

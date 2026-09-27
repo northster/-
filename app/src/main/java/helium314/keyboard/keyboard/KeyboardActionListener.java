@@ -127,6 +127,9 @@ public interface KeyboardActionListener {
 
     /** fork: vertical swipe on the key area, up = expand toolbar, down = collapse */
     void onToolbarSwipe(boolean up);
+
+    /** fork: sideways fling over the keys: one-handed keyboard to that side, or back to full width */
+    void onOneHandedSwipe(boolean toLeft);
     /** fork: finger moved while in space long press cursor mode. @return true if the steps were consumed */
     boolean onSpaceCursorMove(int steps);
 
@@ -200,6 +203,8 @@ public interface KeyboardActionListener {
         public void resetMetaState() {}
         @Override
         public void onToolbarSwipe(boolean up) {}
+        @Override
+        public void onOneHandedSwipe(boolean toLeft) {}
         @Override
         public boolean onSpaceCursorMoveVertically(int steps) {
             return false;

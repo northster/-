@@ -248,6 +248,11 @@ object ForkSettings {
     @JvmStatic
     fun isToolbarSwipeEnabled() = initialized && cachedSwipeEnabled
 
+    /** sideways fling over the keys switches the one-handed keyboard */
+    const val PREF_ONE_HANDED_SWIPE = "fork_one_handed_swipe"
+    @JvmStatic
+    fun isOneHandedSwipeEnabled() = initialized && appPrefs.getBoolean(PREF_ONE_HANDED_SWIPE, true)
+
     /** Thresholds in px. [density] should be the one of the display the keyboard is shown on. */
     @JvmStatic
     fun swipeThresholds(density: Float): SwipeThresholds {

@@ -4,15 +4,12 @@ package helium314.keyboard.fork.translate
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
-import android.graphics.drawable.GradientDrawable
 import android.text.TextUtils
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
-import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.LinearLayout
-import android.widget.ScrollView
 import android.widget.TextView
 import androidx.core.content.edit
 import helium314.keyboard.keyboard.KeyboardTypeface
@@ -21,9 +18,10 @@ import helium314.keyboard.latin.common.ColorType
 import helium314.keyboard.latin.settings.Settings
 
 /**
- * fork: AI translation with the whole keyboard area: target language, style and purpose as chips, then whether the
- * translation replaces the text or goes under it. Covers the letters (same size) until it is closed.
- * The last choices are kept; languages are listed most used first.
+ * fork: AI translation with the whole keyboard area. Language, style and purpose are three wheels side by side, like
+ * the alarm clock's time picker; the text to translate is shown above them. The toolbar above has the way back and
+ * the translate button ([translate]). The translation replaces the text; text that already is in the chosen
+ * language only gets its grammar and style fixed. The last choices are kept, languages are listed most used first.
  */
 @SuppressLint("ViewConstructor")
 class TranslatePanel(
@@ -32,33 +30,50 @@ class TranslatePanel(
     private val prefs: SharedPreferences,
     /** the text that will be translated, shown at the top */
     private val preview: String,
-    private val onTranslate: (prompt: String, label: String, keepOriginal: Boolean) -> Unit,
-    private val onClose: () -> Unit,
+    private val onTranslate: (prompt: String, label: String) -> Unit,
 ) : FrameLayout(context) {
     private val density = resources.displayMetrics.density
     private val palette = Settings.getValues().mColors
 
-    /** label on the chip to the name the model gets */
+    /** label on the wheel to what the model gets */
     class Option(val label: String, val prompt: String)
 
     private val languages = LANGUAGES.sortedByDescending { prefs.getInt(PREF_USE + it.label, 0) }
     private var language = languages.firstOrNull { it.label == prefs.getString(PREF_LANGUAGE, null) } ?: languages.first()
     private var style = STYLES.firstOrNull { it.label == prefs.getString(PREF_STYLE, null) } ?: STYLES.first()
     private var purpose = PURPOSES.firstOrNull { it.label == prefs.getString(PREF_PURPOSE, null) } ?: PURPOSES.first()
-    private var keepOriginal = prefs.getBoolean(PREF_KEEP, false)
-
-    private val content = LinearLayout(context).apply {
-        orientation = LinearLayout.VERTICAL
-        setPadding(dp(12), dp(6), dp(12), dp(10))
-    }
 
     init {
         setBackgroundColor(palette.get(ColorType.MAIN_BACKGROUND))
         isClickable = true // touches stay here, the keys below don't get them
-        val scroll = ScrollView(context).apply { isVerticalScrollBarEnabled = false }
-        scroll.addView(content, LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT))
-        addView(scroll, LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT))
-        build()
+        val content = LinearLayout(context).apply {
+            orientation = LinearLayout.VERTICAL
+            setPadding(dp(14), dp(8), dp(14), dp(6))
+        }
+        // what is translated
+        content.addView(label(context.getString(R.string.fork_translate_source), 12f, ColorType.KEY_HINT_TEXT))
+        content.addView(label(preview.ifBlank { context.getString(R.string.fork_translate_empty) }, 14f,
+            if (preview.isBlank()) ColorType.KEY_HINT_TEXT else ColorType.KEY_TEXT).apply {
+            maxLines = 2
+            ellipsize = TextUtils.TruncateAt.END
+            setPadding(0, dp(2), 0, dp(6))
+        })
+        // the three wheels
+        val wheels = LinearLayout(context).apply { orientation = LinearLayout.HORIZONTAL }
+        fun column(title: Int, options: List<Option>, selected: Option, weight: Float, onPick: (Option) -> Unit) {
+            val col = LinearLayout(context).apply { orientation = LinearLayout.VERTICAL }
+            col.addView(label(context.getString(title), 12f, ColorType.KEY_HINT_TEXT).apply { gravity = Gravity.CENTER },
+                LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT))
+            col.addView(WheelPicker(context, options.map { it.label }, options.indexOf(selected).coerceAtLeast(0)) {
+                onPick(options[it])
+            }, LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 1f))
+            wheels.addView(col, LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, weight))
+        }
+        column(R.string.fork_translate_language, languages, language, 1.3f) { language = it }
+        column(R.string.fork_translate_style, STYLES, style, 1f) { style = it }
+        column(R.string.fork_translate_purpose, PURPOSES, purpose, 1f) { purpose = it }
+        content.addView(wheels, LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 1f))
+        addView(content, LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT))
     }
 
     /** as large as the keyboard view: MATCH_PARENT in the wrap_content keyboard frame would take the whole screen */
@@ -68,62 +83,23 @@ class TranslatePanel(
         super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY))
     }
 
-    private fun build() {
-        content.removeAllViews()
-        // header: close, title, translate
-        val header = LinearLayout(context).apply {
-            orientation = LinearLayout.HORIZONTAL
-            gravity = Gravity.CENTER_VERTICAL
-        }
-        header.addView(chip("‹", false) { onClose() }, LinearLayout.LayoutParams(dp(40), dp(34)))
-        header.addView(label(context.getString(R.string.fork_translate_title), 16f, ColorType.KEY_TEXT).apply {
-            setPadding(dp(10), 0, 0, 0)
-        }, LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f))
-        header.addView(chip(context.getString(R.string.fork_translate_go), true) { translate() },
-            LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, dp(34)))
-        content.addView(header)
-        // what is translated
-        content.addView(label(preview.ifBlank { context.getString(R.string.fork_translate_empty) }, 13f, ColorType.KEY_HINT_TEXT).apply {
-            maxLines = 2
-            ellipsize = TextUtils.TruncateAt.START
-            setPadding(dp(2), dp(6), dp(2), 0)
-        })
-        section(R.string.fork_translate_language, languages, language) { language = it }
-        section(R.string.fork_translate_style, STYLES, style) { style = it }
-        section(R.string.fork_translate_purpose, PURPOSES, purpose) { purpose = it }
-        val results = listOf(Option(context.getString(R.string.fork_translate_replace), ""),
-            Option(context.getString(R.string.fork_translate_keep), "keep"))
-        section(R.string.fork_translate_result, results, results[if (keepOriginal) 1 else 0]) { keepOriginal = it.prompt == "keep" }
-    }
-
-    private fun section(title: Int, options: List<Option>, selected: Option, onPick: (Option) -> Unit) {
-        content.addView(label(context.getString(title), 12f, ColorType.KEY_HINT_TEXT).apply {
-            setPadding(dp(2), dp(10), 0, dp(4))
-        })
-        val flow = FlowLayout(context, dp(6))
-        for (option in options) {
-            flow.addView(chip(option.label, option === selected) { onPick(option); build() },
-                ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, dp(32)))
-        }
-        content.addView(flow, LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT))
-    }
-
-    private fun translate() {
+    /** the translate button in the toolbar */
+    fun translate() {
         prefs.edit {
             putString(PREF_LANGUAGE, language.label)
             putString(PREF_STYLE, style.label)
             putString(PREF_PURPOSE, purpose.label)
-            putBoolean(PREF_KEEP, keepOriginal)
             putInt(PREF_USE + language.label, prefs.getInt(PREF_USE + language.label, 0) + 1)
         }
         val prompt = buildString {
-            append("Translate the text to ${language.prompt}.")
+            append("If the text is not in ${language.prompt}, translate it to ${language.prompt}. ")
+            append("If it already is in ${language.prompt}, do not translate it: only correct its grammar, spelling ")
+            append("and punctuation, and apply the style below.")
             if (style.prompt.isNotEmpty()) append(' ').append(style.prompt)
             if (purpose.prompt.isNotEmpty()) append(' ').append(purpose.prompt)
-            append(" Keep the meaning, line breaks, names and numbers. If the text is already in ${language.prompt}, ")
-            append("rewrite it in the requested style instead. Output only the translation.")
+            append(" Keep the meaning, line breaks, names and numbers. Output only the resulting text.")
         }
-        onTranslate(prompt, "→ ${language.label}", keepOriginal)
+        onTranslate(prompt, "→ ${language.label}")
     }
 
     private fun label(text: String, sp: Float, color: ColorType) = TextView(context).apply {
@@ -133,69 +109,12 @@ class TranslatePanel(
         KeyboardTypeface.applyToTextView(this)
     }
 
-    private fun chip(text: String, selected: Boolean, onClick: () -> Unit) = TextView(context).apply {
-        this.text = text
-        setSingleLine()
-        gravity = Gravity.CENTER
-        setTextSize(TypedValue.COMPLEX_UNIT_SP, 14f)
-        KeyboardTypeface.applyToTextView(this)
-        setTextColor(palette.get(if (selected) ColorType.ACTION_KEY_ICON else ColorType.KEY_TEXT))
-        setPadding(dp(14), 0, dp(14), 0)
-        background = GradientDrawable().apply {
-            cornerRadius = dp(16).toFloat()
-            setColor(palette.get(if (selected) ColorType.ACTION_KEY_BACKGROUND else ColorType.KEY_BACKGROUND))
-        }
-        setOnClickListener { onClick() }
-    }
-
     private fun dp(v: Int) = (v * density).toInt()
-
-    /** children in rows, wrapping to the next row when full */
-    private class FlowLayout(context: Context, private val gap: Int) : ViewGroup(context) {
-        override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-            val width = MeasureSpec.getSize(widthMeasureSpec)
-            var x = 0
-            var y = 0
-            var rowHeight = 0
-            for (i in 0 until childCount) {
-                val child = getChildAt(i)
-                child.measure(MeasureSpec.makeMeasureSpec(width, MeasureSpec.AT_MOST),
-                    MeasureSpec.makeMeasureSpec(child.layoutParams.height, MeasureSpec.EXACTLY))
-                if (x > 0 && x + child.measuredWidth > width) {
-                    x = 0
-                    y += rowHeight + gap
-                    rowHeight = 0
-                }
-                x += child.measuredWidth + gap
-                rowHeight = maxOf(rowHeight, child.measuredHeight)
-            }
-            setMeasuredDimension(width, y + rowHeight)
-        }
-
-        override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
-            val width = r - l
-            var x = 0
-            var y = 0
-            var rowHeight = 0
-            for (i in 0 until childCount) {
-                val child = getChildAt(i)
-                if (x > 0 && x + child.measuredWidth > width) {
-                    x = 0
-                    y += rowHeight + gap
-                    rowHeight = 0
-                }
-                child.layout(x, y, x + child.measuredWidth, y + child.measuredHeight)
-                x += child.measuredWidth + gap
-                rowHeight = maxOf(rowHeight, child.measuredHeight)
-            }
-        }
-    }
 
     companion object {
         const val PREF_LANGUAGE = "fork_translate_language"
         const val PREF_STYLE = "fork_translate_style"
         const val PREF_PURPOSE = "fork_translate_purpose"
-        const val PREF_KEEP = "fork_translate_keep"
         private const val PREF_USE = "fork_translate_usage_"
 
         val LANGUAGES = listOf(

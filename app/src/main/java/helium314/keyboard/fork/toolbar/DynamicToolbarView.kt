@@ -256,26 +256,18 @@ class DynamicToolbarView @JvmOverloads constructor(
         chips.removeAllViews()
         chipBar.addView(iconButton(R.drawable.ic_dot_close, context.getString(android.R.string.cancel)) { onCancel() },
             LinearLayout.LayoutParams((48 * density).toInt(), LayoutParams.MATCH_PARENT))
+        // centered in the toolbar (the border glows while it runs)
         val status = TextView(context).apply {
             text = label
             setSingleLine()
+            ellipsize = TextUtils.TruncateAt.END
             setTextSize(TypedValue.COMPLEX_UNIT_SP, 14f)
             KeyboardTypeface.applyToTextView(this)
             setTextColor(Settings.getValues().mColors.get(ColorType.KEY_TEXT))
-            gravity = Gravity.CENTER_VERTICAL
+            gravity = Gravity.CENTER
         }
         chipBar.addView(status, LinearLayout.LayoutParams(0, LayoutParams.MATCH_PARENT, 1f))
-        // dot matrix style "working" dots
-        var dots = 0
-        val tick = object : Runnable {
-            override fun run() {
-                if (status.parent == null) return
-                dots = (dots + 1) % 4
-                status.text = label + "  " + "●".repeat(dots) + "○".repeat(3 - dots)
-                status.postDelayed(this, 300)
-            }
-        }
-        status.post(tick)
+        chipBar.addView(View(context), LinearLayout.LayoutParams((48 * density).toInt(), LayoutParams.MATCH_PARENT))
         if (header.visibility != VISIBLE && searchBar.visibility != VISIBLE) {
             row.visibility = GONE
             chipBar.visibility = VISIBLE
@@ -562,7 +554,9 @@ class DynamicToolbarView @JvmOverloads constructor(
         else colors.setColor(button, ColorType.TOOL_BAR_KEY)
     }
 
-    fun showToolHeader(title: String, actions: List<Pair<android.graphics.drawable.Drawable?, String>>, onBack: () -> Unit, onAction: (Int) -> Unit) {
+    /** [button]: a text button at the right end, in the enter key's colors (translation: translate) */
+    fun showToolHeader(title: String, actions: List<Pair<android.graphics.drawable.Drawable?, String>>, onBack: () -> Unit,
+                       onAction: (Int) -> Unit, button: Pair<String, () -> Unit>? = null) {
         val colors = Settings.getValues().mColors
         header.removeAllViews()
         val size = LinearLayout.LayoutParams((48 * density).toInt(), LayoutParams.MATCH_PARENT)
@@ -586,6 +580,22 @@ class DynamicToolbarView @JvmOverloads constructor(
             headerActions.add(button)
             header.addView(button, LinearLayout.LayoutParams((44 * density).toInt(), LayoutParams.MATCH_PARENT))
         }
+        if (button != null) header.addView(TextView(context).apply {
+            text = button.first
+            setSingleLine()
+            gravity = Gravity.CENTER
+            setTextSize(TypedValue.COMPLEX_UNIT_SP, 14f)
+            KeyboardTypeface.applyToTextView(this)
+            setTextColor(colors.get(ColorType.ACTION_KEY_ICON))
+            setPadding((16 * density).toInt(), 0, (16 * density).toInt(), 0)
+            background = GradientDrawable().apply {
+                cornerRadius = 16 * density
+                setColor(colors.get(ColorType.ACTION_KEY_BACKGROUND))
+            }
+            setOnClickListener { button.second() }
+        }, LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, (32 * density).toInt()).apply {
+            marginEnd = (8 * density).toInt()
+        })
         row.visibility = GONE
         searchBar.visibility = GONE
         chipBar.visibility = GONE

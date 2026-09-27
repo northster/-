@@ -74,11 +74,16 @@ class DynamicToolbarController(private val context: Context) {
     private var slateAutoOpened = false
     private val slate by lazy {
         latinIME?.let { ime -> helium314.keyboard.fork.slate.SlateRunner(ime, object : helium314.keyboard.fork.slate.SlateRunner.Ui {
-            override fun showProgress(label: String, onCancel: () -> Unit) =
+            override fun showProgress(label: String, onCancel: () -> Unit) {
+                aiGlow?.show(true)
                 showSlate { it.showSlateProgress(context.getString(R.string.fork_slate_running, label), onCancel) }
-            override fun showResult(label: String, result: String, onInsert: () -> Unit, onDismiss: () -> Unit) =
+            }
+            override fun showResult(label: String, result: String, onInsert: () -> Unit, onDismiss: () -> Unit) {
+                aiGlow?.show(false)
                 showSlate { it.showSmartHit(label, result, onUse = onInsert, onBack = onDismiss) }
+            }
             override fun hide() {
+                aiGlow?.show(false)
                 slateView = null
                 if (slateAutoOpened) {
                     slateAutoOpened = false
@@ -98,6 +103,17 @@ class DynamicToolbarController(private val context: Context) {
         }
         applyChipState()
     }
+    /** pastel border glow while an AI command runs */
+    private var aiGlow: AiGlow? = null
+
+    /** the keyboard with the toolbar (when shown), in input view coordinates */
+    private fun keyboardBounds(): android.graphics.RectF? {
+        val frame = keyboardFrame ?: return null
+        val tb = toolbar
+        val top = if (tb != null && tb.visibility == View.VISIBLE && isExpanded) minOf(tb.y, frame.y) else frame.y
+        return android.graphics.RectF(frame.x, top, frame.x + frame.width, frame.y + frame.height)
+    }
+
     /** dot glow behind the keys while a chip waits behind the collapsed toolbar */
     private var hintAnimator: ValueAnimator? = null
     /** white dot wave over the keyboard (and the toolbar) when the toolbar opens / closes */
@@ -138,6 +154,8 @@ class DynamicToolbarController(private val context: Context) {
         keyboardFrame?.removeOnLayoutChangeListener(frameLayoutListener)
         animator?.cancel()
         inputView = newInputView
+        aiGlow?.show(false)
+        aiGlow = AiGlow(newInputView, ::keyboardBounds)
         toolbar = newInputView.findViewById(R.id.dynamic_toolbar)
         setHint(false, immediate = true)
         stopWave()
@@ -930,34 +948,50 @@ class DynamicToolbarController(private val context: Context) {
 
     // ---------------------------------------------------------------- AI translation panel
 
-    private var translatePanel: View? = null
+    private var translatePanel: helium314.keyboard.fork.translate.TranslatePanel? = null
 
-    /** the translation panel over the letters (same size), until it is closed or a translation is started */
+    /**
+     * The translation panel over the letters (same size) and a header in the toolbar: back to the keyboard | AI
+     * translation, translate button on the right. Translates the paragraph before the cursor.
+     */
     private fun showTranslatePanel() {
         val ime = latinIME ?: return
+        val tb = toolbar ?: return
         if (translatePanel != null) return closeTranslatePanel()
         // letters instead of the clipboard / emoji panel
         if (KeyboardSwitcher.getInstance().isShowingClipboardHistory || KeyboardSwitcher.getInstance().isShowingEmojiPalettes)
             ime.mKeyboardActionListener.onCodeInput(KeyCode.ALPHA, Constants.NOT_A_COORDINATE, Constants.NOT_A_COORDINATE, false)
         val kv = KeyboardSwitcher.getInstance().mainKeyboardView ?: return
         val parent = kv.parent as? android.widget.FrameLayout ?: return
-        val text = ime.forkTextBeforeCursor(helium314.keyboard.fork.slate.SlateRunner.MAX_TEXT)?.toString().orEmpty()
-        val panel = helium314.keyboard.fork.translate.TranslatePanel(context, kv, context.prefs(), text.takeLast(200).trim(),
-            onTranslate = { prompt, label, keep ->
-                closeTranslatePanel()
-                slate?.runOnText(helium314.keyboard.fork.slate.SlateCommand(label, prompt, appendResult = keep))
-            },
-            onClose = { closeTranslatePanel() })
+        val paragraph = translateTarget()
+        val panel = helium314.keyboard.fork.translate.TranslatePanel(context, kv, context.prefs(), paragraph.trim()) { prompt, label ->
+            closeTranslatePanel()
+            val target = translateTarget()
+            if (target.isBlank()) {
+                KeyboardSwitcher.getInstance().showToast(context.getString(R.string.fork_translate_empty), true)
+                return@TranslatePanel
+            }
+            slate?.runOnTail(helium314.keyboard.fork.slate.SlateCommand(label, prompt), target)
+        }
         parent.addView(panel, android.widget.FrameLayout.LayoutParams(
             android.widget.FrameLayout.LayoutParams.MATCH_PARENT, android.widget.FrameLayout.LayoutParams.MATCH_PARENT))
         translatePanel = panel
         if (!isExpanded) setExpanded(true, true)
+        tb.showToolHeader(context.getString(R.string.fork_translate_title), emptyList(), onBack = { closeTranslatePanel() },
+            onAction = { }, button = context.getString(R.string.fork_translate_go) to { panel.translate() })
+    }
+
+    /** the paragraph before the cursor (after the last line break), what the translation works on */
+    private fun translateTarget(): String {
+        val text = latinIME?.forkTextBeforeCursor(helium314.keyboard.fork.slate.SlateRunner.MAX_TEXT)?.toString().orEmpty()
+        return text.substring(text.lastIndexOf('\n') + 1)
     }
 
     private fun closeTranslatePanel() {
         val panel = translatePanel ?: return
         translatePanel = null
         (panel.parent as? android.view.ViewGroup)?.removeView(panel)
+        if (!toolActive) toolbar?.hideToolHeader()
     }
 
     /** the search bar is a GIF search (same query typing as the clipboard search) */

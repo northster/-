@@ -59,6 +59,12 @@ class SlateRunner(private val ime: LatinIME, private val ui: Ui) {
         execute(command, text, text)
     }
 
+    /** run [command] on the last [tail] characters before the cursor only (translation: the current paragraph) */
+    fun runOnTail(command: SlateCommand, tail: String) {
+        if (busy) return
+        execute(command, tail, tail)
+    }
+
     private fun execute(command: SlateCommand, text: String, preceding: String) {
         SlateCommands.countUse(prefs, command.trigger)
         val name = command.trigger.removePrefix(SlateCommands.prefix(prefs))
@@ -126,7 +132,8 @@ class SlateRunner(private val ime: LatinIME, private val ui: Ui) {
             }
             is GeminiClient.Outcome.Success -> {
                 val now = ime.forkTextBeforeCursor(MAX_TEXT)?.toString()
-                if (now == preceding) {
+                // the text the command ran on is still right before the cursor (for a paragraph: the end of it)
+                if (now != null && now.endsWith(preceding)) {
                     // nothing was typed meanwhile: the answer takes the text's place
                     ui.hide()
                     lastOriginal = preceding

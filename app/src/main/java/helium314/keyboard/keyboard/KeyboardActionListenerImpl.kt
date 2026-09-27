@@ -284,6 +284,11 @@ class KeyboardActionListenerImpl(private val latinIME: LatinIME, private val inp
         metaState = 0
     }
 
+    override fun onOneHandedSwipe(toLeft: Boolean) {
+        performHapticFeedback(HapticEvent.GESTURE_MOVE)
+        keyboardSwitcher.forkOneHandedSwipe(toLeft)
+    }
+
     override fun onToolbarSwipe(up: Boolean) {
         performHapticFeedback(HapticEvent.GESTURE_MOVE)
         latinIME.dynamicToolbar.onSwipe(up)

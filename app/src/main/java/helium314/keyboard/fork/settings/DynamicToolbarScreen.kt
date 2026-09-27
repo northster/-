@@ -44,6 +44,7 @@ fun DynamicToolbarScreen(
             ForkSettings.PREF_SWIPE_MAX_ANGLE,
             ForkSettings.PREF_SWIPE_HORIZONTAL_REJECT_DP,
             ForkSettings.PREF_SWIPE_MAX_DURATION,
+            ForkSettings.PREF_ONE_HANDED_SWIPE,
             R.string.fork_cat_animation,
             ForkSettings.PREF_TOOLBAR_ANIM_DURATION,
             ForkSettings.PREF_TOOLBAR_SMOOTH_RESIZE,
@@ -135,6 +136,9 @@ fun createDynamicToolbarSettings(context: Context) = listOf(
             description = { stringResource(R.string.abbreviation_unit_milliseconds, it.toString()) },
             stepSize = 25,
         )
+    },
+    Setting(context, ForkSettings.PREF_ONE_HANDED_SWIPE, R.string.fork_one_handed_swipe, R.string.fork_one_handed_swipe_summary) {
+        SwitchPreference(it, true)
     },
     Setting(context, ForkSettings.PREF_TOOLBAR_ANIM_DURATION, R.string.fork_toolbar_anim_duration) { def ->
         SliderPreference(
@@ -236,10 +240,6 @@ fun createDynamicToolbarSettings(context: Context) = listOf(
     Setting(context, helium314.keyboard.fork.translate.TranslatePanel.PREF_PURPOSE, R.string.fork_translate_purpose) {
         TranslateChoice(it, helium314.keyboard.fork.translate.TranslatePanel.PURPOSES)
     },
-    Setting(context, helium314.keyboard.fork.translate.TranslatePanel.PREF_KEEP, R.string.fork_translate_keep,
-        R.string.fork_translate_keep_summary) {
-        SwitchPreference(it, false)
-    },
     Setting(context, helium314.keyboard.fork.gif.GifClient.PREF_KLIPY_KEY, R.string.fork_gif_klipy_key) {
         GifKeyPreference(it.title, it.key, "partner.klipy.com")
     },
@@ -328,7 +328,6 @@ fun TranslateScreen(onClickBack: () -> Unit) {
         helium314.keyboard.fork.translate.TranslatePanel.PREF_LANGUAGE,
         helium314.keyboard.fork.translate.TranslatePanel.PREF_STYLE,
         helium314.keyboard.fork.translate.TranslatePanel.PREF_PURPOSE,
-        helium314.keyboard.fork.translate.TranslatePanel.PREF_KEEP,
     )
     SearchSettingsScreen(onClickBack = onClickBack, title = stringResource(R.string.fork_screen_translate), settings = items) {
         androidx.compose.foundation.layout.Column(androidx.compose.ui.Modifier.verticalScroll(androidx.compose.foundation.rememberScrollState())) {

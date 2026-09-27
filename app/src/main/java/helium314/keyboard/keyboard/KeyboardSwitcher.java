@@ -344,6 +344,21 @@ public final class KeyboardSwitcher {
         mState.onUpdateShiftState(autoCapsFlags, recapitalizeMode);
     }
 
+    /**
+     * fork: sideways fling over the keys. Full width: one-handed on the side it went to. One-handed: towards the other
+     * side goes back to full width.
+     */
+    public void forkOneHandedSwipe(final boolean toLeft) {
+        final int wanted = toLeft ? android.view.Gravity.LEFT : android.view.Gravity.RIGHT;
+        if (!mKeyboardViewWrapper.getOneHandedModeEnabled()) {
+            Settings.getInstance().writeOneHandedModeGravity(wanted);
+            setOneHandedModeEnabled(true, false);
+            mKeyboardViewWrapper.setOneHandedGravity(wanted);
+        } else if (mKeyboardViewWrapper.getOneHandedGravity() != wanted) {
+            setOneHandedModeEnabled(false, false);
+        }
+    }
+
     public void setOneHandedModeEnabled(boolean enabled, boolean force) {
         if (!force && mKeyboardViewWrapper.getOneHandedModeEnabled() == enabled) {
             return;

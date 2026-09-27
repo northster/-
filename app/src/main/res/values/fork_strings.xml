@@ -391,4 +391,7 @@
     <string name="fork_clip_select_all">Select all</string>
     <string name="fork_clip_select_none">Select none</string>
     <string name="fork_clip_delete_count">Delete (%1$d)</string>
+    <string name="fork_translate_source">Translates the paragraph before the cursor</string>
+    <string name="fork_one_handed_swipe">Swipe sideways for one-handed mode</string>
+    <string name="fork_one_handed_swipe_summary">A quick, long swipe left or right over the keys moves the keyboard to that side; the other way makes it full width again</string>
 </resources>
