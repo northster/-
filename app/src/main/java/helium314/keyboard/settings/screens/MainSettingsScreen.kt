@@ -65,6 +65,7 @@ fun MainSettingsScreen(
     onClickDynamicToolbar: () -> Unit,
     onClickClipboard: () -> Unit,
     onClickSmartChips: () -> Unit,
+    onClickSlate: () -> Unit,
     onClickGestureTyping: () -> Unit,
     onClickDataGathering: () -> Unit,
     onClickAdvanced: () -> Unit,
@@ -146,6 +147,8 @@ fun MainSettingsScreen(
                     R.drawable.ic_dot_clipboard, onClickClipboard),
                 entry(R.string.fork_screen_smart_chips, stringResource(R.string.fork_desc_smart_chips),
                     R.drawable.ic_dot_sparkles, onClickSmartChips),
+                entry(R.string.fork_screen_slate, stringResource(R.string.fork_desc_slate),
+                    R.drawable.ic_dot_translate, onClickSlate),
             ))
             SettingsSection(stringResource(R.string.fork_main_more), listOf(
                 entry(R.string.settings_screen_advanced, stringResource(R.string.fork_desc_advanced),
@@ -180,7 +183,7 @@ private fun PreviewScreen() {
     initPreview(LocalContext.current)
     Theme(previewDark) {
         Surface {
-            MainSettingsScreen({}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {})
+            MainSettingsScreen({}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {})
         }
     }
 }

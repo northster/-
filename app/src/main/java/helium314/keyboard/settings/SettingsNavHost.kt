@@ -76,6 +76,7 @@ fun SettingsNavHost(
                 onClickDynamicToolbar = { navController.navigate(SettingsDestination.DynamicToolbar) },
                 onClickClipboard = { navController.navigate(SettingsDestination.ForkClipboard) },
                 onClickSmartChips = { navController.navigate(SettingsDestination.ForkSmartChips) },
+                onClickSlate = { navController.navigate(SettingsDestination.ForkSlate) },
                 onClickGestureTyping = { navController.navigate(SettingsDestination.GestureTyping) },
                 onClickDataGathering = { navController.navigate(SettingsDestination.DataGathering) },
                 onClickAdvanced = { navController.navigate(SettingsDestination.Advanced) },
@@ -107,6 +108,9 @@ fun SettingsNavHost(
         }
         composable(SettingsDestination.ForkClipboard) {
             helium314.keyboard.fork.settings.ClipboardScreen(onClickBack = ::goBack)
+        }
+        composable(SettingsDestination.ForkSlate) {
+            helium314.keyboard.fork.settings.SlateScreen(onClickBack = ::goBack)
         }
         composable(SettingsDestination.ForkSmartChips) {
             helium314.keyboard.fork.settings.SmartChipsScreen(onClickBack = ::goBack)
@@ -188,6 +192,7 @@ object SettingsDestination {
     const val ForkClipboard = "fork_clipboard"
     const val ForkLanguageAdd = "fork_language_add"
     const val ForkSmartChips = "fork_smart_chips"
+    const val ForkSlate = "fork_slate"
     const val DataGathering = "data_gathering" // remove when data gathering phase is done (end of 2026 latest)
     const val DataReview = "data_review" // remove when data gathering phase is done (end of 2026 latest)
     const val Advanced = "advanced"

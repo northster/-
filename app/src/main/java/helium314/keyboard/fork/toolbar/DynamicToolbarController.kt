@@ -69,6 +69,35 @@ class DynamicToolbarController(private val context: Context) {
     private var typedAutoOpened = false
     /** the user closed the toolbar while a typed chip was shown: don't open it again until the chip is gone */
     private var typedSuppressed = false
+    /** SwiftSlate style commands; what it shows on the toolbar while it runs, null when idle */
+    private var slateView: ((DynamicToolbarView) -> Unit)? = null
+    private var slateAutoOpened = false
+    private val slate by lazy {
+        latinIME?.let { ime -> helium314.keyboard.fork.slate.SlateRunner(ime, object : helium314.keyboard.fork.slate.SlateRunner.Ui {
+            override fun showProgress(label: String, onCancel: () -> Unit) =
+                showSlate { it.showSlateProgress(context.getString(R.string.fork_slate_running, label), onCancel) }
+            override fun showResult(label: String, result: String, onInsert: () -> Unit, onDismiss: () -> Unit) =
+                showSlate { it.showSmartHit(label, result, onUse = onInsert, onBack = onDismiss) }
+            override fun hide() {
+                slateView = null
+                if (slateAutoOpened) {
+                    slateAutoOpened = false
+                    closingForTyped = true
+                    setExpanded(false, true)
+                    closingForTyped = false
+                } else applyChipState()
+            }
+        }) }
+    }
+
+    private fun showSlate(view: (DynamicToolbarView) -> Unit) {
+        slateView = view
+        if (!isExpanded && isUsable()) {
+            setExpanded(true, true) // no wave, that is for swipes
+            slateAutoOpened = true
+        }
+        applyChipState()
+    }
     /** dot glow behind the keys while a chip waits behind the collapsed toolbar */
     private var hintAnimator: ValueAnimator? = null
     /** white dot wave over the keyboard (and the toolbar) when the toolbar opens / closes */
@@ -153,6 +182,7 @@ class DynamicToolbarController(private val context: Context) {
         if (!expanded && toolbar?.isChipBarShown == true) dismissChip()
         if (!expanded) {
             autoOpened = false
+            slateAutoOpened = false
             // closed by the user while a typed chip shows: it stays closed until the chip is gone
             if (typedHit != null && !closingForTyped) typedSuppressed = true
             typedAutoOpened = false
@@ -461,7 +491,10 @@ class DynamicToolbarController(private val context: Context) {
         val c = chip
         val busy = toolActive || clipSearch.isActive
         val hit = typedHit
-        if (hit != null && isExpanded && !busy) {
+        val slateUi = slateView
+        if (slateUi != null && isExpanded && !busy) {
+            slateUi(tb)
+        } else if (hit != null && isExpanded && !busy) {
             tb.showSmartHit(hit.query, hit.result,
                 onUse = { useTypedHit(hit) },
                 onBack = { typedSuppressed = true; typedHit = null; closeTyped() })
@@ -500,6 +533,8 @@ class DynamicToolbarController(private val context: Context) {
 
     private fun checkTypedText() {
         val ime = latinIME ?: return
+        // a typed command ("...text ?fix") comes first
+        if (!toolActive && !clipSearch.isActive && slate?.onTextChanged() == true) return
         val text = ime.forkTextBeforeCursor(helium314.keyboard.fork.smart.SmartSuggest.LOOKBEHIND)?.toString().orEmpty()
         val smartContext = helium314.keyboard.fork.smart.SmartPrefs.context(context)
         val hit = if (!helium314.keyboard.fork.smart.SmartPrefs.enabled(context) || toolActive || clipSearch.isActive) null
@@ -786,6 +821,15 @@ class DynamicToolbarController(private val context: Context) {
                     helium314.keyboard.latin.common.Constants.NOT_A_COORDINATE,
                     helium314.keyboard.latin.common.Constants.NOT_A_COORDINATE, false
                 )
+                return
+            }
+            // AI commands as chips, run on the text before the cursor
+            ToolbarItems.AI -> {
+                val commands = helium314.keyboard.fork.slate.SlateCommands.custom(context.prefs())
+                toolbar?.showCommandChips(commands.map { it.trigger }, onPick = { i ->
+                    toolbar?.hideChipBar()
+                    slate?.runOnText(commands[i])
+                }, onBack = { toolbar?.hideChipBar(); applyChipState() })
                 return
             }
             // the app's own undo / redo (Ctrl+Z / Ctrl+Shift+Z)

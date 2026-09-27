@@ -250,6 +250,55 @@ class DynamicToolbarView @JvmOverloads constructor(
         }
     }
 
+    /** an AI command is running: its trigger and a pulsing "…", the back button cancels it */
+    fun showSlateProgress(label: String, onCancel: () -> Unit) {
+        chipBar.removeAllViews()
+        chips.removeAllViews()
+        chipBar.addView(iconButton(R.drawable.ic_dot_close, context.getString(android.R.string.cancel)) { onCancel() },
+            LinearLayout.LayoutParams((48 * density).toInt(), LayoutParams.MATCH_PARENT))
+        val status = TextView(context).apply {
+            text = label
+            setSingleLine()
+            setTextSize(TypedValue.COMPLEX_UNIT_SP, 14f)
+            KeyboardTypeface.applyToTextView(this)
+            setTextColor(Settings.getValues().mColors.get(ColorType.KEY_TEXT))
+            gravity = Gravity.CENTER_VERTICAL
+        }
+        chipBar.addView(status, LinearLayout.LayoutParams(0, LayoutParams.MATCH_PARENT, 1f))
+        // dot matrix style "working" dots
+        var dots = 0
+        val tick = object : Runnable {
+            override fun run() {
+                if (status.parent == null) return
+                dots = (dots + 1) % 4
+                status.text = label + "  " + "●".repeat(dots) + "○".repeat(3 - dots)
+                status.postDelayed(this, 300)
+            }
+        }
+        status.post(tick)
+        if (header.visibility != VISIBLE && searchBar.visibility != VISIBLE) {
+            row.visibility = GONE
+            chipBar.visibility = VISIBLE
+        }
+    }
+
+    /** the AI commands as chips, to run one on the text before the cursor */
+    fun showCommandChips(labels: List<String>, onPick: (Int) -> Unit, onBack: () -> Unit) {
+        chipBar.removeAllViews()
+        chips.removeAllViews()
+        chipBar.addView(iconButton(R.drawable.ic_dot_left, context.getString(R.string.fork_tool_back)) { onBack() },
+            LinearLayout.LayoutParams((48 * density).toInt(), LayoutParams.MATCH_PARENT))
+        val scroll = HorizontalScrollView(context).apply { isHorizontalScrollBarEnabled = false }
+        val list = LinearLayout(context).apply { orientation = LinearLayout.HORIZONTAL; gravity = Gravity.CENTER_VERTICAL }
+        labels.forEachIndexed { i, label -> list.addView(chip(label, false, 200, border = true) { onPick(i) }, chipParams()) }
+        scroll.addView(list, LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT))
+        chipBar.addView(scroll, LinearLayout.LayoutParams(0, LayoutParams.MATCH_PARENT, 1f))
+        row.visibility = GONE
+        header.visibility = GONE
+        searchBar.visibility = GONE
+        chipBar.visibility = VISIBLE
+    }
+
     private fun actionLabel(action: helium314.keyboard.fork.clipboard.ClipPrefs.SmartAction) = when (action) {
         is helium314.keyboard.fork.clipboard.ClipPrefs.SmartAction.Code -> action.value
         is helium314.keyboard.fork.clipboard.ClipPrefs.SmartAction.Link -> context.getString(R.string.fork_smart_open)
