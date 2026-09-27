@@ -331,4 +331,19 @@
     <string name="fork_slate_replacement">명령어 자리에 들어갈 글</string>
     <string name="fork_slate_prompt">AI에게 줄 지시</string>
     <string name="fork_slate_credit">명령, 지시문, Gemini 연결은 Musheer Alam의 SwiftSlate(MIT 라이선스)에서 가져왔어요. AI 명령일 때만 커서 앞 글이 Google Gemini로 보내져요.</string>
+    <string name="fork_screen_typo">오타 보정</string>
+    <string name="fork_desc_typo">키를 누르는 위치 학습, 가장 많이 내는 오타</string>
+    <string name="fork_typo_enabled">내 타이핑으로 학습</string>
+    <string name="fork_typo_enabled_summary">두 글자 경계를 누르면 평소에 누르려던 키로 입력돼요. 키마다 실제로 누르는 위치와, 지우고 다시 친 글자에서 배워요</string>
+    <string name="fork_typo_touches">키를 누르는 위치</string>
+    <string name="fork_typo_touches_summary">키를 누르면 해당 키 패턴만 볼 수 있어요</string>
+    <string name="fork_typo_no_data">아직 학습한 게 없어요. 조금 타이핑해 보세요</string>
+    <string name="fork_typo_ranking">가장 많이 내는 오타 순위</string>
+    <string name="fork_typo_no_typos">아직 센 오타가 없어요. 글자를 치자마자 지우고 옆 글자를 치면 오타로 세요</string>
+    <string name="fork_typo_typed">오타</string>
+    <string name="fork_typo_meant">의도한 키</string>
+    <string name="fork_typo_count">발생 횟수</string>
+    <string name="fork_typo_reset">학습 초기화</string>
+    <string name="fork_typo_reset_summary">키 크기를 바꾼 뒤처럼 처음부터 다시 배워요</string>
+    <string name="fork_typo_reset_confirm">지금까지 배운 터치 위치와 오타를 모두 지울까요?</string>
 </resources>

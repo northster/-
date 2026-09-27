@@ -101,6 +101,8 @@ public class KeyDetector {
                 primaryKey = key;
             }
         }
-        return primaryKey;
+        // fork: near the border between letters, the learned key centers decide (typo correction)
+        return helium314.keyboard.fork.typo.TouchLearning.adjust(primaryKey, touchX, touchY,
+                mKeyboard.getNearestKeys(touchX, touchY));
     }
 }

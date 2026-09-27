@@ -66,6 +66,7 @@ fun MainSettingsScreen(
     onClickClipboard: () -> Unit,
     onClickSmartChips: () -> Unit,
     onClickSlate: () -> Unit,
+    onClickTypo: () -> Unit,
     onClickGestureTyping: () -> Unit,
     onClickDataGathering: () -> Unit,
     onClickAdvanced: () -> Unit,
@@ -120,6 +121,8 @@ fun MainSettingsScreen(
                     R.drawable.ic_settings_preferences, onClickPreferences),
                 entry(R.string.settings_screen_correction, stringResource(R.string.fork_desc_correction),
                     R.drawable.ic_settings_correction, onClickTextCorrection),
+                entry(R.string.fork_screen_typo, stringResource(R.string.fork_desc_typo),
+                    R.drawable.ic_settings_gesture, onClickTypo),
                 entry(R.string.dictionary_settings_category, stringResource(R.string.fork_desc_dictionaries),
                     R.drawable.ic_dictionary, onClickDictionaries),
                 if (JniUtils.sHaveGestureLib)
@@ -183,7 +186,7 @@ private fun PreviewScreen() {
     initPreview(LocalContext.current)
     Theme(previewDark) {
         Surface {
-            MainSettingsScreen({}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {})
+            MainSettingsScreen({}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {})
         }
     }
 }

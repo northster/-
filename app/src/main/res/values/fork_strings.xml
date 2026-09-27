@@ -334,4 +334,19 @@
     <string name="fork_slate_replacement">Text put in place of the trigger</string>
     <string name="fork_slate_prompt">Instruction for the AI</string>
     <string name="fork_slate_credit">Commands, prompts and the Gemini client come from SwiftSlate by Musheer Alam (MIT license). The text before the cursor is sent to Google Gemini only for AI commands.</string>
+    <string name="fork_screen_typo">Typo correction</string>
+    <string name="fork_desc_typo">Learns where you press each key, most common typos</string>
+    <string name="fork_typo_enabled">Learn from my typing</string>
+    <string name="fork_typo_enabled_summary">Near the border between two letters, the key you usually mean wins. Learns where each key is really pressed, and from letters corrected with delete</string>
+    <string name="fork_typo_touches">Where you press the keys</string>
+    <string name="fork_typo_touches_summary">Tap a key to see only its touches</string>
+    <string name="fork_typo_no_data">Nothing learned yet. Type for a while</string>
+    <string name="fork_typo_ranking">Most common typos</string>
+    <string name="fork_typo_no_typos">No typos counted yet. A letter deleted right away and replaced by a neighbouring one counts as a typo</string>
+    <string name="fork_typo_typed">Typo</string>
+    <string name="fork_typo_meant">Meant</string>
+    <string name="fork_typo_count">Times</string>
+    <string name="fork_typo_reset">Forget what was learned</string>
+    <string name="fork_typo_reset_summary">Starts learning again, e.g. after changing the key size</string>
+    <string name="fork_typo_reset_confirm">Forget all touches and typos learned so far?</string>
 </resources>

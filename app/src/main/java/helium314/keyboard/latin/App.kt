@@ -25,6 +25,7 @@ class App : Application() {
         FoldableUtils.init(this)
         Settings.init(this)
         ForkSettings.init(this)
+        helium314.keyboard.fork.typo.TouchLearning.init(this)
         SubtypeSettings.init(this)
 
         val scope = CoroutineScope(Dispatchers.Default)

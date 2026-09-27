@@ -337,6 +337,10 @@ public final class PointerTracker implements PointerTrackerQueue.Element,
         // Even if the key is disabled, it should respond if it is in the altCodeWhileTyping state.
         if (key.isEnabled() || altersCode) {
             sTypingTimeRecorder.onCodeInput(code, eventTime);
+            // fork: learn where this key is really pressed, and notice typos corrected with delete
+            if (!isKeyRepeat && mKeyboard != null)
+                helium314.keyboard.fork.typo.TouchLearning.onKeyInput(key, code, mKeyDetector.getTouchX(x),
+                        mKeyDetector.getTouchY(y), mKeyboard.mOccupiedWidth, mKeyboard.mOccupiedHeight, eventTime);
             if (code == KeyCode.MULTIPLE_CODE_POINTS) {
                 sListener.onTextInput(key.getOutputText());
             } else if (code != KeyCode.NOT_SPECIFIED) {
