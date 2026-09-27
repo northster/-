@@ -306,6 +306,23 @@ class DynamicToolbarView @JvmOverloads constructor(
         is helium314.keyboard.fork.clipboard.ClipPrefs.SmartAction.Email -> context.getString(R.string.fork_smart_mail)
     }
 
+    /** autofill suggestions (the service's own chip views, scrollable) in place of the tools, with a back button */
+    fun showAutofill(view: View, onBack: () -> Unit) {
+        chipBar.removeAllViews()
+        chips.removeAllViews()
+        chipBar.addView(iconButton(R.drawable.ic_dot_left, context.getString(R.string.fork_tool_back)) { onBack() },
+            LinearLayout.LayoutParams((48 * density).toInt(), LayoutParams.MATCH_PARENT))
+        (view.parent as? android.view.ViewGroup)?.removeView(view)
+        chipBar.addView(view, LinearLayout.LayoutParams(0, LayoutParams.MATCH_PARENT, 1f).apply {
+            val m = (4 * density).toInt()
+            setMargins(0, m, m, m)
+        })
+        if (header.visibility != VISIBLE && searchBar.visibility != VISIBLE) {
+            row.visibility = GONE
+            chipBar.visibility = VISIBLE
+        }
+    }
+
     fun hideChipBar() {
         if (chipBar.visibility != VISIBLE) return
         chipBar.visibility = GONE

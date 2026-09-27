@@ -52,6 +52,12 @@ import helium314.keyboard.latin.settings.Settings;
 public class InlineAutofillUtils {
 
     public static InlineSuggestionsRequest createInlineSuggestionRequest(final Context context) {
+        return createInlineSuggestionRequest(context,
+                context.getResources().getDimensionPixelSize(R.dimen.config_suggestions_strip_height));
+    }
+
+    /** fork: chips of the given height (the dynamic toolbar's) */
+    public static InlineSuggestionsRequest createInlineSuggestionRequest(final Context context, final int height) {
         final Colors colors = Settings.getValues().mColors;
         final int chipBgDrawableId = androidx.autofill.R.drawable.autofill_inline_suggestion_chip_background;
         final int chipBgColor = colors.get(ColorType.AUTOFILL_BACKGROUND_CHIP);
@@ -85,7 +91,6 @@ public class InlineAutofillUtils {
         stylesBuilder.addStyle(style);
         Bundle stylesBundle = stylesBuilder.build();
 
-        final int height = context.getResources().getDimensionPixelSize(R.dimen.config_suggestions_strip_height);
         final Size min = new Size(100, height);
         final Size max = new Size(740, height);
 

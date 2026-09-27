@@ -142,6 +142,8 @@ class DynamicToolbarController(private val context: Context) {
         setHint(false)
         stopWave()
         typedHit = null
+        autofillView = null
+        autofillOpened = false
         typedAutoOpened = false
         typedSuppressed = false
         panelAnimator?.cancel()
@@ -180,9 +182,13 @@ class DynamicToolbarController(private val context: Context) {
             return
         }
         // closing the toolbar while it shows a paste chip dismisses the chip
-        if (!expanded && toolbar?.isChipBarShown == true) dismissChip()
+        if (!expanded && toolbar?.isChipBarShown == true) {
+            // autofill suggestions shown: those are what the user closes
+            if (autofillView != null) autofillView = null else dismissChip()
+        }
         if (!expanded) {
             autoOpened = false
+            autofillOpened = false
             slateAutoOpened = false
             // closed by the user while a typed chip shows: it stays closed until the chip is gone
             if (typedHit != null && !closingForTyped) typedSuppressed = true
@@ -493,7 +499,14 @@ class DynamicToolbarController(private val context: Context) {
         val busy = toolActive || clipSearch.isActive
         val hit = typedHit
         val slateUi = slateView
-        if (slateUi != null && isExpanded && !busy) {
+        val autofill = autofillView
+        if (autofill != null && isExpanded && !busy) {
+            // password manager (Samsung Pass, Google ...) suggestions for this field come first
+            tb.showAutofill(autofill) {
+                autofillView = null
+                if (autofillOpened) { autofillOpened = false; setExpanded(false, true) } else applyChipState()
+            }
+        } else if (slateUi != null && isExpanded && !busy) {
             slateUi(tb)
         } else if (hit != null && isExpanded && !busy) {
             tb.showSmartHit(hit.query, hit.result,
@@ -621,7 +634,7 @@ class DynamicToolbarController(private val context: Context) {
         ime.mKeyboardActionListener.onContent(entry.getContentInfo(context))
     }
 
-    private fun hintWanted() = GlowPrefs.glowEnabled(context.prefs()) && (chip != null || typedHit != null) && !isExpanded && !toolActive && !clipSearch.isActive && isUsable()
+    private fun hintWanted() = GlowPrefs.glowEnabled(context.prefs()) && (chip != null || typedHit != null || autofillView != null) && !isExpanded && !toolActive && !clipSearch.isActive && isUsable()
 
     /** keyboard view that draws the glow */
     private var hintView: helium314.keyboard.keyboard.KeyboardView? = null
@@ -754,7 +767,7 @@ class DynamicToolbarController(private val context: Context) {
     private fun waveLayerFor(kv: View): WaveLayer? {
         val parent = kv.parent as? android.widget.FrameLayout ?: return null
         waveLayer?.let { if (it.parent === parent) return it else (it.parent as? android.view.ViewGroup)?.removeView(it) }
-        val layer = WaveLayer(context).apply { visibility = View.INVISIBLE }
+        val layer = WaveLayer(context, kv).apply { visibility = View.INVISIBLE }
         parent.addView(layer, android.widget.FrameLayout.LayoutParams(
             android.widget.FrameLayout.LayoutParams.MATCH_PARENT, android.widget.FrameLayout.LayoutParams.MATCH_PARENT))
         waveLayer = layer
@@ -783,6 +796,54 @@ class DynamicToolbarController(private val context: Context) {
     private val chipExpiry = Runnable { refreshPasteChips() }
 
     val isClipSearchActive get() = clipSearch.isActive
+
+    // ---------------------------------------------------------------- autofill (Samsung Pass, Google Password Manager ...)
+
+    /** inline suggestions of the autofill service for the current field, null when there are none */
+    private var autofillView: View? = null
+    /** the toolbar was opened for them, and closes again when they go */
+    private var autofillOpened = false
+
+    /** whether the keyboard asks the autofill service for inline suggestions (Android 11+) */
+    fun autofillEnabled() = context.prefs().getBoolean(PREF_AUTOFILL, true)
+
+    /** height of the suggestion chips: the toolbar's, a bit smaller */
+    fun autofillChipHeight(): Int {
+        val h = toolbar?.layoutParams?.height?.takeIf { it > 0 }
+            ?: context.resources.getDimensionPixelSize(R.dimen.fork_dynamic_toolbar_height)
+        return (h - 8 * context.resources.displayMetrics.density).toInt().coerceAtLeast(1)
+    }
+
+    /**
+     * The autofill service answered: [view] holds its suggestion chips (passwords, logins, cards), null for none.
+     * Shown in the toolbar in place of the tools; the toolbar opens for them unless turned off in the settings.
+     */
+    fun showAutofill(view: View?) {
+        autofillView = view
+        if (view == null) {
+            if (autofillOpened && isExpanded) {
+                autofillOpened = false
+                setExpanded(false, true)
+            } else applyChipState()
+            return
+        }
+        if (!isExpanded && !toolActive && !clipSearch.isActive && isUsable() && context.prefs().getBoolean(PREF_AUTOFILL_OPEN, true)) {
+            setExpanded(true, true) // no wave: that is for swipes
+            autofillOpened = true
+        }
+        applyChipState()
+    }
+
+    /** the field is left: its suggestions are gone */
+    fun onFinishInputView() {
+        endClipSearch(null)
+        if (autofillView == null) return
+        autofillView = null
+        if (autofillOpened && isExpanded) {
+            autofillOpened = false
+            setExpanded(false, false)
+        } else applyChipState()
+    }
 
     /** the search bar is a GIF search (same query typing as the clipboard search) */
     private var gifMode = false
@@ -1017,6 +1078,8 @@ class DynamicToolbarController(private val context: Context) {
     }
 
     companion object {
+        const val PREF_AUTOFILL = "fork_autofill_inline"
+        const val PREF_AUTOFILL_OPEN = "fork_autofill_open"
         /** chip label to language name for the model */
         private val TRANSLATE_TARGETS = listOf(
             "한국어" to "Korean", "English" to "English", "日本語" to "Japanese", "中文" to "Simplified Chinese",
@@ -1037,8 +1100,19 @@ class DynamicToolbarController(private val context: Context) {
 }
 
 /** fork: the toolbar wave over the keys, in its own view so the keys are not redrawn every frame; takes no touches */
-private class WaveLayer(context: Context) : View(context) {
+private class WaveLayer(context: Context, private val keyboardView: View) : View(context) {
     var drawable: DotWaveDrawable? = null
+
+    /**
+     * As large as the keyboard view, never larger: a plain MATCH_PARENT view in the wrap_content keyboard frame takes
+     * all the height it is offered (the whole screen), and the keyboard frame grows with it.
+     */
+    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+        val width = MeasureSpec.getSize(widthMeasureSpec)
+        val height = if (MeasureSpec.getMode(heightMeasureSpec) == MeasureSpec.EXACTLY) MeasureSpec.getSize(heightMeasureSpec)
+            else keyboardView.measuredHeight
+        setMeasuredDimension(width, height)
+    }
 
     init {
         isClickable = false

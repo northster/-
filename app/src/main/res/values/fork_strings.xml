@@ -367,4 +367,9 @@
     <string name="fork_gif_nothing">No GIFs found</string>
     <string name="fork_gif_sending">Sending GIF…</string>
     <string name="fork_gif_copied">This field takes no GIFs: copied to the clipboard</string>
+    <string name="fork_cat_autofill">Password autofill</string>
+    <string name="fork_autofill">Autofill suggestions in the toolbar</string>
+    <string name="fork_autofill_summary">Logins and passwords from Samsung Pass, Google Password Manager or another autofill service (Android 11+). Takes effect in the next field</string>
+    <string name="fork_autofill_open">Open the toolbar for them</string>
+    <string name="fork_autofill_open_summary">Otherwise the glow shows that there are suggestions</string>
 </resources>

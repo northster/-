@@ -1094,7 +1094,7 @@ public class LatinIME extends InputMethodService implements
     }
 
     void onFinishInputViewInternal(final boolean finishingInput) {
-        if (mDynamicToolbar != null) mDynamicToolbar.endClipSearch(null); // fork
+        if (mDynamicToolbar != null) mDynamicToolbar.onFinishInputView(); // fork: ends the clipboard search, drops autofill chips
         super.onFinishInputView(finishingInput);
         Log.i(TAG, "onFinishInputView");
         cleanupInternalStateForFinishInput();
@@ -1363,6 +1363,10 @@ public class LatinIME extends InputMethodService implements
     @RequiresApi(api = Build.VERSION_CODES.R)
     public InlineSuggestionsRequest onCreateInlineSuggestionsRequest(@NonNull Bundle uiExtras) {
         Log.d(TAG,"onCreateInlineSuggestionsRequest called");
+        // fork: password manager suggestions (Samsung Pass, Google ...) are shown on the dynamic toolbar
+        if (mDynamicToolbar != null && mDynamicToolbar.autofillEnabled()) {
+            return InlineAutofillUtils.createInlineSuggestionRequest(mDisplayContext, mDynamicToolbar.autofillChipHeight());
+        }
         if (Settings.getValues().mSuggestionStripHiddenPerUserSettings) {
             return null;
         }
@@ -1374,6 +1378,16 @@ public class LatinIME extends InputMethodService implements
     @RequiresApi(api = Build.VERSION_CODES.R)
     public boolean onInlineSuggestionsResponse(InlineSuggestionsResponse response) {
         Log.d(TAG,"onInlineSuggestionsResponse called");
+        if (mDynamicToolbar != null && mDynamicToolbar.autofillEnabled()) { // fork
+            final List<InlineSuggestion> suggestions = response.getInlineSuggestions();
+            Log.i(TAG, "autofill suggestions: " + suggestions.size());
+            if (suggestions.isEmpty()) {
+                mDynamicToolbar.showAutofill(null);
+                return false;
+            }
+            mDynamicToolbar.showAutofill(InlineAutofillUtils.createView(suggestions, mDisplayContext));
+            return true;
+        }
         if (Settings.getValues().mSuggestionStripHiddenPerUserSettings) {
             return false;
         }

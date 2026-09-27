@@ -64,6 +64,9 @@ fun DynamicToolbarScreen(
             GlowPrefs.GLOW_WIDTH,
             GlowPrefs.GLOW_DOT_SIZE,
             GlowPrefs.GLOW_DOT_SPACING,
+            R.string.fork_cat_autofill,
+            DynamicToolbarController.PREF_AUTOFILL,
+            DynamicToolbarController.PREF_AUTOFILL_OPEN,
             R.string.fork_cat_gif,
             helium314.keyboard.fork.gif.GifClient.PREF_KLIPY_KEY,
             helium314.keyboard.fork.gif.GifClient.PREF_GIPHY_KEY,
@@ -217,6 +220,12 @@ fun createDynamicToolbarSettings(context: Context) = listOf(
     },
     Setting(context, GlowPrefs.GLOW_DOT_SPACING, R.string.fork_glow_dot_spacing) {
         GlowSlider(it, GlowPrefs.DEFAULT_GLOW_DOT_SPACING, 2.5f..12f, 0.5f, ::dp)
+    },
+    Setting(context, DynamicToolbarController.PREF_AUTOFILL, R.string.fork_autofill, R.string.fork_autofill_summary) {
+        SwitchPreference(it, true)
+    },
+    Setting(context, DynamicToolbarController.PREF_AUTOFILL_OPEN, R.string.fork_autofill_open, R.string.fork_autofill_open_summary) {
+        SwitchPreference(it, true)
     },
     Setting(context, helium314.keyboard.fork.gif.GifClient.PREF_KLIPY_KEY, R.string.fork_gif_klipy_key) {
         GifKeyPreference(it.title, it.key, "partner.klipy.com")

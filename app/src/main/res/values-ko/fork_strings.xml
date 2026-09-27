@@ -364,4 +364,9 @@
     <string name="fork_gif_nothing">찾은 GIF가 없어요</string>
     <string name="fork_gif_sending">GIF 보내는 중…</string>
     <string name="fork_gif_copied">이 입력란은 GIF를 받지 않아요. 클립보드에 복사했어요</string>
+    <string name="fork_cat_autofill">비밀번호 자동완성</string>
+    <string name="fork_autofill">툴바에 자동완성 제안</string>
+    <string name="fork_autofill_summary">삼성 패스, Google 비밀번호 관리자 등 자동완성 서비스의 로그인/비밀번호 제안 (안드로이드 11 이상). 다음 입력칸부터 적용</string>
+    <string name="fork_autofill_open">제안이 오면 툴바 열기</string>
+    <string name="fork_autofill_open_summary">끄면 글로우로만 알려요</string>
 </resources>
