@@ -27,8 +27,8 @@ object ToolbarItems {
     /** Current toolbar content. Placeholders only for now. */
     val defaultItems = listOf(
         ToolbarItem(CLIPBOARD, R.drawable.ic_dot_clipboard, R.string.fork_toolbar_clipboard),
-        // commands (?fix, text replacers ...), shown as "?"
-        ToolbarItem(AI, R.drawable.ic_dot_question, R.string.fork_toolbar_ai),
+        // AI commands (?fix, text replacers ...)
+        ToolbarItem(AI, R.drawable.ic_dot_sparkles, R.string.fork_toolbar_ai),
         ToolbarItem(TRANSLATE, R.drawable.ic_dot_translate, R.string.fork_toolbar_translate),
         ToolbarItem(GIF, R.drawable.ic_dot_gif, R.string.fork_toolbar_gif),
         // opens the keyboard settings

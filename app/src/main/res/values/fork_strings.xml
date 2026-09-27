@@ -2,7 +2,7 @@
 <!-- SPDX-License-Identifier: GPL-3.0-only -->
 <resources>
     <string name="fork_toolbar_clipboard">Clipboard</string>
-    <string name="fork_toolbar_ai">Commands</string>
+    <string name="fork_toolbar_ai">AI</string>
     <string name="fork_toolbar_translate">Translate</string>
     <string name="fork_toolbar_more">More</string>
     <string name="fork_toolbar_placeholder">%s (placeholder)</string>
@@ -34,7 +34,7 @@
     <string name="fork_desc_dictionaries">Add or manage dictionaries</string>
     <string name="fork_desc_appearance">Key height, spacing, fonts, emoji</string>
     <string name="fork_desc_layouts">Symbols, numbers and functional key layouts</string>
-    <string name="fork_desc_dynamic_toolbar">Swipe gesture, animation, wave, glow</string>
+    <string name="fork_desc_dynamic_toolbar">Swipe gesture, wave, glow, autofill, GIF</string>
     <string name="fork_desc_toolbar">Suggestion strip and toolbar keys of the original keyboard</string>
     <string name="fork_desc_advanced">Long press timing, automatic layout switch, backup</string>
     <string name="fork_desc_about">Version, license, logs</string>

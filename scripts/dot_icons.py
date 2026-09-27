@@ -1,4 +1,5 @@
 # fork: dot matrix icons, 12x12 grid, each 'o' is one round dot (24x24 viewport, 2 units per cell)
+# Most of these are now replaced by scripts/pixel_icons.py (run it after this one).
 ICONS = {
 'shift': """
 .....oo.....

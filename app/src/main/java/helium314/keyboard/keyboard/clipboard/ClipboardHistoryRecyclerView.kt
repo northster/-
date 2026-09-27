@@ -5,7 +5,6 @@ package helium314.keyboard.keyboard.clipboard
 import android.content.Context
 import android.util.AttributeSet
 import android.view.View
-import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import helium314.keyboard.latin.ClipboardHistoryManager
 import androidx.core.view.isVisible
@@ -19,19 +18,7 @@ class ClipboardHistoryRecyclerView @JvmOverloads constructor(
 
     var placeholderView: View? = null
     val historyManager: ClipboardHistoryManager? get() = (adapter as? ClipboardAdapter?)?.clipboardHistoryManager
-    @Suppress("unused")
-    private val touchHelper = ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
-        override fun onMove(recyclerView: RecyclerView, viewHolder: ViewHolder, target: ViewHolder) = false
-        override fun getSwipeDirs(recyclerView: RecyclerView, viewHolder: ViewHolder): Int {
-            if (historyManager?.canRemove(viewHolder.absoluteAdapterPosition) == false)
-                return 0 // block swipe for pinned items
-            return super.getSwipeDirs(recyclerView, viewHolder)
-        }
-        override fun onSwiped(viewHolder: ViewHolder, dir: Int) {
-            historyManager?.removeEntry(viewHolder.absoluteAdapterPosition)
-            adapter?.notifyItemRemoved(viewHolder.absoluteAdapterPosition)
-        }
-    }).attachToRecyclerView(this)
+    // fork: no swipe to delete, sideways swipes from the screen edge are the system's back gesture
 
     private val adapterDataObserver: AdapterDataObserver = object : AdapterDataObserver() {
         override fun onChanged() {

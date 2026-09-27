@@ -76,10 +76,19 @@ object TouchLearning {
 
     private fun isLetter(code: Int) = code > 0 && Character.isLetter(code)
 
+    /** shifted Hangul (ㅃ ㅉ ㄸ ㄲ ㅆ ㅒ ㅖ) is the same key as its base letter */
+    private val SHIFTED = mapOf('ㅃ' to 'ㅂ', 'ㅉ' to 'ㅈ', 'ㄸ' to 'ㄷ', 'ㄲ' to 'ㄱ', 'ㅆ' to 'ㅅ', 'ㅒ' to 'ㅐ', 'ㅖ' to 'ㅔ')
+        .entries.associate { it.key.code to it.value.code }
+    private fun base(code: Int) = SHIFTED[code] ?: code
+
+    /** Hangul compatibility jamo: the statistics screen shows only the Korean keyboard */
+    private fun isHangul(code: Int) = code in 0x3131..0x318E
+
     /** a key was typed at [x], [y] (keyboard coordinates) */
     @JvmStatic
-    fun onKeyInput(key: Key, code: Int, x: Int, y: Int, keyboardWidth: Int, keyboardHeight: Int, time: Long) {
+    fun onKeyInput(key: Key, typedCode: Int, x: Int, y: Int, keyboardWidth: Int, keyboardHeight: Int, time: Long) {
         if (!enabled || prefs == null) return
+        val code = base(typedCode)
         if (code == KeyCode.DELETE) {
             if (lastCode != 0 && time - lastTime < 1500) {
                 deletedCode = lastCode; deletedX = lastX; deletedY = lastY; deletedTime = time
@@ -128,7 +137,7 @@ object TouchLearning {
         aspect = keyboardWidth.toFloat() / keyboardHeight
         shapes[code] = KeyShape(key.x.toFloat() / keyboardWidth, key.y.toFloat() / keyboardHeight,
             key.width.toFloat() / keyboardWidth, key.height.toFloat() / keyboardHeight,
-            key.label ?: String(Character.toChars(code)))
+            if (isHangul(code)) String(Character.toChars(code)) else key.label ?: String(Character.toChars(code)))
     }
 
     /**
@@ -155,7 +164,7 @@ object TouchLearning {
 
     /** squared distance from the touch to the key's learned center, in key sizes; null while it has too few samples */
     private fun score(key: Key, x: Int, y: Int): Float? {
-        val s = stats[key.code]?.takeIf { it.n >= MIN_SAMPLES } ?: return null
+        val s = stats[base(key.code)]?.takeIf { it.n >= MIN_SAMPLES } ?: return null
         val w = key.width.toFloat().coerceAtLeast(1f)
         val h = key.height.toFloat().coerceAtLeast(1f)
         val cx = key.x + w / 2 + s.dx * w
@@ -170,14 +179,34 @@ object TouchLearning {
     /** typo pairs (typed, meant) with how often, most frequent first */
     fun typoRanking(context: Context): List<Triple<String, String, Int>> {
         init(context)
-        return typos.entries.sortedByDescending { it.value }.mapNotNull { (pair, count) ->
-            val (from, to) = pair.split('>').mapNotNull { it.toIntOrNull() }.takeIf { it.size == 2 } ?: return@mapNotNull null
-            Triple(label(from), label(to), count)
+        val merged = HashMap<Pair<Int, Int>, Int>()
+        for ((pair, count) in typos) {
+            val (from, to) = pair.split('>').mapNotNull { it.toIntOrNull() }.takeIf { it.size == 2 } ?: continue
+            if (!isHangul(from) || !isHangul(to)) continue
+            val key = base(from) to base(to)
+            if (key.first == key.second) continue
+            merged[key] = (merged[key] ?: 0) + count
+        }
+        return merged.entries.sortedByDescending { it.value }.map { (pair, count) ->
+            Triple(label(pair.first), label(pair.second), count)
         }
     }
 
-    fun keys(context: Context): Map<Int, KeyShape> { init(context); return shapes.toMap() }
-    fun points(code: Int): List<FloatArray> = stats[code]?.points?.toList().orEmpty()
+    /** the Korean keys only, shifted letters folded into their base key */
+    fun keys(context: Context): Map<Int, KeyShape> {
+        init(context)
+        val result = HashMap<Int, KeyShape>()
+        for ((code, shape) in shapes) {
+            if (!isHangul(code)) continue
+            val b = base(code)
+            if (b == code || !result.containsKey(b))
+                result[b] = KeyShape(shape.x, shape.y, shape.w, shape.h, String(Character.toChars(b)))
+        }
+        return result
+    }
+
+    fun points(code: Int): List<FloatArray> =
+        stats[code]?.points?.toList().orEmpty() + SHIFTED.filterValues { it == code }.keys.flatMap { stats[it]?.points?.toList().orEmpty() }
     fun samples(code: Int): Int = stats[code]?.n ?: 0
 
     private fun label(code: Int) = shapes[code]?.label ?: String(Character.toChars(code))

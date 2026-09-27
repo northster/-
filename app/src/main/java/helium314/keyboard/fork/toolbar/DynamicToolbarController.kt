@@ -139,7 +139,7 @@ class DynamicToolbarController(private val context: Context) {
         animator?.cancel()
         inputView = newInputView
         toolbar = newInputView.findViewById(R.id.dynamic_toolbar)
-        setHint(false)
+        setHint(false, immediate = true)
         stopWave()
         typedHit = null
         autofillView = null
@@ -641,35 +641,89 @@ class DynamicToolbarController(private val context: Context) {
 
     /** glow settings changed: show the glow again with them */
     fun onGlowSettingsChanged() {
-        setHint(false)
+        setHint(false, immediate = true) // a new glow with the new settings
         refreshPasteChips()
     }
 
-    private fun setHint(on: Boolean) {
+    private var hintGlow: DotGlowDrawable? = null
+    /** fades the glow in (to 1) or out (to 0, then removes it) */
+    private var fadeAnimator: ValueAnimator? = null
+    private var fade = 0f
+
+    private fun setHint(on: Boolean, immediate: Boolean = false) {
         val kv = KeyboardSwitcher.getInstance().mainKeyboardView
+        val fadingOut = fadeAnimator != null && hintView != null && !fadeTargetOn
+        if (on && hintView != null && hintView === kv && !fadingOut) return
+        if (!on && (hintView == null || (fadingOut && !immediate))) return
         Log.i(TAG, "glow ${if (on) "on" else "off"}, keyboard view ${kv != null}")
-        if (on == (hintView != null) && (!on || hintView === kv)) return
-        // remove the old one
-        hintAnimator?.cancel()
-        hintView?.setForkUnderlay(null)
-        hintView = null
-        if (!on || kv == null) return
-        val params = GlowPrefs.glow(context.prefs())
-        // over the background, under the keys
-        val glow = DotGlowDrawable(GlowPrefs.color(context.prefs()), context.resources.displayMetrics.density, params)
-        kv.setForkUnderlay(glow)
-        hintView = kv
-        // slow breathing, noticed without being in the way
-        hintAnimator = ValueAnimator.ofFloat(0f, 1f).apply {
-            duration = (params.periodMs / 2).coerceAtLeast(1)
-            repeatMode = ValueAnimator.REVERSE
-            repeatCount = ValueAnimator.INFINITE
-            addUpdateListener {
-                // redraw the keyboard only when the glow's alpha actually changed
-                if (glow.setIntensity(it.animatedValue as Float)) kv.invalidateAllKeys()
+        if (!on) {
+            if (immediate) removeHint() else fadeHint(false)
+            return
+        }
+        if (kv == null) return
+        if (hintView !== kv) {
+            removeHint()
+            val params = GlowPrefs.glow(context.prefs())
+            // over the background, under the keys
+            val glow = DotGlowDrawable(GlowPrefs.color(context.prefs()), context.resources.displayMetrics.density, params)
+            glow.setFade(0f)
+            kv.setForkUnderlay(glow)
+            hintView = kv
+            hintGlow = glow
+            fade = 0f
+            // slow breathing, noticed without being in the way
+            hintAnimator = ValueAnimator.ofFloat(0f, 1f).apply {
+                duration = (params.periodMs / 2).coerceAtLeast(1)
+                repeatMode = ValueAnimator.REVERSE
+                repeatCount = ValueAnimator.INFINITE
+                addUpdateListener {
+                    // redraw the keyboard only when the glow's alpha actually changed
+                    if (glow.setIntensity(it.animatedValue as Float)) kv.invalidateAllKeys()
+                }
+                start()
             }
+        }
+        fadeHint(true)
+    }
+
+    private var fadeTargetOn = false
+
+    private fun fadeHint(on: Boolean) {
+        val glow = hintGlow ?: return
+        val kv = hintView ?: return
+        fadeAnimator?.cancel()
+        fadeTargetOn = on
+        val target = if (on) 1f else 0f
+        fadeAnimator = ValueAnimator.ofFloat(fade, target).apply {
+            duration = (FADE_MILLIS * kotlin.math.abs(target - fade)).toLong().coerceAtLeast(1)
+            interpolator = android.view.animation.DecelerateInterpolator()
+            addUpdateListener {
+                fade = it.animatedValue as Float
+                if (glow.setFade(fade)) kv.invalidateAllKeys()
+            }
+            addListener(object : AnimatorListenerAdapter() {
+                private var cancelled = false
+                override fun onAnimationCancel(animation: Animator) { cancelled = true }
+                override fun onAnimationEnd(animation: Animator) {
+                    if (fadeAnimator !== animation) return
+                    fadeAnimator = null
+                    if (!on && !cancelled) removeHint()
+                }
+            })
             start()
         }
+    }
+
+    private fun removeHint() {
+        val a = fadeAnimator
+        fadeAnimator = null
+        a?.cancel()
+        hintAnimator?.cancel()
+        hintAnimator = null
+        hintView?.setForkUnderlay(null)
+        hintView = null
+        hintGlow = null
+        fade = 0f
     }
 
     /**
@@ -1078,6 +1132,7 @@ class DynamicToolbarController(private val context: Context) {
     }
 
     companion object {
+        private const val FADE_MILLIS = 450L
         const val PREF_AUTOFILL = "fork_autofill_inline"
         const val PREF_AUTOFILL_OPEN = "fork_autofill_open"
         /** chip label to language name for the model */

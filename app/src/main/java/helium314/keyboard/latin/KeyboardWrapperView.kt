@@ -163,4 +163,48 @@ class KeyboardWrapperView @JvmOverloads constructor(
         switchOneHandedModeBtn.setLayout((keyboardView.measuredHeight * 0.5f).toInt())
         resizeOneHandedModeBtn.setLayout((keyboardView.measuredHeight * 0.8f).toInt())
     }
+
+    // fork: in the clipboard and emoji panels a sideways swipe that starts at the screen edge is the system's back
+    //  gesture. The panels (emoji pages, lists) don't get to scroll with it: once it goes sideways they get a cancel.
+    private var edgeTouch = false
+    private var edgeTaken = false
+    private var edgeDownX = 0f
+    private var edgeDownY = 0f
+    private val edgeSlop = android.view.ViewConfiguration.get(context).scaledTouchSlop
+
+    override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
+        if (ev.actionMasked == MotionEvent.ACTION_DOWN) {
+            val switcher = KeyboardSwitcher.getInstance()
+            edgeTaken = false
+            edgeTouch = (switcher.isShowingClipboardHistory || switcher.isShowingEmojiPalettes) && isAtScreenEdge(ev.rawX)
+            edgeDownX = ev.x
+            edgeDownY = ev.y
+        }
+        if (edgeTouch) {
+            val end = ev.actionMasked == MotionEvent.ACTION_UP || ev.actionMasked == MotionEvent.ACTION_CANCEL
+            if (edgeTaken) {
+                if (end) edgeTouch = false
+                return true
+            }
+            val dx = abs(ev.x - edgeDownX)
+            if (ev.actionMasked == MotionEvent.ACTION_MOVE && dx > edgeSlop && dx > abs(ev.y - edgeDownY)) {
+                edgeTaken = true
+                val cancel = MotionEvent.obtain(ev).apply { action = MotionEvent.ACTION_CANCEL }
+                super.dispatchTouchEvent(cancel)
+                cancel.recycle()
+                return true
+            }
+            if (end) edgeTouch = false
+        }
+        return super.dispatchTouchEvent(ev)
+    }
+
+    /** within the system's back gesture area (gesture navigation only, Android 10+) */
+    private fun isAtScreenEdge(rawX: Float): Boolean {
+        if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.Q) return false
+        val insets = rootWindowInsets?.systemGestureInsets ?: return false
+        if (insets.left == 0 && insets.right == 0) return false // button navigation
+        val width = resources.displayMetrics.widthPixels
+        return rawX < insets.left || rawX > width - insets.right
+    }
 }

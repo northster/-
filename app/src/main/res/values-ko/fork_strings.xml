@@ -2,7 +2,7 @@
 <!-- SPDX-License-Identifier: GPL-3.0-only -->
 <resources>
     <string name="fork_toolbar_clipboard">클립보드</string>
-    <string name="fork_toolbar_ai">명령</string>
+    <string name="fork_toolbar_ai">AI</string>
     <string name="fork_toolbar_translate">번역</string>
     <string name="fork_toolbar_more">더보기</string>
     <string name="fork_toolbar_placeholder">%s (준비 중)</string>
@@ -31,7 +31,7 @@
     <string name="fork_desc_dictionaries">사전 추가 및 관리</string>
     <string name="fork_desc_appearance">키 높이, 간격, 글꼴, 이모지</string>
     <string name="fork_desc_layouts">기호, 숫자, 기능 키 레이아웃</string>
-    <string name="fork_desc_dynamic_toolbar">스와이프 제스처, 애니메이션, 파동, 글로우</string>
+    <string name="fork_desc_dynamic_toolbar">스와이프 제스처, 파동, 글로우, 자동완성, GIF</string>
     <string name="fork_desc_toolbar">원래 키보드의 제안 줄과 툴바 키</string>
     <string name="fork_desc_advanced">길게 누르기 시간, 자판 자동 전환, 백업</string>
     <string name="fork_desc_about">버전, 라이선스, 로그</string>

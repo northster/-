@@ -389,7 +389,7 @@
     <string name="load">불러오기</string>
     <string name="prefs_key_emoji_max_sdk">이모지 버전 덮어쓰기</string>
     <string name="gnu_gpl">GNU 범용 공개 라이선스 v3.0</string>
-    <string name="settings_screen_toolbar">제안 줄 (기본 툴바)</string>
+    <string name="settings_screen_toolbar">툴바</string>
     <string name="label_enter_key" tools:keep="@string/label_enter_key">Enter</string>
     <string name="label_tab_key" tools:keep="@string/label_tab_key">Tab</string>
     <string name="label_delete_key" tools:keep="@string/label_delete_key">Delete</string>

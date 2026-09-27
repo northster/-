@@ -63,9 +63,23 @@ class DotGlowDrawable(private val color: Int, private val density: Float, privat
     private val bitmapPaint = Paint(Paint.FILTER_BITMAP_FLAG)
     private var bitmap: android.graphics.Bitmap? = null
 
+    private var intensity = 0f
+    private var fade = 1f
+
     /** 0..1, set by the breathing animation; returns whether what is drawn changed */
     fun setIntensity(value: Float): Boolean {
-        val alpha = (255 * (params.minAlpha + (params.maxAlpha - params.minAlpha) * value)).toInt().coerceIn(0, 255)
+        intensity = value
+        return applyAlpha()
+    }
+
+    /** 0..1 on top of the breathing, for fading the glow in and out; returns whether what is drawn changed */
+    fun setFade(value: Float): Boolean {
+        fade = value
+        return applyAlpha()
+    }
+
+    private fun applyAlpha(): Boolean {
+        val alpha = (255 * fade * (params.minAlpha + (params.maxAlpha - params.minAlpha) * intensity)).toInt().coerceIn(0, 255)
         if (alpha == bitmapPaint.alpha) return false
         bitmapPaint.alpha = alpha
         invalidateSelf()
