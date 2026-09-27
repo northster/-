@@ -363,7 +363,7 @@
     <string name="fork_gif_key_help">Free key from %1$s. Stored encrypted.</string>
     <string name="fork_gif_search_hint">Search GIFs</string>
     <string name="fork_gif_no_key">Enter a KLIPY or GIPHY API key in the toolbar settings for GIFs</string>
-    <string name="fork_gif_failed">Couldn't load GIFs</string>
+    <string name="fork_gif_failed">Couldn\'t load GIFs</string>
     <string name="fork_gif_nothing">No GIFs found</string>
     <string name="fork_gif_sending">Sending GIF…</string>
     <string name="fork_gif_copied">This field takes no GIFs: copied to the clipboard</string>
