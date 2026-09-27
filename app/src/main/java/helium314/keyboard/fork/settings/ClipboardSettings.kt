@@ -104,6 +104,27 @@ fun createForkClipboardSettings(context: Context) = listOf(
     Setting(context, ClipPrefs.CODE_AUTO_OPEN, R.string.fork_code_auto_open, R.string.fork_code_auto_open_summary) {
         SwitchPreference(it, ClipPrefs.DEFAULT_CODE_AUTO_OPEN)
     },
+    Setting(context, helium314.keyboard.fork.clipboard.NotificationOtpCapture.PREF, R.string.fork_notification_codes,
+        R.string.fork_notification_codes_summary) { setting ->
+        val ctx = LocalContext.current
+        val access = helium314.keyboard.fork.clipboard.NotificationOtpCapture.hasAccess(ctx)
+        helium314.keyboard.settings.preferences.SwitchPreference(
+            name = setting.title,
+            key = setting.key,
+            default = false,
+            description = if (access || !ctx.prefs().getBoolean(setting.key, false)) setting.description
+                else ctx.getString(R.string.fork_notification_codes_no_access),
+        ) { on ->
+            if (!on) helium314.keyboard.fork.clipboard.NotificationOtpBus.clear()
+            else if (!helium314.keyboard.fork.clipboard.NotificationOtpCapture.hasAccess(ctx)) {
+                // the system screen where notification access is granted
+                Toast.makeText(ctx, R.string.fork_notification_codes_grant, Toast.LENGTH_LONG).show()
+                runCatching {
+                    ctx.startActivity(android.content.Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS"))
+                }
+            }
+        }
+    },
     Setting(context, ClipPrefs.CODE_TEST_UNTIL, R.string.fork_code_test, R.string.fork_code_test_summary) { setting ->
         val ctx = LocalContext.current
         helium314.keyboard.settings.preferences.Preference(name = setting.title, description = setting.description, onClick = {
@@ -146,6 +167,18 @@ fun createForkClipboardSettings(context: Context) = listOf(
             format = { ctx.getString(R.string.fork_unit_dp, it.toInt().toString()) },
             step = 1f,
         )
+    },
+    Setting(context, helium314.keyboard.fork.smart.SmartPrefs.TYPING, R.string.fork_smart_typing, R.string.fork_smart_typing_summary) {
+        SwitchPreference(it, true)
+    },
+    Setting(context, helium314.keyboard.fork.smart.SmartPrefs.CALC, R.string.fork_smart_calc, R.string.fork_smart_calc_summary) {
+        SwitchPreference(it, true)
+    },
+    Setting(context, helium314.keyboard.fork.smart.SmartPrefs.CURRENCY, R.string.fork_smart_currency, R.string.fork_smart_currency_summary) {
+        SwitchPreference(it, true)
+    },
+    Setting(context, helium314.keyboard.fork.smart.SmartPrefs.UNITS, R.string.fork_smart_units, R.string.fork_smart_units_summary) {
+        SwitchPreference(it, true)
     },
     Setting(context, ClipPrefs.SCREENSHOTS, R.string.fork_clip_screenshots, R.string.fork_clip_screenshots_summary) { setting ->
         val ctx = LocalContext.current

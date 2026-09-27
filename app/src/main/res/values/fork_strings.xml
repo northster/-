@@ -266,4 +266,17 @@
     <string name="fork_chip_radius">Chip corner radius</string>
     <string name="fork_chip_color_auto_enter">Theme (enter key color)</string>
     <string name="fork_chip_color_auto_key">Theme (key colors)</string>
+    <string name="fork_notification_codes">Verification codes from notifications</string>
+    <string name="fork_notification_codes_summary">When a message with a code arrives, the code is offered as a chip without copying it. Read on the phone only, never stored.</string>
+    <string name="fork_notification_codes_no_access">Notification access is not granted yet: tap the switch off and on to open the setting</string>
+    <string name="fork_notification_codes_grant">Allow notification access for DT Keyboard</string>
+    <string name="fork_cat_smart_typing">Smart chips for typed text</string>
+    <string name="fork_smart_typing">Smart chips while typing</string>
+    <string name="fork_smart_typing_summary">Answers for sums, amounts and measures show on the toolbar as you type; tap to put the answer in</string>
+    <string name="fork_smart_calc">Calculate while typing</string>
+    <string name="fork_smart_calc_summary">"12*4" offers 48</string>
+    <string name="fork_smart_currency">Currency conversion</string>
+    <string name="fork_smart_currency_summary">"10 dollars", "$10" or "5만원" offers the amount in won or dollars. Exchange rates are downloaded twice a day</string>
+    <string name="fork_smart_units">Unit conversion</string>
+    <string name="fork_smart_units_summary">"1 ft" offers metres, "30평" square metres</string>
 </resources>

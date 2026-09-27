@@ -220,6 +220,36 @@ class DynamicToolbarView @JvmOverloads constructor(
         }
     }
 
+    /**
+     * Smart chip for typed text (WM Keyboard style): what was recognised on the left, the answer as a highlighted
+     * chip on the right; tapping it puts the answer in place of the typed text. [onBack] hides it.
+     */
+    fun showSmartHit(query: String, result: String, onUse: () -> Unit, onBack: () -> Unit) {
+        chipBar.removeAllViews()
+        chips.removeAllViews()
+        chipBar.addView(iconButton(R.drawable.ic_dot_left, context.getString(R.string.fork_tool_back)) { onBack() },
+            LinearLayout.LayoutParams((48 * density).toInt(), LayoutParams.MATCH_PARENT))
+        chips.gravity = Gravity.START or Gravity.CENTER_VERTICAL
+        chips.addView(TextView(context).apply {
+            text = "$query ="
+            setSingleLine()
+            ellipsize = TextUtils.TruncateAt.START
+            setTextSize(TypedValue.COMPLEX_UNIT_SP, 14f)
+            KeyboardTypeface.applyToTextView(this)
+            setTextColor(Settings.getValues().mColors.get(ColorType.KEY_HINT_TEXT))
+            gravity = Gravity.CENTER_VERTICAL
+            setPadding((6 * density).toInt(), 0, 0, 0)
+        }, LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT))
+        chipBar.addView(chips, LinearLayout.LayoutParams(0, LayoutParams.MATCH_PARENT, 1f))
+        chipBar.addView(chip(result, true, 220, border = true) { onUse() }, chipParams().apply {
+            marginEnd = (8 * density).toInt()
+        })
+        if (header.visibility != VISIBLE && searchBar.visibility != VISIBLE) {
+            row.visibility = GONE
+            chipBar.visibility = VISIBLE
+        }
+    }
+
     private fun actionLabel(action: helium314.keyboard.fork.clipboard.ClipPrefs.SmartAction) = when (action) {
         is helium314.keyboard.fork.clipboard.ClipPrefs.SmartAction.Code -> action.value
         is helium314.keyboard.fork.clipboard.ClipPrefs.SmartAction.Link -> context.getString(R.string.fork_smart_open)

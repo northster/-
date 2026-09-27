@@ -97,19 +97,33 @@ class ClipboardHistoryManager(
     /** fork: the primary clip if it was copied recently, for the paste chip on the dynamic toolbar */
     class RecentClip(val text: String?, val imageUri: android.net.Uri?, val timestamp: Long,
                      /** not on the clipboard, a new screenshot (pasted through the clipboard history) */
-                     val screenshot: helium314.keyboard.fork.clipboard.ScreenshotWatcher.Screenshot? = null) {
+                     val screenshot: helium314.keyboard.fork.clipboard.ScreenshotWatcher.Screenshot? = null,
+                     /** code found in a notification: the chip pastes this, [text] is the notification */
+                     val code: String? = null) {
         /** identifies the clip, a dismissed chip is not offered again */
         val key get() = "$timestamp:${text?.hashCode() ?: imageUri?.toString()}"
     }
 
     fun getRecentClip(): RecentClip? {
-        // fork: a screenshot counts as a recent clip too (like Samsung's keyboard), the newer one wins
-        val clip = getRecentPrimaryClip()
+        // fork: a screenshot or a code from a notification counts as a recent clip too (like Samsung's keyboard),
+        // the newest one wins
+        val clip = listOfNotNull(getRecentPrimaryClip(), recentNotificationCode()).maxByOrNull { it.timestamp }
         val shot = helium314.keyboard.fork.clipboard.ScreenshotWatcher.latest(latinIME, RECENT_TIME_MILLIS)
             ?.takeIf { System.currentTimeMillis() - it.timeMillis <= RECENT_TIME_MILLIS }
         if (shot != null && (clip == null || shot.timeMillis > clip.timestamp))
             return RecentClip(null, shot.uri, shot.timeMillis, shot)
         return clip
+    }
+
+    /** fork: a verification code from a notification (see NotificationOtp), while it is recent */
+    private fun recentNotificationCode(): RecentClip? {
+        if (!helium314.keyboard.fork.clipboard.NotificationOtpCapture.isEnabled(latinIME)) return null
+        val otp = helium314.keyboard.fork.clipboard.NotificationOtpBus.latest ?: return null
+        if (System.currentTimeMillis() - otp.postedAt > RECENT_TIME_MILLIS) {
+            helium314.keyboard.fork.clipboard.NotificationOtpBus.clear()
+            return null
+        }
+        return RecentClip("[${otp.sourceApp}] ${otp.message}", null, otp.postedAt, code = otp.code)
     }
 
     private fun getRecentPrimaryClip(): RecentClip? {

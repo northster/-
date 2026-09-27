@@ -263,4 +263,17 @@
     <string name="fork_chip_radius">칩 모서리 둥글기</string>
     <string name="fork_chip_color_auto_enter">테마 (엔터 키 색)</string>
     <string name="fork_chip_color_auto_key">테마 (키 색)</string>
+    <string name="fork_notification_codes">알림에서 인증번호 가져오기</string>
+    <string name="fork_notification_codes_summary">인증번호 문자가 오면 복사하지 않아도 칩으로 보여줘요. 폰 안에서만 읽고 저장하지 않아요.</string>
+    <string name="fork_notification_codes_no_access">아직 알림 접근 권한이 없어요: 스위치를 껐다 켜면 설정 화면이 열려요</string>
+    <string name="fork_notification_codes_grant">DT Keyboard의 알림 접근을 허용해 주세요</string>
+    <string name="fork_cat_smart_typing">입력 스마트 칩</string>
+    <string name="fork_smart_typing">입력하면서 스마트 칩</string>
+    <string name="fork_smart_typing_summary">계산식, 금액, 단위를 입력하면 툴바에 답이 바로 나와요. 누르면 답으로 바뀌어요</string>
+    <string name="fork_smart_calc">입력하면서 계산</string>
+    <string name="fork_smart_calc_summary">"12*4" 입력 시 48 제안</string>
+    <string name="fork_smart_currency">통화 변환</string>
+    <string name="fork_smart_currency_summary">"10달러", "$10", "5만원" 입력 시 원화나 달러 금액 제안. 환율은 하루 두 번 받아와요</string>
+    <string name="fork_smart_units">단위 변환</string>
+    <string name="fork_smart_units_summary">"1 ft"는 미터로, "30평"은 제곱미터로 제안</string>
 </resources>

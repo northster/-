@@ -63,6 +63,12 @@ class DynamicToolbarController(private val context: Context) {
     private var autoOpenedKey: String? = null
     /** the toolbar was opened for a code and closes again once the chip is used or dismissed */
     private var autoOpened = false
+    /** smart chip for the typed text (sum, amount, measure), shown instead of the paste chip */
+    private var typedHit: helium314.keyboard.fork.smart.SmartSuggest.SmartHit? = null
+    /** the toolbar was opened for [typedHit] and closes again when it is gone */
+    private var typedAutoOpened = false
+    /** the user closed the toolbar while a typed chip was shown: don't open it again until the chip is gone */
+    private var typedSuppressed = false
     /** dot glow behind the keys while a chip waits behind the collapsed toolbar */
     private var hintAnimator: ValueAnimator? = null
     /** white dot wave over the keyboard (and the toolbar) when the toolbar opens / closes */
@@ -106,6 +112,9 @@ class DynamicToolbarController(private val context: Context) {
         toolbar = newInputView.findViewById(R.id.dynamic_toolbar)
         setHint(false)
         stopWave()
+        typedHit = null
+        typedAutoOpened = false
+        typedSuppressed = false
         panelAnimator?.cancel()
         isClipboardPanelTall = false
         keyboardFrame = newInputView.findViewById<View>(R.id.main_keyboard_frame)?.also {
@@ -142,7 +151,12 @@ class DynamicToolbarController(private val context: Context) {
         }
         // closing the toolbar while it shows a paste chip dismisses the chip
         if (!expanded && toolbar?.isChipBarShown == true) dismissChip()
-        if (!expanded) autoOpened = false
+        if (!expanded) {
+            autoOpened = false
+            // closed by the user while a typed chip shows: it stays closed until the chip is gone
+            if (typedHit != null && !closingForTyped) typedSuppressed = true
+            typedAutoOpened = false
+        }
         isExpanded = expanded
         applyChipState()
         context.prefs().edit { putBoolean(ForkSettings.PREF_TOOLBAR_EXPANDED, expanded) }
@@ -374,6 +388,9 @@ class DynamicToolbarController(private val context: Context) {
      */
     fun refreshPasteChips() {
         val ime = latinIME ?: return
+        if (helium314.keyboard.fork.smart.SmartPrefs.enabled(context)
+            && context.prefs().getBoolean(helium314.keyboard.fork.smart.SmartPrefs.CURRENCY, true))
+            helium314.keyboard.fork.smart.CurrencyRates.refreshIfOld(context)
         handler.removeCallbacks(chipExpiry)
         val prefs = context.prefs()
         val now = System.currentTimeMillis()
@@ -401,7 +418,7 @@ class DynamicToolbarController(private val context: Context) {
     private fun autoOpenForCode() {
         val c = chip ?: return
         if (c.key == autoOpenedKey || isExpanded || toolActive || clipSearch.isActive || !isUsable()) return
-        if (!ClipPrefs.codeAutoOpen(context.prefs()) || ClipPrefs.findCode(c.text) == null) return
+        if (!ClipPrefs.codeAutoOpen(context.prefs()) || (c.code ?: ClipPrefs.findCode(c.text)) == null) return
         Log.i(TAG, "opening the toolbar for a verification code")
         autoOpenedKey = c.key
         setExpanded(true, true) // no wave: that is for swipes
@@ -421,6 +438,8 @@ class DynamicToolbarController(private val context: Context) {
 
     private fun dismissChip() {
         chip?.let { dismissedChipKey = it.key }
+        // a notification code is offered once
+        if (chip?.code != null) helium314.keyboard.fork.clipboard.NotificationOtpBus.clear()
         chip = null
         handler.removeCallbacks(chipExpiry)
     }
@@ -433,17 +452,81 @@ class DynamicToolbarController(private val context: Context) {
         val tb = toolbar ?: return
         val c = chip
         val busy = toolActive || clipSearch.isActive
-        if (c != null && isExpanded && !busy) {
+        val hit = typedHit
+        if (hit != null && isExpanded && !busy) {
+            tb.showSmartHit(hit.query, hit.result,
+                onUse = { useTypedHit(hit) },
+                onBack = { typedSuppressed = true; typedHit = null; closeTyped() })
+        } else if (c != null && isExpanded && !busy) {
             val prefs = context.prefs()
-            val actions = if (c.imageUri == null) ClipPrefs.findActions(c.text) else emptyList()
+            val found = if (c.imageUri == null) ClipPrefs.findActions(c.text) else emptyList()
+            // a code from a notification is the one to paste
+            val actions = if (c.code == null) found
+                else listOf(ClipPrefs.SmartAction.Code(c.code)) + found.filter { it !is ClipPrefs.SmartAction.Code }
             tb.showChipBar(c.text?.take(300), actions, ClipPrefs.smartChips(prefs), c.imageUri,
-                onPaste = { text -> if (c.screenshot != null) pasteScreenshot(c.screenshot) else pasteChip(text) },
+                onPaste = { text ->
+                    when {
+                        c.screenshot != null -> pasteScreenshot(c.screenshot)
+                        c.code != null -> pasteChip(c.code) // the notification text itself is not wanted
+                        else -> pasteChip(text)
+                    }
+                },
                 onAction = ::onSmartAction,
                 onBack = { closeChip() })
         } else {
             tb.hideChipBar()
         }
         setHint(hintWanted())
+    }
+
+    // ---------------------------------------------------------------- smart chips for typed text
+
+    private val textCheck = Runnable { checkTypedText() }
+    private var closingForTyped = false
+
+    /** the text or the cursor changed: look at the text before the cursor once the caches are updated */
+    fun onTextChangedSoon() {
+        handler.removeCallbacks(textCheck)
+        handler.post(textCheck)
+    }
+
+    private fun checkTypedText() {
+        val ime = latinIME ?: return
+        val hit = if (!helium314.keyboard.fork.smart.SmartPrefs.enabled(context) || toolActive || clipSearch.isActive) null
+            else helium314.keyboard.fork.smart.SmartSuggest.detect(
+                ime.forkTextBeforeCursor(helium314.keyboard.fork.smart.SmartSuggest.LOOKBEHIND)?.toString().orEmpty(),
+                helium314.keyboard.fork.smart.SmartPrefs.context(context))
+        if (hit == typedHit) return
+        typedHit = hit
+        if (hit == null) {
+            typedSuppressed = false
+            closeTyped()
+            return
+        }
+        // show it right away, like the suggestion strip would; no wave, that is for swipes
+        if (!isExpanded && !typedSuppressed && isUsable()) {
+            setExpanded(true, true)
+            typedAutoOpened = true
+        }
+        applyChipState()
+    }
+
+    /** the typed chip is gone: close the toolbar again if it was opened for it */
+    private fun closeTyped() {
+        if (typedAutoOpened) {
+            typedAutoOpened = false
+            closingForTyped = true
+            setExpanded(false, true)
+            closingForTyped = false
+        } else {
+            applyChipState()
+        }
+    }
+
+    private fun useTypedHit(hit: helium314.keyboard.fork.smart.SmartSuggest.SmartHit) {
+        val ime = latinIME ?: return
+        ime.forkReplaceBeforeCursor(hit.replaceSpan, hit.insert)
+        // the new text is looked at again with the next selection update, which clears the chip
     }
 
     private fun onSmartAction(action: ClipPrefs.SmartAction) {

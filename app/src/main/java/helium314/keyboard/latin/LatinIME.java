@@ -871,6 +871,22 @@ public class LatinIME extends InputMethodService implements
         }
     }
 
+    /** fork: text before the cursor for the smart chips (cached by the input connection, cheap) */
+    @Nullable
+    public CharSequence forkTextBeforeCursor(final int n) {
+        return mInputLogic.mConnection.getTextBeforeCursor(n, 0);
+    }
+
+    /** fork: a smart chip was used: [deleteBefore] characters before the cursor are replaced by [text] */
+    public void forkReplaceBeforeCursor(final int deleteBefore, @NonNull final String text) {
+        final RichInputConnection connection = mInputLogic.mConnection;
+        connection.finishComposingText();
+        connection.beginBatchEdit();
+        if (deleteBefore > 0) connection.deleteTextBeforeCursor(deleteBefore);
+        connection.commitText(text, 1);
+        connection.endBatchEdit();
+    }
+
     void onStartInputViewInternal(final EditorInfo editorInfo, final boolean restarting) {
         if (mDynamicToolbar != null) mDynamicToolbar.refreshPasteChips(); // fork
         mClipboardHistoryManager.onStartInputView(); // fork
@@ -1081,6 +1097,8 @@ public class LatinIME extends InputMethodService implements
                                   final int composingSpanStart, final int composingSpanEnd) {
         super.onUpdateSelection(oldSelStart, oldSelEnd, newSelStart, newSelEnd,
                 composingSpanStart, composingSpanEnd);
+        // fork: typed text may be a sum / amount / measure for the smart chips, looked at once the caches are updated
+        if (mDynamicToolbar != null) mDynamicToolbar.onTextChangedSoon();
         if (DebugFlags.DEBUG_ENABLED) {
             Log.i(TAG, "onUpdateSelection: oss=" + oldSelStart + ", ose=" + oldSelEnd
                     + ", nss=" + newSelStart + ", nse=" + newSelEnd
