@@ -29,7 +29,7 @@ enum class ClipAction(val toolbarKey: ToolbarKey?, val defaultOn: Boolean) {
     RIGHT(ToolbarKey.RIGHT, false);
 
     fun icon(context: Context): Drawable? =
-        if (toolbarKey == null) ContextCompat.getDrawable(context, R.drawable.sym_keyboard_search_lxx)
+        if (toolbarKey == null) ContextCompat.getDrawable(context, R.drawable.ic_dot_search)
         else KeyboardIconsSet.instance.getNewDrawable(toolbarKey.name, context)
 
     fun label(context: Context): String =

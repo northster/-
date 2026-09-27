@@ -14,6 +14,7 @@ import helium314.keyboard.fork.clipboard.ClipAction
 import helium314.keyboard.fork.clipboard.ClipPrefs
 import helium314.keyboard.fork.clipboard.ClipSearch
 import helium314.keyboard.keyboard.internal.keyboard_parser.floris.KeyCode
+import helium314.keyboard.latin.ClipboardHistoryManager
 import helium314.keyboard.latin.LatinIME
 import helium314.keyboard.latin.RichInputMethodManager
 import helium314.keyboard.latin.common.Constants
@@ -92,7 +93,12 @@ class DynamicToolbarController(private val context: Context) {
         updatePosition()
     }
 
-    fun onSwipe(up: Boolean) = setExpanded(up, true)
+    fun onSwipe(up: Boolean) {
+        // the user decides now: a toolbar opened for a paste chip stays, or the chip is dismissed with it
+        if (!up && chipPeek) dismissedChipText = currentChipText
+        chipPeek = false
+        setExpanded(up, true)
+    }
 
     fun setExpanded(expanded: Boolean, animate: Boolean) {
         if (expanded == isExpanded) return
@@ -108,8 +114,8 @@ class DynamicToolbarController(private val context: Context) {
             endClipSearch(null)
             return
         }
-        if (expanded) refreshPasteChips()
         isExpanded = expanded
+        if (expanded) refreshPasteChips(autoShow = false)
         context.prefs().edit { putBoolean(ForkSettings.PREF_TOOLBAR_EXPANDED, expanded) }
         Log.i(TAG, "toolbar ${if (expanded) "expanded" else "collapsed"}")
 
@@ -260,21 +266,51 @@ class DynamicToolbarController(private val context: Context) {
     private val latinIME get() = context as? LatinIME
 
     /** Show the latest clip (if recent) and a verification code found in it. */
-    fun refreshPasteChips() {
+    /**
+     * Show the latest clip (if recent) and a verification code found in it.
+     * Like Samsung's keyboard, a collapsed toolbar opens by itself to show them ([autoShow]),
+     * and closes again once the chip is used or gone.
+     */
+    @JvmOverloads
+    fun refreshPasteChips(autoShow: Boolean = true) {
         val tb = toolbar ?: return
         val ime = latinIME ?: return
+        handler.removeCallbacks(chipExpiry)
         val prefs = context.prefs()
         val text = if (ClipPrefs.pasteChip(prefs)) ime.clipboardHistoryManager.getRecentClipText() else null
         if (text == null || text == dismissedChipText) {
+            currentChipText = null
             tb.setPasteChips(null, null) { }
+            endChipPeek()
             return
         }
+        currentChipText = text
         tb.setPasteChips(text.take(200), ClipPrefs.findCode(text)) { paste ->
             dismissedChipText = text
+            currentChipText = null
             ime.onTextInput(paste)
             tb.setPasteChips(null, null) { }
+            endChipPeek()
+        }
+        // the clip stops being recent after a while, check again then
+        handler.postDelayed(chipExpiry, ClipboardHistoryManager.RECENT_TIME_MILLIS + 1000)
+        if (autoShow && !isExpanded && !toolActive && !clipSearch.isActive && isUsable()) {
+            chipPeek = true
+            setExpanded(true, true)
         }
     }
+
+    private fun endChipPeek() {
+        if (!chipPeek) return
+        chipPeek = false
+        if (isExpanded && !toolActive && !clipSearch.isActive) setExpanded(false, true)
+    }
+
+    private val handler = android.os.Handler(android.os.Looper.getMainLooper())
+    private val chipExpiry = Runnable { refreshPasteChips(autoShow = false) }
+    /** the toolbar was opened only to show a paste chip */
+    private var chipPeek = false
+    private var currentChipText: String? = null
 
     val isClipSearchActive get() = clipSearch.isActive
 

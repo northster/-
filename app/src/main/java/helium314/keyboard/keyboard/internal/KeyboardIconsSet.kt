@@ -159,7 +159,40 @@ class KeyboardIconsSet private constructor() {
                     ToolbarKey.BACKGROUND_GATHERING -> R.drawable.ic_settings_gesture
                 })
             }
+            putAll(forkDotIcons)
         } }
+
+        /** fork: dot matrix icons (res/drawable/ic_dot_*, scripts/dot_icons.py) to match dot matrix fonts like Doto */
+        private val forkDotIcons get() = mapOf(
+            NAME_SHIFT_KEY to R.drawable.ic_dot_shift,
+            NAME_SHIFT_KEY_SHIFTED to R.drawable.ic_dot_shift_filled,
+            NAME_SHIFT_KEY_LOCKED to R.drawable.ic_dot_shift_locked,
+            NAME_DELETE_KEY to R.drawable.ic_dot_backspace,
+            NAME_SPACE_KEY to R.drawable.ic_dot_space,
+            NAME_SPACE_KEY_FOR_NUMBER_LAYOUT to R.drawable.ic_dot_space,
+            NAME_ENTER_KEY to R.drawable.ic_dot_enter,
+            NAME_GO_KEY to R.drawable.ic_dot_right,
+            NAME_SEARCH_KEY to R.drawable.ic_dot_search,
+            NAME_SEND_KEY to R.drawable.ic_dot_right,
+            NAME_DONE_KEY to R.drawable.ic_dot_check,
+            NAME_NEXT_KEY to R.drawable.ic_dot_right,
+            NAME_PREVIOUS_KEY to R.drawable.ic_dot_left,
+            NAME_LANGUAGE_SWITCH_KEY to R.drawable.ic_dot_globe,
+            NAME_BIN to R.drawable.ic_dot_trash,
+            ToolbarKey.CLIPBOARD.name.lowercase(Locale.US) to R.drawable.ic_dot_clipboard,
+            ToolbarKey.UNDO.name.lowercase(Locale.US) to R.drawable.ic_dot_undo,
+            ToolbarKey.REDO.name.lowercase(Locale.US) to R.drawable.ic_dot_redo,
+            ToolbarKey.SELECT_ALL.name.lowercase(Locale.US) to R.drawable.ic_dot_select_all,
+            ToolbarKey.SELECT_WORD.name.lowercase(Locale.US) to R.drawable.ic_dot_select_word,
+            ToolbarKey.COPY.name.lowercase(Locale.US) to R.drawable.ic_dot_copy,
+            ToolbarKey.CUT.name.lowercase(Locale.US) to R.drawable.ic_dot_cut,
+            ToolbarKey.PASTE.name.lowercase(Locale.US) to R.drawable.ic_dot_paste,
+            ToolbarKey.CLEAR_CLIPBOARD.name.lowercase(Locale.US) to R.drawable.ic_dot_trash,
+            ToolbarKey.CLOSE_HISTORY.name.lowercase(Locale.US) to R.drawable.ic_dot_close,
+            ToolbarKey.EMOJI.name.lowercase(Locale.US) to R.drawable.ic_dot_smile,
+            ToolbarKey.LEFT.name.lowercase(Locale.US) to R.drawable.ic_dot_left,
+            ToolbarKey.RIGHT.name.lowercase(Locale.US) to R.drawable.ic_dot_right,
+        )
 
         private val keyboardIconsMaterial by lazy { hashMapOf(
             // fork: Samsung style outline / filled shift arrows
@@ -224,7 +257,40 @@ class KeyboardIconsSet private constructor() {
                     ToolbarKey.BACKGROUND_GATHERING -> R.drawable.ic_settings_gesture
                 })
             }
+            putAll(forkDotIcons)
         } }
+
+        /** fork: dot matrix icons (res/drawable/ic_dot_*, scripts/dot_icons.py) to match dot matrix fonts like Doto */
+        private val forkDotIcons get() = mapOf(
+            NAME_SHIFT_KEY to R.drawable.ic_dot_shift,
+            NAME_SHIFT_KEY_SHIFTED to R.drawable.ic_dot_shift_filled,
+            NAME_SHIFT_KEY_LOCKED to R.drawable.ic_dot_shift_locked,
+            NAME_DELETE_KEY to R.drawable.ic_dot_backspace,
+            NAME_SPACE_KEY to R.drawable.ic_dot_space,
+            NAME_SPACE_KEY_FOR_NUMBER_LAYOUT to R.drawable.ic_dot_space,
+            NAME_ENTER_KEY to R.drawable.ic_dot_enter,
+            NAME_GO_KEY to R.drawable.ic_dot_right,
+            NAME_SEARCH_KEY to R.drawable.ic_dot_search,
+            NAME_SEND_KEY to R.drawable.ic_dot_right,
+            NAME_DONE_KEY to R.drawable.ic_dot_check,
+            NAME_NEXT_KEY to R.drawable.ic_dot_right,
+            NAME_PREVIOUS_KEY to R.drawable.ic_dot_left,
+            NAME_LANGUAGE_SWITCH_KEY to R.drawable.ic_dot_globe,
+            NAME_BIN to R.drawable.ic_dot_trash,
+            ToolbarKey.CLIPBOARD.name.lowercase(Locale.US) to R.drawable.ic_dot_clipboard,
+            ToolbarKey.UNDO.name.lowercase(Locale.US) to R.drawable.ic_dot_undo,
+            ToolbarKey.REDO.name.lowercase(Locale.US) to R.drawable.ic_dot_redo,
+            ToolbarKey.SELECT_ALL.name.lowercase(Locale.US) to R.drawable.ic_dot_select_all,
+            ToolbarKey.SELECT_WORD.name.lowercase(Locale.US) to R.drawable.ic_dot_select_word,
+            ToolbarKey.COPY.name.lowercase(Locale.US) to R.drawable.ic_dot_copy,
+            ToolbarKey.CUT.name.lowercase(Locale.US) to R.drawable.ic_dot_cut,
+            ToolbarKey.PASTE.name.lowercase(Locale.US) to R.drawable.ic_dot_paste,
+            ToolbarKey.CLEAR_CLIPBOARD.name.lowercase(Locale.US) to R.drawable.ic_dot_trash,
+            ToolbarKey.CLOSE_HISTORY.name.lowercase(Locale.US) to R.drawable.ic_dot_close,
+            ToolbarKey.EMOJI.name.lowercase(Locale.US) to R.drawable.ic_dot_smile,
+            ToolbarKey.LEFT.name.lowercase(Locale.US) to R.drawable.ic_dot_left,
+            ToolbarKey.RIGHT.name.lowercase(Locale.US) to R.drawable.ic_dot_right,
+        )
 
         private val keyboardIconsRounded by lazy { hashMapOf(
             NAME_SHIFT_KEY to                   R.drawable.sym_keyboard_shift_rounded,
@@ -288,7 +354,40 @@ class KeyboardIconsSet private constructor() {
                     ToolbarKey.BACKGROUND_GATHERING -> R.drawable.ic_settings_gesture
                 })
             }
+            putAll(forkDotIcons)
         } }
+
+        /** fork: dot matrix icons (res/drawable/ic_dot_*, scripts/dot_icons.py) to match dot matrix fonts like Doto */
+        private val forkDotIcons get() = mapOf(
+            NAME_SHIFT_KEY to R.drawable.ic_dot_shift,
+            NAME_SHIFT_KEY_SHIFTED to R.drawable.ic_dot_shift_filled,
+            NAME_SHIFT_KEY_LOCKED to R.drawable.ic_dot_shift_locked,
+            NAME_DELETE_KEY to R.drawable.ic_dot_backspace,
+            NAME_SPACE_KEY to R.drawable.ic_dot_space,
+            NAME_SPACE_KEY_FOR_NUMBER_LAYOUT to R.drawable.ic_dot_space,
+            NAME_ENTER_KEY to R.drawable.ic_dot_enter,
+            NAME_GO_KEY to R.drawable.ic_dot_right,
+            NAME_SEARCH_KEY to R.drawable.ic_dot_search,
+            NAME_SEND_KEY to R.drawable.ic_dot_right,
+            NAME_DONE_KEY to R.drawable.ic_dot_check,
+            NAME_NEXT_KEY to R.drawable.ic_dot_right,
+            NAME_PREVIOUS_KEY to R.drawable.ic_dot_left,
+            NAME_LANGUAGE_SWITCH_KEY to R.drawable.ic_dot_globe,
+            NAME_BIN to R.drawable.ic_dot_trash,
+            ToolbarKey.CLIPBOARD.name.lowercase(Locale.US) to R.drawable.ic_dot_clipboard,
+            ToolbarKey.UNDO.name.lowercase(Locale.US) to R.drawable.ic_dot_undo,
+            ToolbarKey.REDO.name.lowercase(Locale.US) to R.drawable.ic_dot_redo,
+            ToolbarKey.SELECT_ALL.name.lowercase(Locale.US) to R.drawable.ic_dot_select_all,
+            ToolbarKey.SELECT_WORD.name.lowercase(Locale.US) to R.drawable.ic_dot_select_word,
+            ToolbarKey.COPY.name.lowercase(Locale.US) to R.drawable.ic_dot_copy,
+            ToolbarKey.CUT.name.lowercase(Locale.US) to R.drawable.ic_dot_cut,
+            ToolbarKey.PASTE.name.lowercase(Locale.US) to R.drawable.ic_dot_paste,
+            ToolbarKey.CLEAR_CLIPBOARD.name.lowercase(Locale.US) to R.drawable.ic_dot_trash,
+            ToolbarKey.CLOSE_HISTORY.name.lowercase(Locale.US) to R.drawable.ic_dot_close,
+            ToolbarKey.EMOJI.name.lowercase(Locale.US) to R.drawable.ic_dot_smile,
+            ToolbarKey.LEFT.name.lowercase(Locale.US) to R.drawable.ic_dot_left,
+            ToolbarKey.RIGHT.name.lowercase(Locale.US) to R.drawable.ic_dot_right,
+        )
 
         fun getAllIcons(context: Context): Map<String, List<Int>> {
             // currently active style first

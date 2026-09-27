@@ -23,9 +23,9 @@ object ToolbarItems {
 
     /** Current toolbar content. Placeholders only for now. */
     val defaultItems = listOf(
-        ToolbarItem(CLIPBOARD, R.drawable.ic_fork_toolbar_clipboard, R.string.fork_toolbar_clipboard),
-        ToolbarItem(AI, R.drawable.ic_fork_toolbar_ai, R.string.fork_toolbar_ai),
-        ToolbarItem(TRANSLATE, R.drawable.ic_fork_toolbar_translate, R.string.fork_toolbar_translate),
-        ToolbarItem(MORE, R.drawable.ic_fork_toolbar_more, R.string.fork_toolbar_more),
+        ToolbarItem(CLIPBOARD, R.drawable.ic_dot_clipboard, R.string.fork_toolbar_clipboard),
+        ToolbarItem(AI, R.drawable.ic_dot_sparkles, R.string.fork_toolbar_ai),
+        ToolbarItem(TRANSLATE, R.drawable.ic_dot_translate, R.string.fork_toolbar_translate),
+        ToolbarItem(MORE, R.drawable.ic_dot_more, R.string.fork_toolbar_more),
     )
 }

@@ -167,7 +167,12 @@ class ClipboardHistoryView @JvmOverloads constructor(
         val settings = Settings.getInstance()
         KeyboardTypeface.customTypeface()?.let { params.mTypeface = it }
         setupClipKey(params)
-        setupBottomRowKeyboard(editorInfo, keyboardActionListener)
+        val bottomRow = findViewById<View>(R.id.bottom_row_keyboard)
+        if (FORK_NO_BOTTOM_ROW) bottomRow.visibility = GONE
+        else {
+            bottomRow.visibility = VISIBLE
+            setupBottomRowKeyboard(editorInfo, keyboardActionListener)
+        }
 
         placeholderView.apply {
             KeyboardTypeface.applyToTextView(this)

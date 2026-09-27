@@ -139,7 +139,7 @@ class DynamicToolbarView @JvmOverloads constructor(
     fun showSearch(onClose: () -> Unit) {
         val colors = Settings.getValues().mColors
         searchBar.removeAllViews()
-        searchBar.addView(iconButton(R.drawable.sym_keyboard_search_lxx, context.getString(R.string.fork_clip_search)) { },
+        searchBar.addView(iconButton(R.drawable.ic_dot_search, context.getString(R.string.fork_clip_search)) { },
             LinearLayout.LayoutParams((40 * density).toInt(), LayoutParams.MATCH_PARENT))
         queryView.setTextColor(colors.get(ColorType.KEY_TEXT))
         queryView.setHintTextColor(colors.get(ColorType.KEY_HINT_TEXT))
@@ -147,7 +147,7 @@ class DynamicToolbarView @JvmOverloads constructor(
         KeyboardTypeface.applyToTextView(queryView)
         searchBar.addView(queryView, LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT))
         searchBar.addView(resultScroll, LinearLayout.LayoutParams(0, LayoutParams.MATCH_PARENT, 1f))
-        searchBar.addView(iconButton(R.drawable.ic_close, context.getString(android.R.string.cancel)) { onClose() },
+        searchBar.addView(iconButton(R.drawable.ic_dot_close, context.getString(android.R.string.cancel)) { onClose() },
             LinearLayout.LayoutParams((40 * density).toInt(), LayoutParams.MATCH_PARENT))
         row.visibility = GONE
         header.visibility = GONE
@@ -187,7 +187,7 @@ class DynamicToolbarView @JvmOverloads constructor(
         val colors = Settings.getValues().mColors
         header.removeAllViews()
         val size = LinearLayout.LayoutParams((48 * density).toInt(), LayoutParams.MATCH_PARENT)
-        header.addView(iconButton(R.drawable.ic_fork_keyboard, context.getString(R.string.fork_tool_back)) { onBack() }, size)
+        header.addView(iconButton(R.drawable.ic_dot_keyboard, context.getString(R.string.fork_tool_back)) { onBack() }, size)
         header.addView(View(context).apply { setBackgroundColor(colors.get(ColorType.KEY_HINT_TEXT)) },
             LinearLayout.LayoutParams((1 * density).toInt().coerceAtLeast(1), (18 * density).toInt()).apply {
                 marginStart = (4 * density).toInt()

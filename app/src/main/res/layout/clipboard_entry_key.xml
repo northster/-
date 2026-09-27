@@ -57,7 +57,7 @@
             android:scaleType="fitCenter"
             android:background="@null"
             android:contentDescription="@string/fork_clip_pin"
-            android:src="@drawable/ic_clipboard_pin_lxx"/>
+            android:src="@drawable/ic_dot_pin"/>
         <ImageButton
             android:id="@+id/clipboard_entry_delete"
             android:layout_width="28dp"
@@ -66,7 +66,7 @@
             android:scaleType="fitCenter"
             android:background="@null"
             android:contentDescription="@string/delete"
-            android:src="@drawable/ic_fork_delete"/>
+            android:src="@drawable/ic_dot_trash"/>
     </LinearLayout>
 
 </LinearLayout>

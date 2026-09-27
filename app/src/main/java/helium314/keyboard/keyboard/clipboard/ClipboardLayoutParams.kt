@@ -11,6 +11,9 @@ import helium314.keyboard.latin.R
 import helium314.keyboard.latin.settings.Settings
 import helium314.keyboard.latin.utils.ResourceUtils
 
+/** fork: the clipboard panel has no bottom key row, see ClipboardHistoryView */
+const val FORK_NO_BOTTOM_ROW = true
+
 class ClipboardLayoutParams(ctx: Context) {
 
     private val keyVerticalGap: Int
@@ -41,7 +44,9 @@ class ClipboardLayoutParams(ctx: Context) {
         bottomRowKeyboardHeight = (defaultKeyboardHeight - bottomPadding - topPadding) / rowCount - keyVerticalGap / 2
         // height calculation is not good enough, probably also because keyboard top padding might be off by a pixel (see KeyboardParser)
         val offset = 1.25f * res.displayMetrics.density * sv.mKeyboardHeightScale
-        listHeight = defaultKeyboardHeight - bottomRowKeyboardHeight - bottomPadding + offset.toInt()
+        // fork: no bottom row (ABC / space / delete), back to the letters is on the toolbar header
+        listHeight = if (FORK_NO_BOTTOM_ROW) defaultKeyboardHeight - bottomPadding
+            else defaultKeyboardHeight - bottomRowKeyboardHeight - bottomPadding + offset.toInt()
     }
 
     fun setListProperties(recycler: RecyclerView) {
