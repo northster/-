@@ -15,6 +15,7 @@ import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
@@ -122,6 +123,10 @@ public final class EmojiPalettesView extends LinearLayout
             });
 
             emojiRecyclerView.setPersistentDrawingCache(PERSISTENT_NO_CACHE);
+            // fork: the bottom row floats over the list, an empty row at the end keeps the last emojis reachable
+            emojiRecyclerView.setClipToPadding(false);
+            emojiRecyclerView.setPadding(emojiRecyclerView.getPaddingLeft(), emojiRecyclerView.getPaddingTop(),
+                    emojiRecyclerView.getPaddingRight(), forkOverlayHeight());
             // fork: dotted scrollbar on the right instead of the page indicator below
             emojiRecyclerView.setVerticalScrollBarEnabled(false);
             emojiRecyclerView.addItemDecoration(new helium314.keyboard.fork.toolbar.DotScrollbarDecoration(
@@ -239,6 +244,53 @@ public final class EmojiPalettesView extends LinearLayout
         setMeasuredDimension(width, Math.max(height, mForkExpandedHeight));
     }
 
+    // ---- fork: the bottom row (space, delete) floats over the emojis, which show through its empty part
+    private boolean mForkPassThrough = false;
+
+    private int forkOverlayHeight() {
+        final ViewGroup.LayoutParams indicator = findViewById(R.id.emoji_category_page_id_view).getLayoutParams();
+        return mEmojiLayoutParams.getBottomRowKeyboardHeight() + (indicator != null ? Math.max(indicator.height, 0) : 0);
+    }
+
+    /** the list reaches down behind the bottom row */
+    private void forkOverlayBottomRow() {
+        final int overlay = forkOverlayHeight();
+        final ViewGroup.LayoutParams pagerLp = mPager.getLayoutParams();
+        pagerLp.height += overlay;
+        mPager.setLayoutParams(pagerLp);
+        mForkNormalPagerHeight = pagerLp.height;
+        final View bottomRow = findViewById(R.id.bottom_row_keyboard);
+        final LinearLayout.LayoutParams rowLp = (LinearLayout.LayoutParams) bottomRow.getLayoutParams();
+        rowLp.topMargin = -overlay;
+        bottomRow.setLayoutParams(rowLp);
+    }
+
+    /** touches on the empty part of the bottom row go to the emojis behind it */
+    private boolean isOverBottomRowGap(final MotionEvent ev) {
+        final MainKeyboardView row = findViewById(R.id.bottom_row_keyboard);
+        if (row == null || row.getKeyboard() == null) return false;
+        if (ev.getY() < row.getTop() || ev.getY() > row.getBottom()) return false;
+        final int x = (int) ev.getX() - row.getLeft() - row.getPaddingLeft();
+        for (final Key key : row.getKeyboard().getSortedKeys()) {
+            if (!key.isSpacer() && x >= key.getX() && x < key.getX() + key.getWidth()) return false;
+        }
+        return true;
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(final MotionEvent ev) {
+        if (ev.getActionMasked() == MotionEvent.ACTION_DOWN)
+            mForkPassThrough = mPager != null && isOverBottomRowGap(ev);
+        if (mForkPassThrough) {
+            final MotionEvent event = MotionEvent.obtain(ev);
+            event.offsetLocation(-mPager.getLeft(), -mPager.getTop());
+            final boolean handled = mPager.dispatchTouchEvent(event);
+            event.recycle();
+            return handled;
+        }
+        return super.dispatchTouchEvent(ev);
+    }
+
     // ---- fork: taller panel from the toolbar header, see ForkTallPanel
     private int mForkExpandedHeight = 0;
     private int mForkNormalPagerHeight = 0;
@@ -339,7 +391,7 @@ public final class EmojiPalettesView extends LinearLayout
         mPager.setAdapter(new PagerAdapter(mPager));
         mPager.setUserInputEnabled(false); // fork: categories change with the tabs on the toolbar, not by swiping
         mEmojiLayoutParams.setEmojiListProperties(mPager);
-        mForkNormalPagerHeight = mPager.getLayoutParams().height;
+        forkOverlayBottomRow();
         mEmojiCategoryPageIndicatorView = findViewById(R.id.emoji_category_page_id_view);
         mEmojiCategoryPageIndicatorView.setVisibility(INVISIBLE); // fork: replaced by the dotted scrollbar
         mEmojiLayoutParams.setCategoryPageIdViewProperties(mEmojiCategoryPageIndicatorView);
@@ -439,7 +491,7 @@ public final class EmojiPalettesView extends LinearLayout
         params.updateParams(mEmojiLayoutParams.getBottomRowKeyboardHeight(), keyVisualAttr);
         mForkExpandedHeight = 0;
         new EmojiLayoutParams(getResources()).setEmojiListProperties(mPager); // necessary when floating
-        mForkNormalPagerHeight = mPager.getLayoutParams().height;
+        forkOverlayBottomRow();
         setupSidePadding();
         initDictionaryFacilitator();
     }

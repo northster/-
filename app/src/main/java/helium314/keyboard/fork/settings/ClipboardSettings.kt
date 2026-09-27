@@ -98,6 +98,13 @@ fun createForkClipboardSettings(context: Context) = listOf(
             ctx.getString(R.string.fork_clip_chip_hint_dot) to ClipPrefs.HINT_DOT,
         ), ClipPrefs.HINT_GLOW)
     },
+    Setting(context, ClipPrefs.HINT_TEST_UNTIL, R.string.fork_clip_hint_test, R.string.fork_clip_hint_test_summary) { setting ->
+        val ctx = LocalContext.current
+        helium314.keyboard.settings.preferences.Preference(name = setting.title, description = setting.description, onClick = {
+            ctx.prefs().edit { putLong(ClipPrefs.HINT_TEST_UNTIL, System.currentTimeMillis() + 30_000) }
+            Toast.makeText(ctx, R.string.fork_clip_hint_test_started, Toast.LENGTH_LONG).show()
+        })
+    },
     Setting(context, ClipPrefs.SCREENSHOTS, R.string.fork_clip_screenshots, R.string.fork_clip_screenshots_summary) { setting ->
         val ctx = LocalContext.current
         val launcher = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->

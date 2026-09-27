@@ -19,6 +19,8 @@ object ClipPrefs {
     const val PASTE_CHIP = "fork_clip_paste_chip"
     /** how a waiting paste chip is shown while the toolbar is collapsed */
     const val CHIP_HINT = "fork_clip_chip_hint"
+    /** until this time (ms) a test chip is offered, to see the hint without copying anything */
+    const val HINT_TEST_UNTIL = "fork_clip_hint_test_until"
     const val HINT_GLOW = "glow"
     const val HINT_DOT = "dot"
 

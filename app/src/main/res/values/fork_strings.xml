@@ -211,4 +211,8 @@
     <string name="fork_layout_name">Name of the new layout</string>
     <string name="fork_layout_discard">There are unsaved changes. Discard them?</string>
     <string name="fork_layout_discard_confirm">Discard</string>
+    <string name="fork_clip_hint_test">Try the chip hint</string>
+    <string name="fork_clip_hint_test_summary">Shows the hint with a test chip for 30 seconds</string>
+    <string name="fork_clip_hint_test_started">Tap a text field now, with the toolbar closed. The hint shows for 30 seconds.</string>
+    <string name="fork_clip_hint_test_text">Test chip</string>
 </resources>

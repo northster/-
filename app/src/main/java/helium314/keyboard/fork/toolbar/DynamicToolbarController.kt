@@ -362,7 +362,15 @@ class DynamicToolbarController(private val context: Context) {
     fun refreshPasteChips() {
         val ime = latinIME ?: return
         handler.removeCallbacks(chipExpiry)
-        val clip = if (ClipPrefs.pasteChip(context.prefs())) ime.clipboardHistoryManager.getRecentClip() else null
+        val prefs = context.prefs()
+        val now = System.currentTimeMillis()
+        val testUntil = prefs.getLong(ClipPrefs.HINT_TEST_UNTIL, 0)
+        val clip = when {
+            now < testUntil -> ClipboardHistoryManager.RecentClip(context.getString(R.string.fork_clip_hint_test_text), null,
+                testUntil - ClipboardHistoryManager.RECENT_TIME_MILLIS)
+            ClipPrefs.pasteChip(prefs) -> ime.clipboardHistoryManager.getRecentClip()
+            else -> null
+        }
         chip = clip?.takeIf { it.key != dismissedChipKey }
         chip?.let {
             // it stops being recent after a while
@@ -380,6 +388,9 @@ class DynamicToolbarController(private val context: Context) {
 
     /** show chip bar / glow for the current state */
     private fun applyChipState() {
+        Log.i(TAG, "chip state: chip=${chip != null} expanded=$isExpanded tool=$toolActive search=${clipSearch.isActive} " +
+            "usable=${keyboardFrame != null && isUsable()} toolbar=${toolbar != null} " +
+            "keyboardView=${KeyboardSwitcher.getInstance().mainKeyboardView != null} hint=${ClipPrefs.chipHint(context.prefs())}")
         val tb = toolbar ?: return
         val c = chip
         val busy = toolActive || clipSearch.isActive
@@ -422,6 +433,7 @@ class DynamicToolbarController(private val context: Context) {
     private fun setHint(on: Boolean) {
         val kv = KeyboardSwitcher.getInstance().mainKeyboardView
         val style = ClipPrefs.chipHint(context.prefs())
+        Log.i(TAG, "hint ${if (on) "on" else "off"} ($style), keyboard view ${kv != null}")
         val shown = hintView != null
         if (on == shown && (!on || (hintView === kv && hintStyle == style))) return
         // remove the old one

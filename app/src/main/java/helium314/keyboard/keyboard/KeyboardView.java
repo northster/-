@@ -362,6 +362,14 @@ public class KeyboardView extends View {
             final Drawable background = key.selectBackgroundDrawable(
                     mKeyBackground, mFunctionalKeyBackground, mSpacebarBackground, mActionKeyBackground);
             onDrawKeyBackground(key, canvas, background);
+            // fork: the paste chip glow also shows on the key surface, under the label
+            if (mForkUnderlay != null) {
+                canvas.save();
+                canvas.clipRect(0, 0, key.getDrawWidth(), key.getHeight());
+                canvas.translate(-keyDrawX, -keyDrawY);
+                drawForkDecoration(mForkUnderlay, canvas);
+                canvas.restore();
+            }
         }
         onDrawKeyTopVisuals(key, canvas, paint, params);
 

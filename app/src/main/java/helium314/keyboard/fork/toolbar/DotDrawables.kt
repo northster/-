@@ -66,12 +66,12 @@ class DotGlowDrawable(private val color: Int, private val density: Float) : Draw
         val w = bounds.width().toFloat()
         val h = bounds.height().toFloat()
         if (w <= 0f || h <= 0f) return
-        val spacing = 5f * density
-        val r = 1f * density
+        val spacing = 4.5f * density
+        val r = 1.1f * density
         val cx = bounds.left + w / 2
         val top = bounds.top.toFloat()
-        val rx = w * 0.42f
-        val ry = h * 0.6f
+        val rx = w * 0.5f
+        val ry = h * 0.8f
         var y = top + spacing / 2
         while (y < top + ry) {
             var x = bounds.left + spacing / 2
@@ -80,7 +80,7 @@ class DotGlowDrawable(private val color: Int, private val density: Float) : Draw
                 val dy = (y - top) / ry
                 val d = sqrt(dx * dx + dy * dy)
                 if (d < 1f) {
-                    paint.alpha = (255 * intensity * (1f - d).pow(1.6f)).toInt().coerceIn(0, 255)
+                    paint.alpha = (220 * intensity * (1f - d).pow(1.2f)).toInt().coerceIn(0, 255)
                     canvas.drawCircle(x, y, r, paint)
                 }
                 x += spacing
