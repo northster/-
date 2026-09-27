@@ -8,13 +8,17 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
+    <!-- fork: pin toggle at the top left (a check mark while clips are selected for deletion) -->
     <ImageView
             android:id="@+id/clipboard_entry_pinned_icon"
-            android:contentDescription="@string/clipboard_history_pinned_first"
-            android:layout_width="@dimen/config_clipboard_pinned_icon_size"
-            android:layout_height="@dimen/config_clipboard_pinned_icon_size"
-            android:layout_marginVertical="8dp"
-            android:layout_marginStart="4dp"/>
+            android:contentDescription="@string/fork_clip_pin"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:padding="6dp"
+            android:scaleType="fitCenter"
+            android:layout_gravity="top"
+            android:layout_marginTop="2dp"
+            android:layout_marginStart="2dp"/>
 
     <!-- Provide audio and haptic feedback by ourselves based on the keyboard settings.
          We just need to ignore the system's audio and haptic feedback settings. -->
@@ -24,7 +28,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:layout_marginBottom="6dp"
-        android:layout_marginHorizontal="8dp"
+        android:layout_marginStart="2dp"
+        android:layout_marginEnd="10dp"
         android:hapticFeedbackEnabled="false"
         android:soundEffectsEnabled="false"
         android:orientation="vertical">
@@ -46,6 +51,7 @@
     <!-- fork: pin / delete right on the card -->
     <LinearLayout
         android:id="@+id/clipboard_entry_actions"
+        android:visibility="gone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical">

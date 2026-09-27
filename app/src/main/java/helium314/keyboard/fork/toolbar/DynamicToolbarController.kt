@@ -383,6 +383,10 @@ class DynamicToolbarController(private val context: Context) {
 
     /** back key: shrinks a tall panel first. Returns true if it was used. */
     fun onBackKey(): Boolean {
+        KeyboardSwitcher.getInstance().clipboardHistoryView?.takeIf { it.forkIsSelecting }?.let {
+            it.forkStopSelecting()
+            return true
+        }
         if (translatePanel != null) {
             closeTranslatePanel()
             return true
@@ -421,6 +425,12 @@ class DynamicToolbarController(private val context: Context) {
             manager.pinnedOnly = !manager.pinnedOnly
             KeyboardSwitcher.getInstance().clipboardHistoryView?.forkRefreshList()
             toolbar?.setHeaderActionActive(ClipAction.enabled(context.prefs()).indexOf(ClipAction.PINNED), manager.pinnedOnly)
+            return
+        }
+        if (action == ClipAction.CLEAR_CLIPBOARD) {
+            // pick the clips to delete instead of clearing everything
+            val view = KeyboardSwitcher.getInstance().clipboardHistoryView ?: return
+            if (view.forkIsSelecting) view.forkStopSelecting() else view.forkStartSelecting()
             return
         }
         val code = action.code() ?: return
@@ -529,6 +539,8 @@ class DynamicToolbarController(private val context: Context) {
                     when {
                         c.screenshot != null -> pasteScreenshot(c.screenshot)
                         c.code != null -> pasteChip(c.code) // the notification text itself is not wanted
+                        // the chip shows the start of a long clip, the whole clip is pasted
+                        text != null && c.text != null && c.text.startsWith(text) -> pasteChip(c.text)
                         else -> pasteChip(text)
                     }
                 },
@@ -659,6 +671,9 @@ class DynamicToolbarController(private val context: Context) {
     private fun setHint(on: Boolean, immediate: Boolean = false) {
         val kv = KeyboardSwitcher.getInstance().mainKeyboardView
         val fadingOut = fadeAnimator != null && hintView != null && !fadeTargetOn
+        // the smart chip glow has its own color, a clip or autofill glows in the enter key's color
+        val color = glowColor()
+        if (on && hintView != null && hintView === kv && hintGlowColor != color) removeHint()
         if (on && hintView != null && hintView === kv && !fadingOut) return
         if (!on && (hintView == null || (fadingOut && !immediate))) return
         Log.i(TAG, "glow ${if (on) "on" else "off"}, keyboard view ${kv != null}")
@@ -671,7 +686,8 @@ class DynamicToolbarController(private val context: Context) {
             removeHint()
             val params = GlowPrefs.glow(context.prefs())
             // over the background, under the keys
-            val glow = DotGlowDrawable(GlowPrefs.color(context.prefs()), context.resources.displayMetrics.density, params)
+            val glow = DotGlowDrawable(color, context.resources.displayMetrics.density, params)
+            hintGlowColor = color
             glow.setFade(0f)
             kv.setForkUnderlay(glow)
             hintView = kv
@@ -693,6 +709,12 @@ class DynamicToolbarController(private val context: Context) {
     }
 
     private var fadeTargetOn = false
+    private var hintGlowColor = 0
+
+    /** what the toolbar would show decides the color: typed smart chip in the glow color, else the enter key's */
+    private fun glowColor(): Int =
+        if (autofillView == null && typedHit != null) GlowPrefs.color(context.prefs())
+        else Settings.getValues().mColors.get(helium314.keyboard.latin.common.ColorType.ACTION_KEY_BACKGROUND)
 
     private fun fadeHint(on: Boolean) {
         val glow = hintGlow ?: return

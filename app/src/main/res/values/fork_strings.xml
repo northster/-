@@ -353,7 +353,7 @@
     <string name="fork_emoji_dict_summary">The 🔍 in the emoji panel needs an emoji dictionary for your language; add one here</string>
     <string name="fork_toolbar_gif">GIF</string>
     <string name="fork_toolbar_settings">Settings</string>
-    <string name="fork_glow_color">Glow color</string>
+    <string name="fork_glow_color">Smart chip glow color</string>
     <string name="fork_glow_color_default">Default (sky blue)</string>
     <string name="fork_smart_rates_from">Rates: %1$s · as of %2$s</string>
     <string name="fork_cat_gif">GIF</string>
@@ -388,4 +388,7 @@
     <string name="fork_gif_screen_summary">The GIF button on the toolbar searches with KLIPY (used first) or GIPHY. Both need a free API key.</string>
     <string name="fork_translate_screen_summary">The translate button on the toolbar opens a panel over the keys. It starts with these choices and remembers the last ones used. Uses the Gemini API keys of AI commands.</string>
     <string name="fork_translate_keep_summary">The translation goes under the original instead of replacing it</string>
+    <string name="fork_clip_select_all">Select all</string>
+    <string name="fork_clip_select_none">Select none</string>
+    <string name="fork_clip_delete_count">Delete (%1$d)</string>
 </resources>

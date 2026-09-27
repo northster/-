@@ -290,7 +290,7 @@ SwiftSlate(github.com/Musheer360/SwiftSlate, MIT)의 명령 방식을 키보드 
 - 키와 툴바 아이콘을 도트 매트릭스 스타일로 바꿨다. Doto 같은 도트 글꼴과 어울리게 하려는 것이다.
   - 대상: Shift, ⌫, 엔터, 스페이스, 언어, 이모지, 툴바 도구, 클립보드 동작, 카드의 고정·삭제 버튼.
 - 아이콘은 `scripts/dot_icons.py`에 12×12 점 그림으로 정의되어 있다. `python3 scripts/dot_icons.py app/src/main/res/drawable`를 실행하면 `ic_dot_*.xml`이 다시 만들어진다.
-- 대부분은 pixelarticons(github.com/halfmage/pixelarticons, MIT, Copyright (c) 2020 Gerrit Halfmann)의 24×24 픽셀 아이콘을 점 하나당 한 픽셀로 바꾼 것이다(`scripts/pixel_icons.py`, 대응표 `MAP`). 팩에 없는 GIF와 스페이스는 같은 24×24 격자에 직접 그렸다. `npm pack pixelarticons`로 받은 `package/svg` 폴더를 넣어 `python3 scripts/pixel_icons.py <svg 폴더> app/src/main/res/drawable`로 다시 만든다(dot_icons.py 다음에 실행).
+- 대부분은 pixelarticons(github.com/halfmage/pixelarticons, MIT, Copyright (c) 2020 Gerrit Halfmann)의 24×24 픽셀 아이콘을 12×12 점 격자로 줄인 것이다(`scripts/pixel_icons.py`, 대응표 `MAP`). 점 간격과 크기는 키 글자 크기의 Doto 글꼴과 같게(24dp에 12점, 지름 1.7dp). 아이콘마다 가장 덜 뭉개지는 위치(0/1픽셀 어긋남)에서 줄인다. Shift, 지구본, 스페이스, GIF, 지우기와 AI(별 두 개)는 12×12에 직접 그린 그림이다. `npm pack pixelarticons`로 받은 `package/svg` 폴더를 넣어 `python3 scripts/pixel_icons.py <svg 폴더> app/src/main/res/drawable`로 다시 만든다(dot_icons.py 다음에 실행).
 - 새 아이콘은 이 파일에 그림을 추가하고, `KeyboardIconsSet.forkDotIcons`나 툴바 항목에 연결한다.
 
 ## 11. 입력 중 밑줄 없애기

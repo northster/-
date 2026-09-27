@@ -151,8 +151,9 @@ sealed interface KeyData : AbstractKeyData {
             return Settings.getInstance().getInLocale(id, locale)
         }
 
-        private fun getActionKeyPopupKeys(params: KeyboardParams): SimplePopups? =
-            getActionKeyPopupKeyString(params.mId)?.let { createActionPopupKeys(it, params) }
+        // fork: nothing on a long press of enter (emoji / previous / next field popup removed)
+        @Suppress("UNUSED_PARAMETER")
+        private fun getActionKeyPopupKeys(params: KeyboardParams): SimplePopups? = null
 
         private fun getActionKeyPopupKeyString(keyboardId: KeyboardId): String? {
             val action = keyboardId.imeAction

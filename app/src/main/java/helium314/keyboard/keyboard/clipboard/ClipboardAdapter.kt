@@ -33,6 +33,34 @@ class ClipboardAdapter(
     /** fork: max lines of text on a card, see ClipPrefs.PREVIEW_LINES */
     var itemMaxLines = 4
 
+    /** fork: clips are being picked for deletion: a tap selects instead of pasting */
+    var selecting = false
+        private set
+    val selected = LinkedHashSet<Long>()
+    var onSelectionChanged: () -> Unit = {}
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun setSelecting(on: Boolean) {
+        selecting = on
+        selected.clear()
+        notifyDataSetChanged()
+        onSelectionChanged()
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun selectAll(all: Boolean) {
+        selected.clear()
+        if (all) for (i in 0 until itemCount) getItem(i)?.let { selected.add(it.id) }
+        notifyDataSetChanged()
+        onSelectionChanged()
+    }
+
+    private fun toggleSelected(id: Long, position: Int) {
+        if (!selected.remove(id)) selected.add(id)
+        notifyItemChanged(position)
+        onSelectionChanged()
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
                 .inflate(R.layout.clipboard_entry_key, parent, false)
@@ -66,9 +94,12 @@ class ClipboardAdapter(
                 isHapticFeedbackEnabled = false
             }
             Settings.getValues().mColors.setBackground(view, ColorType.KEY_BACKGROUND)
+            // fork: the pin toggle at the top left (a check mark while selecting)
             pinnedIconView = view.findViewById<ImageView>(R.id.clipboard_entry_pinned_icon).apply {
-                visibility = View.GONE
-                setImageResource(pinnedIconResId)
+                setOnClickListener {
+                    val id = view.tag as? Long ?: return@setOnClickListener
+                    if (selecting) toggleSelected(id, bindingAdapterPosition) else keyEventListener.onTogglePin(id)
+                }
             }
             contentTextView = view.findViewById<TextView>(R.id.clipboard_entry_text_content).apply {
                 typeface = itemTypeFace
@@ -78,7 +109,6 @@ class ClipboardAdapter(
             contentImageView = view.findViewById(R.id.clipboard_entry_image_content)
             clipboardLayoutParams.setItemProperties(view)
             val colors = Settings.getValues().mColors
-            colors.setColor(pinnedIconView, ColorType.CLIPBOARD_PIN)
             pinButton = view.findViewById<ImageView>(R.id.clipboard_entry_pin).apply {
                 setOnClickListener { (view.tag as? Long)?.let { keyEventListener.onTogglePin(it) } }
             }
@@ -100,9 +130,21 @@ class ClipboardAdapter(
                 contentTextView.typeface = helium314.keyboard.keyboard.KeyboardTypeface.resolve(contentTextView.text,
                     itemTypeFace ?: Typeface.DEFAULT)
             }
-            // fork: the pin button is highlighted instead of showing the separate pin icon
-            pinnedIconView.visibility = View.GONE
-            Settings.getValues().mColors.setColor(pinButton, if (historyEntry.isPinned) ColorType.CLIPBOARD_PIN else ColorType.KEY_HINT_TEXT)
+            // fork: pin toggle at the top left, in the enter key's color when pinned; a check mark while selecting
+            val colors = Settings.getValues().mColors
+            if (selecting) {
+                val isSelected = historyEntry.id in selected
+                pinnedIconView.setImageResource(R.drawable.ic_dot_check)
+                colors.setColor(pinnedIconView, if (isSelected) ColorType.ACTION_KEY_BACKGROUND else ColorType.KEY_HINT_TEXT)
+                pinnedIconView.alpha = if (isSelected) 1f else 0.35f
+                itemView.alpha = if (isSelected) 1f else 0.75f
+            } else {
+                pinnedIconView.setImageResource(R.drawable.ic_dot_pin)
+                colors.setColor(pinnedIconView, if (historyEntry.isPinned) ColorType.ACTION_KEY_BACKGROUND else ColorType.KEY_HINT_TEXT)
+                pinnedIconView.alpha = if (historyEntry.isPinned) 1f else 0.45f
+                itemView.alpha = 1f
+            }
+            pinnedIconView.visibility = View.VISIBLE
             contentImageView.visibility = if (historyEntry.filename != null) View.VISIBLE else View.GONE
             contentTextView.visibility = if (contentTextView.text.isNullOrEmpty()) View.GONE else View.VISIBLE
         }
@@ -116,10 +158,12 @@ class ClipboardAdapter(
         }
 
         override fun onClick(view: View) {
+            if (selecting) { toggleSelected(view.tag as Long, bindingAdapterPosition); return }
             keyEventListener.onKeyUp(view.tag as Long)
         }
 
         override fun onLongClick(view: View): Boolean {
+            if (selecting) { toggleSelected(view.tag as Long, bindingAdapterPosition); return true }
             keyEventListener.onLongPressClip(view.tag as Long) // fork: info panel instead of toggling pin
             return true
         }

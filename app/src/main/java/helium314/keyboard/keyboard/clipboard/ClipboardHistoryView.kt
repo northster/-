@@ -230,6 +230,7 @@ class ClipboardHistoryView @JvmOverloads constructor(
         if (!this::clipboardAdapter.isInitialized) return
         setForkExpandedHeight(0)
         hideInfoPanel()
+        forkStopSelecting()
         clipboardRecyclerView.adapter = null
         clipboardHistoryManager.setHistoryChangeListener(null)
         clipboardAdapter.clipboardHistoryManager = null
@@ -368,6 +369,84 @@ class ClipboardHistoryView @JvmOverloads constructor(
         }
         container.addView(scrim, FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT))
         infoPanel = scrim
+    }
+
+    // fork: picking clips to delete (the toolbar's delete button), with a bar at the bottom
+    private var selectionBar: View? = null
+    private var selectionDelete: TextView? = null
+    private var selectionAll: TextView? = null
+
+    val forkIsSelecting get() = this::clipboardAdapter.isInitialized && clipboardAdapter.selecting
+
+    fun forkStartSelecting() {
+        if (!this::clipboardAdapter.isInitialized || clipboardAdapter.selecting) return
+        hideInfoPanel()
+        val container = clipboardRecyclerView.parent as? FrameLayout ?: return
+        val colors = Settings.getValues().mColors
+        val density = resources.displayMetrics.density
+        fun button(label: String, primary: Boolean, action: () -> Unit) = TextView(context).apply {
+            text = label
+            gravity = android.view.Gravity.CENTER
+            setTextSize(TypedValue.COMPLEX_UNIT_SP, 15f)
+            KeyboardTypeface.applyToTextView(this)
+            setTextColor(colors.get(if (primary) ColorType.ACTION_KEY_ICON else ColorType.KEY_TEXT))
+            background = android.graphics.drawable.GradientDrawable().apply {
+                cornerRadius = 22 * density
+                setColor(colors.get(if (primary) ColorType.ACTION_KEY_BACKGROUND else ColorType.KEY_BACKGROUND))
+            }
+            setOnClickListener {
+                keyboardActionListener.onPressKey(KeyCode.NOT_SPECIFIED, 0, 1, HapticEvent.KEY_PRESS)
+                action()
+            }
+        }
+        val bar = LinearLayout(context).apply {
+            orientation = HORIZONTAL
+            val p = (10 * density).toInt()
+            setPadding(p, p, p, p)
+            setBackgroundColor(colors.get(ColorType.MAIN_BACKGROUND))
+            isClickable = true
+        }
+        val all = button(context.getString(R.string.fork_clip_select_all), false) {
+            clipboardAdapter.selectAll(clipboardAdapter.selected.size < clipboardAdapter.itemCount)
+        }
+        val cancel = button(context.getString(android.R.string.cancel), false) { forkStopSelecting() }
+        val delete = button(context.getString(R.string.delete), true) {
+            val ids = clipboardAdapter.selected.toList()
+            forkStopSelecting()
+            ids.forEach { clipboardHistoryManager.deleteClip(it) }
+            forkRefreshList()
+        }
+        val h = (44 * density).toInt()
+        val gap = (8 * density).toInt()
+        bar.addView(all, LinearLayout.LayoutParams(0, h, 1f))
+        bar.addView(cancel, LinearLayout.LayoutParams(0, h, 1f).apply { marginStart = gap })
+        bar.addView(delete, LinearLayout.LayoutParams(0, h, 1f).apply { marginStart = gap })
+        container.addView(bar, FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT,
+            android.view.Gravity.BOTTOM))
+        selectionBar = bar
+        selectionDelete = delete
+        selectionAll = all
+        clipboardAdapter.onSelectionChanged = ::updateSelectionBar
+        clipboardAdapter.setSelecting(true)
+    }
+
+    fun forkStopSelecting() {
+        selectionBar?.let { (it.parent as? ViewGroup)?.removeView(it) }
+        selectionBar = null
+        selectionDelete = null
+        selectionAll = null
+        if (this::clipboardAdapter.isInitialized && clipboardAdapter.selecting) clipboardAdapter.setSelecting(false)
+    }
+
+    private fun updateSelectionBar() {
+        val count = clipboardAdapter.selected.size
+        selectionDelete?.let {
+            it.text = if (count > 0) context.getString(R.string.fork_clip_delete_count, count) else context.getString(R.string.delete)
+            it.isEnabled = count > 0
+            it.alpha = if (count > 0) 1f else 0.5f
+        }
+        selectionAll?.setText(if (count > 0 && count >= clipboardAdapter.itemCount) R.string.fork_clip_select_none
+            else R.string.fork_clip_select_all)
     }
 
     /** fork: pinned clips only, the positions from the database don't match the list */
