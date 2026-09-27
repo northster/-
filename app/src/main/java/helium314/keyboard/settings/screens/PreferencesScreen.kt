@@ -43,8 +43,8 @@ fun PreferencesScreen(
     val b = (LocalContext.current.getActivity() as? SettingsActivity)?.prefChanged?.collectAsState()
     if ((b?.value ?: 0) < 0)
         Log.v("irrelevant", "stupid way to trigger recomposition on preference change")
-    val clipboardHistoryEnabled = prefs.getBoolean(Settings.PREF_ENABLE_CLIPBOARD_HISTORY, Defaults.PREF_ENABLE_CLIPBOARD_HISTORY)
-    // fork: regrouped into smaller, clearer sections
+    // fork: regrouped into smaller, clearer sections; clipboard and smart chips have their own screens (ToolScreens.kt),
+    //  rarely used options (.com popups, redundant popups, d-pad key, emoji descriptions) are only found by the search
     val items = listOf(
         R.string.fork_cat_hints,
         Settings.PREF_SHOW_HINTS,
@@ -52,8 +52,6 @@ fun PreferencesScreen(
             Settings.PREF_POPUP_KEYS_HINT_ORDER else null,
         Settings.PREF_POPUP_KEYS_ORDER,
         Settings.PREF_SHOW_POPUP_HINTS,
-        Settings.PREF_SHOW_TLD_POPUP_KEYS,
-        Settings.PREF_REMOVE_REDUNDANT_POPUPS,
         R.string.fork_cat_feedback,
         Settings.PREF_POPUP_ON,
         if (AudioAndHapticFeedbackManager.getInstance().hasVibrator())
@@ -77,42 +75,13 @@ fun PreferencesScreen(
         Settings.PREF_SHOW_LANGUAGE_SWITCH_KEY,
         Settings.PREF_LANGUAGE_SWITCH_KEY,
         Settings.PREF_SHOW_EMOJI_KEY,
-        Settings.PREF_SHOW_DPAD_KEY,
-        R.string.fork_cat_smart_typing,
-        helium314.keyboard.fork.smart.SmartPrefs.TYPING,
-        if (prefs.getBoolean(helium314.keyboard.fork.smart.SmartPrefs.TYPING, true)) helium314.keyboard.fork.smart.SmartPrefs.CALC else null,
-        if (prefs.getBoolean(helium314.keyboard.fork.smart.SmartPrefs.TYPING, true)) helium314.keyboard.fork.smart.SmartPrefs.CURRENCY else null,
-        if (prefs.getBoolean(helium314.keyboard.fork.smart.SmartPrefs.TYPING, true)) helium314.keyboard.fork.smart.SmartPrefs.UNITS else null,
-        R.string.settings_category_clipboard_history,
-        Settings.PREF_ENABLE_CLIPBOARD_HISTORY,
-        // fork: retention in hours, size limits, layout of the panel, paste chips, screenshots
-        helium314.keyboard.fork.clipboard.ClipAction.PREF,
-        if (clipboardHistoryEnabled) ClipPrefs.RETENTION_HOURS else null,
-        if (clipboardHistoryEnabled) ClipPrefs.MAX_ITEMS else null,
-        if (clipboardHistoryEnabled) ClipPrefs.COLUMNS else null,
-        if (clipboardHistoryEnabled) ClipPrefs.PREVIEW_LINES else null,
-        if (clipboardHistoryEnabled) Settings.PREF_CLIPBOARD_HISTORY_PINNED_FIRST else null,
-        Settings.PREF_ABC_AFTER_CLIP,
-        ClipPrefs.PASTE_CHIP,
-        ClipPrefs.SMART_CHIPS,
-        ClipPrefs.CODE_AUTO_OPEN,
-        helium314.keyboard.fork.clipboard.NotificationOtpCapture.PREF,
-        ClipPrefs.CODE_TEST_UNTIL,
-        ClipPrefs.SMART_TESTER,
-        ClipPrefs.CHIP_BORDER,
-        if (prefs.getBoolean(ClipPrefs.CHIP_BORDER, true)) ClipPrefs.CHIP_BORDER_STYLE else null,
-        if (prefs.getBoolean(ClipPrefs.CHIP_BORDER, true)) ClipPrefs.CHIP_BORDER_COLOR else null,
-        ClipPrefs.CHIP_BG_COLOR,
-        ClipPrefs.CHIP_TEXT_COLOR,
-        ClipPrefs.CHIP_RADIUS,
-        if (clipboardHistoryEnabled) ClipPrefs.SCREENSHOTS else null,
-        if (clipboardHistoryEnabled) Settings.PREF_CLIPBOARD_USE_FILES else null,
-        if (clipboardHistoryEnabled && prefs.getBoolean(Settings.PREF_CLIPBOARD_USE_FILES, Defaults.PREF_CLIPBOARD_USE_FILES))
-            Settings.PREF_CLIPBOARD_FILES_SIZE_LIMIT else null,
+        // fork: spacebar hold and cursor
+        R.string.fork_cat_space,
+        helium314.keyboard.fork.ForkSettings.PREF_SPACE_LONG_PRESS_MS,
+        helium314.keyboard.fork.ForkSettings.PREF_VIRTUAL_CARET,
         R.string.fork_cat_general,
         helium314.keyboard.fork.ForkSettings.PREF_HIDE_COMPOSING_UNDERLINE,
         Settings.PREF_SAVE_SUBTYPE_PER_APP,
-        Settings.PREF_SHOW_EMOJI_DESCRIPTIONS,
     )
     SearchSettingsScreen(
         onClickBack = onClickBack,

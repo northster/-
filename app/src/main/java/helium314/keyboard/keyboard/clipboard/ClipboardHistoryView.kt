@@ -370,16 +370,25 @@ class ClipboardHistoryView @JvmOverloads constructor(
         infoPanel = scrim
     }
 
+    /** fork: pinned clips only, the positions from the database don't match the list */
+    fun forkRefreshList() {
+        clipboardAdapter.notifyDataSetChanged()
+        clipboardRecyclerView.scrollToPosition(0)
+    }
+
     override fun onClipInserted(position: Int) {
+        if (clipboardHistoryManager.pinnedOnly) { clipboardAdapter.notifyDataSetChanged(); return }
         clipboardAdapter.notifyItemInserted(position)
         clipboardRecyclerView.smoothScrollToPosition(position)
     }
 
     override fun onClipsRemoved(position: Int, count: Int) {
+        if (clipboardHistoryManager.pinnedOnly) { clipboardAdapter.notifyDataSetChanged(); return }
         clipboardAdapter.notifyItemRangeRemoved(position, count)
     }
 
     override fun onClipMoved(oldPosition: Int, newPosition: Int) {
+        if (clipboardHistoryManager.pinnedOnly) { clipboardAdapter.notifyDataSetChanged(); return }
         clipboardAdapter.notifyItemMoved(oldPosition, newPosition)
         clipboardAdapter.notifyItemChanged(newPosition)
         if (newPosition < oldPosition) clipboardRecyclerView.smoothScrollToPosition(newPosition)

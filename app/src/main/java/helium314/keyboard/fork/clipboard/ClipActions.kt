@@ -18,6 +18,8 @@ import helium314.keyboard.latin.utils.getStringResourceOrName
  */
 enum class ClipAction(val toolbarKey: ToolbarKey?, val defaultOn: Boolean) {
     SEARCH(null, true),
+    /** show only the pinned clips (toggle) */
+    PINNED(null, true),
     CLEAR_CLIPBOARD(ToolbarKey.CLEAR_CLIPBOARD, true),
     SELECT_ALL(ToolbarKey.SELECT_ALL, false),
     SELECT_WORD(ToolbarKey.SELECT_WORD, false),
@@ -28,22 +30,32 @@ enum class ClipAction(val toolbarKey: ToolbarKey?, val defaultOn: Boolean) {
     LEFT(ToolbarKey.LEFT, false),
     RIGHT(ToolbarKey.RIGHT, false);
 
-    fun icon(context: Context): Drawable? =
-        if (toolbarKey == null) ContextCompat.getDrawable(context, R.drawable.ic_dot_search)
-        else KeyboardIconsSet.instance.getNewDrawable(toolbarKey.name, context)
+    fun icon(context: Context): Drawable? = when (this) {
+        SEARCH -> ContextCompat.getDrawable(context, R.drawable.ic_dot_search)
+        PINNED -> ContextCompat.getDrawable(context, R.drawable.ic_dot_pin)
+        else -> KeyboardIconsSet.instance.getNewDrawable(toolbarKey!!.name, context)
+    }
 
-    fun label(context: Context): String =
-        if (toolbarKey == null) context.getString(R.string.fork_clip_search)
-        else toolbarKey.name.lowercase().getStringResourceOrName("", context)
+    fun label(context: Context): String = when (this) {
+        SEARCH -> context.getString(R.string.fork_clip_search)
+        PINNED -> context.getString(R.string.fork_clip_pinned_only)
+        else -> toolbarKey!!.name.lowercase().getStringResourceOrName("", context)
+    }
 
-    /** key code sent for this action, null for [SEARCH] which is handled by the toolbar */
+    /** key code sent for this action, null for [SEARCH] and [PINNED] which are handled by the toolbar */
     fun code(): Int? = toolbarKey?.let { getCodeForToolbarKey(it) }
 
     companion object {
         const val PREF = "fork_clip_actions"
+        private const val PINNED_ADDED = "fork_clip_actions_pinned_added"
 
         fun enabled(prefs: SharedPreferences): List<ClipAction> {
-            val stored = prefs.getString(PREF, null) ?: return entries.filter { it.defaultOn }
+            var stored = prefs.getString(PREF, null) ?: return entries.filter { it.defaultOn }
+            // the pinned clips button came later: add it once to a list chosen before
+            if (!prefs.getBoolean(PINNED_ADDED, false)) {
+                if (PINNED.name !in stored.split(';')) stored = "$stored;${PINNED.name}"
+                prefs.edit { putString(PREF, stored); putBoolean(PINNED_ADDED, true) }
+            }
             val names = stored.split(';').toSet()
             return entries.filter { it.name in names }
         }

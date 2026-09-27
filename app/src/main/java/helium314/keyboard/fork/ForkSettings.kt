@@ -87,6 +87,23 @@ object ForkSettings {
     fun isComposingUnderlineHidden() =
         !initialized || appPrefs.getBoolean(PREF_HIDE_COMPOSING_UNDERLINE, DEFAULT_HIDE_COMPOSING_UNDERLINE)
 
+    /** iPhone style floating caret while space is held (falls back to steps in apps that don't support it) */
+    const val PREF_VIRTUAL_CARET = "fork_virtual_caret"
+
+    @JvmStatic
+    fun isVirtualCaretEnabled() = !initialized || appPrefs.getBoolean(PREF_VIRTUAL_CARET, true)
+
+    /** how long space must be held before it moves the cursor (and other space long presses), ms; 0 = like HeliBoard */
+    const val PREF_SPACE_LONG_PRESS_MS = "fork_space_long_press_ms"
+
+    /** the space long press time, or [default] (HeliBoard: 1.5 x the key long press time) when not set */
+    @JvmStatic
+    fun spaceLongPressMs(default: Int): Int {
+        if (!initialized) return default
+        val ms = appPrefs.getFloat(PREF_SPACE_LONG_PRESS_MS, 0f).toInt()
+        return if (ms > 0) ms else default
+    }
+
     const val DEFAULT_TOOLBAR_SWIPE_ENABLED = true
     const val DEFAULT_TOOLBAR_OVERLAY = false
     const val DEFAULT_TOOLBAR_SMOOTH_RESIZE = true

@@ -424,6 +424,16 @@ class DynamicToolbarView @JvmOverloads constructor(
     }
 
     /** Header of an open tool: back to the keyboard, the tool's name, its actions on the right. */
+    private val headerActions = ArrayList<ImageButton>()
+
+    /** a toggle in the tool header (e.g. pinned clips only) is on: drawn in the enter key color */
+    fun setHeaderActionActive(index: Int, active: Boolean) {
+        val button = headerActions.getOrNull(index) ?: return
+        val colors = Settings.getValues().mColors
+        if (active) button.setColorFilter(colors.get(ColorType.ACTION_KEY_BACKGROUND))
+        else colors.setColor(button, ColorType.TOOL_BAR_KEY)
+    }
+
     fun showToolHeader(title: String, actions: List<Pair<android.graphics.drawable.Drawable?, String>>, onBack: () -> Unit, onAction: (Int) -> Unit) {
         val colors = Settings.getValues().mColors
         header.removeAllViews()
@@ -442,8 +452,11 @@ class DynamicToolbarView @JvmOverloads constructor(
             setTextColor(colors.get(ColorType.KEY_TEXT))
             KeyboardTypeface.applyToTextView(this)
         }, LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f))
+        headerActions.clear()
         actions.forEachIndexed { i, (icon, label) ->
-            header.addView(iconButton(icon, label) { onAction(i) }, LinearLayout.LayoutParams((44 * density).toInt(), LayoutParams.MATCH_PARENT))
+            val button = iconButton(icon, label) { onAction(i) }
+            headerActions.add(button)
+            header.addView(button, LinearLayout.LayoutParams((44 * density).toInt(), LayoutParams.MATCH_PARENT))
         }
         row.visibility = GONE
         searchBar.visibility = GONE

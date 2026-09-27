@@ -63,6 +63,8 @@ fun MainSettingsScreen(
     onClickPreferences: () -> Unit,
     onClickToolbar: () -> Unit,
     onClickDynamicToolbar: () -> Unit,
+    onClickClipboard: () -> Unit,
+    onClickSmartChips: () -> Unit,
     onClickGestureTyping: () -> Unit,
     onClickDataGathering: () -> Unit,
     onClickAdvanced: () -> Unit,
@@ -136,10 +138,14 @@ fun MainSettingsScreen(
                 entry(R.string.settings_screen_secondary_layouts, stringResource(R.string.fork_desc_layouts),
                     R.drawable.ic_settings_layout, onClickLayouts),
             ))
-            SettingsSection(stringResource(R.string.fork_main_toolbar), listOf(
-                // fork: dynamic and HeliBoard toolbar settings are one screen
+            SettingsSection(stringResource(R.string.fork_main_tools), listOf(
+                // fork: the toolbar, and the tools on it with their own screens
                 entry(R.string.settings_screen_toolbar, stringResource(R.string.fork_desc_dynamic_toolbar),
                     R.drawable.ic_settings_toolbar, onClickDynamicToolbar),
+                entry(R.string.fork_screen_clipboard, stringResource(R.string.fork_desc_clipboard),
+                    R.drawable.ic_dot_clipboard, onClickClipboard),
+                entry(R.string.fork_screen_smart_chips, stringResource(R.string.fork_desc_smart_chips),
+                    R.drawable.ic_dot_sparkles, onClickSmartChips),
             ))
             SettingsSection(stringResource(R.string.fork_main_more), listOf(
                 entry(R.string.settings_screen_advanced, stringResource(R.string.fork_desc_advanced),
@@ -174,7 +180,7 @@ private fun PreviewScreen() {
     initPreview(LocalContext.current)
     Theme(previewDark) {
         Surface {
-            MainSettingsScreen({}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {})
+            MainSettingsScreen({}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {})
         }
     }
 }

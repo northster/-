@@ -265,6 +265,8 @@ public final class EmojiPalettesView extends LinearLayout
         final LinearLayout.LayoutParams rowLp = (LinearLayout.LayoutParams) bottomRow.getLayoutParams();
         rowLp.topMargin = -overlay;
         bottomRow.setLayoutParams(rowLp);
+        // floating over the emojis: a soft shadow keeps the buttons from looking pasted on
+        ((MainKeyboardView) bottomRow).setForkKeyShadow(true);
     }
 
     /** touches on the empty part of the bottom row go to the emojis behind it */

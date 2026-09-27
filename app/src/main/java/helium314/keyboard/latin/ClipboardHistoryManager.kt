@@ -207,7 +207,7 @@ class ClipboardHistoryManager(
         removeClipboardSuggestion()
     }
 
-    fun canRemove(index: Int) = clipboardDao?.isPinned(index) == false
+    fun canRemove(index: Int) = !pinnedOnly && clipboardDao?.isPinned(index) == false
 
     fun removeEntry(index: Int) {
         if (canRemove(index))
@@ -222,9 +222,14 @@ class ClipboardHistoryManager(
     // when history is about to be shown
     fun prepareClipboardHistory() = clipboardDao?.clearOldClips(true)
 
-    fun getHistorySize() = clipboardDao?.count() ?: 0
+    /** fork: the clipboard panel shows only the pinned clips (toolbar header button) */
+    var pinnedOnly = false
 
-    fun getHistoryEntry(position: Int) = clipboardDao?.getAt(position)
+    private fun pinned() = clipboardDao?.getAll()?.filter { it.isPinned }.orEmpty()
+
+    fun getHistorySize() = if (pinnedOnly) pinned().size else clipboardDao?.count() ?: 0
+
+    fun getHistoryEntry(position: Int) = if (pinnedOnly) pinned().getOrNull(position) else clipboardDao?.getAt(position)
 
     fun getHistoryEntryContent(id: Long) = clipboardDao?.get(id)
 

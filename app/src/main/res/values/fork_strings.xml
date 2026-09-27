@@ -279,4 +279,22 @@
     <string name="fork_smart_currency_summary">"10 dollars", "$10" or "5만원" offers the amount in won or dollars. Exchange rates are downloaded twice a day</string>
     <string name="fork_smart_units">Unit conversion</string>
     <string name="fork_smart_units_summary">"1 ft" offers metres, "30평" square metres</string>
+    <string name="fork_clip_pinned_only">Pinned clips only</string>
+    <string name="fork_main_tools">Tools</string>
+    <string name="fork_screen_clipboard">Clipboard</string>
+    <string name="fork_screen_smart_chips">Smart chips</string>
+    <string name="fork_desc_clipboard">History, panel, paste chip</string>
+    <string name="fork_desc_smart_chips">Answers while typing, codes, actions for copied text</string>
+    <string name="fork_cat_clip_panel">Clipboard panel</string>
+    <string name="fork_cat_paste_chip">Paste chip</string>
+    <string name="fork_cat_clip_files">Images and files</string>
+    <string name="fork_cat_smart_clip">Copied text</string>
+    <string name="fork_cat_codes">Verification codes</string>
+    <string name="fork_cat_space">Space bar</string>
+    <string name="fork_cat_chip_look">Chip look</string>
+    <string name="fork_space_long_press">Space bar hold time</string>
+    <string name="fork_space_long_press_summary">How long space must be held before the cursor moves</string>
+    <string name="fork_space_long_press_default">Default</string>
+    <string name="fork_virtual_caret">Floating cursor (iPhone style)</string>
+    <string name="fork_virtual_caret_summary">While space is held, a cursor follows your finger over the text and the real cursor jumps to the nearest letter. Apps that do not tell where their letters are move step by step</string>
 </resources>

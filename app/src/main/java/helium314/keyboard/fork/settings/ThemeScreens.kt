@@ -279,6 +279,14 @@ fun ThemeColorsScreen(onClickBack: () -> Unit) {
                     helium314.keyboard.latin.settings.Settings.PREF_THEME_DAY_NIGHT else null,
                 helium314.keyboard.latin.settings.Settings.PREF_NAVBAR_COLOR,
                 helium314.keyboard.latin.settings.Settings.PREF_CUSTOM_ICON_NAMES,
+                // paste / smart chips on the toolbar
+                R.string.fork_cat_chip_look,
+                helium314.keyboard.fork.clipboard.ClipPrefs.CHIP_BORDER,
+                helium314.keyboard.fork.clipboard.ClipPrefs.CHIP_BORDER_STYLE,
+                helium314.keyboard.fork.clipboard.ClipPrefs.CHIP_BORDER_COLOR,
+                helium314.keyboard.fork.clipboard.ClipPrefs.CHIP_BG_COLOR,
+                helium314.keyboard.fork.clipboard.ClipPrefs.CHIP_TEXT_COLOR,
+                helium314.keyboard.fork.clipboard.ClipPrefs.CHIP_RADIUS,
             ))
         }
         if (rename)

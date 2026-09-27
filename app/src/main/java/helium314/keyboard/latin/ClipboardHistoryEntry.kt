@@ -29,8 +29,8 @@ class ClipboardHistoryEntry(
     override fun compareTo(other: ClipboardHistoryEntry): Int {
         val result = other.isPinned.compareTo(isPinned)
         if (result == 0) return other.timeStamp.compareTo(timeStamp)
-        if (Settings.getValues()?.mClipboardHistoryPinnedFirst == false) return -result
-        return result
+        // fork: pinned clips are always at the end (the header button shows only them), no setting
+        return -result
     }
 
     fun getContentInfo(context: Context): InputContentInfoCompat =

@@ -285,6 +285,14 @@ class KeyboardActionListenerImpl(private val latinIME: LatinIME, private val inp
 
     override fun onSpaceCursorMove(steps: Int): Boolean = onMoveCursorHorizontally(steps)
 
+    override fun onSpaceCursorStart() {
+        if (helium314.keyboard.fork.ForkSettings.isVirtualCaretEnabled()) latinIME.mVirtualCaret.start()
+    }
+
+    override fun onSpaceCursorEnd() = latinIME.mVirtualCaret.end()
+
+    override fun onSpaceCursorDrag(dx: Int, dy: Int): Boolean = latinIME.mVirtualCaret.drag(dx, dy)
+
     // fork: one arrow key press per line, like Samsung / Apple keyboards
     override fun onSpaceCursorMoveVertically(steps: Int): Boolean {
         if (steps == 0) return false

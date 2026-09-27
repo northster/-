@@ -871,8 +871,15 @@ public final class PointerTracker implements PointerTrackerQueue.Element,
         mInVerticalSwipe = false;
         mStartX = mLastX;
         mStartY = mLastY;
+        mSpaceCursorOriginX = mLastX;
+        mSpaceCursorOriginY = mLastY;
         sListener.onCustomRequest(KeyboardActionListener.CustomAction.TOUCHPAD_ON); // visual feedback
+        sListener.onSpaceCursorStart();
     }
+
+    /** fork: where the finger was when space cursor mode started */
+    private int mSpaceCursorOriginX;
+    private int mSpaceCursorOriginY;
 
     private void onMoveEvent(final int x, final int y, final long eventTime, final MotionEvent me) {
         if (DEBUG_MOVE_EVENT) {
@@ -1025,6 +1032,8 @@ public final class PointerTracker implements PointerTrackerQueue.Element,
 
     private void onKeySwipe(final int code, final int x, final int y, final long eventTime) {
         if (mInSpaceCursorMode) { // fork: space long press cursor movement, independent of swipe settings
+            // floating caret following the finger, if the app tells where its characters are
+            if (sListener.onSpaceCursorDrag(x - mSpaceCursorOriginX, y - mSpaceCursorOriginY)) return;
             final int steps = (x - mStartX) / sPointerStep;
             if (steps != 0 && sListener.onSpaceCursorMove(steps)) {
                 mStartX += steps * sPointerStep;
@@ -1201,6 +1210,7 @@ public final class PointerTracker implements PointerTrackerQueue.Element,
         if (mInSpaceCursorMode) {
             mInSpaceCursorMode = false;
             sListener.onCustomRequest(KeyboardActionListener.CustomAction.TOUCHPAD_OFF);
+            sListener.onSpaceCursorEnd();
         }
         if (mKeySwipeAllowed) {
             mKeySwipeAllowed = false;
@@ -1335,6 +1345,7 @@ public final class PointerTracker implements PointerTrackerQueue.Element,
             sInKeySwipe = false;
             mInHorizontalSwipe = false;
             sListener.onCustomRequest(KeyboardActionListener.CustomAction.TOUCHPAD_OFF);
+            sListener.onSpaceCursorEnd();
         }
         sTimerProxy.cancelKeyTimersOf(this);
         setReleasedKeyGraphics(mCurrentKey, true);
@@ -1409,6 +1420,8 @@ public final class PointerTracker implements PointerTrackerQueue.Element,
 
     private int getLongPressTimeout(int code) {
         int longpressTimeout = Settings.getValues().mKeyLongpressTimeout;
+        // fork: the space hold time can be set on its own (cursor movement starts with it)
+        if (code == Constants.CODE_SPACE) return ForkSettings.spaceLongPressMs(longpressTimeout * 3 / 2);
         return switch (code) {
             case Constants.CODE_SPACE, KeyCode.SHIFT, KeyCode.SYMBOL_ALPHA
                 // We use slightly longer timeout for space, shift-lock, and the numpad long-press.

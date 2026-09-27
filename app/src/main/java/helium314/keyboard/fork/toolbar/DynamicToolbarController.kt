@@ -351,6 +351,7 @@ class DynamicToolbarController(private val context: Context) {
 
     /** Called by KeyboardSwitcher when the letters (or something else without a header) are shown again. */
     fun onToolHidden() {
+        latinIME?.clipboardHistoryManager?.pinnedOnly = false // the panel opens with all clips again
         panelAnimator?.cancel()
         isClipboardPanelTall = false
         toolKind = TOOL_NONE
@@ -370,6 +371,13 @@ class DynamicToolbarController(private val context: Context) {
         val ime = latinIME ?: return
         if (action == ClipAction.SEARCH) {
             startClipSearch()
+            return
+        }
+        if (action == ClipAction.PINNED) {
+            val manager = ime.clipboardHistoryManager
+            manager.pinnedOnly = !manager.pinnedOnly
+            KeyboardSwitcher.getInstance().clipboardHistoryView?.forkRefreshList()
+            toolbar?.setHeaderActionActive(ClipAction.enabled(context.prefs()).indexOf(ClipAction.PINNED), manager.pinnedOnly)
             return
         }
         val code = action.code() ?: return

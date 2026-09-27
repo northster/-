@@ -871,16 +871,37 @@ public class LatinIME extends InputMethodService implements
         }
     }
 
-    /** fork: text before the cursor for the smart chips (cached by the input connection, cheap) */
+    /**
+     * fork: text before the cursor for the smart chips, read from the field itself: the cache can miss the Hangul
+     * syllable being composed (e.g. "10달러" came back without its word), which is exactly what the chips look for.
+     */
     @Nullable
     public CharSequence forkTextBeforeCursor(final int n) {
-        return mInputLogic.mConnection.getTextBeforeCursor(n, 0);
+        final android.view.inputmethod.InputConnection ic = getCurrentInputConnection();
+        final CharSequence fromField = ic == null ? null : ic.getTextBeforeCursor(n, 0);
+        return fromField != null ? fromField : mInputLogic.mConnection.getTextBeforeCursor(n, 0);
+    }
+
+    /** fork: iPhone style cursor on a held spacebar */
+    public final helium314.keyboard.fork.cursor.VirtualCaret mVirtualCaret = new helium314.keyboard.fork.cursor.VirtualCaret(this);
+
+    @Override
+    public void onUpdateCursorAnchorInfo(final android.view.inputmethod.CursorAnchorInfo cursorAnchorInfo) {
+        super.onUpdateCursorAnchorInfo(cursorAnchorInfo);
+        mVirtualCaret.onCursorAnchorInfo(cursorAnchorInfo); // fork
+    }
+
+    /** fork: put the cursor at [offset] (virtual caret) */
+    public void forkSetCursor(final int offset) {
+        mInputLogic.finishInput();
+        mInputLogic.mConnection.setSelection(offset, offset);
     }
 
     /** fork: a smart chip was used: [deleteBefore] characters before the cursor are replaced by [text] */
     public void forkReplaceBeforeCursor(final int deleteBefore, @NonNull final String text) {
         final RichInputConnection connection = mInputLogic.mConnection;
-        connection.finishComposingText();
+        // ends the word (and Hangul syllable) being composed, or the next key would type it again
+        mInputLogic.finishInput();
         connection.beginBatchEdit();
         if (deleteBefore > 0) connection.deleteTextBeforeCursor(deleteBefore);
         connection.commitText(text, 1);

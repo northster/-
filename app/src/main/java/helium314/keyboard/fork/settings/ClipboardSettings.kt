@@ -180,6 +180,23 @@ fun createForkClipboardSettings(context: Context) = listOf(
     Setting(context, helium314.keyboard.fork.smart.SmartPrefs.UNITS, R.string.fork_smart_units, R.string.fork_smart_units_summary) {
         SwitchPreference(it, true)
     },
+    Setting(context, helium314.keyboard.fork.ForkSettings.PREF_SPACE_LONG_PRESS_MS, R.string.fork_space_long_press,
+        R.string.fork_space_long_press_summary) { setting ->
+        val ctx = LocalContext.current
+        InlineSliderPreference(
+            name = setting.title,
+            key = setting.key,
+            default = 0f,
+            range = 0f..1000f,
+            format = { if (it <= 0f) ctx.getString(R.string.fork_space_long_press_default)
+                else ctx.getString(R.string.abbreviation_unit_milliseconds, it.toInt().toString()) },
+            step = 25f,
+        )
+    },
+    Setting(context, helium314.keyboard.fork.ForkSettings.PREF_VIRTUAL_CARET, R.string.fork_virtual_caret,
+        R.string.fork_virtual_caret_summary) {
+        SwitchPreference(it, true)
+    },
     Setting(context, ClipPrefs.SCREENSHOTS, R.string.fork_clip_screenshots, R.string.fork_clip_screenshots_summary) { setting ->
         val ctx = LocalContext.current
         val launcher = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->

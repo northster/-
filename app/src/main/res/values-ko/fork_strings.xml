@@ -276,4 +276,22 @@
     <string name="fork_smart_currency_summary">"10달러", "$10", "5만원" 입력 시 원화나 달러 금액 제안. 환율은 하루 두 번 받아와요</string>
     <string name="fork_smart_units">단위 변환</string>
     <string name="fork_smart_units_summary">"1 ft"는 미터로, "30평"은 제곱미터로 제안</string>
+    <string name="fork_clip_pinned_only">고정한 클립만 보기</string>
+    <string name="fork_main_tools">도구</string>
+    <string name="fork_screen_clipboard">클립보드</string>
+    <string name="fork_screen_smart_chips">스마트 칩</string>
+    <string name="fork_desc_clipboard">기록, 패널, 붙여넣기 칩</string>
+    <string name="fork_desc_smart_chips">입력 중 답, 인증번호, 복사한 내용의 동작</string>
+    <string name="fork_cat_clip_panel">클립보드 패널</string>
+    <string name="fork_cat_paste_chip">붙여넣기 칩</string>
+    <string name="fork_cat_clip_files">이미지와 파일</string>
+    <string name="fork_cat_smart_clip">복사한 내용</string>
+    <string name="fork_cat_codes">인증번호</string>
+    <string name="fork_cat_space">스페이스바</string>
+    <string name="fork_cat_chip_look">칩 모양</string>
+    <string name="fork_space_long_press">스페이스바 길게 누르기 시간</string>
+    <string name="fork_space_long_press_summary">커서 이동이 시작되기까지 스페이스바를 누르고 있어야 하는 시간</string>
+    <string name="fork_space_long_press_default">기본</string>
+    <string name="fork_virtual_caret">떠다니는 커서 (아이폰 방식)</string>
+    <string name="fork_virtual_caret_summary">스페이스바를 누른 채 움직이면 커서가 손가락을 따라 글 위를 움직이고, 실제 커서는 가장 가까운 글자로 옮겨져요. 글자 위치를 알려주지 않는 앱에서는 한 칸씩 움직여요</string>
 </resources>

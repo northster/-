@@ -61,8 +61,6 @@ fun DynamicToolbarScreen(
             GlowPrefs.GLOW_WIDTH,
             GlowPrefs.GLOW_DOT_SIZE,
             GlowPrefs.GLOW_DOT_SPACING,
-            R.string.fork_cat_tool_header,
-            helium314.keyboard.fork.clipboard.ClipAction.PREF,
             // HeliBoard's own toolbar (suggestion strip modes) is not shown: it must stay hidden for the dynamic toolbar
         )
     SearchSettingsScreen(

@@ -133,6 +133,13 @@ public interface KeyboardActionListener {
     /** fork: space long press cursor mode, moving the finger up / down moves the cursor by lines */
     boolean onSpaceCursorMoveVertically(int steps);
 
+    /** fork: space cursor mode started / ended (iPhone style floating caret) */
+    void onSpaceCursorStart();
+    void onSpaceCursorEnd();
+
+    /** fork: finger moved by dx, dy px since space cursor mode started. @return true if the floating caret handled it */
+    boolean onSpaceCursorDrag(int dx, int dy);
+
     KeyboardActionListener EMPTY_LISTENER = new Adapter();
 
     enum SwipeAction { NONE, MOVE_CURSOR, SWITCH_LANGUAGE, TOGGLE_NUMPAD, TOGGLE_DPAD, HIDE_KEYBOARD, TOUCHPAD_MODE }
@@ -199,6 +206,14 @@ public interface KeyboardActionListener {
         }
         @Override
         public boolean onSpaceCursorMove(int steps) {
+            return false;
+        }
+        @Override
+        public void onSpaceCursorStart() {}
+        @Override
+        public void onSpaceCursorEnd() {}
+        @Override
+        public boolean onSpaceCursorDrag(int dx, int dy) {
             return false;
         }
     }

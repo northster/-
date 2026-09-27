@@ -130,7 +130,8 @@ fun SettingsCard(
             .padding(horizontal = 16.dp)
             .fillMaxWidth()
             .clip(MaterialTheme.shapes.medium)
-            .border(BorderStroke(1.dp, s.border), MaterialTheme.shapes.medium)
+            // fork: the outline is the page color, the lighter fill alone marks the card
+            .border(BorderStroke(1.dp, s.background), MaterialTheme.shapes.medium)
             .background(s.card)
     ) {
         rows.forEachIndexed { i, row ->

@@ -284,6 +284,21 @@ public class KeyboardView extends View {
     @Nullable private Drawable mForkUnderlay;
     @Nullable private Drawable mForkOverlay;
 
+    /** fork: soft shadow under every key, for keys floating over content (emoji panel bottom row) */
+    @Nullable private Paint mForkKeyShadowPaint;
+
+    public void setForkKeyShadow(final boolean on) {
+        if (!on) { mForkKeyShadowPaint = null; invalidateAllKeys(); return; }
+        final float density = getResources().getDisplayMetrics().density;
+        final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        paint.setColor(0x33000000);
+        paint.setShadowLayer(8 * density, 0, 2 * density, 0x80000000);
+        mForkKeyShadowPaint = paint;
+        // shadow layers on shapes need software drawing before Android 9
+        if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.P) setLayerType(LAYER_TYPE_SOFTWARE, null);
+        invalidateAllKeys();
+    }
+
     /** fork: drawn under the keys and on their surfaces (paste chip glow) */
     public void setForkUnderlay(@Nullable final Drawable underlay) {
         if (mForkUnderlay == underlay) return;
@@ -366,6 +381,13 @@ public class KeyboardView extends View {
         final KeyDrawParams params = mKeyDrawParams.mayCloneAndUpdateParams((int) (key.getHeight() * mKeyScaleForText), attr);
         params.mAnimAlpha = Constants.Color.ALPHA_OPAQUE;
 
+        if (!key.isSpacer() && mForkKeyShadowPaint != null) {
+            // fork: under the key background, a bit inset so it shows as a soft edge around the key
+            final float inset = 2 * getResources().getDisplayMetrics().density;
+            final float radius = 12 * getResources().getDisplayMetrics().density;
+            canvas.drawRoundRect(inset, inset, key.getDrawWidth() - inset, key.getHeight() - inset, radius, radius,
+                    mForkKeyShadowPaint);
+        }
         if (!key.isSpacer()) {
             final Drawable background = key.selectBackgroundDrawable(
                     mKeyBackground, mFunctionalKeyBackground, mSpacebarBackground, mActionKeyBackground);
