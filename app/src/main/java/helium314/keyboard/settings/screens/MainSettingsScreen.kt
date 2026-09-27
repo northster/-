@@ -66,8 +66,6 @@ fun MainSettingsScreen(
     onClickClipboard: () -> Unit,
     onClickSmartChips: () -> Unit,
     onClickSlate: () -> Unit,
-    onClickTranslate: () -> Unit = {},
-    onClickGif: () -> Unit = {},
     onClickTypo: () -> Unit,
     onClickGestureTyping: () -> Unit,
     onClickDataGathering: () -> Unit,
@@ -78,6 +76,8 @@ fun MainSettingsScreen(
     onClickLayouts: () -> Unit,
     onClickDictionaries: () -> Unit,
     onClickBack: () -> Unit,
+    onClickTranslate: () -> Unit = {},
+    onClickGif: () -> Unit = {},
 ) {
     SearchSettingsScreen(
         onClickBack = onClickBack,
