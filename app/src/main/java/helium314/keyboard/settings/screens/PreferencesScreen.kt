@@ -94,6 +94,7 @@ fun PreferencesScreen(
         if (clipboardHistoryEnabled && prefs.getBoolean(Settings.PREF_CLIPBOARD_USE_FILES, Defaults.PREF_CLIPBOARD_USE_FILES))
             Settings.PREF_CLIPBOARD_FILES_SIZE_LIMIT else null,
         R.string.fork_cat_general,
+        helium314.keyboard.fork.ForkSettings.PREF_HIDE_COMPOSING_UNDERLINE,
         Settings.PREF_SAVE_SUBTYPE_PER_APP,
         Settings.PREF_SHOW_EMOJI_DESCRIPTIONS,
     )

@@ -54,8 +54,13 @@ class DynamicToolbarController(private val context: Context) {
     private var toolActive = false
     /** toolbar state before the tool opened it */
     private var expandedBeforeTool = false
-    /** clip already pasted from a chip, not offered again */
-    private var dismissedChipText: String? = null
+    /** key of the clip whose chip was used or closed, not offered again */
+    private var dismissedChipKey: String? = null
+    /** recent clip offered as a paste chip, null if none */
+    private var chip: ClipboardHistoryManager.RecentClip? = null
+    /** glows on the keyboard's top edge while a chip waits behind the collapsed toolbar */
+    private var glow: View? = null
+    private var glowAnimator: ValueAnimator? = null
     private var keyboardFrame: View? = null
     private var inputView: View? = null
     private var animator: ValueAnimator? = null
@@ -81,6 +86,8 @@ class DynamicToolbarController(private val context: Context) {
         animator?.cancel()
         inputView = newInputView
         toolbar = newInputView.findViewById(R.id.dynamic_toolbar)
+        glowAnimator?.cancel()
+        glow = newInputView.findViewById(R.id.fork_chip_glow)
         keyboardFrame = newInputView.findViewById<View>(R.id.main_keyboard_frame)?.also {
             it.addOnLayoutChangeListener(frameLayoutListener)
         }
@@ -93,12 +100,7 @@ class DynamicToolbarController(private val context: Context) {
         updatePosition()
     }
 
-    fun onSwipe(up: Boolean) {
-        // the user decides now: a toolbar opened for a paste chip stays, or the chip is dismissed with it
-        if (!up && chipPeek) dismissedChipText = currentChipText
-        chipPeek = false
-        setExpanded(up, true)
-    }
+    fun onSwipe(up: Boolean) = setExpanded(up, true)
 
     fun setExpanded(expanded: Boolean, animate: Boolean) {
         if (expanded == isExpanded) return
@@ -114,8 +116,10 @@ class DynamicToolbarController(private val context: Context) {
             endClipSearch(null)
             return
         }
+        // closing the toolbar while it shows a paste chip dismisses the chip
+        if (!expanded && toolbar?.isChipBarShown == true) dismissChip()
         isExpanded = expanded
-        if (expanded) refreshPasteChips(autoShow = false)
+        applyChipState()
         context.prefs().edit { putBoolean(ForkSettings.PREF_TOOLBAR_EXPANDED, expanded) }
         Log.i(TAG, "toolbar ${if (expanded) "expanded" else "collapsed"}")
 
@@ -175,6 +179,7 @@ class DynamicToolbarController(private val context: Context) {
         }
         val frameTop = frame.top + frame.translationY
         tb.translationY = frameTop - tb.bottom + hiddenFraction * tb.height
+        glow?.let { it.translationY = frameTop - it.top }
     }
 
     private fun requestInsetsUpdate() {
@@ -244,6 +249,7 @@ class DynamicToolbarController(private val context: Context) {
         toolActive = false
         toolbar?.hideToolHeader()
         if (!expandedBeforeTool) setExpanded(false, true)
+        applyChipState()
     }
 
     private fun backToKeyboard() {
@@ -267,50 +273,80 @@ class DynamicToolbarController(private val context: Context) {
 
     /** Show the latest clip (if recent) and a verification code found in it. */
     /**
-     * Show the latest clip (if recent) and a verification code found in it.
-     * Like Samsung's keyboard, a collapsed toolbar opens by itself to show them ([autoShow]),
-     * and closes again once the chip is used or gone.
+     * Look for a recent clip to offer as a paste chip.
+     * Collapsed toolbar: the keyboard's top edge glows. Expanded toolbar: the chip bar (back | chips) replaces the tools,
+     * like Samsung's keyboard. Using the chip, going back or closing the toolbar dismisses it.
      */
-    @JvmOverloads
-    fun refreshPasteChips(autoShow: Boolean = true) {
-        val tb = toolbar ?: return
+    fun refreshPasteChips() {
         val ime = latinIME ?: return
         handler.removeCallbacks(chipExpiry)
-        val prefs = context.prefs()
-        val text = if (ClipPrefs.pasteChip(prefs)) ime.clipboardHistoryManager.getRecentClipText() else null
-        if (text == null || text == dismissedChipText) {
-            currentChipText = null
-            tb.setPasteChips(null, null) { }
-            endChipPeek()
-            return
+        val clip = if (ClipPrefs.pasteChip(context.prefs())) ime.clipboardHistoryManager.getRecentClip() else null
+        chip = clip?.takeIf { it.key != dismissedChipKey }
+        chip?.let {
+            // it stops being recent after a while
+            val left = ClipboardHistoryManager.RECENT_TIME_MILLIS - (System.currentTimeMillis() - it.timestamp)
+            handler.postDelayed(chipExpiry, left.coerceAtLeast(0) + 500)
         }
-        currentChipText = text
-        tb.setPasteChips(text.take(200), ClipPrefs.findCode(text)) { paste ->
-            dismissedChipText = text
-            currentChipText = null
-            ime.onTextInput(paste)
-            tb.setPasteChips(null, null) { }
-            endChipPeek()
-        }
-        // the clip stops being recent after a while, check again then
-        handler.postDelayed(chipExpiry, ClipboardHistoryManager.RECENT_TIME_MILLIS + 1000)
-        if (autoShow && !isExpanded && !toolActive && !clipSearch.isActive && isUsable()) {
-            chipPeek = true
-            setExpanded(true, true)
-        }
+        applyChipState()
     }
 
-    private fun endChipPeek() {
-        if (!chipPeek) return
-        chipPeek = false
-        if (isExpanded && !toolActive && !clipSearch.isActive) setExpanded(false, true)
+    private fun dismissChip() {
+        chip?.let { dismissedChipKey = it.key }
+        chip = null
+        handler.removeCallbacks(chipExpiry)
+    }
+
+    /** show chip bar / glow for the current state */
+    private fun applyChipState() {
+        val tb = toolbar ?: return
+        val c = chip
+        val busy = toolActive || clipSearch.isActive
+        if (c != null && isExpanded && !busy) {
+            tb.showChipBar(c.text?.take(300), ClipPrefs.findCode(c.text), c.imageUri,
+                onPaste = { text -> pasteChip(text) },
+                onBack = { dismissChip(); applyChipState() })
+        } else {
+            tb.hideChipBar()
+        }
+        setGlow(c != null && !isExpanded && !busy && isUsable())
+    }
+
+    private fun pasteChip(text: String?) {
+        val ime = latinIME ?: return
+        dismissChip()
+        applyChipState()
+        if (text != null) ime.onTextInput(text)
+        else ime.mKeyboardActionListener.onCodeInput(KeyCode.CLIPBOARD_PASTE, Constants.NOT_A_COORDINATE, Constants.NOT_A_COORDINATE, false)
+    }
+
+    private fun setGlow(on: Boolean) {
+        val g = glow ?: return
+        if (on == (g.visibility == View.VISIBLE)) return
+        glowAnimator?.cancel()
+        if (!on) {
+            g.visibility = View.GONE
+            return
+        }
+        val enter = Settings.getValues().mColors.get(helium314.keyboard.latin.common.ColorType.ACTION_KEY_BACKGROUND)
+        g.background = android.graphics.drawable.GradientDrawable(
+            android.graphics.drawable.GradientDrawable.Orientation.TOP_BOTTOM,
+            intArrayOf(androidx.core.graphics.ColorUtils.setAlphaComponent(enter, 200),
+                androidx.core.graphics.ColorUtils.setAlphaComponent(enter, 70),
+                androidx.core.graphics.ColorUtils.setAlphaComponent(enter, 0)))
+        g.visibility = View.VISIBLE
+        updatePosition()
+        // slow breathing, so it is noticed without being in the way
+        glowAnimator = ValueAnimator.ofFloat(0.35f, 1f).apply {
+            duration = 1100
+            repeatMode = ValueAnimator.REVERSE
+            repeatCount = ValueAnimator.INFINITE
+            addUpdateListener { g.alpha = it.animatedValue as Float }
+            start()
+        }
     }
 
     private val handler = android.os.Handler(android.os.Looper.getMainLooper())
-    private val chipExpiry = Runnable { refreshPasteChips(autoShow = false) }
-    /** the toolbar was opened only to show a paste chip */
-    private var chipPeek = false
-    private var currentChipText: String? = null
+    private val chipExpiry = Runnable { refreshPasteChips() }
 
     val isClipSearchActive get() = clipSearch.isActive
 

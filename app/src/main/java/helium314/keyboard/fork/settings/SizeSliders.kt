@@ -123,7 +123,7 @@ fun DpSliderPreference(name: String, size: ForkSize, description: String? = null
                 enabled = !size.isDefault(prefs),
             ) { Text(stringResource(R.string.button_default), style = MaterialTheme.typography.labelMedium) }
         }
-        Slider(
+        helium314.keyboard.settings.ScrollSafeSlider(
             value = value.coerceIn(size.range),
             onValueChange = {
                 val stepped = (it / size.step).roundToInt() * size.step

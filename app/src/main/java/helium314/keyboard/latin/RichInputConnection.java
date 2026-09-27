@@ -298,7 +298,18 @@ public final class RichInputConnection implements PrivateCommandPerformer {
         }
     }
 
+    /**
+     * fork: length of the composing text written as normal text (no underline mode, see
+     * ForkSettings.PREF_HIDE_COMPOSING_UNDERLINE). It is replaced on the next change instead of being a composing region.
+     */
+    private int mPlainComposingLength = 0;
+
+    private boolean plainComposing() {
+        return helium314.keyboard.fork.ForkSettings.isComposingUnderlineHidden();
+    }
+
     public void finishComposingText() {
+        mPlainComposingLength = 0; // fork: already normal text
         if (DEBUG_BATCH_NESTING) checkBatchEdit();
         if (DEBUG_PREVIOUS_TEXT) checkConsistencyForDebug();
         // TODO: this is not correct! The cursor is not necessarily after the composing text.
@@ -334,6 +345,10 @@ public final class RichInputConnection implements PrivateCommandPerformer {
         mExpectedSelEnd = mExpectedSelStart;
         mComposingText.setLength(0);
         if (isConnected()) {
+            if (mPlainComposingLength > 0) { // fork: replaces the plain composing text like it would replace a composing region
+                mIC.deleteSurroundingText(mPlainComposingLength, 0);
+                mPlainComposingLength = 0;
+            }
             mTempObjectForCommitText.clear();
             mTempObjectForCommitText.append(text);
             final CharacterStyle[] spans = mTempObjectForCommitText.getSpans(
@@ -592,6 +607,7 @@ public final class RichInputConnection implements PrivateCommandPerformer {
         if (isConnected()) {
             mIC.deleteSurroundingText(beforeLength, 0);
         }
+        mPlainComposingLength = Math.max(0, mPlainComposingLength - beforeLength); // fork
         if (DEBUG_PREVIOUS_TEXT) checkConsistencyForDebug();
     }
 
@@ -660,6 +676,7 @@ public final class RichInputConnection implements PrivateCommandPerformer {
     }
 
     public void setComposingRegion(final int start, final int end) {
+        mPlainComposingLength = 0; // fork
         if (DEBUG_BATCH_NESTING) checkBatchEdit();
         if (DEBUG_PREVIOUS_TEXT) checkConsistencyForDebug();
         final int moveBy = mExpectedSelStart - start; // determine now, as mExpectedSelStart may change in getTextBeforeCursor
@@ -699,7 +716,16 @@ public final class RichInputConnection implements PrivateCommandPerformer {
         if (isConnected()) {
             if (DebugFlags.DEBUG_ENABLED)
                 Log.d(TAG, "setting composing text of length "+text.length()); // don't log actual text
-            mIC.setComposingText(text, newCursorPosition);
+            if (plainComposing()) {
+                // fork: no composing region, so apps don't underline the syllable being typed
+                if (mPlainComposingLength > 0)
+                    mIC.deleteSurroundingText(mPlainComposingLength, 0);
+                mIC.commitText(text, newCursorPosition);
+                mPlainComposingLength = text.length();
+            } else {
+                mPlainComposingLength = 0;
+                mIC.setComposingText(text, newCursorPosition);
+            }
             if (!Settings.getValues().mInputAttributes.mShouldShowSuggestions && text.length() > 0) {
                 // We have a field that disables suggestions, but still committed text is set.
                 // This might lead to weird bugs (e.g. https://github.com/HeliBorg/HeliBoard/issues/225), so better do
@@ -986,7 +1012,8 @@ public final class RichInputConnection implements PrivateCommandPerformer {
         // This update is "belated" if we are expecting it. That is, mExpectedSelStart and
         // mExpectedSelEnd match the new values that the TextView is updating TO.
         if (mExpectedSelStart == newSelStart && mExpectedSelEnd == newSelEnd) {
-            if (composingSpanEnd - composingSpanStart < mComposingText.length()) {
+            // fork: without a composing region the app reports no composing span
+            if (!plainComposing() && composingSpanEnd - composingSpanStart < mComposingText.length()) {
                 // composing span is smaller than expected, maybe changed by the app (see #1141)
                 // larger composing span is ok, because mComposingText only contains the word up to the cursor
                 return false;

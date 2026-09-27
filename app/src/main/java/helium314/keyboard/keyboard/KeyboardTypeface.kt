@@ -103,8 +103,10 @@ object KeyboardTypeface {
         val emojiTypeface = emojiTypeface()
         return if (emojiTypeface != null && text != null && isEmoji(text)) {
             emojiTypeface
-        } else if (text != null && containsHangul(text) && koreanTypeface() != null) {
-            koreanTypeface()!! // fork: Korean font for anything with Hangul in it
+        } else if (text != null && containsHangul(text)) {
+            // fork: Korean font for anything with Hangul in it. Without one, not the Latin font either: it usually has
+            //  no Hangul, and the fallback font would get its weight (e.g. Doto Black makes Hangul very bold)
+            koreanTypeface() ?: defaultTypeface
         } else {
             customTypeface() ?: defaultTypeface
         }

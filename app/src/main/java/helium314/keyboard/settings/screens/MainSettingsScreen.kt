@@ -131,10 +131,9 @@ fun MainSettingsScreen(
                         R.drawable.ic_settings_layout, onClickLayouts),
                 ))
                 SettingsSection(stringResource(R.string.fork_main_toolbar), listOf(
-                    entry(R.string.fork_settings_screen, stringResource(R.string.fork_desc_dynamic_toolbar),
+                    // fork: dynamic and HeliBoard toolbar settings are one screen
+                    entry(R.string.settings_screen_toolbar, stringResource(R.string.fork_desc_dynamic_toolbar),
                         R.drawable.ic_settings_toolbar, onClickDynamicToolbar),
-                    entry(R.string.settings_screen_toolbar, stringResource(R.string.fork_desc_toolbar),
-                        R.drawable.ic_settings_toolbar, onClickToolbar),
                 ))
                 SettingsSection(stringResource(R.string.fork_main_more), listOf(
                     entry(R.string.settings_screen_advanced, stringResource(R.string.fork_desc_advanced),

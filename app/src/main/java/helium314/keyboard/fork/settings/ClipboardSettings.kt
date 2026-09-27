@@ -38,6 +38,10 @@ import helium314.keyboard.settings.preferences.SwitchPreference
 
 /** fork: clipboard history settings, shown in the clipboard section of the preferences screen */
 fun createForkClipboardSettings(context: Context) = listOf(
+    Setting(context, helium314.keyboard.fork.ForkSettings.PREF_HIDE_COMPOSING_UNDERLINE,
+        R.string.fork_hide_composing_underline, R.string.fork_hide_composing_underline_summary) {
+        SwitchPreference(it, helium314.keyboard.fork.ForkSettings.DEFAULT_HIDE_COMPOSING_UNDERLINE)
+    },
     Setting(context, ClipAction.PREF, R.string.fork_clip_actions, R.string.fork_clip_actions_summary) { setting ->
         ClipActionsPreference(setting.title, setting.description)
     },

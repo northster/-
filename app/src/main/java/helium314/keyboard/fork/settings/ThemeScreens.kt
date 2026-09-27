@@ -186,8 +186,8 @@ fun ThemeColorsScreen(onClickBack: () -> Unit) {
                             val selected = theme.id == current.id
                             Row(
                                 Modifier.clip(MaterialTheme.shapes.small)
-                                    .border(1.dp, if (selected) s.primary else s.border, MaterialTheme.shapes.small)
-                                    .background(if (selected) s.accent else Color.Transparent)
+                                    .border(if (selected) 2.dp else 1.dp, if (selected) s.primary else s.border, MaterialTheme.shapes.small)
+                                    .background(if (selected) s.primary.copy(alpha = 0.14f) else Color.Transparent)
                                     .clickable { selectedId = theme.id; expanded = null }
                                     .padding(horizontal = 10.dp, vertical = 8.dp),
                                 verticalAlignment = Alignment.CenterVertically,
@@ -312,7 +312,8 @@ private fun UseAsRow(text: String, active: Boolean, onClick: () -> Unit) {
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(text, style = MaterialTheme.typography.bodyLarge, modifier = Modifier.weight(1f))
-        helium314.keyboard.settings.ShadcnSwitch(checked = active, onCheckedChange = { if (it) onClick() }, enabled = !active)
+        // stays enabled so "on" looks on, turning it off does nothing (another theme has to be picked)
+        helium314.keyboard.settings.ShadcnSwitch(checked = active, onCheckedChange = { if (it) onClick() })
     }
 }
 
@@ -341,7 +342,7 @@ private fun ValueSlider(
             val shown = if (step < 1f) "%.1f".format(v) else v.roundToInt().toString()
             Text("$shown $unit", style = MaterialTheme.typography.bodyMedium, color = s.mutedForeground)
         }
-        Slider(
+        helium314.keyboard.settings.ScrollSafeSlider(
             value = v,
             onValueChange = {
                 val stepped = (it / step).roundToInt() * step
@@ -473,7 +474,7 @@ private fun GradientSlider(
         }
         Box(contentAlignment = Alignment.Center) {
             Box(Modifier.fillMaxWidth().padding(horizontal = 10.dp).height(8.dp).clip(RoundedCornerShape(4.dp)).background(track))
-            Slider(
+            helium314.keyboard.settings.ScrollSafeSlider(
                 value = value,
                 onValueChange = onChange,
                 onValueChangeFinished = onCommit,

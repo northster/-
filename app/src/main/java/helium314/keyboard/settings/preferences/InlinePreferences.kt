@@ -73,7 +73,7 @@ fun InlineSliderPreference(
                 enabled = value != default,
             ) { Text(stringResource(R.string.button_default), style = MaterialTheme.typography.labelMedium) }
         }
-        Slider(
+        helium314.keyboard.settings.ScrollSafeSlider(
             value = value,
             onValueChange = {
                 val new = step?.let { st -> (it / st).roundToInt() * st } ?: it

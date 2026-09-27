@@ -3,6 +3,10 @@ package helium314.keyboard.fork.settings
 
 import android.content.Context
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import helium314.keyboard.latin.utils.getActivity
+import helium314.keyboard.latin.utils.prefs
 import androidx.compose.ui.res.stringResource
 import helium314.keyboard.fork.ForkSettings
 import helium314.keyboard.fork.gesture.SwipeThresholds
@@ -16,9 +20,15 @@ import helium314.keyboard.settings.preferences.SwitchPreference
 fun DynamicToolbarScreen(
     onClickBack: () -> Unit,
 ) {
+    // fork: one toolbar screen, the dynamic toolbar first and HeliBoard's toolbar settings below
+    val ctx = androidx.compose.ui.platform.LocalContext.current
+    val prefs = ctx.prefs()
+    val b = (ctx.getActivity() as? helium314.keyboard.settings.SettingsActivity)?.prefChanged?.collectAsState()
+    if ((b?.value ?: 0) < 0)
+        helium314.keyboard.latin.utils.Log.v("irrelevant", "stupid way to trigger recomposition on preference change")
     SearchSettingsScreen(
         onClickBack = onClickBack,
-        title = stringResource(R.string.fork_settings_screen),
+        title = stringResource(R.string.settings_screen_toolbar),
         settings = listOf(
             R.string.fork_cat_gesture,
             ForkSettings.PREF_TOOLBAR_SWIPE_ENABLED,
@@ -31,7 +41,10 @@ fun DynamicToolbarScreen(
             ForkSettings.PREF_TOOLBAR_ANIM_DURATION,
             ForkSettings.PREF_TOOLBAR_SMOOTH_RESIZE,
             ForkSettings.PREF_TOOLBAR_OVERLAY,
-        )
+            R.string.fork_cat_tool_header,
+            helium314.keyboard.fork.clipboard.ClipAction.PREF,
+            R.string.fork_cat_classic_toolbar,
+        ) + helium314.keyboard.settings.screens.classicToolbarItems(prefs)
     )
 }
 

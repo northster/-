@@ -128,7 +128,7 @@
     <string name="fork_clip_preview_lines">Lines per card</string>
     <string name="fork_unit_lines">%d lines</string>
     <string name="fork_clip_paste_chip">Paste chips on the toolbar</string>
-    <string name="fork_clip_paste_chip_summary">Recently copied text, and a verification code found in it, shown as chips to paste with one tap</string>
+    <string name="fork_clip_paste_chip_summary">A recent copy makes the top of the keyboard glow. Open the toolbar to see it as a chip, tap to paste</string>
     <string name="fork_clip_screenshots">Add screenshots</string>
     <string name="fork_clip_screenshots_summary">New screenshots appear in the clipboard history (needs access to photos)</string>
     <string name="fork_clip_screenshots_denied">Photo access was not granted</string>
@@ -149,4 +149,8 @@
     <string name="fork_font_default">Default font</string>
     <string name="fork_font_custom">Custom font</string>
     <string name="fork_font_reset">Use default</string>
+    <string name="fork_cat_tool_header">Tool header</string>
+    <string name="fork_cat_classic_toolbar">HeliBoard toolbar</string>
+    <string name="fork_hide_composing_underline">No underline while typing</string>
+    <string name="fork_hide_composing_underline_summary">The letter being composed is written as normal text, so apps don\'t underline it. Turn off if an app deletes or doubles letters</string>
 </resources>

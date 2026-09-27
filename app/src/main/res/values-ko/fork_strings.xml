@@ -125,7 +125,7 @@
     <string name="fork_clip_preview_lines">카드당 줄 수</string>
     <string name="fork_unit_lines">%d줄</string>
     <string name="fork_clip_paste_chip">툴바에 붙여넣기 칩</string>
-    <string name="fork_clip_paste_chip_summary">방금 복사한 글과 그 안의 인증번호를 툴바에 칩으로 보여주고, 누르면 바로 붙여넣기</string>
+    <string name="fork_clip_paste_chip_summary">방금 복사한 글·이미지가 있으면 키보드 윗부분이 빛나요. 툴바를 펼치면 칩이 보이고, 누르면 바로 붙여넣어요</string>
     <string name="fork_clip_screenshots">스크린샷 추가</string>
     <string name="fork_clip_screenshots_summary">새 스크린샷을 클립보드 기록에 넣기 (사진 접근 권한 필요)</string>
     <string name="fork_clip_screenshots_denied">사진 접근 권한이 허용되지 않았어요</string>
@@ -146,4 +146,8 @@
     <string name="fork_font_default">기본 글꼴</string>
     <string name="fork_font_custom">사용자 글꼴</string>
     <string name="fork_font_reset">기본으로</string>
+    <string name="fork_cat_tool_header">도구 머리줄</string>
+    <string name="fork_cat_classic_toolbar">HeliBoard 툴바</string>
+    <string name="fork_hide_composing_underline">입력 중 밑줄 없애기</string>
+    <string name="fork_hide_composing_underline_summary">조합 중인 글자를 일반 글자로 써서 앱이 밑줄을 긋지 않게 해요. 어떤 앱에서 글자가 지워지거나 두 번 써지면 꺼 주세요</string>
 </resources>

@@ -74,6 +74,14 @@ object ForkSettings {
     fun sizeDp(prefs: SharedPreferences, key: String): Float =
         if (prefs.contains(key)) prefs.getFloat(key, SIZE_UNSET) else SIZE_UNSET
 
+    /** type Hangul (and other composed text) without the app's composing underline */
+    const val PREF_HIDE_COMPOSING_UNDERLINE = "fork_hide_composing_underline"
+    const val DEFAULT_HIDE_COMPOSING_UNDERLINE = true
+
+    @JvmStatic
+    fun isComposingUnderlineHidden() =
+        !initialized || appPrefs.getBoolean(PREF_HIDE_COMPOSING_UNDERLINE, DEFAULT_HIDE_COMPOSING_UNDERLINE)
+
     const val DEFAULT_TOOLBAR_SWIPE_ENABLED = true
     const val DEFAULT_TOOLBAR_OVERLAY = false
     const val DEFAULT_TOOLBAR_SMOOTH_RESIZE = true

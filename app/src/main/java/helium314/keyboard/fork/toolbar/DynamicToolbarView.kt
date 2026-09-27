@@ -22,8 +22,8 @@ import helium314.keyboard.latin.settings.Settings
 /**
  * The toolbar shown above the keyboard. It only draws buttons, state and animation are handled
  * by [DynamicToolbarController].
- * Three contents: the normal row (paste chips + item buttons), the header of an open tool
- * (back to keyboard | tool name | actions, like Samsung's keyboard) and the clipboard search bar.
+ * Contents: the normal row (item buttons), the paste chip bar (back | clip chips, like Samsung's keyboard),
+ * the header of an open tool (back to keyboard | tool name | actions) and the clipboard search bar.
  */
 class DynamicToolbarView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null
@@ -33,9 +33,15 @@ class DynamicToolbarView @JvmOverloads constructor(
         orientation = LinearLayout.HORIZONTAL
         gravity = Gravity.CENTER_VERTICAL
     }
-    private val chips = LinearLayout(context).apply {
+    // paste chip bar: back to the tools on the left, the chips centered
+    private val chipBar = LinearLayout(context).apply {
         orientation = LinearLayout.HORIZONTAL
         gravity = Gravity.CENTER_VERTICAL
+        visibility = GONE
+    }
+    private val chips = LinearLayout(context).apply {
+        orientation = LinearLayout.HORIZONTAL
+        gravity = Gravity.CENTER
     }
     private val buttons = LinearLayout(context).apply {
         orientation = LinearLayout.HORIZONTAL
@@ -69,12 +75,12 @@ class DynamicToolbarView @JvmOverloads constructor(
     }
 
     init {
-        row.addView(chips, LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT))
         row.addView(buttons, LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1f))
         addView(row, LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT))
         resultScroll.addView(results, LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT))
         addView(searchBar, LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT))
         addView(header, LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT))
+        addView(chipBar, LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT))
     }
 
     private val ripple get() = TypedValue().also {
@@ -104,7 +110,7 @@ class DynamicToolbarView @JvmOverloads constructor(
     }
 
     /** rounded chip in key colors */
-    private fun chip(text: String, highlight: Boolean, maxWidthDp: Int, onClick: () -> Unit) = TextView(context).apply {
+    private fun chip(text: String, highlight: Boolean, maxWidthDp: Int, border: Boolean = false, onClick: () -> Unit) = TextView(context).apply {
         val colors = Settings.getValues().mColors
         this.text = text
         setSingleLine()
@@ -116,24 +122,81 @@ class DynamicToolbarView @JvmOverloads constructor(
         gravity = Gravity.CENTER_VERTICAL
         val h = (12 * density).toInt()
         setPadding(h, 0, h, 0)
-        background = GradientDrawable().apply {
-            cornerRadius = 15 * density
-            setColor(if (highlight) colors.get(ColorType.ACTION_KEY_BACKGROUND) else colors.get(ColorType.KEY_BACKGROUND))
-        }
+        background = chipBackground(highlight, border)
         setOnClickListener { onClick() }
+    }
+
+    /** key colored pill, [border] in the enter key color (paste chips) */
+    private fun chipBackground(highlight: Boolean, border: Boolean) = GradientDrawable().apply {
+        val colors = Settings.getValues().mColors
+        cornerRadius = 15 * density
+        setColor(if (highlight) colors.get(ColorType.ACTION_KEY_BACKGROUND) else colors.get(ColorType.KEY_BACKGROUND))
+        if (border) setStroke((1.5f * density).toInt().coerceAtLeast(1), colors.get(ColorType.ACTION_KEY_BACKGROUND))
     }
 
     private fun chipParams() = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, (30 * density).toInt()).apply {
         marginStart = (6 * density).toInt()
     }
 
-    /** latest clip / code found in it, empty to hide */
-    fun setPasteChips(latest: String?, code: String?, onPaste: (String) -> Unit) {
+    /**
+     * Paste chips instead of the tools: [text] (or an image thumbnail for [imageUri]) and a [code] found in it.
+     * [onBack] goes back to the tools.
+     */
+    fun showChipBar(text: String?, code: String?, imageUri: android.net.Uri?, onPaste: (String?) -> Unit, onBack: () -> Unit) {
+        chipBar.removeAllViews()
         chips.removeAllViews()
-        if (code != null)
-            chips.addView(chip(code, true, 120) { onPaste(code) }, chipParams())
-        if (latest != null && latest != code)
-            chips.addView(chip(latest.replace('\n', ' '), false, 150) { onPaste(latest) }, chipParams())
+        chipBar.addView(iconButton(R.drawable.ic_dot_left, context.getString(R.string.fork_tool_back)) { onBack() },
+            LinearLayout.LayoutParams((48 * density).toInt(), LayoutParams.MATCH_PARENT))
+        if (imageUri != null) {
+            chips.addView(imageChip(imageUri) { onPaste(null) }, chipParams())
+        } else if (text != null) {
+            if (code != null && code != text.trim())
+                chips.addView(chip(code, true, 120, border = true) { onPaste(code) }, chipParams())
+            chips.addView(chip(text.replace('\n', ' '), false, 200, border = true) { onPaste(text) }, chipParams())
+        }
+        chipBar.addView(chips, LinearLayout.LayoutParams(0, LayoutParams.MATCH_PARENT, 1f))
+        // balance the back button so the chips are centered
+        chipBar.addView(View(context), LinearLayout.LayoutParams((48 * density).toInt(), LayoutParams.MATCH_PARENT))
+        if (header.visibility != VISIBLE && searchBar.visibility != VISIBLE) {
+            row.visibility = GONE
+            chipBar.visibility = VISIBLE
+        }
+    }
+
+    fun hideChipBar() {
+        if (chipBar.visibility != VISIBLE) return
+        chipBar.visibility = GONE
+        if (header.visibility != VISIBLE && searchBar.visibility != VISIBLE) row.visibility = VISIBLE
+    }
+
+    val isChipBarShown get() = chipBar.visibility == VISIBLE
+
+    /** thumbnail + "Paste", like Samsung's image clip chip */
+    private fun imageChip(uri: android.net.Uri, onClick: () -> Unit) = LinearLayout(context).apply {
+        val colors = Settings.getValues().mColors
+        orientation = LinearLayout.HORIZONTAL
+        gravity = Gravity.CENTER_VERTICAL
+        val h = (4 * density).toInt()
+        setPadding(h, 0, (12 * density).toInt(), 0)
+        background = chipBackground(false, true)
+        val thumb = ImageView(context).apply {
+            scaleType = ImageView.ScaleType.CENTER_CROP
+            clipToOutline = true
+            outlineProvider = object : android.view.ViewOutlineProvider() {
+                override fun getOutline(view: View, outline: android.graphics.Outline) =
+                    outline.setRoundRect(0, 0, view.width, view.height, 11 * density)
+            }
+            try { setImageURI(uri) } catch (_: Exception) { } // permission may be gone
+        }
+        addView(thumb, LinearLayout.LayoutParams((22 * density).toInt(), (22 * density).toInt()))
+        addView(TextView(context).apply {
+            setText(R.string.fork_clip_paste)
+            setTextSize(TypedValue.COMPLEX_UNIT_SP, 14f)
+            setTextColor(colors.get(ColorType.KEY_TEXT))
+            KeyboardTypeface.applyToTextView(this)
+            setPadding((8 * density).toInt(), 0, 0, 0)
+        }, LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT))
+        setOnClickListener { onClick() }
     }
 
     fun showSearch(onClose: () -> Unit) {
@@ -151,6 +214,7 @@ class DynamicToolbarView @JvmOverloads constructor(
             LinearLayout.LayoutParams((40 * density).toInt(), LayoutParams.MATCH_PARENT))
         row.visibility = GONE
         header.visibility = GONE
+        chipBar.visibility = GONE
         searchBar.visibility = VISIBLE
     }
 
@@ -206,6 +270,7 @@ class DynamicToolbarView @JvmOverloads constructor(
         }
         row.visibility = GONE
         searchBar.visibility = GONE
+        chipBar.visibility = GONE
         header.visibility = VISIBLE
     }
 

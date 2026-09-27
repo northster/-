@@ -16,7 +16,14 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.foundation.gestures.detectHorizontalDragGestures
+import androidx.compose.material3.Slider
+import androidx.compose.material3.SliderColors
+import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Switch
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -48,11 +55,56 @@ fun ShadcnSwitch(
             checkedThumbColor = s.primaryForeground,
             checkedTrackColor = s.primary,
             checkedBorderColor = Color.Transparent,
-            uncheckedThumbColor = s.background,
+            uncheckedThumbColor = s.mutedForeground,
             uncheckedTrackColor = s.input,
             uncheckedBorderColor = Color.Transparent,
+            // fork: a disabled "on" switch still has to look on
+            disabledCheckedThumbColor = s.primaryForeground,
+            disabledCheckedTrackColor = s.primary.copy(alpha = 0.6f),
+            disabledCheckedBorderColor = Color.Transparent,
+            disabledUncheckedThumbColor = s.mutedForeground.copy(alpha = 0.5f),
+            disabledUncheckedTrackColor = s.input,
+            disabledUncheckedBorderColor = Color.Transparent,
         ),
     )
+}
+
+/**
+ * fork: Slider that only reacts to horizontal drags. Taps on the track and vertical movement (scrolling the list)
+ * don't change the value, so the page can be scrolled with a finger on a slider.
+ */
+@Composable
+fun ScrollSafeSlider(
+    value: Float,
+    onValueChange: (Float) -> Unit,
+    modifier: Modifier = Modifier,
+    onValueChangeFinished: (() -> Unit)? = null,
+    valueRange: ClosedFloatingPointRange<Float> = 0f..1f,
+    colors: SliderColors = SliderDefaults.colors(),
+) {
+    val onChange by rememberUpdatedState(onValueChange)
+    val onFinish by rememberUpdatedState(onValueChangeFinished)
+    val range by rememberUpdatedState(valueRange)
+    Box(modifier) {
+        Slider(value = value, onValueChange = { }, valueRange = valueRange, colors = colors, modifier = Modifier.fillMaxWidth())
+        // on top of the slider, takes all touches; a drag only starts after moving sideways past the touch slop
+        Box(Modifier.matchParentSize().pointerInput(Unit) {
+            val inset = 10.dp.toPx() // half the thumb, the track starts there
+            fun valueAt(x: Float): Float {
+                val f = ((x - inset) / (size.width - 2 * inset)).coerceIn(0f, 1f)
+                return range.start + f * (range.endInclusive - range.start)
+            }
+            detectHorizontalDragGestures(
+                onDragStart = { onChange(valueAt(it.x)) },
+                onDragEnd = { onFinish?.invoke() },
+                onDragCancel = { onFinish?.invoke() },
+                onHorizontalDrag = { change, _ ->
+                    change.consume()
+                    onChange(valueAt(change.position.x))
+                },
+            )
+        })
+    }
 }
 
 /** Small muted label above a card, like a shadcn form group label. */

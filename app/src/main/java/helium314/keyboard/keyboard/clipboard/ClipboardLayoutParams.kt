@@ -45,7 +45,7 @@ class ClipboardLayoutParams(ctx: Context) {
         // height calculation is not good enough, probably also because keyboard top padding might be off by a pixel (see KeyboardParser)
         val offset = 1.25f * res.displayMetrics.density * sv.mKeyboardHeightScale
         // fork: no bottom row (ABC / space / delete), back to the letters is on the toolbar header
-        listHeight = if (FORK_NO_BOTTOM_ROW) defaultKeyboardHeight - bottomPadding
+        listHeight = if (FORK_NO_BOTTOM_ROW) defaultKeyboardHeight // the whole panel, bottom padding included
             else defaultKeyboardHeight - bottomRowKeyboardHeight - bottomPadding + offset.toInt()
     }
 

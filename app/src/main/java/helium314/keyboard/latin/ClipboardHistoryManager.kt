@@ -94,15 +94,26 @@ class ClipboardHistoryManager(
         }
     }
 
-    /** fork: text of the primary clip if it was copied recently, for the paste chips on the dynamic toolbar */
-    fun getRecentClipText(): String? {
+    /** fork: the primary clip if it was copied recently, for the paste chip on the dynamic toolbar */
+    class RecentClip(val text: String?, val imageUri: android.net.Uri?, val timestamp: Long) {
+        /** identifies the clip, a dismissed chip is not offered again */
+        val key get() = "$timestamp:${text?.hashCode() ?: imageUri?.toString()}"
+    }
+
+    fun getRecentClip(): RecentClip? {
         if (tempPrimaryClip) return null
         val clipData = try { clipboardManager.primaryClip } catch (e: Exception) { null } ?: return null
         if (clipData.itemCount == 0) return null
-        if (clipData.description?.hasMimeType("text/*") != true) return null
-        if (ClipboardManagerCompat.getClipSensitivity(clipData.description) == true) return null
-        if (System.currentTimeMillis() - ClipboardManagerCompat.getClipTimestamp(clipData) > RECENT_TIME_MILLIS) return null
-        return clipData.getItemAt(0)?.coerceToText(latinIME)?.toString()?.takeIf { it.isNotBlank() }
+        val description = clipData.description ?: return null
+        if (ClipboardManagerCompat.getClipSensitivity(description) == true) return null
+        val timestamp = ClipboardManagerCompat.getClipTimestamp(clipData)
+        if (System.currentTimeMillis() - timestamp > RECENT_TIME_MILLIS) return null
+        val item = clipData.getItemAt(0) ?: return null
+        if (description.hasMimeType("image/*") && item.uri != null)
+            return RecentClip(null, item.uri, timestamp)
+        if (!description.hasMimeType("text/*")) return null
+        val text = item.coerceToText(latinIME)?.toString()?.takeIf { it.isNotBlank() } ?: return null
+        return RecentClip(text, null, timestamp)
     }
 
     fun getPrimaryClipIfText(): String? {
