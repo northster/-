@@ -2,49 +2,170 @@
 package helium314.keyboard.fork.toolbar
 
 import android.content.Context
+import android.graphics.drawable.GradientDrawable
+import android.text.TextUtils
 import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.Gravity
+import android.view.View
 import android.widget.FrameLayout
+import android.widget.HorizontalScrollView
 import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.TextView
+import helium314.keyboard.keyboard.KeyboardTypeface
+import helium314.keyboard.latin.R
 import helium314.keyboard.latin.common.ColorType
 import helium314.keyboard.latin.settings.Settings
 
 /**
  * The toolbar shown above the keyboard. It only draws buttons, state and animation are handled
  * by [DynamicToolbarController].
+ * Two contents: the normal row (paste chips + item buttons) and the clipboard search bar.
  */
 class DynamicToolbarView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null
 ) : FrameLayout(context, attrs) {
+    private val density = resources.displayMetrics.density
     private val row = LinearLayout(context).apply {
+        orientation = LinearLayout.HORIZONTAL
+        gravity = Gravity.CENTER_VERTICAL
+    }
+    private val chips = LinearLayout(context).apply {
+        orientation = LinearLayout.HORIZONTAL
+        gravity = Gravity.CENTER_VERTICAL
+    }
+    private val buttons = LinearLayout(context).apply {
+        orientation = LinearLayout.HORIZONTAL
+        gravity = Gravity.CENTER_VERTICAL
+    }
+
+    // search bar
+    private val searchBar = LinearLayout(context).apply {
+        orientation = LinearLayout.HORIZONTAL
+        gravity = Gravity.CENTER_VERTICAL
+        visibility = GONE
+    }
+    private val queryView = TextView(context).apply {
+        setSingleLine()
+        ellipsize = TextUtils.TruncateAt.START
+        setTextSize(TypedValue.COMPLEX_UNIT_SP, 15f)
+        maxWidth = (140 * density).toInt()
+        minWidth = (72 * density).toInt()
+    }
+    private val resultScroll = HorizontalScrollView(context).apply { isHorizontalScrollBarEnabled = false }
+    private val results = LinearLayout(context).apply {
         orientation = LinearLayout.HORIZONTAL
         gravity = Gravity.CENTER_VERTICAL
     }
 
     init {
+        row.addView(chips, LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT))
+        row.addView(buttons, LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1f))
         addView(row, LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT))
+        resultScroll.addView(results, LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT))
+        addView(searchBar, LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT))
+    }
+
+    private val ripple get() = TypedValue().also {
+        context.theme.resolveAttribute(android.R.attr.selectableItemBackgroundBorderless, it, true)
+    }.resourceId
+
+    private fun iconButton(icon: Int, label: String, onClick: () -> Unit) = ImageButton(context).apply {
+        setImageResource(icon)
+        contentDescription = label
+        scaleType = ImageView.ScaleType.CENTER_INSIDE
+        ripple.let { if (it != 0) setBackgroundResource(it) else background = null }
+        setOnClickListener { onClick() }
+        Settings.getValues().mColors.setColor(this, ColorType.TOOL_BAR_KEY)
     }
 
     fun setItems(items: List<ToolbarItem>, onClick: (ToolbarItem) -> Unit) {
-        row.removeAllViews()
+        buttons.removeAllViews()
         val colors = Settings.getValues().mColors
         colors.setBackground(this, ColorType.MAIN_BACKGROUND) // same as keyboard, looks like the keyboard grows
-        val ripple = TypedValue().also {
-            context.theme.resolveAttribute(android.R.attr.selectableItemBackgroundBorderless, it, true)
-        }.resourceId
         for (item in items) {
-            val button = ImageButton(context).apply {
-                setImageResource(item.icon)
-                contentDescription = context.getString(item.label)
-                scaleType = android.widget.ImageView.ScaleType.CENTER_INSIDE
-                if (ripple != 0) setBackgroundResource(ripple) else background = null
-                setOnClickListener { onClick(item) }
-                tag = item.id
-            }
-            colors.setColor(button, ColorType.TOOL_BAR_KEY)
-            row.addView(button, LinearLayout.LayoutParams(0, LayoutParams.MATCH_PARENT, 1f))
+            val button = iconButton(item.icon, context.getString(item.label)) { onClick(item) }.apply { tag = item.id }
+            buttons.addView(button, LinearLayout.LayoutParams(0, LayoutParams.MATCH_PARENT, 1f))
         }
     }
+
+    /** rounded chip in key colors */
+    private fun chip(text: String, highlight: Boolean, maxWidthDp: Int, onClick: () -> Unit) = TextView(context).apply {
+        val colors = Settings.getValues().mColors
+        this.text = text
+        setSingleLine()
+        ellipsize = TextUtils.TruncateAt.END
+        maxWidth = (maxWidthDp * density).toInt()
+        setTextSize(TypedValue.COMPLEX_UNIT_SP, 14f)
+        KeyboardTypeface.applyToTextView(this)
+        setTextColor(if (highlight) colors.get(ColorType.ACTION_KEY_ICON) else colors.get(ColorType.KEY_TEXT))
+        gravity = Gravity.CENTER_VERTICAL
+        val h = (12 * density).toInt()
+        setPadding(h, 0, h, 0)
+        background = GradientDrawable().apply {
+            cornerRadius = 15 * density
+            setColor(if (highlight) colors.get(ColorType.ACTION_KEY_BACKGROUND) else colors.get(ColorType.KEY_BACKGROUND))
+        }
+        setOnClickListener { onClick() }
+    }
+
+    private fun chipParams() = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, (30 * density).toInt()).apply {
+        marginStart = (6 * density).toInt()
+    }
+
+    /** latest clip / code found in it, empty to hide */
+    fun setPasteChips(latest: String?, code: String?, onPaste: (String) -> Unit) {
+        chips.removeAllViews()
+        if (code != null)
+            chips.addView(chip(code, true, 120) { onPaste(code) }, chipParams())
+        if (latest != null && latest != code)
+            chips.addView(chip(latest.replace('\n', ' '), false, 150) { onPaste(latest) }, chipParams())
+    }
+
+    fun showSearch(onClose: () -> Unit) {
+        val colors = Settings.getValues().mColors
+        searchBar.removeAllViews()
+        searchBar.addView(iconButton(R.drawable.sym_keyboard_search_lxx, context.getString(R.string.fork_clip_search)) { },
+            LinearLayout.LayoutParams((40 * density).toInt(), LayoutParams.MATCH_PARENT))
+        queryView.setTextColor(colors.get(ColorType.KEY_TEXT))
+        queryView.setHintTextColor(colors.get(ColorType.KEY_HINT_TEXT))
+        queryView.hint = context.getString(R.string.fork_clip_search_hint)
+        KeyboardTypeface.applyToTextView(queryView)
+        searchBar.addView(queryView, LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT))
+        searchBar.addView(resultScroll, LinearLayout.LayoutParams(0, LayoutParams.MATCH_PARENT, 1f))
+        searchBar.addView(iconButton(R.drawable.ic_close, context.getString(android.R.string.cancel)) { onClose() },
+            LinearLayout.LayoutParams((40 * density).toInt(), LayoutParams.MATCH_PARENT))
+        row.visibility = GONE
+        searchBar.visibility = VISIBLE
+    }
+
+    fun hideSearch() {
+        searchBar.visibility = GONE
+        row.visibility = VISIBLE
+        results.removeAllViews()
+        queryView.text = ""
+    }
+
+    /** [matches] are clip texts, [empty] shown when there are none */
+    fun setSearchState(query: String, matches: List<String>, empty: String, onPick: (String) -> Unit) {
+        queryView.text = query
+        results.removeAllViews()
+        if (matches.isEmpty()) {
+            results.addView(TextView(context).apply {
+                text = empty
+                setTextSize(TypedValue.COMPLEX_UNIT_SP, 13f)
+                setTextColor(Settings.getValues().mColors.get(ColorType.KEY_HINT_TEXT))
+                gravity = Gravity.CENTER_VERTICAL
+                setPadding((10 * density).toInt(), 0, 0, 0)
+            }, LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT))
+        }
+        matches.forEachIndexed { i, text ->
+            results.addView(chip(text.replace('\n', ' '), i == 0 && query.isNotEmpty(), 180) { onPick(text) }, chipParams())
+        }
+        resultScroll.scrollTo(0, 0)
+    }
+
+    val isSearchShown get() = searchBar.visibility == View.VISIBLE
 }

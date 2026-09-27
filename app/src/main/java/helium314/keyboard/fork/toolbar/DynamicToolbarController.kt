@@ -8,7 +8,15 @@ import android.content.Context
 import android.view.View
 import android.view.animation.PathInterpolator
 import androidx.core.content.edit
+import helium314.keyboard.event.Event
 import helium314.keyboard.fork.ForkSettings
+import helium314.keyboard.fork.clipboard.ClipPrefs
+import helium314.keyboard.fork.clipboard.ClipSearch
+import helium314.keyboard.keyboard.internal.keyboard_parser.floris.KeyCode
+import helium314.keyboard.latin.LatinIME
+import helium314.keyboard.latin.RichInputMethodManager
+import helium314.keyboard.latin.common.Constants
+import helium314.keyboard.latin.database.ClipboardDao
 import helium314.keyboard.keyboard.KeyboardSwitcher
 import helium314.keyboard.latin.R
 import helium314.keyboard.latin.settings.Settings
@@ -35,7 +43,13 @@ import helium314.keyboard.latin.utils.prefs
  * and process death.
  */
 class DynamicToolbarController(private val context: Context) {
+    init { current = this }
     private var toolbar: DynamicToolbarView? = null
+    private val clipSearch = ClipSearch()
+    /** toolbar state before the search opened it */
+    private var expandedBeforeSearch = false
+    /** clip already pasted from a chip, not offered again */
+    private var dismissedChipText: String? = null
     private var keyboardFrame: View? = null
     private var inputView: View? = null
     private var animator: ValueAnimator? = null
@@ -51,6 +65,7 @@ class DynamicToolbarController(private val context: Context) {
 
     /** Called with every new input view (first start, theme change, display / fold state change). */
     fun attach(newInputView: View) {
+        if (clipSearch.isActive) endClipSearch(null)
         keyboardFrame?.removeOnLayoutChangeListener(frameLayoutListener)
         animator?.cancel()
         inputView = newInputView
@@ -59,6 +74,7 @@ class DynamicToolbarController(private val context: Context) {
             it.addOnLayoutChangeListener(frameLayoutListener)
         }
         toolbar?.setItems(ToolbarItems.defaultItems, ::onItemClicked)
+        refreshPasteChips()
         // restore persisted state without animation
         hiddenFraction = if (isExpanded) 0f else 1f
         insetsIncludeToolbar = isExpanded
@@ -69,6 +85,13 @@ class DynamicToolbarController(private val context: Context) {
 
     fun setExpanded(expanded: Boolean, animate: Boolean) {
         if (expanded == isExpanded) return
+        if (!expanded && clipSearch.isActive) {
+            // collapsing closes the search
+            expandedBeforeSearch = false
+            endClipSearch(null)
+            return
+        }
+        if (expanded) refreshPasteChips()
         isExpanded = expanded
         context.prefs().edit { putBoolean(ForkSettings.PREF_TOOLBAR_EXPANDED, expanded) }
         Log.i(TAG, "toolbar ${if (expanded) "expanded" else "collapsed"}")
@@ -163,7 +186,90 @@ class DynamicToolbarController(private val context: Context) {
         return expandedTop()
     }
 
+    // ---------------------------------------------------------------- clipboard: paste chips and search
+
+    private val latinIME get() = context as? LatinIME
+
+    /** Show the latest clip (if recent) and a verification code found in it. */
+    fun refreshPasteChips() {
+        val tb = toolbar ?: return
+        val ime = latinIME ?: return
+        val prefs = context.prefs()
+        val text = if (ClipPrefs.pasteChip(prefs)) ime.clipboardHistoryManager.getRecentClipText() else null
+        if (text == null || text == dismissedChipText) {
+            tb.setPasteChips(null, null) { }
+            return
+        }
+        tb.setPasteChips(text.take(200), ClipPrefs.findCode(text)) { paste ->
+            dismissedChipText = text
+            ime.onTextInput(paste)
+            tb.setPasteChips(null, null) { }
+        }
+    }
+
+    val isClipSearchActive get() = clipSearch.isActive
+
+    /** Open the search bar: the keyboard types into it instead of the app. */
+    fun startClipSearch() {
+        val ime = latinIME ?: return
+        val tb = toolbar ?: return
+        if (clipSearch.isActive) return
+        // letters instead of the clipboard panel
+        if (KeyboardSwitcher.getInstance().isShowingClipboardHistory)
+            ime.mKeyboardActionListener.onCodeInput(KeyCode.ALPHA, Constants.NOT_A_COORDINATE, Constants.NOT_A_COORDINATE, false)
+        clipSearch.start(RichInputMethodManager.getInstance().combiningRulesExtraValueOfCurrentSubtype)
+        expandedBeforeSearch = isExpanded
+        tb.showSearch { endClipSearch(null) }
+        updateSearchResults()
+        setExpanded(true, true)
+    }
+
+    /** Close the search bar, [paste] goes to the app. */
+    fun endClipSearch(paste: String?) {
+        if (!clipSearch.isActive) return
+        clipSearch.stop()
+        toolbar?.hideSearch()
+        refreshPasteChips()
+        if (!expandedBeforeSearch) setExpanded(false, true)
+        if (paste != null) latinIME?.onTextInput(paste)
+    }
+
+    /** Key input while searching. Returns true if it was used for the search and must not reach the app. */
+    fun onKeyEvent(event: Event): Boolean {
+        if (!clipSearch.isActive) return false
+        if (event.codePoint == Constants.CODE_ENTER) {
+            // enter pastes the first match
+            val first = matches().firstOrNull()
+            if (clipSearch.query.isNotEmpty() && first != null) endClipSearch(first)
+            else endClipSearch(null)
+            return true
+        }
+        clipSearch.setCombiningSpec(RichInputMethodManager.getInstance().combiningRulesExtraValueOfCurrentSubtype)
+        if (!clipSearch.onEvent(event)) return false
+        updateSearchResults()
+        return true
+    }
+
+    /** Text input (e.g. popup keys) while searching. Returns true if used. */
+    fun onTextInput(text: String): Boolean {
+        if (!clipSearch.isActive) return false
+        clipSearch.onText(text)
+        updateSearchResults()
+        return true
+    }
+
+    private fun matches(): List<String> {
+        val dao = ClipboardDao.getInstance(context) ?: return emptyList()
+        return ClipSearch.filter(dao.getAll(), clipSearch.query).mapNotNull { it.text }
+    }
+
+    private fun updateSearchResults() {
+        val tb = toolbar ?: return
+        tb.setSearchState(clipSearch.query, matches(), context.getString(R.string.fork_clip_search_empty)) { endClipSearch(it) }
+    }
+
     private fun onItemClicked(item: ToolbarItem) {
+        if (clipSearch.isActive) endClipSearch(null)
         when (item.id) {
             // opens / closes the clipboard history panel in place of the letters (like the clipboard key)
             ToolbarItems.CLIPBOARD -> {
@@ -183,6 +289,10 @@ class DynamicToolbarController(private val context: Context) {
 
     companion object {
         private const val TAG = "DynamicToolbar"
+        /** the controller of the running keyboard service */
+        @JvmStatic
+        var current: DynamicToolbarController? = null
+            private set
         // material 3 "emphasized decelerate"-like curve
         private val EMPHASIZED = PathInterpolator(0.2f, 0f, 0f, 1f)
     }

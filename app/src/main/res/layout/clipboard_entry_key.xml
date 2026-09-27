@@ -43,4 +43,30 @@
             android:maxLines="4"/>
     </LinearLayout>
 
+    <!-- fork: pin / delete right on the card -->
+    <LinearLayout
+        android:id="@+id/clipboard_entry_actions"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <ImageButton
+            android:id="@+id/clipboard_entry_pin"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:padding="6dp"
+            android:scaleType="fitCenter"
+            android:background="@null"
+            android:contentDescription="@string/fork_clip_pin"
+            android:src="@drawable/ic_clipboard_pin_lxx"/>
+        <ImageButton
+            android:id="@+id/clipboard_entry_delete"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:padding="6dp"
+            android:scaleType="fitCenter"
+            android:background="@null"
+            android:contentDescription="@string/delete"
+            android:src="@drawable/ic_fork_delete"/>
+    </LinearLayout>
+
 </LinearLayout>

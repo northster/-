@@ -10,6 +10,7 @@ import android.os.SystemClock
 import android.webkit.MimeTypeMap
 import androidx.core.content.FileProvider
 import androidx.core.database.getStringOrNull
+import helium314.keyboard.fork.clipboard.ClipPrefs
 import helium314.keyboard.latin.ClipboardHistoryEntry
 import helium314.keyboard.latin.common.FileUtils
 import helium314.keyboard.latin.settings.Defaults
@@ -175,6 +176,14 @@ class ClipboardDao private constructor(private val db: Database) {
         db.writableDatabase.update(TABLE, cv, "$COLUMN_ID = ${entry.id}", null)
     }
 
+    /** fork: delete button / info panel, pinned clips included. Notifies the listener. */
+    fun deleteById(id: Long) {
+        val index = cache.indexOfFirst { it.id == id }
+        if (index < 0) return
+        delete(listOf(cache[index]))
+        listener?.onClipsRemoved(index, 1)
+    }
+
     // RecyclerView initiates this, so we don't call listener (or we'll get an IndexOutOfRangeException from RecyclerView)
     fun deleteClipAt(index: Int) {
         delete(listOf(cache[index]))
@@ -194,11 +203,19 @@ class ClipboardDao private constructor(private val db: Database) {
             return
 
         lastClearOldClips = SystemClock.elapsedRealtime()
-        val retentionTime = Settings.getValues()?.mClipboardHistoryRetentionTime ?: 121L
-        if (retentionTime > 120) return
-        val minTime = System.currentTimeMillis() - retentionTime * 60 * 1000L
-        val toRemove = cache.filter { it.timeStamp < minTime && !it.isPinned }
-        delete(toRemove)
+        // fork: retention in hours and a maximum number of clips, see ClipPrefs
+        val p = prefs ?: return
+        val toRemove = LinkedHashSet<ClipboardHistoryEntry>()
+        val retentionHours = ClipPrefs.retentionHours(p)
+        if (retentionHours > 0) {
+            val minTime = System.currentTimeMillis() - retentionHours * 3600 * 1000L
+            cache.filterTo(toRemove) { it.timeStamp < minTime && !it.isPinned }
+        }
+        val maxItems = ClipPrefs.maxItems(p)
+        if (maxItems > 0) {
+            cache.filter { !it.isPinned }.sortedByDescending { it.timeStamp }.drop(maxItems).let { toRemove.addAll(it) }
+        }
+        delete(toRemove.toList())
     }
 
     fun clearNonPinned() {
@@ -270,11 +287,13 @@ class ClipboardDao private constructor(private val db: Database) {
         const val ADD_MIME_TYPE_COLUMN = "ALTER TABLE $TABLE ADD COLUMN $COLUMN_MIME_TYPE TEXT"
 
         private var instance: ClipboardDao? = null
+        private var prefs: SharedPreferences? = null
         lateinit var clipFilesDir: File
             private set
 
         /** Returns the instance or creates a new one. Returns null if instance can't be created (e.g. no access to db due to device being locked) */
         fun getInstance(context: Context): ClipboardDao? {
+            if (prefs == null) prefs = context.prefs()
             if (instance == null)
                 try {
                     instance = ClipboardDao(Database.getInstance(context))

@@ -24,11 +24,16 @@ class ClipboardLayoutParams(ctx: Context) {
         val defaultKeyboardHeight = ResourceUtils.getSecondaryKeyboardHeight(res, sv)
         val defaultKeyboardWidth = ResourceUtils.getKeyboardWidth(ctx, sv)
 
-        keyVerticalGap = (res.getFraction(R.fraction.config_key_vertical_gap_holo,
-            defaultKeyboardHeight, defaultKeyboardHeight) * sv.mKeyGapScale).toInt()
-        keyHorizontalGap = (res.getFraction(R.fraction.config_key_horizontal_gap_holo,
-            defaultKeyboardWidth, defaultKeyboardWidth) * sv.mKeyGapScale).toInt()
-        val bottomPadding = (res.getFraction(R.fraction.config_keyboard_bottom_padding_holo,
+        val density = res.displayMetrics.density
+        // fork: sizes set in dp (see KeyboardParams.applyForkDpGaps) apply here too
+        keyVerticalGap = if (sv.mForkKeyGapVDp >= 0) (sv.mForkKeyGapVDp * density).toInt()
+            else (res.getFraction(R.fraction.config_key_vertical_gap_holo,
+                defaultKeyboardHeight, defaultKeyboardHeight) * sv.mKeyGapScale).toInt()
+        keyHorizontalGap = if (sv.mForkKeyGapHDp >= 0) (sv.mForkKeyGapHDp * density).toInt()
+            else (res.getFraction(R.fraction.config_key_horizontal_gap_holo,
+                defaultKeyboardWidth, defaultKeyboardWidth) * sv.mKeyGapScale).toInt()
+        val bottomPadding = if (sv.mForkBottomPaddingDp >= 0) (sv.mForkBottomPaddingDp * density).toInt()
+            else (res.getFraction(R.fraction.config_keyboard_bottom_padding_holo,
                 defaultKeyboardHeight, defaultKeyboardHeight) * sv.mBottomPaddingScale).toInt()
         val topPadding = res.getFraction(R.fraction.config_keyboard_top_padding_holo,
                 defaultKeyboardHeight, defaultKeyboardHeight).toInt()

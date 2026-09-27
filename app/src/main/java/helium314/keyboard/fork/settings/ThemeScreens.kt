@@ -30,6 +30,8 @@ import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -49,7 +51,8 @@ import androidx.compose.ui.unit.dp
 import androidx.core.graphics.ColorUtils
 import helium314.keyboard.fork.theme.DtTheme
 import helium314.keyboard.fork.theme.DtThemeStore
-import helium314.keyboard.keyboard.KeyboardSwitcher
+import helium314.keyboard.fork.ForkLive
+import helium314.keyboard.keyboard.KeyboardTheme
 import helium314.keyboard.latin.R
 import helium314.keyboard.latin.utils.LocalShadcn
 import helium314.keyboard.latin.utils.NextScreenIcon
@@ -80,7 +83,6 @@ fun createForkThemeSettings(context: Context) = listOf(
     },
 )
 
-private fun reloadKeyboard() = KeyboardSwitcher.getInstance().setThemeNeedsReload()
 
 @Composable
 private fun ThemeSwatch(theme: DtTheme) {
@@ -98,7 +100,9 @@ private fun ThemeSwatch(theme: DtTheme) {
 
 // ------------------------------------------------------------------ editor
 
-private class ColorSlot(val label: Int, val get: (DtTheme) -> Int, val set: (DtTheme, Int) -> DtTheme, val alpha: Boolean = false)
+private class ColorSlot(
+    val label: Int, val get: (DtTheme) -> Int, val set: (DtTheme, Int) -> DtTheme, val alpha: Boolean = false, val desc: Int? = null,
+)
 
 // order follows WM Keyboard's theme editor: board, keys, enter key, accent & popups, toolbar
 private val boardSlots = listOf(
@@ -108,7 +112,8 @@ private val keySlots = listOf(
     ColorSlot(R.string.fork_color_key, { it.key }, { t, c -> t.copy(key = c) }, alpha = true),
     ColorSlot(R.string.fork_color_key_text, { it.keyText }, { t, c -> t.copy(keyText = c) }),
     ColorSlot(R.string.fork_color_hint_text, { it.hintText }, { t, c -> t.copy(hintText = c) }),
-    ColorSlot(R.string.fork_color_functional, { it.functionalKey }, { t, c -> t.copy(functionalKey = c) }, alpha = true),
+    ColorSlot(R.string.fork_color_functional, { it.functionalKey }, { t, c -> t.copy(functionalKey = c) }, alpha = true,
+        desc = R.string.fork_color_functional_desc),
     ColorSlot(R.string.fork_color_functional_text, { it.functionalText }, { t, c -> t.copy(functionalText = c) }),
     ColorSlot(R.string.fork_color_pressed, { it.pressed ?: it.key }, { t, c -> t.copy(pressed = c) }, alpha = true),
     ColorSlot(R.string.fork_color_border, { it.border }, { t, c -> t.copy(border = c) }, alpha = true),
@@ -128,22 +133,36 @@ private val toolbarSlots = listOf(
 
 /**
  * fork: "Theme & colors": pick a saved theme at the top, edit its colors and key shapes below.
- * Every change is saved to the theme file and redrawn on the keyboard right away.
+ * The keyboard shows the selected theme while this screen is open, and follows sliders while they are dragged
+ * (live preview, see [ForkLive]). Changes are saved to the theme file when a slider is released.
  */
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun ThemeColorsScreen(onClickBack: () -> Unit) {
-    val prefs = LocalContext.current.prefs()
+    val ctx = LocalContext.current
+    val prefs = ctx.prefs()
     val s = LocalShadcn.current
     var version by remember { mutableStateOf(0) } // bumped on every change to re-read the store
-    fun changed() { version++; reloadKeyboard() }
+    fun changed() { version++ }
     val themes = remember(version) { DtThemeStore.all(prefs) }
     val lightId = remember(version) { DtThemeStore.activeId(prefs, false) }
     val darkId = remember(version) { DtThemeStore.activeId(prefs, true) }
     val isNight = androidx.compose.foundation.isSystemInDarkTheme()
     var selectedId by remember { mutableStateOf(if (isNight) darkId else lightId) }
-    val current = themes.firstOrNull { it.id == selectedId } ?: themes.first()
-    fun update(t: DtTheme) { DtThemeStore.save(prefs, t); changed() }
+    val saved = themes.firstOrNull { it.id == selectedId } ?: themes.first()
+    // unsaved state while a slider is dragged
+    var draft by remember(saved) { mutableStateOf<DtTheme?>(null) }
+    val current = draft ?: saved
+    fun live(t: DtTheme) { draft = t; ForkLive.previewTheme(t) }
+    fun update(t: DtTheme) { draft = t; DtThemeStore.save(prefs, t); changed() }
+    LaunchedEffect(saved) { ForkLive.previewTheme(saved) }
+    DisposableEffect(Unit) {
+        onDispose {
+            DtThemeStore.preview = null
+            KeyboardTheme.getColorsForCurrentTheme(ctx) // switches the shared colors back to the active theme
+            ForkLive.requestReload()
+        }
+    }
     var expanded by remember { mutableStateOf<Int?>(null) }
     var rename by remember { mutableStateOf(false) }
     var delete by remember { mutableStateOf(false) }
@@ -218,31 +237,37 @@ fun ThemeColorsScreen(onClickBack: () -> Unit) {
                 @Composable {
                     ColorRow(
                         label = stringResource(slot.label),
+                        description = slot.desc?.let { stringResource(it) },
                         color = slot.get(current),
+                        savedColor = slot.get(saved),
                         alpha = slot.alpha,
                         expanded = expanded == slot.label,
                         onToggle = { expanded = if (expanded == slot.label) null else slot.label },
-                        onColor = { update(slot.set(current, it)) },
+                        onLive = { live(slot.set(saved, it)) },
+                        onColor = { update(slot.set(saved, it)) },
                     )
                 }
             }
             SettingsSection(stringResource(R.string.fork_theme_cat_board), colorRows(boardSlots))
             SettingsSection(stringResource(R.string.fork_theme_cat_keys), colorRows(keySlots) + listOf(
                 @Composable {
-                    ValueSlider(stringResource(R.string.fork_shape_key_radius), current.keyRadius, 0f..24f, "dp") {
-                        update(current.copy(keyRadius = it))
+                    ValueSlider(stringResource(R.string.fork_shape_key_radius), saved.keyRadius, 0f..24f, "dp",
+                        onLive = { live(saved.copy(keyRadius = it)) }) {
+                        update(saved.copy(keyRadius = it))
                     }
                 },
                 @Composable {
-                    ValueSlider(stringResource(R.string.fork_shape_border_width), current.borderWidth, 0f..3f, "dp", step = 0.5f) {
-                        update(current.copy(borderWidth = it))
+                    ValueSlider(stringResource(R.string.fork_shape_border_width), saved.borderWidth, 0f..3f, "dp", step = 0.5f,
+                        onLive = { live(saved.copy(borderWidth = it)) }) {
+                        update(saved.copy(borderWidth = it))
                     }
                 },
             ))
             SettingsSection(stringResource(R.string.fork_theme_cat_enter), colorRows(enterSlots) + listOf(
                 @Composable {
-                    ValueSlider(stringResource(R.string.fork_shape_enter_radius), current.enterRadius, 0f..40f, "dp") {
-                        update(current.copy(enterRadius = it))
+                    ValueSlider(stringResource(R.string.fork_shape_enter_radius), saved.enterRadius, 0f..40f, "dp",
+                        onLive = { live(saved.copy(enterRadius = it)) }) {
+                        update(saved.copy(enterRadius = it))
                     }
                 },
             ))
@@ -304,7 +329,10 @@ private fun OutlineButton(text: String, destructive: Boolean = false, onClick: (
 }
 
 @Composable
-private fun ValueSlider(name: String, value: Float, range: ClosedFloatingPointRange<Float>, unit: String, step: Float = 1f, onCommit: (Float) -> Unit) {
+private fun ValueSlider(
+    name: String, value: Float, range: ClosedFloatingPointRange<Float>, unit: String, step: Float = 1f,
+    onLive: (Float) -> Unit = {}, onCommit: (Float) -> Unit,
+) {
     val s = LocalShadcn.current
     var v by remember(value) { mutableFloatStateOf(value) }
     Column(Modifier.fillMaxWidth().padding(start = 16.dp, end = 16.dp, top = 12.dp, bottom = 4.dp)) {
@@ -315,7 +343,10 @@ private fun ValueSlider(name: String, value: Float, range: ClosedFloatingPointRa
         }
         Slider(
             value = v,
-            onValueChange = { v = (it / step).roundToInt() * step },
+            onValueChange = {
+                val stepped = (it / step).roundToInt() * step
+                if (stepped != v) { v = stepped; onLive(stepped) }
+            },
             onValueChangeFinished = { onCommit(v) },
             valueRange = range,
             colors = SliderDefaults.colors(thumbColor = s.primary, activeTrackColor = s.primary, inactiveTrackColor = s.muted),
@@ -346,20 +377,28 @@ private fun parseHex(text: String): Int? {
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-private fun ColorRow(label: String, color: Int, alpha: Boolean, expanded: Boolean, onToggle: () -> Unit, onColor: (Int) -> Unit) {
+private fun ColorRow(
+    label: String, description: String?, color: Int, savedColor: Int, alpha: Boolean, expanded: Boolean,
+    onToggle: () -> Unit, onLive: (Int) -> Unit, onColor: (Int) -> Unit,
+) {
     val s = LocalShadcn.current
     Column {
         Row(
             Modifier.fillMaxWidth().clickable(onClick = onToggle).padding(horizontal = 16.dp, vertical = 12.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Text(label, style = MaterialTheme.typography.bodyLarge, modifier = Modifier.weight(1f))
+            Column(Modifier.weight(1f)) {
+                Text(label, style = MaterialTheme.typography.bodyLarge)
+                if (description != null)
+                    Text(description, style = MaterialTheme.typography.bodySmall, color = s.mutedForeground)
+            }
             Text(color.hex(alpha), style = MaterialTheme.typography.bodyMedium, color = s.mutedForeground,
                 fontFamily = FontFamily.Monospace, modifier = Modifier.padding(end = 10.dp))
             Box(Modifier.size(24.dp).clip(RoundedCornerShape(6.dp)).border(1.dp, s.border, RoundedCornerShape(6.dp)).background(Color(color)))
         }
         AnimatedVisibility(expanded) {
-            ColorEditor(color, alpha, onColor)
+            // the editor starts from the saved color, so its sliders don't jump while the draft changes
+            ColorEditor(savedColor, alpha, onLive, onColor)
         }
     }
 }
@@ -367,7 +406,7 @@ private fun ColorRow(label: String, color: Int, alpha: Boolean, expanded: Boolea
 /** hue / saturation / brightness / opacity sliders, hex field and presets */
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-private fun ColorEditor(color: Int, alpha: Boolean, onColor: (Int) -> Unit) {
+private fun ColorEditor(color: Int, alpha: Boolean, onLive: (Int) -> Unit, onColor: (Int) -> Unit) {
     val s = LocalShadcn.current
     val hsv = remember(color) { FloatArray(3).also { android.graphics.Color.colorToHSV(color, it) } }
     var h by remember(color) { mutableFloatStateOf(hsv[0]) }
@@ -376,6 +415,7 @@ private fun ColorEditor(color: Int, alpha: Boolean, onColor: (Int) -> Unit) {
     var a by remember(color) { mutableFloatStateOf(android.graphics.Color.alpha(color) / 255f) }
     fun current() = android.graphics.Color.HSVToColor((a * 255).roundToInt(), floatArrayOf(h, sat, v))
     fun commit() = onColor(current())
+    fun live() = onLive(current())
     var hexText by remember(color) { mutableStateOf(color.hex(alpha)) }
 
     Column(Modifier.fillMaxWidth().padding(start = 16.dp, end = 16.dp, bottom = 12.dp)) {
@@ -383,14 +423,14 @@ private fun ColorEditor(color: Int, alpha: Boolean, onColor: (Int) -> Unit) {
         Box(Modifier.fillMaxWidth().height(28.dp).clip(RoundedCornerShape(6.dp))
             .border(1.dp, s.border, RoundedCornerShape(6.dp)).background(Color(current())))
         GradientSlider(stringResource(R.string.fork_color_hue), h, 0f..360f,
-            Brush.horizontalGradient((0..6).map { Color.hsv(it * 60f % 360f, 1f, 1f) }), { h = it }, ::commit)
+            Brush.horizontalGradient((0..6).map { Color.hsv(it * 60f % 360f, 1f, 1f) }), { h = it; live() }, ::commit)
         GradientSlider(stringResource(R.string.fork_color_saturation), sat, 0f..1f,
-            Brush.horizontalGradient(listOf(Color.hsv(h, 0f, v), Color.hsv(h, 1f, v))), { sat = it }, ::commit)
+            Brush.horizontalGradient(listOf(Color.hsv(h, 0f, v), Color.hsv(h, 1f, v))), { sat = it; live() }, ::commit)
         GradientSlider(stringResource(R.string.fork_color_brightness), v, 0f..1f,
-            Brush.horizontalGradient(listOf(Color.Black, Color.hsv(h, sat, 1f))), { v = it }, ::commit)
+            Brush.horizontalGradient(listOf(Color.Black, Color.hsv(h, sat, 1f))), { v = it; live() }, ::commit)
         if (alpha)
             GradientSlider(stringResource(R.string.fork_color_opacity), a, 0f..1f,
-                Brush.horizontalGradient(listOf(Color.Transparent, Color.hsv(h, sat, v))), { a = it }, ::commit)
+                Brush.horizontalGradient(listOf(Color.Transparent, Color.hsv(h, sat, v))), { a = it; live() }, ::commit)
         OutlinedTextField(
             value = hexText,
             onValueChange = { text ->

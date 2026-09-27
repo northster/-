@@ -27,6 +27,9 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.unit.dp
 import helium314.keyboard.fork.ForkSettings
+import helium314.keyboard.fork.ForkLive
+import helium314.keyboard.fork.settings.DpSliderPreference
+import helium314.keyboard.fork.settings.ForkSize
 import helium314.keyboard.latin.settings.createPrefKeyForBooleanSettings
 import helium314.keyboard.latin.utils.LocalShadcn
 import helium314.keyboard.settings.SettingsSection
@@ -98,6 +101,7 @@ fun AppearanceScreen(
         Settings.PREF_BOTTOM_PADDING_SCALE_PREFIX,
         Settings.PREF_SIDE_PADDING_SCALE_PREFIX,
         Settings.PREF_KEY_GAP_SCALE_PREFIX,
+        ForkSettings.PREF_KEY_GAP_V_DP,
         Settings.PREF_ENABLE_SPLIT_KEYBOARD,
         Settings.PREF_SPLIT_SPACER_SCALE_PREFIX,
         R.string.fork_cat_font,
@@ -238,25 +242,17 @@ fun createAppearanceSettings(context: Context) = listOf(
             default = Defaults.PREF_SPLIT_SPACER_SCALE[0],
             range = 0.5f..2f,
             step = 0.01f,
-        ) { KeyboardSwitcher.getInstance().setThemeNeedsReload() }
+            live = true,
+        ) { ForkLive.requestReload() }
     },
-    Setting(context, Settings.PREF_KEY_GAP_SCALE_PREFIX, R.string.prefs_key_gap_scale) { setting ->
-        InlineSliderPreference(
-            name = setting.title,
-            key = createPrefKeyForBooleanSettings(setting.key, 0, 2),
-            default = Defaults.PREF_KEY_GAP_SCALE[0],
-            range = 0.5f..2.5f,
-            step = 0.01f,
-        ) { KeyboardSwitcher.getInstance().setThemeNeedsReload() }
+    Setting(context, Settings.PREF_KEY_GAP_SCALE_PREFIX, R.string.fork_size_key_gap_h) { setting ->
+        DpSliderPreference(setting.title, ForkSize.KEY_GAP_H)
     },
-    Setting(context, Settings.PREF_KEYBOARD_HEIGHT_SCALE_PREFIX, R.string.prefs_keyboard_height_scale) { setting ->
-        InlineSliderPreference(
-            name = setting.title,
-            key = createPrefKeyForBooleanSettings(setting.key, 0, 2),
-            default = Defaults.PREF_KEYBOARD_HEIGHT_SCALE[0],
-            range = 0.3f..1.5f,
-            step = 0.01f,
-        ) { KeyboardSwitcher.getInstance().setThemeNeedsReload() }
+    Setting(context, ForkSettings.PREF_KEY_GAP_V_DP, R.string.fork_size_key_gap_v) { setting ->
+        DpSliderPreference(setting.title, ForkSize.KEY_GAP_V)
+    },
+    Setting(context, Settings.PREF_KEYBOARD_HEIGHT_SCALE_PREFIX, R.string.fork_size_height) { setting ->
+        DpSliderPreference(setting.title, ForkSize.HEIGHT)
     },
     Setting(context, Settings.PREF_BOTTOM_ROW_SCALE_PREFIX, R.string.prefs_bottom_row_scale) { setting ->
         InlineSliderPreference(
@@ -265,25 +261,14 @@ fun createAppearanceSettings(context: Context) = listOf(
             default = Defaults.PREF_BOTTOM_ROW_SCALE[0],
             range = 0.5f..2f,
             step = 0.01f,
-        ) { KeyboardSwitcher.getInstance().setThemeNeedsReload() }
+            live = true,
+        ) { ForkLive.requestReload() }
     },
-    Setting(context, Settings.PREF_BOTTOM_PADDING_SCALE_PREFIX, R.string.prefs_bottom_padding_scale) { setting ->
-        InlineSliderPreference(
-            name = setting.title,
-            key = createPrefKeyForBooleanSettings(setting.key, 0, 2),
-            default = Defaults.PREF_BOTTOM_PADDING_SCALE[0],
-            range = 0f..5f,
-            step = 0.01f,
-        ) { KeyboardSwitcher.getInstance().setThemeNeedsReload() }
+    Setting(context, Settings.PREF_BOTTOM_PADDING_SCALE_PREFIX, R.string.fork_size_bottom_padding) { setting ->
+        DpSliderPreference(setting.title, ForkSize.BOTTOM_PADDING)
     },
-    Setting(context, Settings.PREF_SIDE_PADDING_SCALE_PREFIX, R.string.prefs_side_padding_scale) { setting ->
-        InlineSliderPreference(
-            name = setting.title,
-            key = createPrefKeyForBooleanSettings(setting.key, 0, 3),
-            default = Defaults.PREF_SIDE_PADDING_SCALE[0],
-            range = 0f..3f,
-            step = 0.01f,
-        ) { KeyboardSwitcher.getInstance().setThemeNeedsReload() }
+    Setting(context, Settings.PREF_SIDE_PADDING_SCALE_PREFIX, R.string.fork_size_side_padding) { setting ->
+        DpSliderPreference(setting.title, ForkSize.SIDE_PADDING)
     },
     Setting(context, Settings.PREF_SPACE_BAR_TEXT, R.string.prefs_space_bar_text) {
         TextInputPreference(it, Defaults.PREF_SPACE_BAR_TEXT)
@@ -298,7 +283,8 @@ fun createAppearanceSettings(context: Context) = listOf(
             default = Defaults.PREF_FONT_SCALE,
             range = 0.5f..1.5f,
             step = 0.01f,
-        ) { KeyboardSwitcher.getInstance().setThemeNeedsReload() }
+            live = true,
+        ) { ForkLive.requestReload() }
     },
     Setting(context, Settings.PREF_HINT_FONT_SCALE, R.string.prefs_hint_font_scale) { setting ->
         InlineSliderPreference(
@@ -307,7 +293,8 @@ fun createAppearanceSettings(context: Context) = listOf(
             default = Defaults.PREF_HINT_FONT_SCALE,
             range = 0.5f..1.5f,
             step = 0.01f,
-        ) { KeyboardSwitcher.getInstance().setThemeNeedsReload() }
+            live = true,
+        ) { ForkLive.requestReload() }
     },
     Setting(context, SettingsWithoutKey.CUSTOM_EMOJI_FONT, R.string.custom_emoji_font) {
         CustomFontPreference(it, Settings.getCustomEmojiFontFile(LocalContext.current), R.string.custom_emoji_font)
@@ -319,7 +306,8 @@ fun createAppearanceSettings(context: Context) = listOf(
             default = Defaults.PREF_EMOJI_FONT_SCALE,
             range = 0.5f..1.5f,
             step = 0.01f,
-        ) { KeyboardSwitcher.getInstance().setThemeNeedsReload() }
+            live = true,
+        ) { ForkLive.requestReload() }
     },
     Setting(context, Settings.PREF_EMOJI_KEY_FIT, R.string.prefs_emoji_key_fit) {
         SwitchPreference(it, Defaults.PREF_EMOJI_KEY_FIT) { KeyboardSwitcher.getInstance().setThemeNeedsReload() }

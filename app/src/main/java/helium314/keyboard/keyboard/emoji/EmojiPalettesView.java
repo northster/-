@@ -399,9 +399,10 @@ public final class EmojiPalettesView extends LinearLayout
         final int keyboardWidth = ResourceUtils.getKeyboardWidth(getContext(), sv);
         final TypedArray keyboardAttr = getContext().obtainStyledAttributes(
                 null, R.styleable.Keyboard, R.attr.keyboardStyle, R.style.Keyboard);
-        final float leftPadding = keyboardAttr.getFraction(R.styleable.Keyboard_keyboardLeftPadding,
+        final float forkSide = sv.mForkSidePaddingDp * getResources().getDisplayMetrics().density; // fork: dp size
+        final float leftPadding = sv.mForkSidePaddingDp >= 0 ? forkSide : keyboardAttr.getFraction(R.styleable.Keyboard_keyboardLeftPadding,
                 keyboardWidth, keyboardWidth, 0f) * sv.mSidePaddingScale;
-        final float rightPadding =  keyboardAttr.getFraction(R.styleable.Keyboard_keyboardRightPadding,
+        final float rightPadding = sv.mForkSidePaddingDp >= 0 ? forkSide : keyboardAttr.getFraction(R.styleable.Keyboard_keyboardRightPadding,
                 keyboardWidth, keyboardWidth, 0f) * sv.mSidePaddingScale;
         keyboardAttr.recycle();
         mPager.setPadding(

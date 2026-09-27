@@ -150,7 +150,7 @@ private constructor(val themeId: Int, @JvmField val mStyleId: Int) {
 
             // fork: colors and key shapes come from the selected theme file
             if (helium314.keyboard.fork.ForkSettings.THEME_FILES)
-                return helium314.keyboard.fork.theme.ForkColors(
+                return helium314.keyboard.fork.theme.ForkColors.shared(
                     helium314.keyboard.fork.theme.DtThemeStore.active(prefs, isNight),
                     context.resources.displayMetrics.density
                 )

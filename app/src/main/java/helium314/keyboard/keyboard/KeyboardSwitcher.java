@@ -605,6 +605,17 @@ public final class KeyboardSwitcher {
 
     /** Marks the theme as outdated. The theme will be reloaded next time the keyboard is shown.
      *  If the keyboard is currently showing, theme will be reloaded immediately. */
+    /**
+     * fork: rebuild the shown keyboard in place for live previews from settings (colors, sizes),
+     * without the hide / show of {@link #setThemeNeedsReload()}. Main thread only.
+     */
+    public void reloadKeyboardLive() {
+        KeyboardLayoutSet.Companion.onKeyboardThemeChanged();
+        if (mLatinIME == null || !mLatinIME.isInputViewShown() || mKeyboardView == null)
+            return;
+        reloadMainKeyboard();
+    }
+
     public void setThemeNeedsReload() {
         mThemeNeedsReload = true;
         if (mLatinIME == null || !mLatinIME.isInputViewShown())

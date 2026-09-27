@@ -30,6 +30,8 @@ class ClipboardAdapter(
     var itemTypeFace: Typeface? = null
     var itemTextColor = 0
     var itemTextSize = 0f
+    /** fork: max lines of text on a card, see ClipPrefs.PREVIEW_LINES */
+    var itemMaxLines = 4
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -52,6 +54,8 @@ class ClipboardAdapter(
         private val pinnedIconView: ImageView
         private val contentTextView: TextView
         private val contentImageView: ImageView
+        private val pinButton: ImageView
+        private val deleteButton: ImageView
 
         init {
             view.apply {
@@ -75,17 +79,27 @@ class ClipboardAdapter(
             clipboardLayoutParams.setItemProperties(view)
             val colors = Settings.getValues().mColors
             colors.setColor(pinnedIconView, ColorType.CLIPBOARD_PIN)
+            pinButton = view.findViewById<ImageView>(R.id.clipboard_entry_pin).apply {
+                setOnClickListener { (view.tag as? Long)?.let { keyEventListener.onTogglePin(it) } }
+            }
+            deleteButton = view.findViewById<ImageView>(R.id.clipboard_entry_delete).apply {
+                setOnClickListener { (view.tag as? Long)?.let { keyEventListener.onDeleteClip(it) } }
+            }
+            colors.setColor(deleteButton, ColorType.KEY_HINT_TEXT)
         }
 
         fun setContent(historyEntry: ClipboardHistoryEntry?) {
             if (historyEntry == null) return
             itemView.tag = historyEntry.id
+            contentTextView.maxLines = itemMaxLines
             if (historyEntry.filename != null) {
                 historyEntry.setImageAndDescription(contentImageView, contentTextView)
             } else {
                 contentTextView.text = historyEntry.text?.take(1000) // truncate displayed text for performance reasons
             }
-            pinnedIconView.visibility = if (historyEntry.isPinned) View.VISIBLE else View.GONE
+            // fork: the pin button is highlighted instead of showing the separate pin icon
+            pinnedIconView.visibility = View.GONE
+            Settings.getValues().mColors.setColor(pinButton, if (historyEntry.isPinned) ColorType.CLIPBOARD_PIN else ColorType.KEY_HINT_TEXT)
             contentImageView.visibility = if (historyEntry.filename != null) View.VISIBLE else View.GONE
             contentTextView.visibility = if (contentTextView.text.isNullOrEmpty()) View.GONE else View.VISIBLE
         }
@@ -103,7 +117,7 @@ class ClipboardAdapter(
         }
 
         override fun onLongClick(view: View): Boolean {
-            clipboardHistoryManager?.toggleClipPinned(view.tag as Long)
+            keyEventListener.onLongPressClip(view.tag as Long) // fork: info panel instead of toggling pin
             return true
         }
     }

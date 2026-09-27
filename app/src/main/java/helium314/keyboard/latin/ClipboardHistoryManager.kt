@@ -46,6 +46,7 @@ class ClipboardHistoryManager(
     private var clipboardSuggestionView: View? = null
     private var clipboardDao: ClipboardDao? = null
     private var tempPrimaryClip = false
+    private val screenshotWatcher = helium314.keyboard.fork.clipboard.ScreenshotWatcher(latinIME)
 
     fun onCreate() {
         clipboardManager = latinIME.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
@@ -53,13 +54,19 @@ class ClipboardHistoryManager(
         clipboardDao = ClipboardDao.getInstance(latinIME)
         if (latinIME.mSettings.current.mClipboardHistoryEnabled)
             fetchPrimaryClip()
+        screenshotWatcher.update()
     }
 
     fun onDestroy() {
         clipboardManager.removePrimaryClipChangedListener(this)
+        screenshotWatcher.stop()
     }
 
+    /** fork: settings may have changed while the keyboard was hidden */
+    fun onStartInputView() = screenshotWatcher.update()
+
     override fun onPrimaryClipChanged() {
+        helium314.keyboard.fork.toolbar.DynamicToolbarController.current?.refreshPasteChips()
         // Make sure we read clipboard content only if history settings is set
         if (latinIME.mSettings.current.mClipboardHistoryEnabled) {
             fetchPrimaryClip()
@@ -85,6 +92,17 @@ class ClipboardHistoryManager(
         } else if (maySaveFromUri(clipItem.uri, latinIME)) {
             clipboardDao?.addClipUri(timeStamp, false, clipItem.uri, description, latinIME)
         }
+    }
+
+    /** fork: text of the primary clip if it was copied recently, for the paste chips on the dynamic toolbar */
+    fun getRecentClipText(): String? {
+        if (tempPrimaryClip) return null
+        val clipData = try { clipboardManager.primaryClip } catch (e: Exception) { null } ?: return null
+        if (clipData.itemCount == 0) return null
+        if (clipData.description?.hasMimeType("text/*") != true) return null
+        if (ClipboardManagerCompat.getClipSensitivity(clipData.description) == true) return null
+        if (System.currentTimeMillis() - ClipboardManagerCompat.getClipTimestamp(clipData) > RECENT_TIME_MILLIS) return null
+        return clipData.getItemAt(0)?.coerceToText(latinIME)?.toString()?.takeIf { it.isNotBlank() }
     }
 
     fun getPrimaryClipIfText(): String? {
@@ -140,6 +158,10 @@ class ClipboardHistoryManager(
 
     fun toggleClipPinned(id: Long) {
         clipboardDao?.togglePinned(id)
+    }
+
+    fun deleteClip(id: Long) {
+        clipboardDao?.deleteById(id)
     }
 
     fun clearHistory() {

@@ -45,6 +45,20 @@ object ForkSettings {
     /** Toolbar state, persisted so it survives input view re-creation (e.g. fold / unfold) and process death. */
     const val PREF_TOOLBAR_EXPANDED = "fork_toolbar_expanded"
 
+    // ---- keyboard size in dp (Appearance & size). Absent = HeliBoard's scale values still apply,
+    //      so sizes set before the dp sliders existed are kept until a slider is moved.
+    const val PREF_KB_HEIGHT_DP = "fork_kb_height_dp"
+    const val PREF_BOTTOM_PADDING_DP = "fork_bottom_padding_dp"
+    const val PREF_SIDE_PADDING_DP = "fork_side_padding_dp"
+    const val PREF_KEY_GAP_H_DP = "fork_key_gap_h_dp"
+    const val PREF_KEY_GAP_V_DP = "fork_key_gap_v_dp"
+    const val SIZE_UNSET = -1f
+
+    /** dp value of a size pref, or [SIZE_UNSET] */
+    @JvmStatic
+    fun sizeDp(prefs: SharedPreferences, key: String): Float =
+        if (prefs.contains(key)) prefs.getFloat(key, SIZE_UNSET) else SIZE_UNSET
+
     const val DEFAULT_TOOLBAR_SWIPE_ENABLED = true
     const val DEFAULT_TOOLBAR_OVERLAY = false
     const val DEFAULT_TOOLBAR_SMOOTH_RESIZE = true

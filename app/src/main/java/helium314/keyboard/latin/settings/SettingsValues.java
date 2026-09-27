@@ -129,6 +129,12 @@ public class SettingsValues {
     public final boolean mUrlDetectionEnabled;
     public final float mBottomPaddingScale;
     public final float mSidePaddingScale;
+    // fork: sizes in dp, ForkSettings.SIZE_UNSET (< 0) when the scale values above apply
+    public final float mForkHeightDp;
+    public final float mForkBottomPaddingDp;
+    public final float mForkSidePaddingDp;
+    public final float mForkKeyGapHDp;
+    public final float mForkKeyGapVDp;
     public final ToolbarMode mToolbarMode;
     public final boolean mToolbarSwipeDownToHide;
     public final boolean mToolbarHidingGlobal;
@@ -323,6 +329,11 @@ public class SettingsValues {
         mSpacingAndPunctuations = new SpacingAndPunctuations(res, mUrlDetectionEnabled);
         mBottomPaddingScale = mIsFloatingKeyboard ? 0f : Settings.readBottomPaddingScale(prefs, isLandscape, isFolded);
         mSidePaddingScale = Settings.readSidePaddingScale(prefs, isLandscape, mIsSplitKeyboardEnabled, isFolded);
+        mForkHeightDp = mIsFloatingKeyboard ? ForkSettings.SIZE_UNSET : ForkSettings.sizeDp(prefs, ForkSettings.PREF_KB_HEIGHT_DP);
+        mForkBottomPaddingDp = mIsFloatingKeyboard ? ForkSettings.SIZE_UNSET : ForkSettings.sizeDp(prefs, ForkSettings.PREF_BOTTOM_PADDING_DP);
+        mForkSidePaddingDp = ForkSettings.sizeDp(prefs, ForkSettings.PREF_SIDE_PADDING_DP);
+        mForkKeyGapHDp = ForkSettings.sizeDp(prefs, ForkSettings.PREF_KEY_GAP_H_DP);
+        mForkKeyGapVDp = ForkSettings.sizeDp(prefs, ForkSettings.PREF_KEY_GAP_V_DP);
         mLongPressSymbolsForNumpad = prefs.getBoolean(Settings.PREFS_LONG_PRESS_SYMBOLS_FOR_NUMPAD, Defaults.PREFS_LONG_PRESS_SYMBOLS_FOR_NUMPAD);
         mAutoShowToolbar = mToolbarMode == ToolbarMode.EXPANDABLE && prefs.getBoolean(Settings.PREF_AUTO_SHOW_TOOLBAR, Defaults.PREF_AUTO_SHOW_TOOLBAR);
         mAutoHideToolbar = mSuggestionsEnabled && prefs.getBoolean(Settings.PREF_AUTO_HIDE_TOOLBAR, Defaults.PREF_AUTO_HIDE_TOOLBAR);

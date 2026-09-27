@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: GPL-3.0-only
 package helium314.keyboard.settings.screens
 
+import helium314.keyboard.fork.clipboard.ClipPrefs
+
 import android.content.Context
 import android.media.AudioManager
 import androidx.compose.material3.Surface
@@ -78,8 +80,15 @@ fun PreferencesScreen(
         Settings.PREF_SHOW_DPAD_KEY,
         R.string.settings_category_clipboard_history,
         Settings.PREF_ENABLE_CLIPBOARD_HISTORY,
-        if (clipboardHistoryEnabled) Settings.PREF_CLIPBOARD_HISTORY_RETENTION_TIME else null,
+        // fork: retention in hours, size limits, layout of the panel, paste chips, screenshots
+        if (clipboardHistoryEnabled) ClipPrefs.RETENTION_HOURS else null,
+        if (clipboardHistoryEnabled) ClipPrefs.MAX_ITEMS else null,
+        if (clipboardHistoryEnabled) ClipPrefs.COLUMNS else null,
+        if (clipboardHistoryEnabled) ClipPrefs.PREVIEW_LINES else null,
         if (clipboardHistoryEnabled) Settings.PREF_CLIPBOARD_HISTORY_PINNED_FIRST else null,
+        Settings.PREF_ABC_AFTER_CLIP,
+        ClipPrefs.PASTE_CHIP,
+        if (clipboardHistoryEnabled) ClipPrefs.SCREENSHOTS else null,
         if (clipboardHistoryEnabled) Settings.PREF_CLIPBOARD_USE_FILES else null,
         if (clipboardHistoryEnabled && prefs.getBoolean(Settings.PREF_CLIPBOARD_USE_FILES, Defaults.PREF_CLIPBOARD_USE_FILES))
             Settings.PREF_CLIPBOARD_FILES_SIZE_LIMIT else null,

@@ -205,6 +205,29 @@ public class KeyboardParams {
         }
     }
 
+    // fork: see ForkSettings.PREF_KB_HEIGHT_DP etc.
+    private void applyForkDpPaddings(final Context context, final SettingsValues sv) {
+        final float density = context.getResources().getDisplayMetrics().density;
+        if (sv.mForkBottomPaddingDp >= 0)
+            mBottomPadding = Math.round(sv.mForkBottomPaddingDp * density);
+        if (sv.mForkSidePaddingDp >= 0) {
+            mLeftPadding = Math.round(sv.mForkSidePaddingDp * density);
+            mRightPadding = mLeftPadding;
+        }
+    }
+
+    private void applyForkDpGaps(final Context context, final SettingsValues sv, final int width, final int height) {
+        final float density = context.getResources().getDisplayMetrics().density;
+        if (sv.mForkKeyGapHDp >= 0 && width > 0) {
+            mHorizontalGap = Math.round(sv.mForkKeyGapHDp * density);
+            mRelativeHorizontalGap = (float) mHorizontalGap / width;
+        }
+        if (sv.mForkKeyGapVDp >= 0 && height > 0) {
+            mVerticalGap = Math.round(sv.mForkKeyGapVDp * density);
+            mRelativeVerticalGap = (float) mVerticalGap / height;
+        }
+    }
+
     // when attr is null, default attributes will be loaded
     //  these are good for basic keyboards already, but have wrong/unsuitable sizes e.g. for emojis,
     //  popupKeys and moreSuggestions
@@ -231,6 +254,8 @@ public class KeyboardParams {
             mRightPadding = (int) (keyboardAttr.getFraction(
                     R.styleable.Keyboard_keyboardRightPadding, width, width, 0)
                     * sv.mSidePaddingScale);
+            if (attr == null) // fork: main keyboards, paddings set in dp replace the scaled theme fractions
+                applyForkDpPaddings(context, sv);
 
             mBaseWidth = mOccupiedWidth - mLeftPadding - mRightPadding;
             final float defaultKeyWidthFactor = context.getResources().getInteger(R.integer.config_screen_metrics) > 2 ? 0.9f : 1f;
@@ -246,6 +271,8 @@ public class KeyboardParams {
                     R.styleable.Keyboard_verticalGap, 1, 1, 0) * sv.mKeyGapScale;
             mHorizontalGap = (int) (mRelativeHorizontalGap * width);
             mVerticalGap = (int) (mRelativeVerticalGap * height);
+            if (attr == null) // fork: main keyboards, gaps set in dp replace the scaled theme fractions
+                applyForkDpGaps(context, sv, width, height);
 
             mBaseHeight = mOccupiedHeight - mTopPadding - mBottomPadding + mVerticalGap;
             mDefaultRowHeight = ResourceUtils.getDimensionOrFraction(keyboardAttr,

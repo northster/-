@@ -72,6 +72,11 @@ public final class ResourceUtils {
         if (settingsValues.mIsFloatingKeyboard) {
             return settingsValues.mFloatingHeight;
         }
+        if (settingsValues.mForkHeightDp > 0) { // fork: height set in dp, number row adds a row on top
+            final DisplayMetrics dm = res.getDisplayMetrics();
+            final float height = settingsValues.mForkHeightDp * dm.density * (settingsValues.mShowsNumberRow ? 1.25f : 1f);
+            return (int) Math.min(height, dm.heightPixels * 0.7f);
+        }
         int defaultKeyboardHeight = getDefaultKeyboardHeight(res, settingsValues.mShowsNumberRow);
         return (int)(defaultKeyboardHeight * settingsValues.mKeyboardHeightScale);
     }

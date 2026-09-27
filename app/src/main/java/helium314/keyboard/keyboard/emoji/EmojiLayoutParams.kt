@@ -24,9 +24,13 @@ internal class EmojiLayoutParams(res: Resources) {
         val sv = Settings.getValues()
         val defaultKeyboardHeight = ResourceUtils.getSecondaryKeyboardHeight(res, sv)
 
-        val keyVerticalGap = (res.getFraction(R.fraction.config_key_vertical_gap_holo,
+        val density = res.displayMetrics.density
+        // fork: sizes set in dp apply here too
+        val keyVerticalGap = if (sv.mForkKeyGapVDp >= 0) (sv.mForkKeyGapVDp * density).toInt()
+            else (res.getFraction(R.fraction.config_key_vertical_gap_holo,
             defaultKeyboardHeight, defaultKeyboardHeight) * sv.mKeyGapScale).toInt()
-        val bottomPadding = (res.getFraction(R.fraction.config_keyboard_bottom_padding_holo,
+        val bottomPadding = if (sv.mForkBottomPaddingDp >= 0) (sv.mForkBottomPaddingDp * density).toInt()
+            else (res.getFraction(R.fraction.config_keyboard_bottom_padding_holo,
             defaultKeyboardHeight, defaultKeyboardHeight) * sv.mBottomPaddingScale).toInt()
         val topPadding = res.getFraction(R.fraction.config_keyboard_top_padding_holo,
             defaultKeyboardHeight, defaultKeyboardHeight).toInt()

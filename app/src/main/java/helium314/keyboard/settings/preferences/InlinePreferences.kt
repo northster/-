@@ -37,7 +37,10 @@ import kotlin.math.roundToInt
 
 // fork: settings that show their control directly in the list instead of opening a dialog
 
-/** Slider shown in the row. The value is written when the finger is lifted, so the keyboard reloads once. */
+/**
+ * Slider shown in the row. The value is written when the finger is lifted, so the keyboard reloads once,
+ * or with [live] on every step while dragging ([onChanged] should then be cheap, e.g. ForkLive.requestReload).
+ */
 @Composable
 fun InlineSliderPreference(
     name: String,
@@ -46,6 +49,7 @@ fun InlineSliderPreference(
     range: ClosedFloatingPointRange<Float>,
     format: (Float) -> String = { "${(100 * it).roundToInt()}%" },
     step: Float? = null,
+    live: Boolean = false,
     onChanged: () -> Unit = { },
 ) {
     val ctx = LocalContext.current
@@ -71,10 +75,21 @@ fun InlineSliderPreference(
         }
         Slider(
             value = value,
-            onValueChange = { value = step?.let { st -> (it / st).roundToInt() * st } ?: it },
+            onValueChange = {
+                val new = step?.let { st -> (it / st).roundToInt() * st } ?: it
+                if (new != value) {
+                    value = new
+                    if (live) {
+                        prefs.edit { putFloat(key, new) }
+                        onChanged()
+                    }
+                }
+            },
             onValueChangeFinished = {
-                prefs.edit { putFloat(key, value) }
-                onChanged()
+                if (!live) {
+                    prefs.edit { putFloat(key, value) }
+                    onChanged()
+                }
             },
             valueRange = range,
             modifier = Modifier.padding(end = 8.dp),

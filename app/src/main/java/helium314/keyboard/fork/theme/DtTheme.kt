@@ -122,8 +122,15 @@ object DtThemeStore {
     fun setActive(prefs: SharedPreferences, id: String, dark: Boolean) =
         prefs.edit { putString(if (dark) PREF_ACTIVE_DARK else PREF_ACTIVE, id) }
 
+    /**
+     * Theme shown while it's being edited in settings (unsaved slider positions included).
+     * Overrides the active theme for both day and night until cleared.
+     */
+    @Volatile var preview: DtTheme? = null
+
     /** theme to draw with, falls back to a built-in one if the selected file was deleted */
     fun active(prefs: SharedPreferences, dark: Boolean): DtTheme {
+        preview?.let { return it }
         val themes = all(prefs)
         return themes.firstOrNull { it.id == activeId(prefs, dark) }
             ?: themes.firstOrNull { it.id == if (dark) DtTheme.SAMSUNG_DARK_ID else DtTheme.SAMSUNG_LIGHT_ID }
