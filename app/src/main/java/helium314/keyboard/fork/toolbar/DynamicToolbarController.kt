@@ -141,6 +141,7 @@ class DynamicToolbarController(private val context: Context) {
         toolbar = newInputView.findViewById(R.id.dynamic_toolbar)
         setHint(false, immediate = true)
         stopWave()
+        closeTranslatePanel()
         typedHit = null
         autofillView = null
         autofillOpened = false
@@ -187,6 +188,7 @@ class DynamicToolbarController(private val context: Context) {
             if (autofillView != null) autofillView = null else dismissChip()
         }
         if (!expanded) {
+            closeTranslatePanel()
             autoOpened = false
             autofillOpened = false
             slateAutoOpened = false
@@ -381,6 +383,10 @@ class DynamicToolbarController(private val context: Context) {
 
     /** back key: shrinks a tall panel first. Returns true if it was used. */
     fun onBackKey(): Boolean {
+        if (translatePanel != null) {
+            closeTranslatePanel()
+            return true
+        }
         if (!isClipboardPanelTall) return false
         setPanelTall(false)
         return true
@@ -891,12 +897,45 @@ class DynamicToolbarController(private val context: Context) {
     /** the field is left: its suggestions are gone */
     fun onFinishInputView() {
         endClipSearch(null)
+        closeTranslatePanel()
         if (autofillView == null) return
         autofillView = null
         if (autofillOpened && isExpanded) {
             autofillOpened = false
             setExpanded(false, false)
         } else applyChipState()
+    }
+
+    // ---------------------------------------------------------------- AI translation panel
+
+    private var translatePanel: View? = null
+
+    /** the translation panel over the letters (same size), until it is closed or a translation is started */
+    private fun showTranslatePanel() {
+        val ime = latinIME ?: return
+        if (translatePanel != null) return closeTranslatePanel()
+        // letters instead of the clipboard / emoji panel
+        if (KeyboardSwitcher.getInstance().isShowingClipboardHistory || KeyboardSwitcher.getInstance().isShowingEmojiPalettes)
+            ime.mKeyboardActionListener.onCodeInput(KeyCode.ALPHA, Constants.NOT_A_COORDINATE, Constants.NOT_A_COORDINATE, false)
+        val kv = KeyboardSwitcher.getInstance().mainKeyboardView ?: return
+        val parent = kv.parent as? android.widget.FrameLayout ?: return
+        val text = ime.forkTextBeforeCursor(helium314.keyboard.fork.slate.SlateRunner.MAX_TEXT)?.toString().orEmpty()
+        val panel = helium314.keyboard.fork.translate.TranslatePanel(context, kv, context.prefs(), text.takeLast(200).trim(),
+            onTranslate = { prompt, label, keep ->
+                closeTranslatePanel()
+                slate?.runOnText(helium314.keyboard.fork.slate.SlateCommand(label, prompt, appendResult = keep))
+            },
+            onClose = { closeTranslatePanel() })
+        parent.addView(panel, android.widget.FrameLayout.LayoutParams(
+            android.widget.FrameLayout.LayoutParams.MATCH_PARENT, android.widget.FrameLayout.LayoutParams.MATCH_PARENT))
+        translatePanel = panel
+        if (!isExpanded) setExpanded(true, true)
+    }
+
+    private fun closeTranslatePanel() {
+        val panel = translatePanel ?: return
+        translatePanel = null
+        (panel.parent as? android.view.ViewGroup)?.removeView(panel)
     }
 
     /** the search bar is a GIF search (same query typing as the clipboard search) */
@@ -1071,6 +1110,7 @@ class DynamicToolbarController(private val context: Context) {
 
     private fun onItemClicked(item: ToolbarItem) {
         if (clipSearch.isActive) endClipSearch(null)
+        if (item.id != ToolbarItems.TRANSLATE) closeTranslatePanel()
         when (item.id) {
             // opens / closes the clipboard history panel in place of the letters (like the clipboard key)
             ToolbarItems.CLIPBOARD -> {
@@ -1094,15 +1134,9 @@ class DynamicToolbarController(private val context: Context) {
                 return
             }
             // AI translation of the text before the cursor, target languages as chips (most used first)
+            // AI translation: language, style and purpose chosen in a panel over the keys
             ToolbarItems.TRANSLATE -> {
-                val targets = helium314.keyboard.fork.slate.SlateCommands.byUse(context.prefs(), TRANSLATE_TARGETS) { "→ " + it.first }
-                toolbar?.showCommandChips(targets.map { "→ " + it.first }, onPick = { i ->
-                    toolbar?.hideChipBar()
-                    val (label, language) = targets[i]
-                    slate?.runOnText(helium314.keyboard.fork.slate.SlateCommand("→ $label",
-                        "Translate the text to $language. Keep the meaning, tone, line breaks, names and numbers. " +
-                            "Output only the translation.", isBuiltIn = false))
-                }, onBack = { toolbar?.hideChipBar(); applyChipState() })
+                showTranslatePanel()
                 return
             }
             ToolbarItems.GIF -> {
@@ -1135,11 +1169,6 @@ class DynamicToolbarController(private val context: Context) {
         private const val FADE_MILLIS = 450L
         const val PREF_AUTOFILL = "fork_autofill_inline"
         const val PREF_AUTOFILL_OPEN = "fork_autofill_open"
-        /** chip label to language name for the model */
-        private val TRANSLATE_TARGETS = listOf(
-            "한국어" to "Korean", "English" to "English", "日本語" to "Japanese", "中文" to "Simplified Chinese",
-            "Español" to "Spanish", "Français" to "French", "Deutsch" to "German", "Tiếng Việt" to "Vietnamese",
-        )
         private const val TAG = "DynamicToolbar"
         const val TOOL_NONE = 0
         const val TOOL_CLIPBOARD = 1

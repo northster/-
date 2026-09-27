@@ -369,4 +369,13 @@
     <string name="fork_autofill_summary">삼성 패스, Google 비밀번호 관리자 등 자동완성 서비스의 로그인/비밀번호 제안 (안드로이드 11 이상). 다음 입력칸부터 적용</string>
     <string name="fork_autofill_open">제안이 오면 툴바 열기</string>
     <string name="fork_autofill_open_summary">끄면 글로우로만 알려요</string>
+    <string name="fork_translate_title">AI 번역</string>
+    <string name="fork_translate_go">번역하기</string>
+    <string name="fork_translate_empty">아직 입력한 글이 없어요. 커서 앞 글을 번역해요</string>
+    <string name="fork_translate_language">언어</string>
+    <string name="fork_translate_style">문체</string>
+    <string name="fork_translate_purpose">용도</string>
+    <string name="fork_translate_result">결과</string>
+    <string name="fork_translate_replace">원문을 번역으로 바꾸기</string>
+    <string name="fork_translate_keep">원문 두고 아래에 번역 추가</string>
 </resources>

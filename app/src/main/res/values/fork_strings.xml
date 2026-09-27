@@ -372,4 +372,13 @@
     <string name="fork_autofill_summary">Logins and passwords from Samsung Pass, Google Password Manager or another autofill service (Android 11+). Takes effect in the next field</string>
     <string name="fork_autofill_open">Open the toolbar for them</string>
     <string name="fork_autofill_open_summary">Otherwise the glow shows that there are suggestions</string>
+    <string name="fork_translate_title">AI translation</string>
+    <string name="fork_translate_go">Translate</string>
+    <string name="fork_translate_empty">Nothing typed yet: the text before the cursor is translated</string>
+    <string name="fork_translate_language">Language</string>
+    <string name="fork_translate_style">Style</string>
+    <string name="fork_translate_purpose">Purpose</string>
+    <string name="fork_translate_result">Result</string>
+    <string name="fork_translate_replace">Replace the text</string>
+    <string name="fork_translate_keep">Keep the original, translation below</string>
 </resources>

@@ -25,11 +25,12 @@ import kotlin.math.abs
  * fork: iPhone style cursor movement on a held spacebar. A floating caret follows the finger over the text (not a
  * character per step), and the real cursor jumps to the character boundary closest to it.
  *
- * Needs the app to tell where its caret is ([CursorAnchorInfo]). With the character bounds ([TextBoundsInfo], Android
- * 14+, not every app answers) the cursor jumps straight to the nearest letter. Without them it is walked there: one
- * character or line at a time towards the floating caret, each step waiting for the app to report the new caret
- * position. Apps that don't report the caret at all get the old step-by-step movement (the caller falls back when
- * [drag] returns false).
+ * Needs the app to tell where its caret is ([CursorAnchorInfo]) and where its characters are ([TextBoundsInfo],
+ * Android 14+; EditText based fields answer, many others don't). The cursor then jumps straight to the letter nearest
+ * to the floating caret. Apps without them get plain step movement (the caller falls back when [drag] returns false):
+ * a floating caret whose real cursor can't be put under it is only confusing. (An earlier version walked the cursor
+ * towards it one step at a time; in apps that don't report the moved cursor it never stopped and ran to the start
+ * of the line.)
  */
 class VirtualCaret(private val ime: LatinIME) {
     private var active = false
@@ -42,16 +43,8 @@ class VirtualCaret(private val ime: LatinIME) {
     private var bounds: Any? = null // TextBoundsInfo, typed loosely so this class loads before Android 14
     private var lastOffset = -1
     private var overlay: CaretOverlay? = null
-    /** the app answered the text bounds request without bounds: walk the cursor instead */
-    private var boundsFailed = false
-    // walking: where the floating caret is, where the real one was reported, a step waiting for its report
-    private var targetX = 0f
-    private var targetY = 0f
-    private var markerX = 0f
-    private var markerY = 0f
-    private var markerHeight = 0f
-    private var stepPendingSince = 0L
-    private var charWidth = 0f
+    /** when the caret was reported and the character bounds requested */
+    private var boundsRequested = 0L
 
     /** the spacebar went into cursor mode */
     fun start() {
@@ -61,10 +54,8 @@ class VirtualCaret(private val ime: LatinIME) {
         active = true
         haveCaret = false
         bounds = null
-        boundsFailed = false
         lastOffset = -1
-        stepPendingSince = 0L
-        charWidth = 8 * ime.resources.displayMetrics.density
+        boundsRequested = 0L
         startTime = SystemClock.uptimeMillis()
         // the answers come through onUpdateCursorAnchorInfo, also after every step (monitor)
         if (!ic.requestCursorUpdates(InputConnection.CURSOR_UPDATE_IMMEDIATE or InputConnection.CURSOR_UPDATE_MONITOR))
@@ -77,27 +68,13 @@ class VirtualCaret(private val ime: LatinIME) {
         if (x.isNaN()) return
         val points = floatArrayOf(x, info.insertionMarkerTop, x, info.insertionMarkerBottom)
         info.matrix.mapPoints(points)
-        if (!haveCaret) {
-            caretX = points[0]
-            caretTop = points[1]
-            caretBottom = points[3]
-            markerX = caretX
-            markerY = (caretTop + caretBottom) / 2
-            markerHeight = caretBottom - caretTop
-            haveCaret = true
-            requestBounds(info)
-            return
-        }
-        // the real cursor moved (a walking step): learn the letter width, take the next step
-        val newX = points[0]
-        val newY = (points[1] + points[3]) / 2
-        if (abs(newY - markerY) < markerHeight / 2 && abs(newX - markerX) > 1f)
-            charWidth = (charWidth * 3 + abs(newX - markerX)) / 4
-        markerX = newX
-        markerY = newY
-        markerHeight = (points[3] - points[1]).coerceAtLeast(1f)
-        stepPendingSince = 0L
-        walk()
+        if (haveCaret) return // only the position at the start is needed
+        caretX = points[0]
+        caretTop = points[1]
+        caretBottom = points[3]
+        haveCaret = true
+        boundsRequested = SystemClock.uptimeMillis()
+        requestBounds(info)
     }
 
     @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
@@ -107,12 +84,12 @@ class VirtualCaret(private val ime: LatinIME) {
         val area = info.editorBoundsInfo?.editorBounds?.let { RectF(it).also { r -> info.matrix.mapRect(r) } }
             ?: RectF(0f, caretTop - 2000f, 10000f, caretBottom + 2000f)
         ic.requestTextBoundsInfo(area, ime.mainExecutor) { result: TextBoundsInfoResult ->
-            if (active && result.resultCode == TextBoundsInfoResult.CODE_SUCCESS && result.textBoundsInfo != null) {
+            if (!active) return@requestTextBoundsInfo
+            if (result.resultCode == TextBoundsInfoResult.CODE_SUCCESS && result.textBoundsInfo != null) {
                 bounds = result.textBoundsInfo
             } else {
-                Log.i(TAG, "no text bounds from the app (${result.resultCode}), walking the cursor")
-                boundsFailed = true
-                walk()
+                Log.i(TAG, "no text bounds from the app (${result.resultCode}), moving step by step")
+                end()
             }
         }
     }
@@ -123,22 +100,22 @@ class VirtualCaret(private val ime: LatinIME) {
      */
     fun drag(dx: Int, dy: Int): Boolean {
         if (!active) return false
+        val now = SystemClock.uptimeMillis()
         if (!haveCaret) {
             // give the app a moment to answer, then fall back
-            if (SystemClock.uptimeMillis() - startTime > WAIT_MILLIS) end()
+            if (now - startTime > WAIT_MILLIS) end()
+            return active
+        }
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.UPSIDE_DOWN_CAKE) return false
+        val info = bounds as? TextBoundsInfo
+        if (info == null) {
+            // no answer (yet): after a while this app just doesn't, move step by step
+            if (now - boundsRequested > WAIT_MILLIS * 2) end()
             return active
         }
         val x = caretX + dx
         val y = (caretTop + caretBottom) / 2 + dy
         showCaret(x, y, caretBottom - caretTop)
-        targetX = x
-        targetY = y
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.UPSIDE_DOWN_CAKE) return true
-        if (boundsFailed) {
-            walk()
-            return true
-        }
-        val info = bounds as? TextBoundsInfo ?: return true
         val offset = nearestOffset(info, x, y)
         if (offset >= 0 && offset != lastOffset) {
             lastOffset = offset
@@ -175,25 +152,6 @@ class VirtualCaret(private val ime: LatinIME) {
             }
         }
         return best
-    }
-
-    /**
-     * One step of the real cursor towards the floating caret: a line up / down first, then a letter left / right.
-     * The next step waits for the app to report where the cursor went (or [STEP_TIMEOUT_MILLIS]).
-     */
-    private fun walk() {
-        if (!active || !boundsFailed || !haveCaret) return
-        val now = SystemClock.uptimeMillis()
-        if (stepPendingSince != 0L && now - stepPendingSince < STEP_TIMEOUT_MILLIS) return
-        val listener = ime.mKeyboardActionListener ?: return
-        val lineDelta = targetY - markerY
-        val moved = when {
-            abs(lineDelta) > markerHeight * 0.75f -> listener.onSpaceCursorMoveVertically(if (lineDelta < 0) -1 else 1)
-            targetX < markerX - charWidth / 2 -> listener.onSpaceCursorMove(-1)
-            targetX > markerX + charWidth / 2 -> listener.onSpaceCursorMove(1)
-            else -> false
-        }
-        if (moved) stepPendingSince = now
     }
 
     /** the finger went up or the gesture was cancelled */
@@ -249,7 +207,5 @@ class VirtualCaret(private val ime: LatinIME) {
         private const val TAG = "VirtualCaret"
         /** how long to wait for the app's caret position before moving step by step */
         private const val WAIT_MILLIS = 250L
-        /** a walking step whose new cursor position was not reported: take the next one anyway */
-        private const val STEP_TIMEOUT_MILLIS = 120L
     }
 }

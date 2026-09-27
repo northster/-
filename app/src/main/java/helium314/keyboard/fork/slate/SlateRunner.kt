@@ -130,7 +130,8 @@ class SlateRunner(private val ime: LatinIME, private val ui: Ui) {
                     // nothing was typed meanwhile: the answer takes the text's place
                     ui.hide()
                     lastOriginal = preceding
-                    replace(preceding, keepLeadingSpace(preceding) + outcome.text)
+                    if (command.appendResult) replace(preceding, preceding.trimEnd() + "\n" + outcome.text)
+                    else replace(preceding, keepLeadingSpace(preceding) + outcome.text)
                 } else {
                     // the text changed: offer the answer instead of overwriting what was typed
                     ui.showResult(command.trigger, outcome.text, onInsert = {

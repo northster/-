@@ -22,6 +22,8 @@ data class SlateCommand(
     val isBuiltIn: Boolean = false,
     val type: CommandType = CommandType.AI,
     val search: Boolean = false,
+    /** the answer goes after the text instead of replacing it (translation panel: keep the original) */
+    val appendResult: Boolean = false,
 )
 
 object SlateCommands {
