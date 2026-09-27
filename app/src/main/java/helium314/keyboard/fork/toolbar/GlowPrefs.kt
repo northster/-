@@ -19,6 +19,10 @@ object GlowPrefs {
     const val GLOW_POSITION = "fork_glow_position"
     const val POSITION_TOP = "top"
     const val POSITION_BOTTOM = "bottom"
+    /** color of the glow's dots, unset = [DEFAULT_GLOW_COLOR] */
+    const val GLOW_COLOR = "fork_glow_color"
+    /** a sky blue that stands out on a black keyboard */
+    const val DEFAULT_GLOW_COLOR = 0xFF38BDF8.toInt()
     const val GLOW_DOT_SIZE = "fork_glow_dot_size"
     const val GLOW_DOT_SPACING = "fork_glow_dot_spacing"
     /** until this time (ms) a test chip is offered, to see the glow without copying anything */
@@ -63,6 +67,7 @@ object GlowPrefs {
     )
 
     fun glowEnabled(prefs: SharedPreferences) = prefs.getBoolean(GLOW, DEFAULT_GLOW)
+    fun color(prefs: SharedPreferences) = prefs.getInt(GLOW_COLOR, DEFAULT_GLOW_COLOR)
     fun waveEnabled(prefs: SharedPreferences) = prefs.getBoolean(WAVE, DEFAULT_WAVE)
 
     fun glow(prefs: SharedPreferences): Glow {

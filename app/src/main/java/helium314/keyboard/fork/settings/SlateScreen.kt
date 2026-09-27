@@ -131,7 +131,7 @@ fun SlateScreen(onClickBack: () -> Unit) {
                 }
             } + listOf(@Composable {
                 Preference(name = stringResource(R.string.fork_slate_command_add), onClick = {
-                    editing = SlateCommand(prefix, ""); editingIndex = -1
+                    editing = SlateCommand("", ""); editingIndex = -1
                 }, icon = R.drawable.ic_plus)
             }))
             SettingsSection(stringResource(R.string.fork_slate_builtin), SlateCommands.builtIns(prefs).map { command ->
@@ -164,11 +164,12 @@ fun SlateScreen(onClickBack: () -> Unit) {
         )
     }
     editing?.let { original ->
-        var trigger by remember(original) { mutableStateOf(original.trigger) }
+        // only the name after the prefix is edited, the prefix itself can't be removed
+        var trigger by remember(original) { mutableStateOf(original.trigger.removePrefix(prefix)) }
         var prompt by remember(original) { mutableStateOf(original.prompt) }
         var replacer by remember(original) { mutableStateOf(original.type == CommandType.TEXT_REPLACER) }
         var search by remember(original) { mutableStateOf(original.search) }
-        val edited = SlateCommand(trigger.trim(), prompt, false, if (replacer) CommandType.TEXT_REPLACER else CommandType.AI, search && !replacer)
+        val edited = SlateCommand(prefix + trigger.trim(), prompt, false, if (replacer) CommandType.TEXT_REPLACER else CommandType.AI, search && !replacer)
         ThreeButtonAlertDialog(
             onDismissRequest = { editing = null },
             onConfirmed = {
@@ -187,8 +188,9 @@ fun SlateScreen(onClickBack: () -> Unit) {
             scrollContent = true,
             content = {
                 Column {
-                    OutlinedTextField(trigger, { trigger = it.replace(" ", "") }, singleLine = true,
-                        label = { Text(stringResource(R.string.fork_slate_trigger)) }, modifier = Modifier.fillMaxWidth())
+                    OutlinedTextField(trigger, { trigger = it.replace(" ", "").removePrefix(prefix) }, singleLine = true,
+                        label = { Text(stringResource(R.string.fork_slate_trigger)) }, modifier = Modifier.fillMaxWidth(),
+                        prefix = { Text(prefix) })
                     Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(top = 8.dp)) {
                         Text(stringResource(R.string.fork_slate_type_replacer), modifier = Modifier.weight(1f))
                         ShadcnSwitch(checked = replacer, onCheckedChange = { replacer = it })

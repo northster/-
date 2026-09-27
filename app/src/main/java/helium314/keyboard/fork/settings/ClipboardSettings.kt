@@ -361,7 +361,7 @@ private fun SmartChipTester(title: String, description: String?) {
 
 /** a chip color: swatch, or "theme" when not set; the picker's default button goes back to the theme color */
 @Composable
-private fun ChipColorPreference(title: String, key: String, autoDescription: String?) {
+internal fun ChipColorPreference(title: String, key: String, autoDescription: String?, onChanged: () -> Unit = { }) {
     val ctx = LocalContext.current
     val prefs = ctx.prefs()
     val b = (ctx.getActivity() as? SettingsActivity)?.prefChanged?.collectAsState()
@@ -387,8 +387,8 @@ private fun ChipColorPreference(title: String, key: String, autoDescription: Str
             initialColor = color,
             title = title,
             showDefault = set,
-            onDefault = { prefs.edit { remove(key) } },
-            onConfirmed = { prefs.edit { putInt(key, it) } },
+            onDefault = { prefs.edit { remove(key) }; onChanged() },
+            onConfirmed = { prefs.edit { putInt(key, it) }; onChanged() },
         )
 }
 

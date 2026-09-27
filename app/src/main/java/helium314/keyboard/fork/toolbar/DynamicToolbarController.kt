@@ -550,11 +550,7 @@ class DynamicToolbarController(private val context: Context) {
             closeTyped()
             return
         }
-        // show it right away, like the suggestion strip would; no wave, that is for swipes
-        if (!isExpanded && !typedSuppressed && isUsable()) {
-            setExpanded(true, true)
-            typedAutoOpened = true
-        }
+        // the toolbar stays as it is: closed, the glow says there is an answer (open it to see it)
         applyChipState()
     }
 
@@ -621,7 +617,7 @@ class DynamicToolbarController(private val context: Context) {
         ime.mKeyboardActionListener.onContent(entry.getContentInfo(context))
     }
 
-    private fun hintWanted() = GlowPrefs.glowEnabled(context.prefs()) && chip != null && !isExpanded && !toolActive && !clipSearch.isActive && isUsable()
+    private fun hintWanted() = GlowPrefs.glowEnabled(context.prefs()) && (chip != null || typedHit != null) && !isExpanded && !toolActive && !clipSearch.isActive && isUsable()
 
     /** keyboard view that draws the glow */
     private var hintView: helium314.keyboard.keyboard.KeyboardView? = null
@@ -641,10 +637,9 @@ class DynamicToolbarController(private val context: Context) {
         hintView?.setForkUnderlay(null)
         hintView = null
         if (!on || kv == null) return
-        val enter = Settings.getValues().mColors.get(helium314.keyboard.latin.common.ColorType.ACTION_KEY_BACKGROUND)
         val params = GlowPrefs.glow(context.prefs())
-        // under the keys and on their surfaces
-        val glow = DotGlowDrawable(enter, context.resources.displayMetrics.density, params)
+        // over the background, under the keys
+        val glow = DotGlowDrawable(GlowPrefs.color(context.prefs()), context.resources.displayMetrics.density, params)
         kv.setForkUnderlay(glow)
         hintView = kv
         // slow breathing, noticed without being in the way
@@ -830,6 +825,12 @@ class DynamicToolbarController(private val context: Context) {
                     toolbar?.hideChipBar()
                     slate?.runOnText(commands[i])
                 }, onBack = { toolbar?.hideChipBar(); applyChipState() })
+                return
+            }
+            ToolbarItems.MORE -> {
+                val intent = android.content.Intent(context, helium314.keyboard.settings.SettingsActivity::class.java)
+                    .addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK or android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                runCatching { context.startActivity(intent) }
                 return
             }
             // the app's own undo / redo (Ctrl+Z / Ctrl+Shift+Z)

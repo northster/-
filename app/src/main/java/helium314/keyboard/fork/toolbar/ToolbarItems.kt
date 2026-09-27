@@ -20,15 +20,19 @@ object ToolbarItems {
     const val AI = "ai"
     const val TRANSLATE = "translate"
     const val MORE = "more"
+    const val GIF = "gif"
     const val UNDO = "undo"
     const val REDO = "redo"
 
     /** Current toolbar content. Placeholders only for now. */
     val defaultItems = listOf(
         ToolbarItem(CLIPBOARD, R.drawable.ic_dot_clipboard, R.string.fork_toolbar_clipboard),
-        ToolbarItem(AI, R.drawable.ic_dot_sparkles, R.string.fork_toolbar_ai),
+        // commands (?fix, text replacers ...), shown as "?"
+        ToolbarItem(AI, R.drawable.ic_dot_question, R.string.fork_toolbar_ai),
         ToolbarItem(TRANSLATE, R.drawable.ic_dot_translate, R.string.fork_toolbar_translate),
-        ToolbarItem(MORE, R.drawable.ic_dot_more, R.string.fork_toolbar_more),
+        ToolbarItem(GIF, R.drawable.ic_dot_gif, R.string.fork_toolbar_gif),
+        // opens the keyboard settings
+        ToolbarItem(MORE, R.drawable.ic_dot_settings, R.string.fork_toolbar_settings),
     )
 
     /** always at the right end of the toolbar, after a divider */

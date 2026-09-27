@@ -2,7 +2,7 @@
 <!-- SPDX-License-Identifier: GPL-3.0-only -->
 <resources>
     <string name="fork_toolbar_clipboard">Clipboard</string>
-    <string name="fork_toolbar_ai">AI</string>
+    <string name="fork_toolbar_ai">Commands</string>
     <string name="fork_toolbar_translate">Translate</string>
     <string name="fork_toolbar_more">More</string>
     <string name="fork_toolbar_placeholder">%s (placeholder)</string>
@@ -29,14 +29,14 @@
     <string name="fork_main_look">Look</string>
     <string name="fork_main_toolbar">Toolbar</string>
     <string name="fork_main_more">More</string>
-    <string name="fork_desc_preferences">Hints, long press, vibration, sound, extra keys, clipboard</string>
-    <string name="fork_desc_correction">Auto correction, capitalization, spacing, personal dictionary</string>
+    <string name="fork_desc_preferences">Hints, long press, vibration, sound, extra keys, space bar</string>
+    <string name="fork_desc_correction">Capitalization, spacing after punctuation</string>
     <string name="fork_desc_dictionaries">Add or manage dictionaries</string>
     <string name="fork_desc_appearance">Key height, spacing, fonts, emoji</string>
     <string name="fork_desc_layouts">Symbols, numbers and functional key layouts</string>
-    <string name="fork_desc_dynamic_toolbar">Swipe gesture, animation, app resize</string>
+    <string name="fork_desc_dynamic_toolbar">Swipe gesture, animation, wave, glow</string>
     <string name="fork_desc_toolbar">Suggestion strip and toolbar keys of the original keyboard</string>
-    <string name="fork_desc_advanced">Long press timing, backup, experimental options</string>
+    <string name="fork_desc_advanced">Long press timing, automatic layout switch, backup</string>
     <string name="fork_desc_about">Version, license, logs</string>
     <string name="fork_desc_gesture">Glide typing</string>
     <string name="fork_setup_not_enabled_title">Keyboard is turned off</string>
@@ -220,7 +220,7 @@
     <string name="fork_wave_brightness">Wave brightness</string>
     <string name="fork_wave_thickness">Wave thickness</string>
     <string name="fork_glow">Glow for a waiting paste chip</string>
-    <string name="fork_glow_summary">The keys glow from the top while a copied item waits behind the closed toolbar</string>
+    <string name="fork_glow_summary">The keys glow while a copied item or a smart chip answer waits behind the closed toolbar</string>
     <string name="fork_glow_max">Maximum brightness</string>
     <string name="fork_glow_min">Minimum brightness</string>
     <string name="fork_glow_period">Breathing time (dim to bright to dim)</string>
@@ -312,7 +312,7 @@
     <string name="fork_language_add_summary">Type in one of %d languages</string>
     <string name="fork_slate_running">%s running</string>
     <string name="fork_screen_slate">AI commands</string>
-    <string name="fork_desc_slate">Commands like ?fix, ?원어 at the end of the text (SwiftSlate)</string>
+    <string name="fork_desc_slate">Commands like ?fix, ?원어 at the end of the text</string>
     <string name="fork_slate_enabled">Commands at the end of the text</string>
     <string name="fork_slate_enabled_summary">Type a command like %1$sfix after your text; it is replaced by the result</string>
     <string name="fork_slate_prefix">Command prefix</string>
@@ -351,4 +351,8 @@
     <string name="fork_typo_reset_confirm">Forget all touches and typos learned so far?</string>
     <string name="fork_emoji_dict">Emoji search dictionary</string>
     <string name="fork_emoji_dict_summary">The 🔍 in the emoji panel needs an emoji dictionary for your language; add one here</string>
+    <string name="fork_toolbar_gif">GIF</string>
+    <string name="fork_toolbar_settings">Settings</string>
+    <string name="fork_glow_color">Glow color</string>
+    <string name="fork_glow_color_default">Default (sky blue)</string>
 </resources>

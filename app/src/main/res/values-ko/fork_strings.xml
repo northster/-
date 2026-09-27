@@ -2,7 +2,7 @@
 <!-- SPDX-License-Identifier: GPL-3.0-only -->
 <resources>
     <string name="fork_toolbar_clipboard">클립보드</string>
-    <string name="fork_toolbar_ai">AI</string>
+    <string name="fork_toolbar_ai">명령</string>
     <string name="fork_toolbar_translate">번역</string>
     <string name="fork_toolbar_more">더보기</string>
     <string name="fork_toolbar_placeholder">%s (준비 중)</string>
@@ -26,14 +26,14 @@
     <string name="fork_main_look">화면</string>
     <string name="fork_main_toolbar">툴바</string>
     <string name="fork_main_more">기타</string>
-    <string name="fork_desc_preferences">힌트, 길게 누르기, 진동, 소리, 추가 키, 클립보드</string>
-    <string name="fork_desc_correction">자동 수정, 자동 대문자, 띄어쓰기, 개인 사전</string>
+    <string name="fork_desc_preferences">힌트, 길게 누르기, 진동, 소리, 추가 키, 스페이스바</string>
+    <string name="fork_desc_correction">자동 대문자, 문장부호 뒤 띄어쓰기</string>
     <string name="fork_desc_dictionaries">사전 추가 및 관리</string>
     <string name="fork_desc_appearance">키 높이, 간격, 글꼴, 이모지</string>
     <string name="fork_desc_layouts">기호, 숫자, 기능 키 레이아웃</string>
-    <string name="fork_desc_dynamic_toolbar">스와이프 제스처, 애니메이션, 앱 화면 이동</string>
+    <string name="fork_desc_dynamic_toolbar">스와이프 제스처, 애니메이션, 파동, 글로우</string>
     <string name="fork_desc_toolbar">원래 키보드의 제안 줄과 툴바 키</string>
-    <string name="fork_desc_advanced">길게 누르기 시간, 백업, 실험 기능</string>
+    <string name="fork_desc_advanced">길게 누르기 시간, 자판 자동 전환, 백업</string>
     <string name="fork_desc_about">버전, 라이선스, 로그</string>
     <string name="fork_desc_gesture">글라이드 입력</string>
     <string name="fork_setup_not_enabled_title">키보드가 꺼져 있어요</string>
@@ -217,7 +217,7 @@
     <string name="fork_wave_brightness">파동 밝기</string>
     <string name="fork_wave_thickness">파동 두께</string>
     <string name="fork_glow">칩 대기 중 글로우</string>
-    <string name="fork_glow_summary">툴바가 닫힌 상태에서 붙여넣을 항목이 있으면 키보드 위쪽이 은은하게 빛나요</string>
+    <string name="fork_glow_summary">툴바가 닫혀 있을 때 붙여넣을 항목이나 스마트 칩 답이 있으면 키 뒤가 빛나요</string>
     <string name="fork_glow_max">최대 밝기</string>
     <string name="fork_glow_min">최소 밝기</string>
     <string name="fork_glow_period">숨쉬기 속도 (어두움→밝음→어두움)</string>
@@ -309,7 +309,7 @@
     <string name="fork_language_add_summary">%d개의 언어 중 하나로 입력</string>
     <string name="fork_slate_running">%s 실행 중</string>
     <string name="fork_screen_slate">AI 명령</string>
-    <string name="fork_desc_slate">글 끝에 ?fix, ?원어 … (SwiftSlate)</string>
+    <string name="fork_desc_slate">글 끝에 ?fix, ?원어 같은 명령</string>
     <string name="fork_slate_enabled">글 끝 명령 사용</string>
     <string name="fork_slate_enabled_summary">글 뒤에 %1$sfix 같은 명령을 치면 결과로 바뀌어요</string>
     <string name="fork_slate_prefix">명령 앞 기호</string>
@@ -348,4 +348,8 @@
     <string name="fork_typo_reset_confirm">지금까지 배운 터치 위치와 오타를 모두 지울까요?</string>
     <string name="fork_emoji_dict">이모지 검색 사전</string>
     <string name="fork_emoji_dict_summary">이모지 패널의 🔍 검색에는 언어별 이모지 사전이 필요해요. 여기서 추가해요</string>
+    <string name="fork_toolbar_gif">GIF</string>
+    <string name="fork_toolbar_settings">설정</string>
+    <string name="fork_glow_color">글로우 색</string>
+    <string name="fork_glow_color_default">기본 (하늘색)</string>
 </resources>

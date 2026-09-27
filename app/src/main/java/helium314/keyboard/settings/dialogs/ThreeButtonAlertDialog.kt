@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
@@ -48,27 +49,37 @@ fun ThreeButtonAlertDialog(
     reducePadding: Boolean = false,
     properties: DialogProperties = DialogProperties()
 ) {
+    // fork: shadcn style: almost as wide as the screen (the platform default width was cramped), card color with a
+    //  1px border, larger padding, filled confirm button
+    val shadcn = helium314.keyboard.latin.utils.LocalShadcn.current
     Dialog(
         onDismissRequest = onDismissRequest,
-        properties = properties
+        properties = DialogProperties(
+            dismissOnBackPress = properties.dismissOnBackPress,
+            dismissOnClickOutside = properties.dismissOnClickOutside,
+            securePolicy = properties.securePolicy,
+            usePlatformDefaultWidth = false,
+            decorFitsSystemWindows = properties.decorFitsSystemWindows,
+        )
     ) {
         Box(
-            modifier = modifier.widthIn(min = 280.dp, max = 560.dp),
+            modifier = modifier.fillMaxWidth().padding(horizontal = 16.dp).widthIn(max = 640.dp),
             propagateMinConstraints = true
         ) {
             Surface(
-                shape = MaterialTheme.shapes.medium,
-                color = MaterialTheme.colorScheme.surface,
-                contentColor = contentColorFor(MaterialTheme.colorScheme.surface),
+                shape = MaterialTheme.shapes.large,
+                color = shadcn.card,
+                contentColor = shadcn.foreground,
+                border = androidx.compose.foundation.BorderStroke(1.dp, shadcn.border),
             ) {
                 Column(modifier = Modifier.padding(
-                    start = if (reducePadding) 8.dp else 16.dp,
-                    end = if (reducePadding) 8.dp else 16.dp,
-                    top = if (reducePadding) 8.dp else 16.dp,
-                    bottom = if (reducePadding) 2.dp else 6.dp
+                    start = if (reducePadding) 8.dp else 20.dp,
+                    end = if (reducePadding) 8.dp else 20.dp,
+                    top = if (reducePadding) 8.dp else 20.dp,
+                    bottom = if (reducePadding) 4.dp else 12.dp
                 )) {
                     title?.let {
-                        CompositionLocalProvider(LocalTextStyle provides MaterialTheme.typography.titleMedium) {
+                        CompositionLocalProvider(LocalTextStyle provides MaterialTheme.typography.titleLarge) {
                             Box(Modifier.padding(PaddingValues(bottom = if (reducePadding) 4.dp else 16.dp))) {
                                 title()
                             }
@@ -80,29 +91,40 @@ fun ThreeButtonAlertDialog(
                                 val scrollState = rememberScrollState()
                                 Box(Modifier
                                     .weight(weight = 1f, fill = false)
-                                    .padding(bottom = if (reducePadding) 2.dp else 8.dp)
+                                    .padding(bottom = if (reducePadding) 2.dp else 12.dp)
                                     .verticalScroll(scrollState)
                                 ) {
                                     content()
                                 }
                             } else {
-                                Box(Modifier.weight(weight = 1f, fill = false).padding(bottom = if (reducePadding) 2.dp else 8.dp)) {
+                                Box(Modifier.weight(weight = 1f, fill = false).padding(bottom = if (reducePadding) 2.dp else 12.dp)) {
                                     content()
                                 }
                             }
                         }
                     }
-                    FlowRow(horizontalArrangement = Arrangement.End) {
+                    FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth()) {
                         if (neutralButtonText != null)
                             TextButton(
-                                onClick = onNeutral
+                                onClick = onNeutral,
+                                colors = androidx.compose.material3.ButtonDefaults.textButtonColors(contentColor = shadcn.destructive),
                             ) { Text(neutralButtonText) }
                         Spacer(Modifier.weight(1f))
-                        TextButton(onClick = onDismissRequest) { Text(cancelButtonText) }
+                        androidx.compose.material3.OutlinedButton(
+                            onClick = onDismissRequest,
+                            shape = MaterialTheme.shapes.medium,
+                            border = androidx.compose.foundation.BorderStroke(1.dp, shadcn.border),
+                            colors = androidx.compose.material3.ButtonDefaults.outlinedButtonColors(contentColor = shadcn.foreground),
+                        ) { Text(cancelButtonText) }
                         if (confirmButtonText != null)
-                            TextButton(
+                            androidx.compose.material3.Button(
                                 enabled = checkOk(),
                                 onClick = { onConfirmed(); onDismissRequest() },
+                                shape = MaterialTheme.shapes.medium,
+                                colors = androidx.compose.material3.ButtonDefaults.buttonColors(
+                                    containerColor = shadcn.primary, contentColor = shadcn.primaryForeground,
+                                    disabledContainerColor = shadcn.muted, disabledContentColor = shadcn.mutedForeground,
+                                ),
                             ) { Text(confirmButtonText) }
                     }
                 }

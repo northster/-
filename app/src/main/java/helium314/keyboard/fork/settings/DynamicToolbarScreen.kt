@@ -54,6 +54,7 @@ fun DynamicToolbarScreen(
             GlowPrefs.GLOW,
             GlowPrefs.GLOW_TEST_UNTIL,
             GlowPrefs.GLOW_POSITION,
+            GlowPrefs.GLOW_COLOR,
             GlowPrefs.GLOW_MAX,
             GlowPrefs.GLOW_MIN,
             GlowPrefs.GLOW_PERIOD,
@@ -185,6 +186,11 @@ fun createDynamicToolbarSettings(context: Context) = listOf(
             ctx.getString(R.string.fork_glow_position_top) to GlowPrefs.POSITION_TOP,
             ctx.getString(R.string.fork_glow_position_bottom) to GlowPrefs.POSITION_BOTTOM,
         ), GlowPrefs.POSITION_TOP) { DynamicToolbarController.current?.onGlowSettingsChanged() }
+    },
+    Setting(context, GlowPrefs.GLOW_COLOR, R.string.fork_glow_color, R.string.fork_glow_color_default) { setting ->
+        ChipColorPreference(setting.title, setting.key, setting.description) {
+            DynamicToolbarController.current?.onGlowSettingsChanged()
+        }
     },
     Setting(context, GlowPrefs.GLOW_MAX, R.string.fork_glow_max) {
         GlowSlider(it, GlowPrefs.DEFAULT_GLOW_MAX, 0.05f..1f, 0.05f, ::percent)
