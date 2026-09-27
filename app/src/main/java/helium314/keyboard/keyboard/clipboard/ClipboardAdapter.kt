@@ -96,6 +96,9 @@ class ClipboardAdapter(
                 historyEntry.setImageAndDescription(contentImageView, contentTextView)
             } else {
                 contentTextView.text = historyEntry.text?.take(1000) // truncate displayed text for performance reasons
+                // fork: Korean font for clips with Hangul
+                contentTextView.typeface = helium314.keyboard.keyboard.KeyboardTypeface.resolve(contentTextView.text,
+                    itemTypeFace ?: Typeface.DEFAULT)
             }
             // fork: the pin button is highlighted instead of showing the separate pin icon
             pinnedIconView.visibility = View.GONE

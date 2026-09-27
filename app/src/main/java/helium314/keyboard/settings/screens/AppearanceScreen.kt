@@ -30,6 +30,9 @@ import helium314.keyboard.fork.ForkSettings
 import helium314.keyboard.fork.ForkLive
 import helium314.keyboard.fork.settings.DpSliderPreference
 import helium314.keyboard.fork.settings.ForkSize
+import helium314.keyboard.fork.settings.ForkFonts
+import helium314.keyboard.fork.settings.ForkFontPreference
+import helium314.keyboard.keyboard.KeyboardTypeface
 import helium314.keyboard.latin.settings.createPrefKeyForBooleanSettings
 import helium314.keyboard.latin.utils.LocalShadcn
 import helium314.keyboard.settings.SettingsSection
@@ -106,15 +109,18 @@ fun AppearanceScreen(
         ForkSettings.PREF_TOOLBAR_HEIGHT_DP,
         Settings.PREF_ENABLE_SPLIT_KEYBOARD,
         Settings.PREF_SPLIT_SPACER_SCALE_PREFIX,
-        R.string.fork_cat_font,
+        R.string.fork_cat_text,
         Settings.PREF_SPACE_BAR_TEXT,
-        SettingsWithoutKey.CUSTOM_FONT,
         Settings.PREF_FONT_SCALE,
         Settings.PREF_HINT_FONT_SCALE,
-        SettingsWithoutKey.CUSTOM_EMOJI_FONT,
         Settings.PREF_EMOJI_FONT_SCALE,
         Settings.PREF_EMOJI_KEY_FIT,
         Settings.PREF_EMOJI_SKIN_TONE,
+        // fork: fonts by script
+        R.string.fork_cat_fonts,
+        SettingsWithoutKey.CUSTOM_FONT,
+        ForkFonts.KOREAN,
+        SettingsWithoutKey.CUSTOM_EMOJI_FONT,
     )
     SearchSettingsScreen(
         onClickBack = onClickBack,
@@ -281,8 +287,8 @@ fun createAppearanceSettings(context: Context) = listOf(
     Setting(context, Settings.PREF_SPACE_BAR_TEXT, R.string.prefs_space_bar_text) {
         TextInputPreference(it, Defaults.PREF_SPACE_BAR_TEXT)
     },
-    Setting(context, SettingsWithoutKey.CUSTOM_FONT, R.string.custom_font) {
-        CustomFontPreference(it, Settings.getCustomFontFile(LocalContext.current), R.string.custom_font)
+    Setting(context, SettingsWithoutKey.CUSTOM_FONT, R.string.fork_font_latin) {
+        ForkFontPreference(it, Settings.getCustomFontFile(LocalContext.current), ForkFonts.NAME_LATIN)
     },
     Setting(context, Settings.PREF_FONT_SCALE, R.string.prefs_font_scale) { setting ->
         InlineSliderPreference(
@@ -304,8 +310,11 @@ fun createAppearanceSettings(context: Context) = listOf(
             live = true,
         ) { ForkLive.requestReload() }
     },
-    Setting(context, SettingsWithoutKey.CUSTOM_EMOJI_FONT, R.string.custom_emoji_font) {
-        CustomFontPreference(it, Settings.getCustomEmojiFontFile(LocalContext.current), R.string.custom_emoji_font)
+    Setting(context, SettingsWithoutKey.CUSTOM_EMOJI_FONT, R.string.fork_font_emoji) {
+        ForkFontPreference(it, Settings.getCustomEmojiFontFile(LocalContext.current), ForkFonts.NAME_EMOJI)
+    },
+    Setting(context, ForkFonts.KOREAN, R.string.fork_font_korean) {
+        ForkFontPreference(it, KeyboardTypeface.koreanFontFile(LocalContext.current), ForkFonts.NAME_KOREAN)
     },
     Setting(context, Settings.PREF_EMOJI_FONT_SCALE, R.string.prefs_emoji_font_scale) { setting ->
         InlineSliderPreference(

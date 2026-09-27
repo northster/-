@@ -17,6 +17,11 @@ object KeyboardTypeface {
     @Volatile
     private var customTypefaceLoaded = false
 
+    // fork: separate font for Hangul
+    private var cachedKoreanTypeface: Typeface? = null
+    @Volatile
+    private var koreanTypefaceLoaded = false
+
     private var cachedEmojiTypeface: Typeface? = null
     @Volatile
     private var emojiTypefaceLoaded = false
@@ -47,6 +52,30 @@ object KeyboardTypeface {
         }
     }
 
+    /** fork: font file for Hangul, next to HeliBoard's custom font (which is used for everything else) */
+    @JvmStatic
+    fun koreanFontFile(context: Context) = java.io.File(helium314.keyboard.latin.utils.DeviceProtectedUtils.getFilesDir(context), "custom_font_ko")
+
+    @JvmStatic
+    fun koreanTypeface(): Typeface? {
+        if (koreanTypefaceLoaded) return cachedKoreanTypeface
+        val context = Settings.getCurrentContext() ?: return null
+        synchronized(lock) {
+            if (!koreanTypefaceLoaded) {
+                cachedKoreanTypeface = runCatching { Typeface.createFromFile(koreanFontFile(context)) }.getOrNull()
+                koreanTypefaceLoaded = true
+            }
+            return cachedKoreanTypeface
+        }
+    }
+
+    /** fork: Hangul syllables and jamo */
+    @JvmStatic
+    fun containsHangul(text: CharSequence): Boolean = text.any {
+        it in '\uAC00'..'\uD7A3' || it in '\u1100'..'\u11FF' || it in '\u3130'..'\u318F'
+            || it in '\uA960'..'\uA97F' || it in '\uD7B0'..'\uD7FF'
+    }
+
     @JvmStatic
     fun emojiTypeface(): Typeface? {
         if (emojiTypefaceLoaded) return cachedEmojiTypeface
@@ -74,6 +103,8 @@ object KeyboardTypeface {
         val emojiTypeface = emojiTypeface()
         return if (emojiTypeface != null && text != null && isEmoji(text)) {
             emojiTypeface
+        } else if (text != null && containsHangul(text) && koreanTypeface() != null) {
+            koreanTypeface()!! // fork: Korean font for anything with Hangul in it
         } else {
             customTypeface() ?: defaultTypeface
         }
@@ -97,6 +128,8 @@ object KeyboardTypeface {
             customTypefaceLoaded = false
             cachedEmojiTypeface = null
             emojiTypefaceLoaded = false
+            cachedKoreanTypeface = null
+            koreanTypefaceLoaded = false
         }
     }
 }

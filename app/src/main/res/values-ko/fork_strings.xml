@@ -138,4 +138,12 @@
     <string name="fork_size_toolbar_height">툴바 높이</string>
     <string name="fork_size_key_height">키 높이</string>
     <string name="fork_size_key_height_summary">글자 키 한 개의 높이. 여백과 간격은 여기에 더해져서, 늘려도 키가 작아지지 않고 키보드가 커져요</string>
+    <string name="fork_cat_text">글자</string>
+    <string name="fork_cat_fonts">글꼴</string>
+    <string name="fork_font_latin">영문 글꼴</string>
+    <string name="fork_font_korean">한글 글꼴</string>
+    <string name="fork_font_emoji">이모지 글꼴</string>
+    <string name="fork_font_default">기본 글꼴</string>
+    <string name="fork_font_custom">사용자 글꼴</string>
+    <string name="fork_font_reset">기본으로</string>
 </resources>
