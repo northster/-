@@ -63,9 +63,7 @@ fun AdvancedSettingsScreen(
     val items = listOf(
         R.string.fork_cat_behavior,
         Settings.PREF_KEY_LONGPRESS_TIMEOUT,
-        Settings.PREF_SPACE_HORIZONTAL_SWIPE,
         Settings.PREFS_LONG_PRESS_SYMBOLS_FOR_NUMPAD,
-        Settings.PREF_ENABLE_EMOJI_ALT_PHYSICAL_KEY,
         R.string.fork_cat_auto_switch,
         Settings.PREF_ABC_AFTER_SYMBOL_SPACE,
         Settings.PREF_ABC_AFTER_NUMPAD_SPACE,
@@ -77,13 +75,9 @@ fun AdvancedSettingsScreen(
         R.string.fork_cat_privacy_backup,
         Settings.PREF_ALWAYS_INCOGNITO_MODE,
         SettingsWithoutKey.BACKUP_RESTORE,
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) Settings.PREF_SHOW_SETUP_WIZARD_ICON else null,
         if (BuildConfig.DEBUG || prefs.getBoolean(DebugSettings.PREF_SHOW_DEBUG_SETTINGS, Defaults.PREF_SHOW_DEBUG_SETTINGS))
             SettingsWithoutKey.DEBUG_SETTINGS else null,
-        R.string.settings_category_experimental,
-        Settings.PREF_EMOJI_MAX_SDK,
-        Settings.PREF_URL_DETECTION,
-        if (BuildConfig.BUILD_TYPE != "nouserlib") SettingsWithoutKey.LOAD_GESTURE_LIB else null
+        // fork: HeliBoard's experimental options and leftovers are removed (ForkSettings.removedHeliBoardSettings)
     )
     SearchSettingsScreen(
         onClickBack = onClickBack,

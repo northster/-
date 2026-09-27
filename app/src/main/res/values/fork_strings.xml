@@ -32,7 +32,7 @@
     <string name="fork_desc_preferences">Hints, long press, vibration, sound, extra keys, clipboard</string>
     <string name="fork_desc_correction">Auto correction, capitalization, spacing, personal dictionary</string>
     <string name="fork_desc_dictionaries">Add or manage dictionaries</string>
-    <string name="fork_desc_appearance">Keyboard height, spacing, fonts</string>
+    <string name="fork_desc_appearance">Key height, spacing, fonts, emoji</string>
     <string name="fork_desc_layouts">Symbols, numbers and functional key layouts</string>
     <string name="fork_desc_dynamic_toolbar">Swipe gesture, animation, app resize</string>
     <string name="fork_desc_toolbar">Suggestion strip and toolbar keys of the original keyboard</string>
@@ -100,8 +100,8 @@
     <string name="fork_shape_key_radius">Key corner radius</string>
     <string name="fork_shape_border_width">Key border width</string>
     <string name="fork_shape_enter_radius">Enter key corner radius</string>
-    <string name="fork_theme_colors">Theme &amp; colors</string>
-    <string name="fork_desc_theme_colors">Pick a theme, edit colors and key shapes</string>
+    <string name="fork_theme_colors">Theme</string>
+    <string name="fork_desc_theme_colors">Pick a theme, colors, key shapes, chip look</string>
     <string name="fork_theme_cat_display">Display</string>
     <string name="fork_size_height">Keyboard height</string>
     <string name="fork_size_bottom_padding">Bottom padding</string>
@@ -292,9 +292,22 @@
     <string name="fork_cat_codes">Verification codes</string>
     <string name="fork_cat_space">Space bar</string>
     <string name="fork_cat_chip_look">Chip look</string>
-    <string name="fork_space_long_press">Space bar hold time</string>
-    <string name="fork_space_long_press_summary">How long space must be held before the cursor moves</string>
+    <string name="fork_space_long_press">Time to start cursor mode</string>
+    <string name="fork_space_long_press_summary">How long space must be held until moving the finger moves the cursor (Default: 1.5 x the key long press time)</string>
     <string name="fork_space_long_press_default">Default</string>
     <string name="fork_virtual_caret">Floating cursor (iPhone style)</string>
     <string name="fork_virtual_caret_summary">While space is held, a cursor follows your finger over the text and the real cursor jumps to the nearest letter. Apps that do not tell where their letters are move step by step</string>
+    <string name="fork_smart_typed_tester">Try the typing chips</string>
+    <string name="fork_smart_typed_tester_summary">Type a sum, amount or measure to see the answer the keyboard would offer</string>
+    <string name="fork_smart_debug">Show what the keyboard reads</string>
+    <string name="fork_smart_debug_summary">While typing, a short note shows the text before the cursor and what was found. For finding out why a chip is missing</string>
+    <string name="fork_smart_no_rates">no exchange rates yet</string>
+    <string name="fork_cursor_char_step">Finger travel per letter</string>
+    <string name="fork_cursor_step_summary">In cursor mode: smaller moves the cursor faster</string>
+    <string name="fork_cursor_line_step">Finger travel per line</string>
+    <string name="fork_key_alpha">Key opacity</string>
+    <string name="fork_key_alpha_summary">Lower lets the chip glow behind the keys show through</string>
+    <string name="fork_languages_in_use">Languages in use</string>
+    <string name="fork_language_add">Add a language</string>
+    <string name="fork_language_add_summary">Type in one of %d languages</string>
 </resources>

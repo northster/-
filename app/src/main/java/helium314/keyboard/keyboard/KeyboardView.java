@@ -299,7 +299,7 @@ public class KeyboardView extends View {
         invalidateAllKeys();
     }
 
-    /** fork: drawn under the keys and on their surfaces (paste chip glow) */
+    /** fork: drawn over the keyboard background, under the keys (paste chip glow) */
     public void setForkUnderlay(@Nullable final Drawable underlay) {
         if (mForkUnderlay == underlay) return;
         mForkUnderlay = underlay;
@@ -391,15 +391,9 @@ public class KeyboardView extends View {
         if (!key.isSpacer()) {
             final Drawable background = key.selectBackgroundDrawable(
                     mKeyBackground, mFunctionalKeyBackground, mSpacebarBackground, mActionKeyBackground);
+            // fork: key opacity setting; the chip glow is drawn behind the keys and shows through see-through keys
+            background.setAlpha(helium314.keyboard.fork.ForkSettings.keyAlpha());
             onDrawKeyBackground(key, canvas, background);
-            // fork: the paste chip glow also shows on the key surface, under the label
-            if (mForkUnderlay != null) {
-                canvas.save();
-                canvas.clipRect(0, 0, key.getDrawWidth(), key.getHeight());
-                canvas.translate(-keyDrawX, -keyDrawY);
-                drawForkDecoration(mForkUnderlay, canvas);
-                canvas.restore();
-            }
         }
         onDrawKeyTopVisuals(key, canvas, paint, params);
 

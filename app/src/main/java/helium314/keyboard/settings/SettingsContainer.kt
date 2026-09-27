@@ -35,6 +35,8 @@ class SettingsContainer(context: Context) {
     //  show, but change will not do anything because another setting needs to be enabled first -> probably best
     fun filter(searchTerm: String): List<Setting> {
         val term = searchTerm.lowercase()
+        // fork: options from HeliBoard that do nothing in this keyboard are not offered at all
+        val list = list.filter { it.key !in helium314.keyboard.fork.ForkSettings.removedHeliBoardSettings }
         val results = mutableSetOf<Setting>()
         list.forEach { setting -> if (setting.title.lowercase().startsWith(term)) results.add(setting) }
         list.forEach { setting -> if (setting.title.lowercase().split(' ').any { it.startsWith(term) }) results.add(setting) }

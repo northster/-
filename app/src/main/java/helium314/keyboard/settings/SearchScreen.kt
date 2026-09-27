@@ -38,6 +38,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import helium314.keyboard.latin.utils.prefs
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -147,6 +149,8 @@ fun <T: Any?> SearchScreen(
                             }
                         },
                         actions = {
+                            // fork: take back / redo the last settings changes
+                            SettingsUndoRedo()
                             extraActions?.invoke()
                             if (icon == null)
                                 IconButton(onClick = { setShowSearch(!showSearch) }) { SearchIcon() }
@@ -264,5 +268,23 @@ fun SettingsSections(settings: List<Any?>) {
             SettingsActivity.settingsContainer[key]?.let { setting -> @Composable { setting.Preference() } }
         }
         SettingsSection(title?.let { stringResource(it) }, rows)
+    }
+}
+
+/** fork: undo / redo of settings changes (SettingsHistory), only shown while there is something to undo or redo */
+@Composable
+private fun SettingsUndoRedo() {
+    val ctx = androidx.compose.ui.platform.LocalContext.current
+    val history = helium314.keyboard.fork.settings.SettingsHistory
+    val step by history.state.collectAsState()
+    if (step < 0) return // only read so the buttons follow the history
+    val prefs = ctx.prefs()
+    if (history.canUndo || history.canRedo) {
+        IconButton(onClick = { history.undo(prefs) }, enabled = history.canUndo) {
+            Icon(painterResource(R.drawable.ic_dot_undo), stringResource(R.string.undo))
+        }
+        IconButton(onClick = { history.redo(prefs) }, enabled = history.canRedo) {
+            Icon(painterResource(R.drawable.ic_dot_redo), stringResource(R.string.redo))
+        }
     }
 }

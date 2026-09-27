@@ -142,6 +142,9 @@ fun SettingsNavHost(
         composable(SettingsDestination.Languages) {
             LanguageScreen(onClickBack = ::goBack)
         }
+        composable(SettingsDestination.ForkLanguageAdd) {
+            helium314.keyboard.settings.screens.LanguageAddScreen(onClickBack = ::goBack)
+        }
         composable(SettingsDestination.Dictionaries) {
             DictionaryScreen(onClickBack = ::goBack)
         }
@@ -183,6 +186,7 @@ object SettingsDestination {
     const val DynamicToolbar = "fork_dynamic_toolbar"
     const val ForkThemes = "fork_themes"
     const val ForkClipboard = "fork_clipboard"
+    const val ForkLanguageAdd = "fork_language_add"
     const val ForkSmartChips = "fork_smart_chips"
     const val DataGathering = "data_gathering" // remove when data gathering phase is done (end of 2026 latest)
     const val DataReview = "data_review" // remove when data gathering phase is done (end of 2026 latest)

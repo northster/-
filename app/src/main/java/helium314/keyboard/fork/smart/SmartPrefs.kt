@@ -10,6 +10,10 @@ object SmartPrefs {
     const val CALC = "fork_smart_calc"
     const val CURRENCY = "fork_smart_currency"
     const val UNITS = "fork_smart_units"
+    /** on-screen note of what the keyboard read before the cursor and what it found (to see why a chip is missing) */
+    const val DEBUG = "fork_smart_debug"
+    /** settings entry with a text field that runs the detection on typed text, nothing is stored */
+    const val TESTER = "fork_smart_typed_tester"
 
     fun enabled(context: Context) = context.prefs().getBoolean(TYPING, true)
 

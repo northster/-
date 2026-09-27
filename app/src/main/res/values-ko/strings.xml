@@ -381,7 +381,7 @@
     <string name="license">오픈소스 라이선스</string>
     <string name="dialog_close">닫기</string>
     <string name="text_tap_languages">언어를 눌러 설정 열기</string>
-    <string name="settings_screen_appearance">외관 및 크기</string>
+    <string name="settings_screen_appearance">크기 및 글꼴</string>
     <string name="full_left" tools:keep="@string/full_left">줄 단위 좌</string>
     <string name="full_right" tools:keep="@string/full_right">줄 단위 우</string>
     <string name="number_row_in_symbols">기호 보기에서 숫자 행 표시</string>

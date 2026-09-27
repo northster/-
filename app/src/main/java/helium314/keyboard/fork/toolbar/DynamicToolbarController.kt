@@ -500,10 +500,14 @@ class DynamicToolbarController(private val context: Context) {
 
     private fun checkTypedText() {
         val ime = latinIME ?: return
+        val text = ime.forkTextBeforeCursor(helium314.keyboard.fork.smart.SmartSuggest.LOOKBEHIND)?.toString().orEmpty()
+        val smartContext = helium314.keyboard.fork.smart.SmartPrefs.context(context)
         val hit = if (!helium314.keyboard.fork.smart.SmartPrefs.enabled(context) || toolActive || clipSearch.isActive) null
-            else helium314.keyboard.fork.smart.SmartSuggest.detect(
-                ime.forkTextBeforeCursor(helium314.keyboard.fork.smart.SmartSuggest.LOOKBEHIND)?.toString().orEmpty(),
-                helium314.keyboard.fork.smart.SmartPrefs.context(context))
+            else helium314.keyboard.fork.smart.SmartSuggest.detect(text, smartContext)
+        if (context.prefs().getBoolean(helium314.keyboard.fork.smart.SmartPrefs.DEBUG, false)) {
+            val rates = if (smartContext.rates == null) " · 환율 없음" else ""
+            KeyboardSwitcher.getInstance().showToast("읽음: \"${text.takeLast(16)}\" → ${hit?.result ?: "없음"}$rates", true)
+        }
         if (hit == typedHit) return
         typedHit = hit
         if (hit == null) {

@@ -1034,12 +1034,13 @@ public final class PointerTracker implements PointerTrackerQueue.Element,
         if (mInSpaceCursorMode) { // fork: space long press cursor movement, independent of swipe settings
             // floating caret following the finger, if the app tells where its characters are
             if (sListener.onSpaceCursorDrag(x - mSpaceCursorOriginX, y - mSpaceCursorOriginY)) return;
-            final int steps = (x - mStartX) / sPointerStep;
+            final int charStep = ForkSettings.cursorCharStepPx();
+            final int steps = (x - mStartX) / charStep;
             if (steps != 0 && sListener.onSpaceCursorMove(steps)) {
-                mStartX += steps * sPointerStep;
+                mStartX += steps * charStep;
             }
             // up / down by lines, needs a longer move than one character
-            final int lineStep = sPointerStep * 3;
+            final int lineStep = ForkSettings.cursorLineStepPx();
             final int stepsY = (y - mStartY) / lineStep;
             if (stepsY != 0 && sListener.onSpaceCursorMoveVertically(stepsY)) {
                 mStartY += stepsY * lineStep;

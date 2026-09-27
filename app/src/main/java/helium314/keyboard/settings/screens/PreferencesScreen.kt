@@ -79,6 +79,8 @@ fun PreferencesScreen(
         R.string.fork_cat_space,
         helium314.keyboard.fork.ForkSettings.PREF_SPACE_LONG_PRESS_MS,
         helium314.keyboard.fork.ForkSettings.PREF_VIRTUAL_CARET,
+        helium314.keyboard.fork.ForkSettings.PREF_CURSOR_CHAR_STEP_DP,
+        helium314.keyboard.fork.ForkSettings.PREF_CURSOR_LINE_STEP_DP,
         R.string.fork_cat_general,
         helium314.keyboard.fork.ForkSettings.PREF_HIDE_COMPOSING_UNDERLINE,
         Settings.PREF_SAVE_SUBTYPE_PER_APP,

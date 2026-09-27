@@ -70,6 +70,8 @@ fun SmartChipsScreen(onClickBack: () -> Unit) {
             if (typing) SmartPrefs.CALC else null,
             if (typing) SmartPrefs.CURRENCY else null,
             if (typing) SmartPrefs.UNITS else null,
+            SmartPrefs.TESTER,
+            SmartPrefs.DEBUG,
             R.string.fork_cat_smart_clip,
             ClipPrefs.SMART_CHIPS,
             ClipPrefs.SMART_TESTER,

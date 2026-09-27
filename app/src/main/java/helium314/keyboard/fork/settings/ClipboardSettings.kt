@@ -193,9 +193,49 @@ fun createForkClipboardSettings(context: Context) = listOf(
             step = 25f,
         )
     },
+    Setting(context, helium314.keyboard.fork.ForkSettings.PREF_CURSOR_CHAR_STEP_DP, R.string.fork_cursor_char_step,
+        R.string.fork_cursor_step_summary) { setting ->
+        val ctx = LocalContext.current
+        InlineSliderPreference(
+            name = setting.title,
+            key = setting.key,
+            default = helium314.keyboard.fork.ForkSettings.DEFAULT_CURSOR_CHAR_STEP_DP,
+            range = 3f..30f,
+            format = { ctx.getString(R.string.fork_unit_dp, it.toInt().toString()) },
+            step = 1f,
+        )
+    },
+    Setting(context, helium314.keyboard.fork.ForkSettings.PREF_CURSOR_LINE_STEP_DP, R.string.fork_cursor_line_step) { setting ->
+        val ctx = LocalContext.current
+        InlineSliderPreference(
+            name = setting.title,
+            key = setting.key,
+            default = helium314.keyboard.fork.ForkSettings.DEFAULT_CURSOR_LINE_STEP_DP,
+            range = 10f..80f,
+            format = { ctx.getString(R.string.fork_unit_dp, it.toInt().toString()) },
+            step = 2f,
+        )
+    },
+    Setting(context, helium314.keyboard.fork.ForkSettings.PREF_KEY_ALPHA, R.string.fork_key_alpha, R.string.fork_key_alpha_summary) { setting ->
+        InlineSliderPreference(
+            name = setting.title,
+            key = setting.key,
+            default = 1f,
+            range = 0.2f..1f,
+            step = 0.05f,
+            live = true,
+        ) { helium314.keyboard.fork.ForkLive.requestReload() }
+    },
     Setting(context, helium314.keyboard.fork.ForkSettings.PREF_VIRTUAL_CARET, R.string.fork_virtual_caret,
         R.string.fork_virtual_caret_summary) {
         SwitchPreference(it, true)
+    },
+    Setting(context, helium314.keyboard.fork.smart.SmartPrefs.TESTER, R.string.fork_smart_typed_tester,
+        R.string.fork_smart_typed_tester_summary) { setting ->
+        SmartTypedTester(setting.title, setting.description)
+    },
+    Setting(context, helium314.keyboard.fork.smart.SmartPrefs.DEBUG, R.string.fork_smart_debug, R.string.fork_smart_debug_summary) {
+        SwitchPreference(it, false)
     },
     Setting(context, ClipPrefs.SCREENSHOTS, R.string.fork_clip_screenshots, R.string.fork_clip_screenshots_summary) { setting ->
         val ctx = LocalContext.current
@@ -344,4 +384,34 @@ private fun ChipColorPreference(title: String, key: String, autoDescription: Str
             onDefault = { prefs.edit { remove(key) } },
             onConfirmed = { prefs.edit { putInt(key, it) } },
         )
+}
+
+/** type a sum / amount / measure and see what the typing smart chips find, with the phone's own regex engine */
+@Composable
+private fun SmartTypedTester(title: String, description: String?) {
+    val s = LocalShadcn.current
+    val ctx = LocalContext.current
+    var text by androidx.compose.runtime.remember { androidx.compose.runtime.mutableStateOf("10달러") }
+    val smart = androidx.compose.runtime.remember(text) { helium314.keyboard.fork.smart.SmartPrefs.context(ctx) }
+    val hit = androidx.compose.runtime.remember(text, smart) { helium314.keyboard.fork.smart.SmartSuggest.detect(text, smart) }
+    Column(Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 12.dp)) {
+        Text(title, style = MaterialTheme.typography.bodyLarge)
+        if (description != null) Text(description, style = MaterialTheme.typography.bodyMedium, color = s.mutedForeground)
+        androidx.compose.material3.OutlinedTextField(
+            value = text,
+            onValueChange = { text = it },
+            modifier = Modifier.fillMaxWidth().padding(top = 8.dp),
+            textStyle = MaterialTheme.typography.bodyMedium,
+            shape = MaterialTheme.shapes.medium,
+            singleLine = true,
+            colors = androidx.compose.material3.OutlinedTextFieldDefaults.colors(
+                focusedBorderColor = s.ring,
+                unfocusedBorderColor = s.input,
+                cursorColor = s.foreground,
+            ),
+        )
+        val result = hit?.let { "${it.query} → ${it.result}" } ?: stringResource(R.string.fork_smart_found_nothing)
+        val rates = if (smart.rates == null) " · " + stringResource(R.string.fork_smart_no_rates) else ""
+        Text(result + rates, style = MaterialTheme.typography.bodyMedium, modifier = Modifier.padding(top = 8.dp))
+    }
 }

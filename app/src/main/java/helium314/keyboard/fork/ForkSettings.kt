@@ -87,6 +87,73 @@ object ForkSettings {
     fun isComposingUnderlineHidden() =
         !initialized || appPrefs.getBoolean(PREF_HIDE_COMPOSING_UNDERLINE, DEFAULT_HIDE_COMPOSING_UNDERLINE)
 
+    /** finger travel per character / per line in space cursor mode, dp */
+    const val PREF_CURSOR_CHAR_STEP_DP = "fork_cursor_char_step_dp"
+    const val PREF_CURSOR_LINE_STEP_DP = "fork_cursor_line_step_dp"
+    const val DEFAULT_CURSOR_CHAR_STEP_DP = 10f
+    const val DEFAULT_CURSOR_LINE_STEP_DP = 30f
+
+    @JvmStatic
+    fun cursorCharStepPx(): Int {
+        val dp = if (initialized) appPrefs.getFloat(PREF_CURSOR_CHAR_STEP_DP, DEFAULT_CURSOR_CHAR_STEP_DP) else DEFAULT_CURSOR_CHAR_STEP_DP
+        return (dp * density).toInt().coerceAtLeast(1)
+    }
+
+    @JvmStatic
+    fun cursorLineStepPx(): Int {
+        val dp = if (initialized) appPrefs.getFloat(PREF_CURSOR_LINE_STEP_DP, DEFAULT_CURSOR_LINE_STEP_DP) else DEFAULT_CURSOR_LINE_STEP_DP
+        return (dp * density).toInt().coerceAtLeast(1)
+    }
+
+    /** keys drawn with this opacity (0..1), so the chip glow behind them can show through */
+    const val PREF_KEY_ALPHA = "fork_key_alpha"
+
+    @JvmStatic
+    fun keyAlpha(): Int = if (!initialized) 255 else (appPrefs.getFloat(PREF_KEY_ALPHA, 1f).coerceIn(0f, 1f) * 255).toInt()
+
+    /**
+     * HeliBoard options that do nothing here, or fight the fork's own features: word suggestions and autocorrect are
+     * off (no suggestion strip), the space bar moves the cursor on its own, there is no gesture typing library, the
+     * bottom row is Samsung's. They are left out of the screens and the settings search.
+     */
+    @JvmField
+    val removedHeliBoardSettings = setOf(
+        helium314.keyboard.latin.settings.Settings.PREF_AUTO_CORRECTION,
+        helium314.keyboard.latin.settings.Settings.PREF_MORE_AUTO_CORRECTION,
+        helium314.keyboard.latin.settings.Settings.PREF_AUTOCORRECT_SHORTCUTS,
+        helium314.keyboard.latin.settings.Settings.PREF_AUTOCORRECT_CAPITALIZED_SUGGESTION,
+        helium314.keyboard.latin.settings.Settings.PREF_AUTO_CORRECT_CONFIDENCE,
+        helium314.keyboard.latin.settings.Settings.PREF_BACKSPACE_REVERTS_AUTOCORRECT,
+        helium314.keyboard.latin.settings.Settings.PREF_BLOCK_POTENTIALLY_OFFENSIVE,
+        helium314.keyboard.latin.settings.Settings.PREF_AUTOSPACE_BEFORE_GESTURE_TYPING,
+        helium314.keyboard.latin.settings.Settings.PREF_AUTOSPACE_AFTER_GESTURE_TYPING,
+        helium314.keyboard.latin.settings.Settings.PREF_SPACE_HORIZONTAL_SWIPE,
+        helium314.keyboard.latin.settings.Settings.PREF_SPACE_VERTICAL_SWIPE,
+        helium314.keyboard.latin.settings.Settings.PREF_ENABLE_EMOJI_ALT_PHYSICAL_KEY,
+        helium314.keyboard.latin.settings.Settings.PREF_SHOW_SETUP_WIZARD_ICON,
+        helium314.keyboard.latin.settings.Settings.PREF_EMOJI_MAX_SDK,
+        helium314.keyboard.latin.settings.Settings.PREF_URL_DETECTION,
+        helium314.keyboard.latin.settings.Settings.PREF_SHOW_TLD_POPUP_KEYS,
+        helium314.keyboard.latin.settings.Settings.PREF_REMOVE_REDUNDANT_POPUPS,
+        helium314.keyboard.latin.settings.Settings.PREF_SHOW_DPAD_KEY,
+        helium314.keyboard.latin.settings.Settings.PREF_SHOW_EMOJI_DESCRIPTIONS,
+        helium314.keyboard.latin.settings.Settings.PREF_CLIPBOARD_HISTORY_PINNED_FIRST,
+        helium314.keyboard.latin.settings.Settings.PREF_TOOLBAR_MODE,
+        helium314.keyboard.latin.settings.Settings.PREF_TOOLBAR_HIDING_GLOBAL,
+        helium314.keyboard.latin.settings.Settings.PREF_TOOLBAR_KEYS,
+        helium314.keyboard.latin.settings.Settings.PREF_PINNED_TOOLBAR_KEYS,
+        helium314.keyboard.latin.settings.Settings.PREF_CLIPBOARD_TOOLBAR_KEYS,
+        helium314.keyboard.latin.settings.Settings.PREF_TOOLBAR_CUSTOM_KEY_CODES,
+        helium314.keyboard.latin.settings.Settings.PREF_QUICK_PIN_TOOLBAR_KEYS,
+        helium314.keyboard.latin.settings.Settings.PREF_AUTO_SHOW_TOOLBAR,
+        helium314.keyboard.latin.settings.Settings.PREF_AUTO_HIDE_TOOLBAR,
+        helium314.keyboard.latin.settings.Settings.PREF_SHOW_ONLY_TOOLBAR_WITH_HARDWARE_KEYBOARD,
+        helium314.keyboard.latin.settings.Settings.PREF_VARIABLE_TOOLBAR_DIRECTION,
+        helium314.keyboard.latin.settings.Settings.PREF_TOOLBAR_SWIPE_DOWN_TO_HIDE,
+        helium314.keyboard.settings.SettingsWithoutKey.LOAD_GESTURE_LIB,
+        helium314.keyboard.settings.SettingsWithoutKey.EDIT_PERSONAL_DICTIONARY,
+    )
+
     /** iPhone style floating caret while space is held (falls back to steps in apps that don't support it) */
     const val PREF_VIRTUAL_CARET = "fork_virtual_caret"
 

@@ -372,8 +372,14 @@ class ClipboardHistoryView @JvmOverloads constructor(
 
     /** fork: pinned clips only, the positions from the database don't match the list */
     fun forkRefreshList() {
-        clipboardAdapter.notifyDataSetChanged()
+        // setting the adapter again rebuilds the whole list (the staggered grid kept the old layout after
+        // notifyDataSetChanged and showed nothing when going back from the pinned clips)
+        clipboardRecyclerView.adapter = clipboardAdapter
+        val empty = clipboardAdapter.itemCount == 0
+        clipboardRecyclerView.visibility = if (empty) INVISIBLE else VISIBLE
+        placeholderView.visibility = if (empty) VISIBLE else INVISIBLE
         clipboardRecyclerView.scrollToPosition(0)
+        clipboardRecyclerView.requestLayout()
     }
 
     override fun onClipInserted(position: Int) {

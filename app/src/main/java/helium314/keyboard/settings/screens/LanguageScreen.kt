@@ -6,6 +6,9 @@ import android.content.Context
 import android.os.Build
 import android.view.inputmethod.InputMethodSubtype
 import androidx.compose.foundation.clickable
+import helium314.keyboard.latin.utils.mainLayoutNameOrQwerty
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -52,8 +55,63 @@ import helium314.keyboard.settings.initPreview
 import helium314.keyboard.latin.utils.previewDark
 import java.util.Locale
 
+/**
+ * fork: the languages in use as cards (name in its own language · English name, layout below, tap for the details),
+ * and a row that opens the list of every language to add one ([LanguageAddScreen]).
+ */
 @Composable
 fun LanguageScreen(
+    onClickBack: () -> Unit,
+) {
+    val ctx = LocalContext.current
+    val b = (LocalContext.current.getActivity() as? SettingsActivity)?.prefChanged?.collectAsState()
+    if ((b?.value ?: 0) < 0)
+        Log.v("irrelevant", "stupid way to trigger recomposition on preference change")
+    val enabledSubtypes = SubtypeSettings.getEnabledSubtypes()
+    val allCount = remember { SubtypeSettings.getAllAvailableSubtypes().map { it.locale().language }.distinct().size }
+    helium314.keyboard.settings.SearchSettingsScreen(
+        onClickBack = onClickBack,
+        title = stringResource(R.string.language_and_layouts_title),
+        settings = emptyList(),
+    ) {
+        androidx.compose.foundation.layout.Column(
+            Modifier.verticalScroll(androidx.compose.foundation.rememberScrollState()).padding(bottom = 24.dp)
+        ) {
+            helium314.keyboard.settings.SettingsSection(stringResource(R.string.fork_languages_in_use), enabledSubtypes.map { subtype ->
+                @Composable {
+                    helium314.keyboard.settings.preferences.Preference(
+                        name = languageTitle(subtype),
+                        description = layoutName(subtype),
+                        onClick = { SettingsDestination.navigateTo(SettingsDestination.Subtype + subtype.toSettingsSubtype().toPref()) },
+                    ) { helium314.keyboard.latin.utils.NextScreenIcon() }
+                }
+            } + listOf(@Composable {
+                helium314.keyboard.settings.preferences.Preference(
+                    name = stringResource(R.string.fork_language_add),
+                    description = stringResource(R.string.fork_language_add_summary, allCount),
+                    onClick = { SettingsDestination.navigateTo(SettingsDestination.ForkLanguageAdd) },
+                    icon = R.drawable.ic_plus,
+                ) { helium314.keyboard.latin.utils.NextScreenIcon() }
+            }))
+        }
+    }
+}
+
+/** "한국어 · Korean": the language in its own words, and in English when that reads differently */
+private fun languageTitle(subtype: InputMethodSubtype): String {
+    val locale = subtype.locale()
+    val own = locale.getDisplayName(locale).replaceFirstChar { it.titlecase(locale) }
+    val english = locale.getDisplayName(Locale.ENGLISH)
+    return if (own.isEmpty() || own == english) english.ifEmpty { subtype.displayName() } else "$own · $english"
+}
+
+private fun layoutName(subtype: InputMethodSubtype): String = runCatching {
+    SubtypeLocaleUtils.getLayoutDisplayNameInSystemLocale(subtype.mainLayoutNameOrQwerty(), subtype.locale())
+}.getOrDefault(subtype.displayName())
+
+/** fork: every language, searchable; tap one to use it (or to stop using it), the arrow opens its details */
+@Composable
+fun LanguageAddScreen(
     onClickBack: () -> Unit,
 ) {
     val ctx = LocalContext.current
@@ -66,7 +124,7 @@ fun LanguageScreen(
         onClickBack = onClickBack,
         title = {
             Column {
-                Text(stringResource(R.string.language_and_layouts_title))
+                Text(stringResource(R.string.fork_language_add))
                 Text(stringResource(
                     R.string.text_tap_languages),
                     style = MaterialTheme.typography.bodyMedium,
@@ -87,16 +145,27 @@ fun LanguageScreen(
 @Composable
 private fun SubtypeRow(subtype: InputMethodSubtype, isEnabled: Boolean) {
     val ctx = LocalContext.current
+    // local state, so the check mark follows the tap right away
+    var enabled by remember(subtype, isEnabled) { mutableStateOf(isEnabled) }
+    var showNoDictDialog by remember { mutableStateOf(false) }
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
             .fillMaxWidth()
             .clickable {
-                SettingsDestination.navigateTo(SettingsDestination.Subtype + subtype.toSettingsSubtype().toPref())
+                val on = !enabled
+                if (on && !dictsAvailable(subtype.locale(), ctx)) showNoDictDialog = true
+                if (on) SubtypeSettings.addEnabledSubtype(ctx.prefs(), subtype)
+                else SubtypeSettings.removeEnabledSubtype(ctx, subtype)
+                enabled = on
             }
-            .padding(vertical = 6.dp, horizontal = 16.dp)
+            .padding(vertical = 10.dp, horizontal = 16.dp)
     ) {
-        var showNoDictDialog by remember { mutableStateOf(false) }
+        androidx.compose.material3.Icon(
+            androidx.compose.ui.res.painterResource(R.drawable.ic_dot_check), null,
+            modifier = Modifier.padding(end = 12.dp).size(20.dp),
+            tint = if (enabled) MaterialTheme.colorScheme.primary else androidx.compose.ui.graphics.Color.Transparent,
+        )
         Column(modifier = Modifier.weight(1f)) {
             Text(subtype.displayName(), style = MaterialTheme.typography.bodyLarge)
             val description = if (SubtypeSettings.isAdditionalSubtype(subtype)) {
@@ -111,15 +180,9 @@ private fun SubtypeRow(subtype: InputMethodSubtype, isEnabled: Boolean) {
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
         }
-        ShadcnSwitch(
-            checked = isEnabled,
-            onCheckedChange = {
-                if (it && !dictsAvailable(subtype.locale(), ctx))
-                    showNoDictDialog = true
-                if (it) SubtypeSettings.addEnabledSubtype(ctx.prefs(), subtype)
-                else SubtypeSettings.removeEnabledSubtype(ctx, subtype)
-            }
-        )
+        androidx.compose.material3.IconButton(onClick = {
+            SettingsDestination.navigateTo(SettingsDestination.Subtype + subtype.toSettingsSubtype().toPref())
+        }) { helium314.keyboard.latin.utils.NextScreenIcon() }
         if (showNoDictDialog)
             MissingDictionaryDialog({ showNoDictDialog = false }, subtype.locale())
     }

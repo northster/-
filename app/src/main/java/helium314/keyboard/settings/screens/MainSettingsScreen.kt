@@ -134,7 +134,7 @@ fun MainSettingsScreen(
                 entry(R.string.fork_theme_colors, stringResource(R.string.fork_desc_theme_colors),
                     R.drawable.ic_settings_appearance, onClickThemeColors),
                 entry(R.string.settings_screen_appearance, stringResource(R.string.fork_desc_appearance),
-                    R.drawable.ic_settings_appearance, onClickAppearance),
+                    R.drawable.ic_settings_size, onClickAppearance),
                 entry(R.string.settings_screen_secondary_layouts, stringResource(R.string.fork_desc_layouts),
                     R.drawable.ic_settings_layout, onClickLayouts),
             ))

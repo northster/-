@@ -29,7 +29,7 @@
     <string name="fork_desc_preferences">힌트, 길게 누르기, 진동, 소리, 추가 키, 클립보드</string>
     <string name="fork_desc_correction">자동 수정, 자동 대문자, 띄어쓰기, 개인 사전</string>
     <string name="fork_desc_dictionaries">사전 추가 및 관리</string>
-    <string name="fork_desc_appearance">키보드 높이, 간격, 글꼴</string>
+    <string name="fork_desc_appearance">키 높이, 간격, 글꼴, 이모지</string>
     <string name="fork_desc_layouts">기호, 숫자, 기능 키 레이아웃</string>
     <string name="fork_desc_dynamic_toolbar">스와이프 제스처, 애니메이션, 앱 화면 이동</string>
     <string name="fork_desc_toolbar">원래 키보드의 제안 줄과 툴바 키</string>
@@ -97,8 +97,8 @@
     <string name="fork_shape_key_radius">키 모서리 둥글기</string>
     <string name="fork_shape_border_width">키 테두리 두께</string>
     <string name="fork_shape_enter_radius">엔터 키 모서리 둥글기</string>
-    <string name="fork_theme_colors">테마 및 색상</string>
-    <string name="fork_desc_theme_colors">테마 선택, 색상과 키 모양 편집</string>
+    <string name="fork_theme_colors">테마</string>
+    <string name="fork_desc_theme_colors">테마 선택, 색상, 키 모양, 칩 모양</string>
     <string name="fork_theme_cat_display">표시</string>
     <string name="fork_size_height">키보드 높이</string>
     <string name="fork_size_bottom_padding">아래 여백</string>
@@ -289,9 +289,22 @@
     <string name="fork_cat_codes">인증번호</string>
     <string name="fork_cat_space">스페이스바</string>
     <string name="fork_cat_chip_look">칩 모양</string>
-    <string name="fork_space_long_press">스페이스바 길게 누르기 시간</string>
-    <string name="fork_space_long_press_summary">커서 이동이 시작되기까지 스페이스바를 누르고 있어야 하는 시간</string>
+    <string name="fork_space_long_press">커서 이동 모드 들어가는 시간</string>
+    <string name="fork_space_long_press_summary">스페이스바를 이만큼 누르고 있으면 커서 이동 모드가 돼요 (기본: 키 길게 누르기 시간의 1.5배)</string>
     <string name="fork_space_long_press_default">기본</string>
     <string name="fork_virtual_caret">떠다니는 커서 (아이폰 방식)</string>
     <string name="fork_virtual_caret_summary">스페이스바를 누른 채 움직이면 커서가 손가락을 따라 글 위를 움직이고, 실제 커서는 가장 가까운 글자로 옮겨져요. 글자 위치를 알려주지 않는 앱에서는 한 칸씩 움직여요</string>
+    <string name="fork_smart_typed_tester">입력 스마트 칩 테스트</string>
+    <string name="fork_smart_typed_tester_summary">계산식, 금액, 단위를 입력하면 키보드가 보여줄 답을 확인해요</string>
+    <string name="fork_smart_debug">읽은 글자 보여주기 (진단)</string>
+    <string name="fork_smart_debug_summary">입력할 때마다 커서 앞 글자와 찾은 결과를 짧게 보여줘요. 칩이 왜 안 뜨는지 확인할 때 켜세요</string>
+    <string name="fork_smart_no_rates">아직 환율 없음</string>
+    <string name="fork_cursor_char_step">글자당 손가락 이동 거리</string>
+    <string name="fork_cursor_step_summary">커서 이동 모드에서: 작을수록 커서가 빨리 움직여요</string>
+    <string name="fork_cursor_line_step">줄당 손가락 이동 거리</string>
+    <string name="fork_key_alpha">키 불투명도</string>
+    <string name="fork_key_alpha_summary">낮추면 키 뒤의 칩 글로우가 비쳐 보여요</string>
+    <string name="fork_languages_in_use">사용 중인 언어</string>
+    <string name="fork_language_add">언어 추가</string>
+    <string name="fork_language_add_summary">%d개의 언어 중 하나로 입력</string>
 </resources>

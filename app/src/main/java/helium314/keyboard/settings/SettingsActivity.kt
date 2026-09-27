@@ -171,6 +171,7 @@ open class SettingsActivity : ComponentActivity(), SharedPreferences.OnSharedPre
     override fun onStart() {
         super.onStart()
         prefs.registerOnSharedPreferenceChangeListener(this)
+        helium314.keyboard.fork.settings.SettingsHistory.start(prefs) // fork
         contentResolver.registerContentObserver(
             android.provider.Settings.Secure.getUriFor(android.provider.Settings.Secure.DEFAULT_INPUT_METHOD), false, imeSettingsObserver)
         contentResolver.registerContentObserver(
@@ -272,6 +273,7 @@ open class SettingsActivity : ComponentActivity(), SharedPreferences.OnSharedPre
     }
 
     override fun onSharedPreferenceChanged(prefereces: SharedPreferences?, key: String?) {
+        if (prefereces != null) helium314.keyboard.fork.settings.SettingsHistory.onChanged(prefereces, key) // fork
         prefChanged()
     }
 }
