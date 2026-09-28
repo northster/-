@@ -106,12 +106,14 @@ class DynamicToolbarController(private val context: Context) {
     /** pastel border glow while an AI command runs */
     private var aiGlow: AiGlow? = null
 
-    /** the keyboard with the toolbar (when shown), in input view coordinates */
-    private fun keyboardBounds(): android.graphics.RectF? {
-        val frame = keyboardFrame ?: return null
-        val tb = toolbar
-        val top = if (tb != null && tb.visibility == View.VISIBLE && isExpanded) minOf(tb.y, frame.y) else frame.y
-        return android.graphics.RectF(frame.x, top, frame.x + frame.width, frame.y + frame.height)
+    /** settings preview: the AI glow for a few seconds; false if the keyboard is not showing */
+    fun previewAiGlow(): Boolean {
+        val glow = aiGlow ?: return false
+        val kv = KeyboardSwitcher.getInstance().mainKeyboardView ?: return false
+        if (!kv.isShown) return false
+        glow.show(true)
+        kv.postDelayed({ if (slateView == null) glow.show(false) }, 6000)
+        return true
     }
 
     /** dot glow behind the keys while a chip waits behind the collapsed toolbar */
@@ -155,7 +157,7 @@ class DynamicToolbarController(private val context: Context) {
         animator?.cancel()
         inputView = newInputView
         aiGlow?.show(false)
-        aiGlow = AiGlow(newInputView, ::keyboardBounds) { KeyboardSwitcher.getInstance().mainKeyboardView }
+        aiGlow = AiGlow(newInputView) { KeyboardSwitcher.getInstance().mainKeyboardView }
         toolbar = newInputView.findViewById(R.id.dynamic_toolbar)
         setHint(false, immediate = true)
         stopWave()

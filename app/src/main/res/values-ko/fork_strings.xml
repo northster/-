@@ -395,11 +395,8 @@
     <string name="fork_clip_unpinned_toast">고정 해제했어요</string>
     <string name="fork_cat_ai_glow">AI 글로우</string>
     <string name="fork_ai_glow">AI 작동 중 글로우</string>
-    <string name="fork_ai_glow_summary">AI 명령이나 번역이 도는 동안 키보드 테두리에 파스텔 점</string>
-    <string name="fork_ai_glow_brightness">밝기</string>
+    <string name="fork_ai_glow_summary">AI 명령이나 번역이 도는 동안 키 뒤에 파스텔 점 글로우(칩 글로우와 같은 모양, 색이 천천히 소용돌이)</string>
     <string name="fork_ai_glow_period">색이 한 바퀴 도는 시간</string>
-    <string name="fork_ai_glow_depth">두께</string>
-    <string name="fork_ai_glow_rows">점 %1$d줄</string>
     <string name="fork_translate_empty_short">입력한 글이 없어요</string>
     <string name="fork_cat_claude_usage">Claude 사용량</string>
     <string name="fork_claude_key">claude.ai 세션 키</string>
@@ -414,10 +411,7 @@
     <string name="fork_translate_custom_prompt">AI에게 줄 설명 (선택)</string>
     <string name="fork_translate_custom_prompt_help">비워두면 이름을 그대로 써요. 예: \"부산 사투리\"</string>
     <string name="fork_translate_custom_no_prompt">이름 그대로</string>
-    <string name="fork_ai_glow_style">나타나는 방식</string>
-    <string name="fork_ai_glow_style_sweep">한 바퀴 돌며</string>
-    <string name="fork_ai_glow_style_rise">아래에서 위로</string>
-    <string name="fork_ai_glow_style_fade">서서히</string>
-    <string name="fork_ai_glow_style_bottom">하단만</string>
+    <string name="fork_ai_glow_test_summary">키보드를 연 채로 누르면 6초 동안 보여줘요(아래 테스트 칸을 눌러 키보드를 여세요)</string>
+    <string name="fork_ai_glow_test_no_keyboard">키보드가 열려 있지 않아요. 아래 테스트 칸을 눌러 키보드를 연 뒤 다시 누르세요</string>
     <string name="fork_ai_glow_in">나타나고 사라지는 시간</string>
 </resources>

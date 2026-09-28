@@ -41,7 +41,6 @@ fun DynamicToolbarScreen(
     val wave = GlowPrefs.waveEnabled(prefs)
     val glow = GlowPrefs.glowEnabled(prefs)
     val aiGlow = prefs.getBoolean(GlowPrefs.AI_GLOW, true)
-    val aiStyle = prefs.getString(GlowPrefs.AI_GLOW_STYLE, GlowPrefs.AI_STYLE_SWEEP)
     val autofill = prefs.getBoolean(DynamicToolbarController.PREF_AUTOFILL, true)
     val items = listOfNotNull(
             R.string.fork_cat_gesture,
@@ -82,13 +81,15 @@ fun DynamicToolbarScreen(
             helium314.keyboard.fork.usage.ClaudeUsage.PREF_SESSION_KEY,
             R.string.fork_cat_ai_glow,
             GlowPrefs.AI_GLOW,
-            GlowPrefs.AI_GLOW_STYLE.takeIf { aiGlow },
-            // the options that do something in the chosen style
+            GlowPrefs.AI_GLOW_TEST.takeIf { aiGlow },
+            GlowPrefs.AI_GLOW_POSITION.takeIf { aiGlow },
+            GlowPrefs.AI_GLOW_MAX.takeIf { aiGlow },
+            GlowPrefs.AI_GLOW_MIN.takeIf { aiGlow },
+            GlowPrefs.AI_GLOW_BREATH.takeIf { aiGlow },
+            GlowPrefs.AI_GLOW_PERIOD.takeIf { aiGlow },
+            GlowPrefs.AI_GLOW_HEIGHT.takeIf { aiGlow },
+            GlowPrefs.AI_GLOW_WIDTH.takeIf { aiGlow },
             GlowPrefs.AI_GLOW_IN.takeIf { aiGlow },
-            GlowPrefs.AI_GLOW_BRIGHTNESS.takeIf { aiGlow },
-            GlowPrefs.AI_GLOW_PERIOD.takeIf { aiGlow && aiStyle != GlowPrefs.AI_STYLE_RISE },
-            GlowPrefs.AI_GLOW_DEPTH.takeIf { aiGlow && aiStyle != GlowPrefs.AI_STYLE_BOTTOM },
-            GlowPrefs.AI_GLOW_BOTTOM_DEPTH.takeIf { aiGlow && aiStyle == GlowPrefs.AI_STYLE_BOTTOM },
             R.string.fork_cat_autofill,
             DynamicToolbarController.PREF_AUTOFILL,
             DynamicToolbarController.PREF_AUTOFILL_OPEN.takeIf { autofill },
@@ -255,31 +256,40 @@ fun createDynamicToolbarSettings(context: Context) = listOf(
     Setting(context, GlowPrefs.AI_GLOW, R.string.fork_ai_glow, R.string.fork_ai_glow_summary) {
         SwitchPreference(it, true)
     },
-    Setting(context, GlowPrefs.AI_GLOW_STYLE, R.string.fork_ai_glow_style) { setting ->
+    Setting(context, GlowPrefs.AI_GLOW_TEST, R.string.fork_clip_hint_test, R.string.fork_ai_glow_test_summary) { setting ->
+        val ctx = androidx.compose.ui.platform.LocalContext.current
+        helium314.keyboard.settings.preferences.Preference(name = setting.title, description = setting.description, onClick = {
+            if (DynamicToolbarController.current?.previewAiGlow() != true)
+                android.widget.Toast.makeText(ctx, R.string.fork_ai_glow_test_no_keyboard, android.widget.Toast.LENGTH_LONG).show()
+        })
+    },
+    Setting(context, GlowPrefs.AI_GLOW_POSITION, R.string.fork_glow_position) { setting ->
         val ctx = androidx.compose.ui.platform.LocalContext.current
         helium314.keyboard.settings.preferences.InlineChoicePreference(setting.title, setting.key, listOf(
-            ctx.getString(R.string.fork_ai_glow_style_sweep) to GlowPrefs.AI_STYLE_SWEEP,
-            ctx.getString(R.string.fork_ai_glow_style_rise) to GlowPrefs.AI_STYLE_RISE,
-            ctx.getString(R.string.fork_ai_glow_style_fade) to GlowPrefs.AI_STYLE_FADE,
-            ctx.getString(R.string.fork_ai_glow_style_bottom) to GlowPrefs.AI_STYLE_BOTTOM,
-        ), GlowPrefs.AI_STYLE_SWEEP)
+            ctx.getString(R.string.fork_glow_position_top) to GlowPrefs.POSITION_TOP,
+            ctx.getString(R.string.fork_glow_position_bottom) to GlowPrefs.POSITION_BOTTOM,
+        ), GlowPrefs.POSITION_TOP)
+    },
+    Setting(context, GlowPrefs.AI_GLOW_MAX, R.string.fork_glow_max) {
+        GlowSlider(it, GlowPrefs.DEFAULT_AI_GLOW_MAX, 0.05f..1f, 0.05f, ::percent)
+    },
+    Setting(context, GlowPrefs.AI_GLOW_MIN, R.string.fork_glow_min) {
+        GlowSlider(it, GlowPrefs.DEFAULT_AI_GLOW_MIN, 0f..1f, 0.05f, ::percent)
+    },
+    Setting(context, GlowPrefs.AI_GLOW_BREATH, R.string.fork_glow_period) {
+        GlowSlider(it, GlowPrefs.DEFAULT_AI_GLOW_BREATH, 400f..8000f, 100f, ::ms)
+    },
+    Setting(context, GlowPrefs.AI_GLOW_PERIOD, R.string.fork_ai_glow_period) {
+        GlowSlider(it, GlowPrefs.DEFAULT_AI_GLOW_PERIOD, 1000f..20000f, 500f, ::ms)
+    },
+    Setting(context, GlowPrefs.AI_GLOW_HEIGHT, R.string.fork_glow_height) {
+        GlowSlider(it, GlowPrefs.DEFAULT_AI_GLOW_HEIGHT, 0.1f..1f, 0.05f, ::percent)
+    },
+    Setting(context, GlowPrefs.AI_GLOW_WIDTH, R.string.fork_glow_width) {
+        GlowSlider(it, GlowPrefs.DEFAULT_AI_GLOW_WIDTH, 0.2f..2f, 0.05f, ::percent)
     },
     Setting(context, GlowPrefs.AI_GLOW_IN, R.string.fork_ai_glow_in) {
         GlowSlider(it, GlowPrefs.DEFAULT_AI_GLOW_IN, 200f..4000f, 100f, ::ms)
-    },
-    Setting(context, GlowPrefs.AI_GLOW_BOTTOM_DEPTH, R.string.fork_ai_glow_depth) { setting ->
-        val ctx = androidx.compose.ui.platform.LocalContext.current
-        GlowSlider(setting, GlowPrefs.DEFAULT_AI_GLOW_BOTTOM_DEPTH, 2f..40f, 1f) { ctx.getString(R.string.fork_ai_glow_rows, it.roundToInt()) }
-    },
-    Setting(context, GlowPrefs.AI_GLOW_BRIGHTNESS, R.string.fork_ai_glow_brightness) {
-        GlowSlider(it, GlowPrefs.DEFAULT_AI_GLOW_BRIGHTNESS, 0.1f..1f, 0.05f, ::percent)
-    },
-    Setting(context, GlowPrefs.AI_GLOW_PERIOD, R.string.fork_ai_glow_period) {
-        GlowSlider(it, GlowPrefs.DEFAULT_AI_GLOW_PERIOD, 800f..10000f, 100f, ::ms)
-    },
-    Setting(context, GlowPrefs.AI_GLOW_DEPTH, R.string.fork_ai_glow_depth) { setting ->
-        val ctx = androidx.compose.ui.platform.LocalContext.current
-        GlowSlider(setting, GlowPrefs.DEFAULT_AI_GLOW_DEPTH, 1f..8f, 1f) { ctx.getString(R.string.fork_ai_glow_rows, it.roundToInt()) }
     },
     Setting(context, DynamicToolbarController.PREF_AUTOFILL, R.string.fork_autofill, R.string.fork_autofill_summary) {
         SwitchPreference(it, true)

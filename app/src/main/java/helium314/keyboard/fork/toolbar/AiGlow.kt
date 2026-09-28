@@ -8,52 +8,28 @@ import android.graphics.Canvas
 import android.graphics.ColorFilter
 import android.graphics.Paint
 import android.graphics.PixelFormat
-import android.graphics.RectF
-import android.graphics.Region
-import android.os.Build
 import android.graphics.drawable.Drawable
+import android.os.SystemClock
 import android.view.View
-import android.view.animation.LinearInterpolator
 import helium314.keyboard.keyboard.KeyboardView
 import helium314.keyboard.latin.utils.prefs
+import kotlin.math.PI
+import kotlin.math.atan2
+import kotlin.math.cos
+import kotlin.math.pow
+import kotlin.math.sin
+import kotlin.math.sqrt
 
 /**
- * fork: pastel gradient glow along the whole keyboard border (toolbar included) while an AI command or translation
- * runs. The colors turn slowly around the border, and it fades in and out. Over the keyboard view it is drawn by the
- * keyboard view, behind the keys and through the key mask like the paste glow; the rest (the toolbar) is drawn in the
- * input view's overlay.
+ * fork: pastel glow while an AI command or translation runs. The same shape as the chip glow (dots behind the keys,
+ * brightest at the middle of the top or bottom edge, breathing, seen through the key mask), in pastel colors that
+ * swirl slowly around the glow's center. It fades in and out.
  */
-class AiGlow(private val host: View, private val bounds: () -> RectF?, private val keyboardView: () -> KeyboardView?) {
-    private val drawable = GlowPrefs.glow(host.context.prefs()).let {
-        // the same dot grid as the other glows
-        GlowDrawable(host.resources.displayMetrics.density, it.spacingDp, it.dotDp)
-    }
-    /** where the keyboard view is in the input view */
-    private val kvRect = RectF()
+class AiGlow(private val host: View, private val keyboardView: () -> KeyboardView?) {
+    private var drawable: SwirlGlowDrawable? = null
     private var kv: KeyboardView? = null
-    /** the part outside the keyboard view, in the input view's overlay */
-    private val outside = object : PartDrawable() {
-        override fun draw(canvas: Canvas) {
-            canvas.save()
-            if (kv != null) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) canvas.clipOutRect(kvRect)
-                else @Suppress("DEPRECATION") canvas.clipRect(kvRect, Region.Op.DIFFERENCE)
-            }
-            drawable.draw(canvas)
-            canvas.restore()
-        }
-    }
-    /** the part on the keyboard view, in its coordinates */
-    private val inside = object : PartDrawable() {
-        override fun draw(canvas: Canvas) {
-            canvas.save()
-            canvas.translate(-kvRect.left, -kvRect.top)
-            drawable.draw(canvas)
-            canvas.restore()
-        }
-    }
-    private var spin: ValueAnimator? = null
-    private var fade: ValueAnimator? = null
+    private var ticker: ValueAnimator? = null
+    private var fader: ValueAnimator? = null
     private var shown = false
 
     fun show(on: Boolean) {
@@ -61,161 +37,120 @@ class AiGlow(private val host: View, private val bounds: () -> RectF?, private v
         if (on && !prefs.getBoolean(GlowPrefs.AI_GLOW, true)) return
         if (on == shown) return
         shown = on
-        fade?.cancel()
-        val style = prefs.getString(GlowPrefs.AI_GLOW_STYLE, GlowPrefs.AI_STYLE_SWEEP) ?: GlowPrefs.AI_STYLE_SWEEP
-        // sweep / rise draw themselves in and out, fade / bottom fade
-        val drawsIn = style == GlowPrefs.AI_STYLE_SWEEP || style == GlowPrefs.AI_STYLE_RISE
-        if (on) {
-            drawable.style = style
-            if (drawsIn) { drawable.fade = 1f; drawable.reveal = 0f; drawable.erase = 0f }
-            else { drawable.reveal = 1f; drawable.erase = 0f }
-            drawable.brightness = prefs.getFloat(GlowPrefs.AI_GLOW_BRIGHTNESS, GlowPrefs.DEFAULT_AI_GLOW_BRIGHTNESS).coerceIn(0.1f, 1f)
-            drawable.depth = if (style == GlowPrefs.AI_STYLE_BOTTOM)
-                    prefs.getFloat(GlowPrefs.AI_GLOW_BOTTOM_DEPTH, GlowPrefs.DEFAULT_AI_GLOW_BOTTOM_DEPTH).toInt().coerceIn(1, 60)
-                else prefs.getFloat(GlowPrefs.AI_GLOW_DEPTH, GlowPrefs.DEFAULT_AI_GLOW_DEPTH).toInt().coerceIn(1, 8)
-            val period = prefs.getFloat(GlowPrefs.AI_GLOW_PERIOD, GlowPrefs.DEFAULT_AI_GLOW_PERIOD).toLong().coerceIn(500, 20000)
-            spin?.duration = period
-            host.overlay.remove(outside)
-            host.overlay.add(outside)
-            kv?.setForkAiUnderlay(null)
-            kv = keyboardView()?.also { it.setForkAiUnderlay(inside) }
-            if (spin == null) spin = ValueAnimator.ofFloat(0f, 360f).apply {
-                duration = period
+        fader?.cancel()
+        if (on && drawable == null) {
+            val view = keyboardView() ?: return
+            val glow = SwirlGlowDrawable(host.resources.displayMetrics.density, GlowPrefs.aiGlow(prefs),
+                prefs.getFloat(GlowPrefs.AI_GLOW_PERIOD, GlowPrefs.DEFAULT_AI_GLOW_PERIOD).toLong().coerceIn(500, 30_000))
+            drawable = glow
+            kv = view
+            view.setForkAiUnderlay(glow)
+            val start = SystemClock.uptimeMillis()
+            ticker = ValueAnimator.ofFloat(0f, 1f).apply {
+                duration = 1000
                 repeatCount = ValueAnimator.INFINITE
-                interpolator = LinearInterpolator()
                 addUpdateListener {
-                    drawable.angle = it.animatedValue as Float
-                    update()
+                    glow.time = SystemClock.uptimeMillis() - start
+                    view.invalidateAllKeys()
                 }
                 start()
             }
         }
-        val (from, to) = when {
-            !drawsIn -> drawable.fade to (if (on) 1f else 0f)
-            on -> drawable.reveal to 1f
-            else -> drawable.erase to 1f
-        }
-        fade = ValueAnimator.ofFloat(from, to).apply {
-            // slow and eased, so it doesn't pop in or out
-            val inMs = prefs.getFloat(GlowPrefs.AI_GLOW_IN, GlowPrefs.DEFAULT_AI_GLOW_IN).toLong().coerceIn(100, 5000)
-            duration = if (drawsIn || !on) inMs else inMs * 2 / 3
+        val glow = drawable ?: return
+        val inMs = prefs.getFloat(GlowPrefs.AI_GLOW_IN, GlowPrefs.DEFAULT_AI_GLOW_IN).toLong().coerceIn(100, 5000)
+        fader = ValueAnimator.ofFloat(glow.fade, if (on) 1f else 0f).apply {
+            duration = inMs
             interpolator = android.view.animation.AccelerateDecelerateInterpolator()
-            addUpdateListener {
-                val v = it.animatedValue as Float
-                when {
-                    !drawsIn -> drawable.fade = v
-                    on -> drawable.reveal = v
-                    else -> drawable.erase = v
-                }
-                update()
-            }
+            addUpdateListener { glow.fade = it.animatedValue as Float }
             addListener(object : AnimatorListenerAdapter() {
                 private var cancelled = false
                 override fun onAnimationCancel(animation: Animator) { cancelled = true }
                 override fun onAnimationEnd(animation: Animator) {
-                    if (!on && !cancelled) {
-                        spin?.cancel()
-                        spin = null
-                        host.overlay.remove(outside)
-                        kv?.setForkAiUnderlay(null)
-                        kv = null
-                    }
+                    if (!on && !cancelled) remove()
                 }
             })
             start()
         }
     }
 
-    private fun update() {
-        val r = bounds() ?: return
-        drawable.setBounds(r.left.toInt(), r.top.toInt(), r.right.toInt(), r.bottom.toInt())
-        kv?.let {
-            // position of the keyboard view in the input view
-            val loc = IntArray(2)
-            val hostLoc = IntArray(2)
-            it.getLocationInWindow(loc)
-            host.getLocationInWindow(hostLoc)
-            val x = (loc[0] - hostLoc[0]).toFloat()
-            val y = (loc[1] - hostLoc[1]).toFloat()
-            // hidden behind the clipboard or emoji panel: all of it in the overlay
-            if (it.isShown) kvRect.set(x, y, x + it.width, y + it.height) else kvRect.setEmpty()
-            it.invalidateAllKeys()
-        }
-        outside.invalidateSelf()
-        host.invalidate()
+    private fun remove() {
+        ticker?.cancel()
+        ticker = null
+        kv?.setForkAiUnderlay(null)
+        kv = null
+        drawable = null
     }
 
-    private abstract class PartDrawable : Drawable() {
-        override fun setAlpha(alpha: Int) { }
-        override fun setColorFilter(colorFilter: ColorFilter?) { }
-        @Deprecated("Deprecated in Java")
-        override fun getOpacity() = PixelFormat.TRANSLUCENT
-    }
-
-    /** dots of the glow's grid along the square border, pastel colors turning around it, fading inwards */
-    private class GlowDrawable(private val density: Float, private val spacingDp: Float, private val dotDp: Float) : Drawable() {
-        var angle = 0f
+    /** the chip glow's dots, each in a pastel color that turns slowly with [time] around the glow's center */
+    private class SwirlGlowDrawable(
+        private val density: Float, private val params: GlowPrefs.Glow, private val swirlMs: Long,
+    ) : Drawable() {
+        var time = 0L
         var fade = 0f
-        var brightness = 1f
-        var depth = 4
-        var style = GlowPrefs.AI_STYLE_SWEEP
-        /** sweep / rise: how much has been drawn in (0..1) and taken away again (0..1) */
-        var reveal = 1f
-        var erase = 0f
         private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
+        // the dots for the current size: position, brightness from the shape, where in the swirl they are
+        private var size = 0L
+        private var xs = FloatArray(0)
+        private var ys = FloatArray(0)
+        private var shape = FloatArray(0)
+        private var angle = FloatArray(0)
+        private var across = FloatArray(0)
+        private var dist = FloatArray(0)
 
         override fun draw(canvas: Canvas) {
-            if (fade <= 0f || bounds.isEmpty) return
-            val spacing = spacingDp * density
-            val r = dotDp * density
-            val w = bounds.width().toFloat()
-            val h = bounds.height().toFloat()
-            val cx = bounds.exactCenterX()
-            val cy = bounds.exactCenterY()
-            val cols = (w / spacing).toInt()
-            val rows = (h / spacing).toInt()
-            // the grid centered in the bounds, so the outer dots sit the same distance from every edge
-            val left = bounds.left + (w - (cols - 1) * spacing) / 2
-            val top = bounds.top + (h - (rows - 1) * spacing) / 2
-            for (row in 0 until rows) {
-                val fromTop = row
-                val fromBottom = rows - 1 - row
-                for (col in 0 until cols) {
-                    val d = if (style == GlowPrefs.AI_STYLE_BOTTOM) fromBottom
-                        else minOf(fromTop, fromBottom, col, cols - 1 - col)
-                    if (d >= depth) continue
-                    val x = left + col * spacing
-                    val y = top + row * spacing
-                    // color from the direction around the center, turning with [angle]
-                    val a = ((Math.toDegrees(kotlin.math.atan2((y - cy).toDouble(), (x - cx).toDouble())) + 360 + angle) % 360) / 360.0
-                    // along the bottom the colors flow sideways, elsewhere they turn around the center
-                    paint.color = colorAt(if (style == GlowPrefs.AI_STYLE_BOTTOM)
-                        ((col / cols.toFloat()) + angle / 360f) % 1f else a.toFloat())
-                    // brightest at the edge, fading inwards
-                    val falloff = (1f - d / depth.toFloat()).let { it * it }
-                    val shown = when (style) {
-                        // around the border clockwise from the bottom middle; it goes away the same way round
-                        GlowPrefs.AI_STYLE_SWEEP -> {
-                            val deg = Math.toDegrees(kotlin.math.atan2((cx - x).toDouble(), (y - cy).toDouble()))
-                            val f = (((deg + 360) % 360) / 360).toFloat()
-                            edge(reveal - f) * edge(f - erase)
-                        }
-                        // from the bottom up; it goes away from the top down
-                        GlowPrefs.AI_STYLE_RISE -> {
-                            val f = 1f - (y - bounds.top) / h
-                            edge(reveal - f) * edge(1f - erase - f)
-                        }
-                        else -> 1f
-                    }
-                    if (shown <= 0f) continue
-                    paint.alpha = (255 * fade * brightness * falloff * shown).toInt().coerceIn(0, 255)
-                    canvas.drawCircle(x, y, r, paint)
-                }
+            val w = bounds.width()
+            val h = bounds.height()
+            if (w <= 0 || h <= 0 || fade <= 0f) return
+            if (size != (w.toLong() shl 32 or h.toLong())) layout(w, h)
+            // breathing like the chip glow
+            val breath = 0.5f - 0.5f * cos(2 * PI * time / params.periodMs.coerceAtLeast(1)).toFloat()
+            val alpha = fade * (params.minAlpha + (params.maxAlpha - params.minAlpha) * breath)
+            val turn = (time % swirlMs) / swirlMs.toFloat()
+            val r = params.dotDp * density
+            for (i in xs.indices) {
+                // the gradient runs across, bent round the center and turning with time; a gentle wave inwards
+                // makes it look like it swirls without moving the dots
+                val t = across[i] * 0.6f + angle[i] * 0.4f + turn + 0.05f * sin(2 * PI * (turn * 2 + dist[i])).toFloat()
+                paint.color = colorAt(t - kotlin.math.floor(t))
+                paint.alpha = (255 * alpha * shape[i]).toInt().coerceIn(0, 255)
+                if (paint.alpha > 0) canvas.drawCircle(bounds.left + xs[i], bounds.top + ys[i], r, paint)
             }
         }
 
-        /** a soft front instead of a hard one: 0 behind it, 1 a little after it */
-        private fun edge(v: Float) = (v / 0.06f).coerceIn(0f, 1f)
+        /** the same dot grid and falloff as [DotGlowDrawable] */
+        private fun layout(width: Int, height: Int) {
+            size = width.toLong() shl 32 or height.toLong()
+            val w = width.toFloat()
+            val h = height.toFloat()
+            val spacing = params.spacingDp * density
+            val cx = w / 2
+            val rx = w * 0.5f * params.width
+            val ry = h * params.height
+            val lx = ArrayList<Float>(); val ly = ArrayList<Float>(); val ls = ArrayList<Float>()
+            val la = ArrayList<Float>(); val lc = ArrayList<Float>(); val ld = ArrayList<Float>()
+            var edgeDistance = spacing / 2
+            while (edgeDistance < ry) {
+                val y = if (params.fromBottom) h - edgeDistance else edgeDistance
+                var x = spacing / 2
+                while (x < w) {
+                    val dx = (x - cx) / rx
+                    val dy = edgeDistance / ry
+                    val d = sqrt(dx * dx + dy * dy)
+                    if (d < 1f) {
+                        lx += x; ly += y
+                        ls += (1f - d).pow(1.2f)
+                        // 0..1 over the half circle round the middle of the edge
+                        la += (atan2(dy, dx) / PI).toFloat()
+                        lc += x / w
+                        ld += d
+                    }
+                    x += spacing
+                }
+                edgeDistance += spacing
+            }
+            xs = lx.toFloatArray(); ys = ly.toFloatArray(); shape = ls.toFloatArray()
+            angle = la.toFloatArray(); across = lc.toFloatArray(); dist = ld.toFloatArray()
+        }
 
         private fun colorAt(t: Float): Int {
             val pos = t * (COLORS.size - 1)

@@ -398,11 +398,8 @@
     <string name="fork_clip_unpinned_toast">Unpinned</string>
     <string name="fork_cat_ai_glow">AI glow</string>
     <string name="fork_ai_glow">Glow while AI works</string>
-    <string name="fork_ai_glow_summary">Pastel dots along the keyboard border while an AI command or translation runs</string>
-    <string name="fork_ai_glow_brightness">Brightness</string>
-    <string name="fork_ai_glow_period">One turn of the colors</string>
-    <string name="fork_ai_glow_depth">Thickness</string>
-    <string name="fork_ai_glow_rows">%1$d rows of dots</string>
+    <string name="fork_ai_glow_summary">Pastel dot glow behind the keys while an AI command or translation runs (shaped like the chip glow, colors swirl slowly)</string>
+    <string name="fork_ai_glow_period">One turn of the swirling colors</string>
     <string name="fork_translate_empty_short">Nothing typed yet</string>
     <string name="fork_cat_claude_usage">Claude usage</string>
     <string name="fork_claude_key">claude.ai session key</string>
@@ -417,10 +414,7 @@
     <string name="fork_translate_custom_prompt">Instruction for the AI (optional)</string>
     <string name="fork_translate_custom_prompt_help">Empty: the name is used, e.g. \"Busan dialect\"</string>
     <string name="fork_translate_custom_no_prompt">By its name</string>
-    <string name="fork_ai_glow_style">How it comes and goes</string>
-    <string name="fork_ai_glow_style_sweep">Round the border</string>
-    <string name="fork_ai_glow_style_rise">Bottom up</string>
-    <string name="fork_ai_glow_style_fade">Fade</string>
-    <string name="fork_ai_glow_style_bottom">Bottom edge only</string>
+    <string name="fork_ai_glow_test_summary">Shows it for 6 seconds while the keyboard is open (tap the test field below to open it)</string>
+    <string name="fork_ai_glow_test_no_keyboard">The keyboard is not open. Tap the test field below to open it, then try again</string>
     <string name="fork_ai_glow_in">Time to appear and go away</string>
 </resources>

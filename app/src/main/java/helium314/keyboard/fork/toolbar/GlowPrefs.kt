@@ -28,31 +28,28 @@ object GlowPrefs {
     /** until this time (ms) a test chip is offered, to see the glow without copying anything */
     const val GLOW_TEST_UNTIL = "fork_clip_hint_test_until"
 
-    /** pastel dot border while an AI command or translation runs */
+    /** pastel dot glow behind the keys while an AI command or translation runs, shaped like the chip glow */
     const val AI_GLOW = "fork_ai_glow_enabled"
-    /** how it comes and goes: [AI_STYLE_FADE], [AI_STYLE_SWEEP], [AI_STYLE_RISE], [AI_STYLE_BOTTOM] */
-    const val AI_GLOW_STYLE = "fork_ai_glow_style"
-    const val AI_STYLE_FADE = "fade"
-    /** drawn in once round the border, and taken away the same way */
-    const val AI_STYLE_SWEEP = "sweep"
-    /** filled from the bottom up, emptied from the top down */
-    const val AI_STYLE_RISE = "rise"
-    /** only along the bottom edge */
-    const val AI_STYLE_BOTTOM = "bottom"
-    const val AI_GLOW_BRIGHTNESS = "fork_ai_glow_brightness"
-    /** one turn of the colors around the border, ms */
-    const val AI_GLOW_PERIOD = "fork_ai_glow_period"
-    /** rows of dots from the edge inwards */
-    const val AI_GLOW_DEPTH = "fork_ai_glow_depth"
     /** how long it takes to appear (and to go away), ms */
     const val AI_GLOW_IN = "fork_ai_glow_in"
-    /** rows of dots of the bottom only style (it can be much thicker) */
-    const val AI_GLOW_BOTTOM_DEPTH = "fork_ai_glow_bottom_depth"
+    /** one turn of the swirling colors, ms */
+    const val AI_GLOW_PERIOD = "fork_ai_glow_period"
+    const val AI_GLOW_MAX = "fork_ai_glow_max"
+    const val AI_GLOW_MIN = "fork_ai_glow_min"
+    /** breathing, like the chip glow's [GLOW_PERIOD] */
+    const val AI_GLOW_BREATH = "fork_ai_glow_breath"
+    const val AI_GLOW_HEIGHT = "fork_ai_glow_height"
+    const val AI_GLOW_WIDTH = "fork_ai_glow_width"
+    const val AI_GLOW_POSITION = "fork_ai_glow_position"
+    /** settings entry that shows the glow for a few seconds (nothing stored) */
+    const val AI_GLOW_TEST = "fork_ai_glow_test"
     const val DEFAULT_AI_GLOW_IN = 900f
-    const val DEFAULT_AI_GLOW_BOTTOM_DEPTH = 12f
-    const val DEFAULT_AI_GLOW_BRIGHTNESS = 1f
-    const val DEFAULT_AI_GLOW_PERIOD = 3200f
-    const val DEFAULT_AI_GLOW_DEPTH = 4f
+    const val DEFAULT_AI_GLOW_PERIOD = 6000f
+    const val DEFAULT_AI_GLOW_MAX = 0.9f
+    const val DEFAULT_AI_GLOW_MIN = 0.45f
+    const val DEFAULT_AI_GLOW_BREATH = 2400f
+    const val DEFAULT_AI_GLOW_HEIGHT = 0.8f
+    const val DEFAULT_AI_GLOW_WIDTH = 1.2f
 
     /**
      * the glows are drawn behind the keys and again over them, clipped to the key shapes: this is how opaque that
@@ -114,6 +111,21 @@ object GlowPrefs {
             dotDp = prefs.getFloat(GLOW_DOT_SIZE, DEFAULT_GLOW_DOT_SIZE).coerceIn(0.3f, 4f),
             spacingDp = prefs.getFloat(GLOW_DOT_SPACING, DEFAULT_GLOW_DOT_SPACING).coerceIn(2f, 16f),
             fromBottom = prefs.getString(GLOW_POSITION, POSITION_TOP) == POSITION_BOTTOM,
+        )
+    }
+
+    /** the AI glow: its own brightness, breathing and shape, on the chip glow's dot grid */
+    fun aiGlow(prefs: SharedPreferences): Glow {
+        val max = prefs.getFloat(AI_GLOW_MAX, DEFAULT_AI_GLOW_MAX).coerceIn(0f, 1f)
+        return Glow(
+            maxAlpha = max,
+            minAlpha = prefs.getFloat(AI_GLOW_MIN, DEFAULT_AI_GLOW_MIN).coerceIn(0f, max),
+            periodMs = prefs.getFloat(AI_GLOW_BREATH, DEFAULT_AI_GLOW_BREATH).toLong().coerceIn(200, 20_000),
+            height = prefs.getFloat(AI_GLOW_HEIGHT, DEFAULT_AI_GLOW_HEIGHT).coerceIn(0.05f, 1f),
+            width = prefs.getFloat(AI_GLOW_WIDTH, DEFAULT_AI_GLOW_WIDTH).coerceIn(0.05f, 2f),
+            dotDp = prefs.getFloat(GLOW_DOT_SIZE, DEFAULT_GLOW_DOT_SIZE).coerceIn(0.3f, 4f),
+            spacingDp = prefs.getFloat(GLOW_DOT_SPACING, DEFAULT_GLOW_DOT_SPACING).coerceIn(2f, 16f),
+            fromBottom = prefs.getString(AI_GLOW_POSITION, POSITION_TOP) == POSITION_BOTTOM,
         )
     }
 
