@@ -1209,6 +1209,29 @@ class DynamicToolbarController(private val context: Context) {
         }
     }
 
+    private fun runGifSearch() {
+        if (!gifMode || !clipSearch.isActive) return
+        val query = clipSearch.query.trim()
+        if (query == gifQuery) return
+        gifQuery = query
+        val id = ++gifRequest
+        gifResults = null
+        gifStatus = null
+        updateSearchResults()
+        val app = context.applicationContext
+        Thread {
+            val found = runCatching { helium314.keyboard.fork.gif.GifClient.search(app.prefs(), query) }
+            handler.post {
+                if (id != gifRequest || !gifMode) return@post
+                gifResults = found.getOrNull()
+                gifStatus = if (found.isFailure) context.getString(R.string.fork_gif_failed)
+                    else context.getString(R.string.fork_gif_nothing)
+                if (found.isFailure) Log.w(TAG, "GIF search failed", found.exceptionOrNull())
+                updateSearchResults()
+            }
+        }.start()
+    }
+
     /** send [item] to the app as a GIF, or copy it when the field takes no images */
     private fun sendGif(item: helium314.keyboard.fork.gif.GifItem) {
         val ime = latinIME ?: return
