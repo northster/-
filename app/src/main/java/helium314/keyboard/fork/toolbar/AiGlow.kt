@@ -101,7 +101,7 @@ class AiGlow(private val host: View, private val keyboardView: () -> KeyboardVie
      * the chip glow's dots and shape, colored like the HomePod light: soft blobs of HomePod colors (random each time)
      * drift slowly round inside the glow, with a pale light at its center; every dot takes the blend of the colors where
      * it is, so the colors flow into each other across the glow instead of bunching up. Under the dots the same light
-     * shines smooth and faint ([bloom]), like LEDs lighting up what is around them.
+     * shines smooth and faint ([bloom]), added onto the dots and around them like the light of LEDs.
      */
     private class PastelDotsDrawable(private val density: Float, private val params: GlowPrefs.Glow, private val bloom: Float) : Layer() {
         private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
@@ -121,7 +121,7 @@ class AiGlow(private val host: View, private val keyboardView: () -> KeyboardVie
         private val bloomPaint = Paint(Paint.ANTI_ALIAS_FLAG)
         private val maskPaint = Paint().apply { xfermode = android.graphics.PorterDuffXfermode(android.graphics.PorterDuff.Mode.DST_IN) }
         private var mask: RadialGradient? = null
-        private var layerPaint = Paint()
+        private val layerPaint = Paint().apply { xfermode = android.graphics.PorterDuffXfermode(android.graphics.PorterDuff.Mode.ADD) }
 
         override fun draw(canvas: Canvas) {
             val w = bounds.width()
@@ -151,7 +151,6 @@ class AiGlow(private val host: View, private val keyboardView: () -> KeyboardVie
             by[BLOBS] = cy
             val blob = maxOf(rx, ry) * 0.55f
             val inv = 1f / (blob * blob)
-            if (bloom > 0f) drawBloom(canvas, alpha * bloom, blob)
             for (d in xs.indices) {
                 var red = 0f; var green = 0f; var blue = 0f; var weight = 0f
                 for (i in 0..BLOBS) {
@@ -171,9 +170,10 @@ class AiGlow(private val host: View, private val keyboardView: () -> KeyboardVie
                 paint.color = (a shl 24) or ((red / weight).toInt() shl 16) or ((green / weight).toInt() shl 8) or (blue / weight).toInt()
                 canvas.drawCircle(bounds.left + xs[d], bounds.top + ys[d], r, paint)
             }
+            if (bloom > 0f) drawBloom(canvas, alpha * bloom, blob)
         }
 
-        /** the blobs smooth, in a layer that the mask keeps to the glow's shape, faint */
+        /** the blobs smooth, in a layer that the mask keeps to the glow's shape, added onto the dots (light adds up) */
         private fun drawBloom(canvas: Canvas, alpha: Float, blob: Float) {
             layerPaint.alpha = (255 * alpha).toInt().coerceIn(0, 255)
             if (layerPaint.alpha <= 0) return

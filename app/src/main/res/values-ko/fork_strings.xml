@@ -439,5 +439,5 @@
     <string name="fork_typo_inner_portrait">안쪽 세로</string>
     <string name="fork_typo_inner_landscape">안쪽 가로</string>
     <string name="fork_ai_glow_bloom">번짐</string>
-    <string name="fork_ai_glow_bloom_summary">점 아래에 같은 색의 매끈한 빛을 깔아 LED가 빛나는 느낌을 내요. 0이면 점만</string>
+    <string name="fork_ai_glow_bloom_summary">점 위에 같은 색의 매끈한 빛을 더해(가산 합성) LED가 빛나는 느낌을 내요. 0이면 점만</string>
 </resources>

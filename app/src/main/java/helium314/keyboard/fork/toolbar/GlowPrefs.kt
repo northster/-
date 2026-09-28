@@ -25,6 +25,9 @@ object GlowPrefs {
     const val DEFAULT_GLOW_COLOR = 0xFF38BDF8.toInt()
     const val GLOW_DOT_SIZE = "fork_glow_dot_size"
     const val GLOW_DOT_SPACING = "fork_glow_dot_spacing"
+    /** chip glow: smooth light added onto the dots (0 = dots only) */
+    const val GLOW_BLOOM = "fork_glow_bloom"
+    const val DEFAULT_GLOW_BLOOM = 0.35f
     /** until this time (ms) a test chip is offered, to see the glow without copying anything */
     const val GLOW_TEST_UNTIL = "fork_clip_hint_test_until"
 
@@ -93,6 +96,8 @@ object GlowPrefs {
     data class Glow(
         val maxAlpha: Float, val minAlpha: Float, val periodMs: Long,
         val height: Float, val width: Float, val dotDp: Float, val spacingDp: Float, val fromBottom: Boolean,
+        /** smooth light added onto the dots, 0..1 */
+        val bloom: Float = 0f,
     )
 
     /** [rippleDepthDp] 0 = straight band */
@@ -116,6 +121,7 @@ object GlowPrefs {
             dotDp = prefs.getFloat(GLOW_DOT_SIZE, DEFAULT_GLOW_DOT_SIZE).coerceIn(0.3f, 4f),
             spacingDp = prefs.getFloat(GLOW_DOT_SPACING, DEFAULT_GLOW_DOT_SPACING).coerceIn(2f, 16f),
             fromBottom = prefs.getString(GLOW_POSITION, POSITION_TOP) == POSITION_BOTTOM,
+            bloom = prefs.getFloat(GLOW_BLOOM, DEFAULT_GLOW_BLOOM).coerceIn(0f, 1f),
         )
     }
 

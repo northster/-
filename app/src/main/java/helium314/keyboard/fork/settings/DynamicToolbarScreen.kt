@@ -79,6 +79,7 @@ fun DynamicToolbarScreen(
             GlowPrefs.GLOW_WIDTH.takeIf { glow },
             GlowPrefs.GLOW_DOT_SIZE.takeIf { glow },
             GlowPrefs.GLOW_DOT_SPACING.takeIf { glow },
+            GlowPrefs.GLOW_BLOOM.takeIf { glow },
             R.string.fork_cat_claude_usage,
             helium314.keyboard.fork.usage.ClaudeUsage.PREF_SESSION_KEY,
             R.string.fork_cat_ai_glow,
@@ -253,6 +254,9 @@ fun createDynamicToolbarSettings(context: Context) = listOf(
     },
     Setting(context, GlowPrefs.GLOW_DOT_SIZE, R.string.fork_glow_dot_size) {
         GlowSlider(it, GlowPrefs.DEFAULT_GLOW_DOT_SIZE, 0.4f..3f, 0.1f, ::dp)
+    },
+    Setting(context, GlowPrefs.GLOW_BLOOM, R.string.fork_ai_glow_bloom, R.string.fork_ai_glow_bloom_summary) {
+        GlowSlider(it, GlowPrefs.DEFAULT_GLOW_BLOOM, 0f..1f, 0.05f, ::percent)
     },
     Setting(context, GlowPrefs.GLOW_DOT_SPACING, R.string.fork_glow_dot_spacing) {
         GlowSlider(it, GlowPrefs.DEFAULT_GLOW_DOT_SPACING, 2.5f..12f, 0.5f, ::dp)

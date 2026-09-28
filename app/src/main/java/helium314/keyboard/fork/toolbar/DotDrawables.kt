@@ -86,12 +86,39 @@ class DotGlowDrawable(private val color: Int, private val density: Float, privat
         return true
     }
 
+    /** the smooth light added onto the dots: the glow's shape as one soft gradient in its color */
+    private val bloomPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        xfermode = android.graphics.PorterDuffXfermode(android.graphics.PorterDuff.Mode.ADD)
+    }
+    private var bloomSize = 0L
+
     override fun draw(canvas: Canvas) {
         val w = bounds.width()
         val h = bounds.height()
         if (w <= 0 || h <= 0) return
         val bmp = bitmap?.takeIf { it.width == w && it.height == h } ?: render(w, h).also { bitmap = it }
         canvas.drawBitmap(bmp, bounds.left.toFloat(), bounds.top.toFloat(), bitmapPaint)
+        if (params.bloom <= 0f) return
+        val key = w.toLong() shl 32 or h.toLong()
+        if (key != bloomSize) {
+            bloomSize = key
+            // the dots' falloff (1 - d)^1.2 as a gradient, the circle stretched to the glow's ellipse
+            val c = color and 0xFFFFFF
+            bloomPaint.shader = android.graphics.RadialGradient(0f, 0f, 1f,
+                intArrayOf(c or 0xFF000000.toInt(), c or 0x6E000000, c or 0x1C000000, c),
+                floatArrayOf(0f, 0.5f, 0.8f, 1f), android.graphics.Shader.TileMode.CLAMP).apply {
+                setLocalMatrix(android.graphics.Matrix().apply {
+                    setScale(w * 0.5f * params.width, h * params.height)
+                    postTranslate(w / 2f, if (params.fromBottom) h.toFloat() else 0f)
+                })
+            }
+        }
+        bloomPaint.alpha = (bitmapPaint.alpha * params.bloom).toInt().coerceIn(0, 255)
+        if (bloomPaint.alpha <= 0) return
+        canvas.save()
+        canvas.translate(bounds.left.toFloat(), bounds.top.toFloat())
+        canvas.drawRect(0f, 0f, w.toFloat(), h.toFloat(), bloomPaint)
+        canvas.restore()
     }
 
     /** the dots at full brightness, fading out from the edge's center */

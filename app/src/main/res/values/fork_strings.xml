@@ -442,5 +442,5 @@
     <string name="fork_typo_inner_portrait">Inner upright</string>
     <string name="fork_typo_inner_landscape">Inner sideways</string>
     <string name="fork_ai_glow_bloom">Bloom</string>
-    <string name="fork_ai_glow_bloom_summary">Smooth light of the same colors under the dots, like glowing LEDs. 0 = dots only</string>
+    <string name="fork_ai_glow_bloom_summary">Smooth light of the same colors added onto the dots (additive), like glowing LEDs. 0 = dots only</string>
 </resources>
