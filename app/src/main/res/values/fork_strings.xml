@@ -411,4 +411,15 @@
     <string name="fork_claude_key_error">Couldn\'t read the usage: %1$s</string>
     <string name="fork_claude_key_checking">Checking…</string>
     <string name="fork_claude_key_help">There is no official API for the plan usage, so the keyboard reads it the way the claude.ai usage page does, with your login cookie. On a computer: open claude.ai, developer tools (F12) > Application > Cookies > claude.ai, copy the value of sessionKey. It is stored encrypted and only sent to claude.ai. Anyone with it can use your account, so do not share it. It stops working when you log out.</string>
+    <string name="fork_slate_keys_moved">Gemini API keys and the model are in Settings > Advanced.</string>
+    <string name="fork_translate_custom_add">Add</string>
+    <string name="fork_translate_custom_name">Name</string>
+    <string name="fork_translate_custom_prompt">Instruction for the AI (optional)</string>
+    <string name="fork_translate_custom_prompt_help">Empty: the name is used, e.g. \"Busan dialect\"</string>
+    <string name="fork_translate_custom_no_prompt">By its name</string>
+    <string name="fork_ai_glow_style">How it comes and goes</string>
+    <string name="fork_ai_glow_style_sweep">Round the border</string>
+    <string name="fork_ai_glow_style_rise">Bottom up</string>
+    <string name="fork_ai_glow_style_fade">Fade</string>
+    <string name="fork_ai_glow_style_bottom">Bottom edge only</string>
 </resources>

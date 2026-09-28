@@ -67,7 +67,7 @@ class Setting(
 
 // intentionally not putting individual debug settings in here so user knows the context
 private fun createSettings(context: Context) = createAboutSettings(context) + createAppearanceSettings(context) +
-        createCorrectionSettings(context) + createPreferencesSettings(context) + createToolbarSettings(context) + createDynamicToolbarSettings(context) + createForkThemeSettings(context) + helium314.keyboard.fork.settings.createForkClipboardSettings(context) + helium314.keyboard.fork.settings.createForkEmojiSettings(context) +
+        createCorrectionSettings(context) + createPreferencesSettings(context) + createToolbarSettings(context) + createDynamicToolbarSettings(context) + helium314.keyboard.fork.settings.createGeminiSettings(context) + createForkThemeSettings(context) + helium314.keyboard.fork.settings.createForkClipboardSettings(context) + helium314.keyboard.fork.settings.createForkEmojiSettings(context) +
         createLayoutSettings(context) + createAdvancedSettings(context) +
         if (JniUtils.sHaveGestureLib) createGestureTypingSettings(context) else emptyList()
 

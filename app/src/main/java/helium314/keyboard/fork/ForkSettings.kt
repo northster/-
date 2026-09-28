@@ -166,13 +166,12 @@ object ForkSettings {
     /** how long space must be held before it moves the cursor (and other space long presses), ms; 0 = like HeliBoard */
     const val PREF_SPACE_LONG_PRESS_MS = "fork_space_long_press_ms"
 
-    /** the space long press time, or [default] (HeliBoard: 1.5 x the key long press time) when not set */
+    /**
+     * the space long press time: [default] (HeliBoard: 1.5 x the key long press time, set in Advanced). The separate
+     * setting was removed again (the long press delay covers it); a value stored before is ignored.
+     */
     @JvmStatic
-    fun spaceLongPressMs(default: Int): Int {
-        if (!initialized) return default
-        val ms = appPrefs.getFloat(PREF_SPACE_LONG_PRESS_MS, 0f).toInt()
-        return if (ms > 0) ms else default
-    }
+    fun spaceLongPressMs(default: Int): Int = default
 
     const val DEFAULT_TOOLBAR_SWIPE_ENABLED = true
     const val DEFAULT_TOOLBAR_OVERLAY = false

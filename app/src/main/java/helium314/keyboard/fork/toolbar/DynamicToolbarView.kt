@@ -84,6 +84,9 @@ class DynamicToolbarView @JvmOverloads constructor(
         addView(chipBar, LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT))
     }
 
+    /** room before the < back button, easier to hit near the screen edge */
+    private val backMargin get() = (8 * density).toInt()
+
     private val ripple get() = TypedValue().also {
         context.theme.resolveAttribute(android.R.attr.selectableItemBackgroundBorderless, it, true)
     }.resourceId
@@ -204,7 +207,7 @@ class DynamicToolbarView @JvmOverloads constructor(
         chips.removeAllViews()
         val side = (48 * density).toInt()
         chipBar.addView(iconButton(R.drawable.ic_dot_left, context.getString(R.string.fork_tool_back)) { onBack() },
-            LinearLayout.LayoutParams(side, LayoutParams.MATCH_PARENT))
+            LinearLayout.LayoutParams(side, LayoutParams.MATCH_PARENT).apply { marginStart = backMargin })
         val code = actions.firstOrNull { it is helium314.keyboard.fork.clipboard.ClipPrefs.SmartAction.Code }?.value
         if (smart && imageUri == null && text != null && actions.isNotEmpty()) {
             // smart chips: the clip on the left, what can be done with it on the right
@@ -248,7 +251,7 @@ class DynamicToolbarView @JvmOverloads constructor(
         chipBar.removeAllViews()
         chips.removeAllViews()
         chipBar.addView(iconButton(R.drawable.ic_dot_left, context.getString(R.string.fork_tool_back)) { onBack() },
-            LinearLayout.LayoutParams((48 * density).toInt(), LayoutParams.MATCH_PARENT))
+            LinearLayout.LayoutParams((48 * density).toInt(), LayoutParams.MATCH_PARENT).apply { marginStart = backMargin })
         chips.gravity = Gravity.START or Gravity.CENTER_VERTICAL
         chips.addView(TextView(context).apply {
             text = "$query ="
@@ -299,7 +302,7 @@ class DynamicToolbarView @JvmOverloads constructor(
         chipBar.removeAllViews()
         chips.removeAllViews()
         chipBar.addView(iconButton(R.drawable.ic_dot_left, context.getString(R.string.fork_tool_back)) { onBack() },
-            LinearLayout.LayoutParams((48 * density).toInt(), LayoutParams.MATCH_PARENT))
+            LinearLayout.LayoutParams((48 * density).toInt(), LayoutParams.MATCH_PARENT).apply { marginStart = backMargin })
         val scroll = HorizontalScrollView(context).apply { isHorizontalScrollBarEnabled = false }
         val list = LinearLayout(context).apply { orientation = LinearLayout.HORIZONTAL; gravity = Gravity.CENTER_VERTICAL }
         labels.forEachIndexed { i, label -> list.addView(chip(label, false, 200, border = true) { onPick(i) }, chipParams()) }
@@ -323,7 +326,7 @@ class DynamicToolbarView @JvmOverloads constructor(
         chipBar.removeAllViews()
         chips.removeAllViews()
         chipBar.addView(iconButton(R.drawable.ic_dot_left, context.getString(R.string.fork_tool_back)) { onBack() },
-            LinearLayout.LayoutParams((48 * density).toInt(), LayoutParams.MATCH_PARENT))
+            LinearLayout.LayoutParams((48 * density).toInt(), LayoutParams.MATCH_PARENT).apply { marginStart = backMargin })
         (view.parent as? android.view.ViewGroup)?.removeView(view)
         chipBar.addView(view, LinearLayout.LayoutParams(0, LayoutParams.MATCH_PARENT, 1f).apply {
             val m = (4 * density).toInt()
@@ -583,7 +586,7 @@ class DynamicToolbarView @JvmOverloads constructor(
         header.removeAllViews()
         val size = LinearLayout.LayoutParams((48 * density).toInt(), LayoutParams.MATCH_PARENT)
         // back is < in every header (no divider after it)
-        header.addView(iconButton(R.drawable.ic_dot_left, context.getString(R.string.fork_tool_back)) { onBack() }, size)
+        header.addView(iconButton(R.drawable.ic_dot_left, context.getString(R.string.fork_tool_back)) { onBack() }, LinearLayout.LayoutParams(size).apply { marginStart = backMargin })
         header.addView(TextView(context).apply {
             text = title
             setSingleLine()
@@ -603,7 +606,7 @@ class DynamicToolbarView @JvmOverloads constructor(
             header.addView(TextView(context).apply {
                 text = subtitle
                 setSingleLine()
-                ellipsize = TextUtils.TruncateAt.START
+                ellipsize = TextUtils.TruncateAt.END // the start of the text shows
                 setTextSize(TypedValue.COMPLEX_UNIT_SP, 14f)
                 setTextColor(colors.get(ColorType.KEY_HINT_TEXT))
                 KeyboardTypeface.applyToTextView(this)
@@ -663,7 +666,7 @@ class DynamicToolbarView @JvmOverloads constructor(
         header.removeAllViews()
         emojiTabs.clear()
         header.addView(iconButton(R.drawable.ic_dot_left, context.getString(R.string.fork_tool_back)) { onBack() },
-            LinearLayout.LayoutParams((48 * density).toInt(), LayoutParams.MATCH_PARENT))
+            LinearLayout.LayoutParams((48 * density).toInt(), LayoutParams.MATCH_PARENT).apply { marginStart = backMargin })
         val strip = LinearLayout(context).apply {
             orientation = LinearLayout.HORIZONTAL
             gravity = Gravity.CENTER_VERTICAL

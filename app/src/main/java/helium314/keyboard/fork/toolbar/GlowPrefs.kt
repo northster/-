@@ -30,6 +30,15 @@ object GlowPrefs {
 
     /** pastel dot border while an AI command or translation runs */
     const val AI_GLOW = "fork_ai_glow_enabled"
+    /** how it comes and goes: [AI_STYLE_FADE], [AI_STYLE_SWEEP], [AI_STYLE_RISE], [AI_STYLE_BOTTOM] */
+    const val AI_GLOW_STYLE = "fork_ai_glow_style"
+    const val AI_STYLE_FADE = "fade"
+    /** drawn in once round the border, and taken away the same way */
+    const val AI_STYLE_SWEEP = "sweep"
+    /** filled from the bottom up, emptied from the top down */
+    const val AI_STYLE_RISE = "rise"
+    /** only along the bottom edge */
+    const val AI_STYLE_BOTTOM = "bottom"
     const val AI_GLOW_BRIGHTNESS = "fork_ai_glow_brightness"
     /** one turn of the colors around the border, ms */
     const val AI_GLOW_PERIOD = "fork_ai_glow_period"

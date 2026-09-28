@@ -36,14 +36,20 @@ fun DynamicToolbarScreen(
     val b = (ctx.getActivity() as? helium314.keyboard.settings.SettingsActivity)?.prefChanged?.collectAsState()
     if ((b?.value ?: 0) < 0)
         helium314.keyboard.latin.utils.Log.v("irrelevant", "stupid way to trigger recomposition on preference change")
-    val items = listOf(
+    // sub-options only while the switch they belong to is on
+    val swipe = prefs.getBoolean(ForkSettings.PREF_TOOLBAR_SWIPE_ENABLED, ForkSettings.DEFAULT_TOOLBAR_SWIPE_ENABLED)
+    val wave = GlowPrefs.waveEnabled(prefs)
+    val glow = GlowPrefs.glowEnabled(prefs)
+    val aiGlow = prefs.getBoolean(GlowPrefs.AI_GLOW, true)
+    val autofill = prefs.getBoolean(DynamicToolbarController.PREF_AUTOFILL, true)
+    val items = listOfNotNull(
             R.string.fork_cat_gesture,
             ForkSettings.PREF_TOOLBAR_SWIPE_ENABLED,
-            ForkSettings.PREF_SWIPE_MIN_DISTANCE_DP,
-            ForkSettings.PREF_SWIPE_MIN_VELOCITY,
-            ForkSettings.PREF_SWIPE_MAX_ANGLE,
-            ForkSettings.PREF_SWIPE_HORIZONTAL_REJECT_DP,
-            ForkSettings.PREF_SWIPE_MAX_DURATION,
+            ForkSettings.PREF_SWIPE_MIN_DISTANCE_DP.takeIf { swipe },
+            ForkSettings.PREF_SWIPE_MIN_VELOCITY.takeIf { swipe },
+            ForkSettings.PREF_SWIPE_MAX_ANGLE.takeIf { swipe },
+            ForkSettings.PREF_SWIPE_HORIZONTAL_REJECT_DP.takeIf { swipe },
+            ForkSettings.PREF_SWIPE_MAX_DURATION.takeIf { swipe },
             ForkSettings.PREF_ONE_HANDED_SWIPE,
             R.string.fork_cat_animation,
             ForkSettings.PREF_TOOLBAR_ANIM_DURATION,
@@ -51,33 +57,36 @@ fun DynamicToolbarScreen(
             ForkSettings.PREF_TOOLBAR_OVERLAY,
             R.string.fork_cat_wave,
             GlowPrefs.WAVE,
-            GlowPrefs.WAVE_DURATION,
-            GlowPrefs.WAVE_BRIGHTNESS,
-            GlowPrefs.WAVE_THICKNESS,
-            GlowPrefs.WAVE_SHAPE,
-            if (prefs.getString(GlowPrefs.WAVE_SHAPE, GlowPrefs.SHAPE_LINE) == GlowPrefs.SHAPE_RIPPLE) GlowPrefs.WAVE_RIPPLE_DEPTH else null,
+            GlowPrefs.WAVE_DURATION.takeIf { wave },
+            GlowPrefs.WAVE_BRIGHTNESS.takeIf { wave },
+            GlowPrefs.WAVE_THICKNESS.takeIf { wave },
+            GlowPrefs.WAVE_SHAPE.takeIf { wave },
+            GlowPrefs.WAVE_RIPPLE_DEPTH.takeIf {
+                wave && prefs.getString(GlowPrefs.WAVE_SHAPE, GlowPrefs.SHAPE_LINE) == GlowPrefs.SHAPE_RIPPLE
+            },
             R.string.fork_cat_glow,
             GlowPrefs.GLOW,
-            GlowPrefs.GLOW_TEST_UNTIL,
-            GlowPrefs.GLOW_POSITION,
-            GlowPrefs.GLOW_COLOR,
-            GlowPrefs.GLOW_MAX,
-            GlowPrefs.GLOW_MIN,
-            GlowPrefs.GLOW_PERIOD,
-            GlowPrefs.GLOW_HEIGHT,
-            GlowPrefs.GLOW_WIDTH,
-            GlowPrefs.GLOW_DOT_SIZE,
-            GlowPrefs.GLOW_DOT_SPACING,
+            GlowPrefs.GLOW_TEST_UNTIL.takeIf { glow },
+            GlowPrefs.GLOW_POSITION.takeIf { glow },
+            GlowPrefs.GLOW_COLOR.takeIf { glow },
+            GlowPrefs.GLOW_MAX.takeIf { glow },
+            GlowPrefs.GLOW_MIN.takeIf { glow },
+            GlowPrefs.GLOW_PERIOD.takeIf { glow },
+            GlowPrefs.GLOW_HEIGHT.takeIf { glow },
+            GlowPrefs.GLOW_WIDTH.takeIf { glow },
+            GlowPrefs.GLOW_DOT_SIZE.takeIf { glow },
+            GlowPrefs.GLOW_DOT_SPACING.takeIf { glow },
             R.string.fork_cat_claude_usage,
             helium314.keyboard.fork.usage.ClaudeUsage.PREF_SESSION_KEY,
             R.string.fork_cat_ai_glow,
             GlowPrefs.AI_GLOW,
-            GlowPrefs.AI_GLOW_BRIGHTNESS,
-            GlowPrefs.AI_GLOW_PERIOD,
-            GlowPrefs.AI_GLOW_DEPTH,
+            GlowPrefs.AI_GLOW_STYLE.takeIf { aiGlow },
+            GlowPrefs.AI_GLOW_BRIGHTNESS.takeIf { aiGlow },
+            GlowPrefs.AI_GLOW_PERIOD.takeIf { aiGlow },
+            GlowPrefs.AI_GLOW_DEPTH.takeIf { aiGlow },
             R.string.fork_cat_autofill,
             DynamicToolbarController.PREF_AUTOFILL,
-            DynamicToolbarController.PREF_AUTOFILL_OPEN,
+            DynamicToolbarController.PREF_AUTOFILL_OPEN.takeIf { autofill },
             // HeliBoard's own toolbar (suggestion strip modes) is not shown: it must stay hidden for the dynamic toolbar
         )
     SearchSettingsScreen(
@@ -238,6 +247,15 @@ fun createDynamicToolbarSettings(context: Context) = listOf(
     Setting(context, GlowPrefs.AI_GLOW, R.string.fork_ai_glow, R.string.fork_ai_glow_summary) {
         SwitchPreference(it, true)
     },
+    Setting(context, GlowPrefs.AI_GLOW_STYLE, R.string.fork_ai_glow_style) { setting ->
+        val ctx = androidx.compose.ui.platform.LocalContext.current
+        helium314.keyboard.settings.preferences.InlineChoicePreference(setting.title, setting.key, listOf(
+            ctx.getString(R.string.fork_ai_glow_style_sweep) to GlowPrefs.AI_STYLE_SWEEP,
+            ctx.getString(R.string.fork_ai_glow_style_rise) to GlowPrefs.AI_STYLE_RISE,
+            ctx.getString(R.string.fork_ai_glow_style_fade) to GlowPrefs.AI_STYLE_FADE,
+            ctx.getString(R.string.fork_ai_glow_style_bottom) to GlowPrefs.AI_STYLE_BOTTOM,
+        ), GlowPrefs.AI_STYLE_SWEEP)
+    },
     Setting(context, GlowPrefs.AI_GLOW_BRIGHTNESS, R.string.fork_ai_glow_brightness) {
         GlowSlider(it, GlowPrefs.DEFAULT_AI_GLOW_BRIGHTNESS, 0.1f..1f, 0.05f, ::percent)
     },
@@ -255,13 +273,13 @@ fun createDynamicToolbarSettings(context: Context) = listOf(
         SwitchPreference(it, true)
     },
     Setting(context, helium314.keyboard.fork.translate.TranslatePanel.PREF_LANGUAGE, R.string.fork_translate_language) {
-        TranslateChoice(it, helium314.keyboard.fork.translate.TranslatePanel.LANGUAGES)
+        TranslateChoice(it, helium314.keyboard.fork.translate.TranslatePanel.KIND_LANGUAGE)
     },
     Setting(context, helium314.keyboard.fork.translate.TranslatePanel.PREF_STYLE, R.string.fork_translate_style) {
-        TranslateChoice(it, helium314.keyboard.fork.translate.TranslatePanel.STYLES)
+        TranslateChoice(it, helium314.keyboard.fork.translate.TranslatePanel.KIND_STYLE)
     },
     Setting(context, helium314.keyboard.fork.translate.TranslatePanel.PREF_PURPOSE, R.string.fork_translate_purpose) {
-        TranslateChoice(it, helium314.keyboard.fork.translate.TranslatePanel.PURPOSES)
+        TranslateChoice(it, helium314.keyboard.fork.translate.TranslatePanel.KIND_PURPOSE)
     },
     Setting(context, helium314.keyboard.fork.gif.GifClient.PREF_KLIPY_KEY, R.string.fork_gif_klipy_key) {
         GifKeyPreference(it.title, it.key, "partner.klipy.com")
@@ -322,11 +340,60 @@ private fun GlowSlider(setting: Setting, default: Float, range: ClosedFloatingPo
     ) { DynamicToolbarController.current?.onGlowSettingsChanged() }
 }
 
-/** a translation default: the panel starts with it (and remembers what was used last) */
+/** a translation default (the panel starts with it and remembers the last used), and the entries added by the user */
 @Composable
-private fun TranslateChoice(setting: Setting, options: List<helium314.keyboard.fork.translate.TranslatePanel.Option>) {
-    helium314.keyboard.settings.preferences.InlineChoicePreference(setting.title, setting.key,
-        options.map { it.label to it.label }, options.first().label)
+private fun TranslateChoice(setting: Setting, kind: String) {
+    val ctx = androidx.compose.ui.platform.LocalContext.current
+    val prefs = ctx.prefs()
+    val panel = helium314.keyboard.fork.translate.TranslatePanel
+    var refresh by androidx.compose.runtime.remember { androidx.compose.runtime.mutableIntStateOf(0) }
+    val options = androidx.compose.runtime.remember(refresh) { panel.options(prefs, kind) }
+    val custom = androidx.compose.runtime.remember(refresh) { panel.custom(prefs, kind) }
+    var editing by androidx.compose.runtime.remember { androidx.compose.runtime.mutableIntStateOf(-2) } // -1 = new
+    androidx.compose.foundation.layout.Column {
+        helium314.keyboard.settings.preferences.InlineChoicePreference(setting.title, setting.key,
+            options.map { it.label to it.label }, options.first().label)
+        custom.forEachIndexed { i, option ->
+            helium314.keyboard.settings.preferences.Preference(name = option.label,
+                description = option.prompt.ifBlank { stringResource(R.string.fork_translate_custom_no_prompt) },
+                onClick = { editing = i })
+        }
+        helium314.keyboard.settings.preferences.Preference(name = stringResource(R.string.fork_translate_custom_add),
+            onClick = { editing = -1 }, icon = R.drawable.ic_plus)
+    }
+    if (editing >= -1) {
+        val original = custom.getOrNull(editing)
+        var label by androidx.compose.runtime.remember(editing) { androidx.compose.runtime.mutableStateOf(original?.label.orEmpty()) }
+        var prompt by androidx.compose.runtime.remember(editing) { androidx.compose.runtime.mutableStateOf(original?.prompt.orEmpty()) }
+        helium314.keyboard.settings.dialogs.ThreeButtonAlertDialog(
+            onDismissRequest = { editing = -2 },
+            onConfirmed = {
+                val list = custom.toMutableList()
+                val entry = helium314.keyboard.fork.translate.TranslatePanel.Option(label.trim(), prompt.trim())
+                if (editing >= 0) list[editing] = entry else list.add(entry)
+                panel.saveCustom(prefs, kind, list)
+                refresh++
+            },
+            checkOk = { label.isNotBlank() },
+            neutralButtonText = if (original != null) stringResource(R.string.delete) else null,
+            onNeutral = {
+                panel.saveCustom(prefs, kind, custom.filterIndexed { i, _ -> i != editing })
+                refresh++
+            },
+            title = { androidx.compose.material3.Text(setting.title) },
+            content = {
+                androidx.compose.foundation.layout.Column {
+                    androidx.compose.material3.OutlinedTextField(label, { label = it }, singleLine = true,
+                        modifier = androidx.compose.ui.Modifier.fillMaxWidth(),
+                        label = { androidx.compose.material3.Text(stringResource(R.string.fork_translate_custom_name)) })
+                    androidx.compose.material3.OutlinedTextField(prompt, { prompt = it }, minLines = 2,
+                        modifier = androidx.compose.ui.Modifier.fillMaxWidth().padding(top = 8.dp),
+                        label = { androidx.compose.material3.Text(stringResource(R.string.fork_translate_custom_prompt)) },
+                        supportingText = { androidx.compose.material3.Text(stringResource(R.string.fork_translate_custom_prompt_help)) })
+                }
+            },
+        )
+    }
 }
 
 /** Tools > GIF: the KLIPY / GIPHY keys */

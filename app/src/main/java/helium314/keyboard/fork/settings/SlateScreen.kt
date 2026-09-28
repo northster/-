@@ -61,11 +61,8 @@ fun SlateScreen(onClickBack: () -> Unit) {
     val s = LocalShadcn.current
     var editing by remember { mutableStateOf<SlateCommand?>(null) }
     var editingIndex by remember { mutableIntStateOf(-1) }
-    var addingKey by remember { mutableStateOf(false) }
-    var deleteKey by remember { mutableIntStateOf(-1) }
     val custom = SlateCommands.custom(prefs)
     val prefix = SlateCommands.prefix(prefs)
-    val keys = SlateKeys.keys(prefs)
 
     SearchSettingsScreen(onClickBack = onClickBack, title = stringResource(R.string.fork_screen_slate), settings = emptyList()) {
         Column(Modifier.verticalScroll(rememberScrollState()).padding(bottom = 24.dp)) {
@@ -93,29 +90,9 @@ fun SlateScreen(onClickBack: () -> Unit) {
                     }
                 },
             ))
-            // ---- Gemini
-            SettingsSection(stringResource(R.string.fork_slate_gemini), keys.mapIndexed { i, key ->
-                @Composable {
-                    Preference(name = "••••" + key.takeLast(4), description = stringResource(R.string.fork_slate_key_saved),
-                        onClick = { deleteKey = i }) {
-                        Icon(painterResource(R.drawable.ic_dot_trash), stringResource(R.string.delete))
-                    }
-                }
-            } + listOf(
-                @Composable {
-                    Preference(name = stringResource(R.string.fork_slate_key_add), description = stringResource(R.string.fork_slate_key_add_summary),
-                        onClick = { addingKey = true }, icon = R.drawable.ic_plus)
-                },
-                @Composable {
-                    var model by remember { mutableStateOf(SlateKeys.model(prefs)) }
-                    Column(Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 12.dp)) {
-                        Text(stringResource(R.string.fork_slate_model), style = MaterialTheme.typography.bodyLarge)
-                        OutlinedTextField(model, { model = it.trim(); prefs.edit { putString(SlateKeys.PREF_MODEL, model) } },
-                            singleLine = true, modifier = Modifier.fillMaxWidth().padding(top = 8.dp),
-                            placeholder = { Text(SlateKeys.DEFAULT_MODEL) })
-                    }
-                },
-            ))
+            // the Gemini API keys and model are in Settings > Advanced
+            Text(stringResource(R.string.fork_slate_keys_moved), style = MaterialTheme.typography.bodySmall,
+                color = s.mutedForeground, modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp))
             // ---- commands
             SettingsSection(stringResource(R.string.fork_slate_commands), custom.mapIndexed { i, command ->
                 @Composable {
@@ -142,27 +119,6 @@ fun SlateScreen(onClickBack: () -> Unit) {
         }
     }
 
-    if (addingKey) {
-        var key by remember { mutableStateOf("") }
-        ThreeButtonAlertDialog(
-            onDismissRequest = { addingKey = false },
-            onConfirmed = {
-                if (!SlateKeys.add(prefs, key)) Toast.makeText(ctx, R.string.fork_slate_key_failed, Toast.LENGTH_LONG).show()
-                refresh++
-            },
-            checkOk = { key.isNotBlank() },
-            title = { Text(stringResource(R.string.fork_slate_key_add)) },
-            content = { OutlinedTextField(key, { key = it.trim() }, singleLine = true, placeholder = { Text("AIza…") }) },
-        )
-    }
-    if (deleteKey >= 0) {
-        ConfirmationDialog(
-            onDismissRequest = { deleteKey = -1 },
-            onConfirmed = { SlateKeys.remove(prefs, deleteKey); refresh++ },
-            content = { Text(stringResource(R.string.fork_slate_key_delete)) },
-            confirmButtonText = stringResource(R.string.delete),
-        )
-    }
     editing?.let { original ->
         // only the name after the prefix is edited, the prefix itself can't be removed
         var trigger by remember(original) { mutableStateOf(original.trigger.removePrefix(prefix)) }

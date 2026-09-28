@@ -408,4 +408,15 @@
     <string name="fork_claude_key_error">사용량을 못 읽었어요: %1$s</string>
     <string name="fork_claude_key_checking">확인 중…</string>
     <string name="fork_claude_key_help">요금제 사용량을 알려주는 공식 API가 없어서, claude.ai 사용량 화면과 같은 방식으로 로그인 쿠키를 써서 읽어요. 컴퓨터에서 claude.ai를 열고 개발자 도구(F12) > Application > Cookies > claude.ai에서 sessionKey 값을 복사해 넣으세요. 암호화해서 저장하고 claude.ai에만 보내요. 이 값이 있으면 계정을 쓸 수 있으니 남에게 주지 마세요. 로그아웃하면 더 이상 동작하지 않아요.</string>
+    <string name="fork_slate_keys_moved">Gemini API 키와 모델은 설정 > 고급에 있어요.</string>
+    <string name="fork_translate_custom_add">추가</string>
+    <string name="fork_translate_custom_name">이름</string>
+    <string name="fork_translate_custom_prompt">AI에게 줄 설명 (선택)</string>
+    <string name="fork_translate_custom_prompt_help">비워두면 이름을 그대로 써요. 예: \"부산 사투리\"</string>
+    <string name="fork_translate_custom_no_prompt">이름 그대로</string>
+    <string name="fork_ai_glow_style">나타나는 방식</string>
+    <string name="fork_ai_glow_style_sweep">한 바퀴 돌며</string>
+    <string name="fork_ai_glow_style_rise">아래에서 위로</string>
+    <string name="fork_ai_glow_style_fade">서서히</string>
+    <string name="fork_ai_glow_style_bottom">하단만</string>
 </resources>

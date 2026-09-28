@@ -77,7 +77,6 @@ fun PreferencesScreen(
         Settings.PREF_SHOW_EMOJI_KEY,
         // fork: spacebar hold and cursor
         R.string.fork_cat_space,
-        helium314.keyboard.fork.ForkSettings.PREF_SPACE_LONG_PRESS_MS,
         helium314.keyboard.fork.ForkSettings.PREF_VIRTUAL_CARET,
         helium314.keyboard.fork.ForkSettings.PREF_CURSOR_CHAR_STEP_DP,
         helium314.keyboard.fork.ForkSettings.PREF_CURSOR_LINE_STEP_DP,

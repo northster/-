@@ -72,6 +72,10 @@ fun AdvancedSettingsScreen(
         Settings.PREF_CUSTOM_CURRENCY_KEY,
         Settings.PREF_MORE_POPUP_KEYS,
         Settings.PREF_TIMESTAMP_FORMAT,
+        // fork: API keys for AI commands and translation
+        R.string.fork_slate_gemini,
+        helium314.keyboard.fork.slate.SlateKeys.PREF_KEYS,
+        helium314.keyboard.fork.slate.SlateKeys.PREF_MODEL,
         R.string.fork_cat_privacy_backup,
         Settings.PREF_ALWAYS_INCOGNITO_MODE,
         SettingsWithoutKey.BACKUP_RESTORE,

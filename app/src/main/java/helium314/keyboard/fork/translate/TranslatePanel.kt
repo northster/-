@@ -37,10 +37,12 @@ class TranslatePanel(
     /** label on the wheel to what the model gets */
     class Option(val label: String, val prompt: String)
 
-    private val languages = LANGUAGES.sortedByDescending { prefs.getInt(PREF_USE + it.label, 0) }
+    private val languages = options(prefs, KIND_LANGUAGE).sortedByDescending { prefs.getInt(PREF_USE + it.label, 0) }
+    private val styles = options(prefs, KIND_STYLE)
+    private val purposes = options(prefs, KIND_PURPOSE)
     private var language = languages.firstOrNull { it.label == prefs.getString(PREF_LANGUAGE, null) } ?: languages.first()
-    private var style = STYLES.firstOrNull { it.label == prefs.getString(PREF_STYLE, null) } ?: STYLES.first()
-    private var purpose = PURPOSES.firstOrNull { it.label == prefs.getString(PREF_PURPOSE, null) } ?: PURPOSES.first()
+    private var style = styles.firstOrNull { it.label == prefs.getString(PREF_STYLE, null) } ?: styles.first()
+    private var purpose = purposes.firstOrNull { it.label == prefs.getString(PREF_PURPOSE, null) } ?: purposes.first()
 
     init {
         setBackgroundColor(palette.get(ColorType.MAIN_BACKGROUND))
@@ -62,8 +64,8 @@ class TranslatePanel(
             wheels.addView(col, LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, weight))
         }
         column(R.string.fork_translate_language, languages, language, 1.3f) { language = it }
-        column(R.string.fork_translate_style, STYLES, style, 1f) { style = it }
-        column(R.string.fork_translate_purpose, PURPOSES, purpose, 1f) { purpose = it }
+        column(R.string.fork_translate_style, styles, style, 1f) { style = it }
+        column(R.string.fork_translate_purpose, purposes, purpose, 1f) { purpose = it }
         content.addView(wheels, LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 1f))
         addView(content, LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT))
     }
@@ -110,13 +112,48 @@ class TranslatePanel(
         private const val PREF_USE = "fork_translate_usage_"
 
         val LANGUAGES = listOf(
-            Option("한국어", "Korean"), Option("English", "English"), Option("日本語", "Japanese"),
-            Option("中文(简体)", "Simplified Chinese"), Option("中文(繁體)", "Traditional Chinese"),
-            Option("Español", "Spanish"), Option("Français", "French"), Option("Deutsch", "German"),
-            Option("Tiếng Việt", "Vietnamese"), Option("ไทย", "Thai"), Option("Bahasa Indonesia", "Indonesian"),
-            Option("Русский", "Russian"), Option("Italiano", "Italian"), Option("Português", "Portuguese"),
-            Option("العربية", "Arabic"), Option("हिन्दी", "Hindi"),
+            Option("한국어", "Korean"), Option("영어", "English"), Option("일본어", "Japanese"),
+            Option("중국어(간체)", "Simplified Chinese"), Option("중국어(번체)", "Traditional Chinese"),
+            Option("스페인어", "Spanish"), Option("프랑스어", "French"), Option("독일어", "German"),
+            Option("베트남어", "Vietnamese"), Option("태국어", "Thai"), Option("인도네시아어", "Indonesian"),
+            Option("러시아어", "Russian"), Option("이탈리아어", "Italian"), Option("포르투갈어", "Portuguese"),
+            Option("아랍어", "Arabic"), Option("힌디어", "Hindi"),
         )
+
+        // ---- entries the user added (Tools > AI translation), after the built-in ones
+        const val KIND_LANGUAGE = "languages"
+        const val KIND_STYLE = "styles"
+        const val KIND_PURPOSE = "purposes"
+        private fun customPref(kind: String) = "fork_translate_custom_$kind"
+
+        fun custom(prefs: SharedPreferences, kind: String): List<Option> {
+            val arr = runCatching { org.json.JSONArray(prefs.getString(customPref(kind), "[]")) }.getOrElse { org.json.JSONArray() }
+            return (0 until arr.length()).mapNotNull { i ->
+                val o = arr.optJSONObject(i) ?: return@mapNotNull null
+                val label = o.optString("l").ifBlank { return@mapNotNull null }
+                Option(label, o.optString("p"))
+            }
+        }
+
+        fun saveCustom(prefs: SharedPreferences, kind: String, options: List<Option>) {
+            val arr = org.json.JSONArray()
+            options.forEach { arr.put(org.json.JSONObject().put("l", it.label).put("p", it.prompt)) }
+            prefs.edit { putString(customPref(kind), arr.toString()) }
+        }
+
+        /** built-in and added entries; an added one without an instruction is used by its name */
+        fun options(prefs: SharedPreferences, kind: String): List<Option> {
+            val builtIn = when (kind) { KIND_LANGUAGE -> LANGUAGES; KIND_STYLE -> STYLES; else -> PURPOSES }
+            return builtIn + custom(prefs, kind).map { o ->
+                Option(o.label, o.prompt.ifBlank {
+                    when (kind) {
+                        KIND_LANGUAGE -> o.label
+                        KIND_STYLE -> "Write it in this style: ${o.label}."
+                        else -> "What it is for: ${o.label}."
+                    }
+                })
+            }
+        }
         val STYLES = listOf(
             Option("자연스럽게", ""),
             Option("존댓말", "Use a polite, respectful register (in Korean: 존댓말, 해요체)."),

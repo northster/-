@@ -34,7 +34,13 @@ class AiGlow(private val host: View, private val bounds: () -> RectF?) {
         if (on == shown) return
         shown = on
         fade?.cancel()
+        val style = prefs.getString(GlowPrefs.AI_GLOW_STYLE, GlowPrefs.AI_STYLE_SWEEP) ?: GlowPrefs.AI_STYLE_SWEEP
+        // sweep / rise draw themselves in and out, fade / bottom fade
+        val drawsIn = style == GlowPrefs.AI_STYLE_SWEEP || style == GlowPrefs.AI_STYLE_RISE
         if (on) {
+            drawable.style = style
+            if (drawsIn) { drawable.fade = 1f; drawable.reveal = 0f; drawable.erase = 0f }
+            else { drawable.reveal = 1f; drawable.erase = 0f }
             drawable.brightness = prefs.getFloat(GlowPrefs.AI_GLOW_BRIGHTNESS, GlowPrefs.DEFAULT_AI_GLOW_BRIGHTNESS).coerceIn(0.1f, 1f)
             drawable.depth = prefs.getFloat(GlowPrefs.AI_GLOW_DEPTH, GlowPrefs.DEFAULT_AI_GLOW_DEPTH).toInt().coerceIn(1, 8)
             val period = prefs.getFloat(GlowPrefs.AI_GLOW_PERIOD, GlowPrefs.DEFAULT_AI_GLOW_PERIOD).toLong().coerceIn(500, 20000)
@@ -52,11 +58,24 @@ class AiGlow(private val host: View, private val bounds: () -> RectF?) {
                 start()
             }
         }
-        fade = ValueAnimator.ofFloat(drawable.fade, if (on) 1f else 0f).apply {
+        val (from, to) = when {
+            !drawsIn -> drawable.fade to (if (on) 1f else 0f)
+            on -> drawable.reveal to 1f
+            else -> drawable.erase to 1f
+        }
+        fade = ValueAnimator.ofFloat(from, to).apply {
             // slow and eased, so it doesn't pop in or out
-            duration = if (on) 600 else 800
+            duration = if (drawsIn) 900 else if (on) 600 else 800
             interpolator = android.view.animation.AccelerateDecelerateInterpolator()
-            addUpdateListener { drawable.fade = it.animatedValue as Float; update() }
+            addUpdateListener {
+                val v = it.animatedValue as Float
+                when {
+                    !drawsIn -> drawable.fade = v
+                    on -> drawable.reveal = v
+                    else -> drawable.erase = v
+                }
+                update()
+            }
             addListener(object : AnimatorListenerAdapter() {
                 private var cancelled = false
                 override fun onAnimationCancel(animation: Animator) { cancelled = true }
@@ -85,6 +104,10 @@ class AiGlow(private val host: View, private val bounds: () -> RectF?) {
         var fade = 0f
         var brightness = 1f
         var depth = 4
+        var style = GlowPrefs.AI_STYLE_SWEEP
+        /** sweep / rise: how much has been drawn in (0..1) and taken away again (0..1) */
+        var reveal = 1f
+        var erase = 0f
         private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
 
         override fun draw(canvas: Canvas) {
@@ -104,7 +127,8 @@ class AiGlow(private val host: View, private val bounds: () -> RectF?) {
                 val fromTop = row
                 val fromBottom = rows - 1 - row
                 for (col in 0 until cols) {
-                    val d = minOf(fromTop, fromBottom, col, cols - 1 - col)
+                    val d = if (style == GlowPrefs.AI_STYLE_BOTTOM) fromBottom
+                        else minOf(fromTop, fromBottom, col, cols - 1 - col)
                     if (d >= depth) continue
                     val x = left + col * spacing
                     val y = top + row * spacing
@@ -113,11 +137,29 @@ class AiGlow(private val host: View, private val bounds: () -> RectF?) {
                     paint.color = colorAt(a.toFloat())
                     // brightest at the edge, fading inwards
                     val falloff = (1f - d / depth.toFloat()).let { it * it }
-                    paint.alpha = (255 * fade * brightness * falloff).toInt().coerceIn(0, 255)
+                    val shown = when (style) {
+                        // around the border clockwise from the bottom middle; it goes away the same way round
+                        GlowPrefs.AI_STYLE_SWEEP -> {
+                            val deg = Math.toDegrees(kotlin.math.atan2((cx - x).toDouble(), (y - cy).toDouble()))
+                            val f = (((deg + 360) % 360) / 360).toFloat()
+                            edge(reveal - f) * edge(f - erase)
+                        }
+                        // from the bottom up; it goes away from the top down
+                        GlowPrefs.AI_STYLE_RISE -> {
+                            val f = 1f - (y - bounds.top) / h
+                            edge(reveal - f) * edge(1f - erase - f)
+                        }
+                        else -> 1f
+                    }
+                    if (shown <= 0f) continue
+                    paint.alpha = (255 * fade * brightness * falloff * shown).toInt().coerceIn(0, 255)
                     canvas.drawCircle(x, y, r, paint)
                 }
             }
         }
+
+        /** a soft front instead of a hard one: 0 behind it, 1 a little after it */
+        private fun edge(v: Float) = (v / 0.06f).coerceIn(0f, 1f)
 
         private fun colorAt(t: Float): Int {
             val pos = t * (COLORS.size - 1)
