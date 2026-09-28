@@ -408,6 +408,10 @@ class DynamicToolbarController(private val context: Context) {
 
     /** back key: shrinks a tall panel first. Returns true if it was used. */
     fun onBackKey(): Boolean {
+        if (gifTyping) {
+            finishGifTyping(false)
+            return true
+        }
         KeyboardSwitcher.getInstance().clipboardHistoryView?.takeIf { it.forkIsSelecting }?.let {
             it.forkStopSelecting()
             return true
@@ -1063,6 +1067,8 @@ class DynamicToolbarController(private val context: Context) {
     private var gifExpandedBefore = false
     /** the search is typed from the panel (the letters are shown for it) and goes back to it */
     private var gifFromPanel = false
+    /** the search for the panel is being typed (the panel is away, the letters are shown) */
+    private var gifTyping = false
     val isGifPanelShown get() = gifPanel?.visibility == View.VISIBLE
 
     /** the GIF panel: trending GIFs (or a search, recent, favorites) where the letters are */
@@ -1072,32 +1078,47 @@ class DynamicToolbarController(private val context: Context) {
             return
         }
         val ime = latinIME ?: return
-        if (gifPanel != null) return
+        if (gifPanel != null || gifTyping) return
         closeTranslatePanel()
         // letters instead of the clipboard / emoji panel
         if (KeyboardSwitcher.getInstance().isShowingClipboardHistory || KeyboardSwitcher.getInstance().isShowingEmojiPalettes)
             ime.mKeyboardActionListener.onCodeInput(KeyCode.ALPHA, Constants.NOT_A_COORDINATE, Constants.NOT_A_COORDINATE, false)
-        val kv = KeyboardSwitcher.getInstance().mainKeyboardView ?: return
-        val parent = kv.parent as? android.widget.FrameLayout ?: return
-        val panel = helium314.keyboard.fork.gif.GifPanel(context, kv, context.prefs()) { sendGif(it) }
-        parent.addView(panel, android.widget.FrameLayout.LayoutParams(
-            android.widget.FrameLayout.LayoutParams.MATCH_PARENT, android.widget.FrameLayout.LayoutParams.MATCH_PARENT))
-        gifPanel = panel
         gifFilter = GIF_ALL
         gifPanelQuery = ""
-        panelAnimator?.cancel()
-        isClipboardPanelTall = false
+        if (!addGifPanelView()) return
         gifExpandedBefore = isExpanded
         if (!isExpanded) setExpanded(true, true)
         showGifHeader()
         loadGifPanel()
     }
 
+    /** a new panel over the letters (a fresh one each time it comes back from typing a search) */
+    private fun addGifPanelView(): Boolean {
+        val kv = KeyboardSwitcher.getInstance().mainKeyboardView ?: return false
+        val parent = kv.parent as? android.widget.FrameLayout ?: return false
+        val panel = helium314.keyboard.fork.gif.GifPanel(context, kv, context.prefs()) { sendGif(it) }
+        parent.addView(panel, android.widget.FrameLayout.LayoutParams(
+            android.widget.FrameLayout.LayoutParams.MATCH_PARENT, android.widget.FrameLayout.LayoutParams.MATCH_PARENT))
+        gifPanel = panel
+        panelAnimator?.cancel()
+        isClipboardPanelTall = false
+        return true
+    }
+
+    private fun removeGifPanelView() {
+        val panel = gifPanel ?: return
+        gifPanel = null
+        gifPanelRequest++
+        (panel.parent as? android.view.ViewGroup)?.removeView(panel)
+    }
+
     private fun showGifHeader() {
         val tb = toolbar ?: return
-        tb.showGifHeader(gifPanelQuery, gifFilter, onBack = { closeGifPanel() }, onSearch = ::startGifTyping,
-            onRecent = { setGifFilter(if (gifFilter == GIF_RECENT) GIF_ALL else GIF_RECENT) },
-            onFavorites = { setGifFilter(if (gifFilter == GIF_FAVORITES) GIF_ALL else GIF_FAVORITES) })
+        tb.showGifHeader(gifPanelQuery, gifFilter, onBack = { closeGifPanel() },
+            // tapping the field while typing goes back to the GIFs
+            onSearch = { if (gifTyping) finishGifTyping(false) else startGifTyping() },
+            onRecent = { finishGifTyping(false); setGifFilter(if (gifFilter == GIF_RECENT) GIF_ALL else GIF_RECENT) },
+            onFavorites = { finishGifTyping(false); setGifFilter(if (gifFilter == GIF_FAVORITES) GIF_ALL else GIF_FAVORITES) })
         // swipe up on the header for a taller panel, like the clipboard
         tb.onHeaderSwipe = { up -> setPanelTall(up) }
     }
@@ -1140,58 +1161,52 @@ class DynamicToolbarController(private val context: Context) {
         }
     }
 
-    /** the search field was tapped: the letters come back to type it, enter shows the results in the panel */
+    /**
+     * The search field was tapped: the letters come back in place of the panel to type the search, the header stays
+     * and its field shows what is typed. Enter shows the results in a new panel.
+     */
     private fun startGifTyping() {
-        val panel = gifPanel ?: return
-        panel.visibility = View.GONE
-        gifFromPanel = true
+        if (gifPanel == null || gifTyping) return
+        removeGifPanelView()
+        gifTyping = true
         gifMode = true
-        gifResults = null
-        gifStatus = null
-        gifQuery = null
-        startClipSearch()
-        if (!clipSearch.isActive) {
-            gifMode = false
-            gifFromPanel = false
-            panel.visibility = View.VISIBLE
+        gifFromPanel = true
+        clipSearch.start(RichInputMethodManager.getInstance().combiningRulesExtraValueOfCurrentSubtype)
+        toolbar?.setGifQuery("", typing = true)
+    }
+
+    /** back to the panel, with the typed search when [search] (else as it was) */
+    private fun finishGifTyping(search: Boolean) {
+        if (!gifTyping) return
+        val query = clipSearch.query.trim()
+        gifTyping = false
+        gifMode = false
+        gifFromPanel = false
+        clipSearch.stop()
+        if (search) {
+            gifPanelQuery = query
+            gifFilter = GIF_ALL
         }
+        if (!addGifPanelView()) return closeGifPanel()
+        showGifHeader()
+        loadGifPanel()
     }
 
     private fun closeGifPanel() {
-        val panel = gifPanel ?: return
-        gifPanel = null
-        gifPanelRequest++
-        gifFromPanel = false
+        if (gifPanel == null && !gifTyping) return
+        if (gifTyping) {
+            gifTyping = false
+            gifMode = false
+            gifFromPanel = false
+            clipSearch.stop()
+        }
+        removeGifPanelView()
         panelAnimator?.cancel()
         isClipboardPanelTall = false
-        (panel.parent as? android.view.ViewGroup)?.removeView(panel)
         if (!toolActive) {
             toolbar?.hideToolHeader()
             if (!gifExpandedBefore) setExpanded(false, true)
         }
-    }
-
-    private fun runGifSearch() {
-        if (!gifMode || !clipSearch.isActive) return
-        val query = clipSearch.query.trim()
-        if (query == gifQuery) return
-        gifQuery = query
-        val id = ++gifRequest
-        gifResults = null
-        gifStatus = null
-        updateSearchResults()
-        val app = context.applicationContext
-        Thread {
-            val found = runCatching { helium314.keyboard.fork.gif.GifClient.search(app.prefs(), query) }
-            handler.post {
-                if (id != gifRequest || !gifMode) return@post
-                gifResults = found.getOrNull()
-                gifStatus = if (found.isFailure) context.getString(R.string.fork_gif_failed)
-                    else context.getString(R.string.fork_gif_nothing)
-                if (found.isFailure) Log.w(TAG, "GIF search failed", found.exceptionOrNull())
-                updateSearchResults()
-            }
-        }.start()
     }
 
     /** send [item] to the app as a GIF, or copy it when the field takes no images */
@@ -1250,28 +1265,22 @@ class DynamicToolbarController(private val context: Context) {
             ime.mKeyboardActionListener.onCodeInput(KeyCode.ALPHA, Constants.NOT_A_COORDINATE, Constants.NOT_A_COORDINATE, false)
         clipSearch.start(RichInputMethodManager.getInstance().combiningRulesExtraValueOfCurrentSubtype)
         expandedBeforeSearch = before
-        tb.showSearch({ endClipSearch(null) }, gifMode, strip = !gifFromPanel)
+        tb.showSearch({ endClipSearch(null) }, gifMode)
         updateSearchResults()
         setExpanded(true, true)
     }
 
     /** Close the search bar, [paste] goes to the app. */
     fun endClipSearch(paste: String?) {
+        if (gifTyping) return finishGifTyping(false)
         if (!clipSearch.isActive) return
         clipSearch.stop()
-        val backToPanel = gifMode && gifFromPanel
-        gifFromPanel = false
         if (gifMode) {
             gifMode = false
             gifRequest++
             handler.removeCallbacks(gifSearchSoon)
         }
         toolbar?.hideSearch()
-        gifPanel?.takeIf { backToPanel }?.let {
-            it.visibility = View.VISIBLE
-            showGifHeader()
-            return
-        }
         refreshPasteChips()
         if (!expandedBeforeSearch) setExpanded(false, true)
         if (paste != null) latinIME?.onTextInput(paste)
@@ -1280,12 +1289,15 @@ class DynamicToolbarController(private val context: Context) {
     /** Key input while searching. Returns true if it was used for the search and must not reach the app. */
     fun onKeyEvent(event: Event): Boolean {
         if (!clipSearch.isActive) return false
-        if (event.codePoint == Constants.CODE_ENTER && gifMode && gifFromPanel) {
-            // the results in the panel
-            gifPanelQuery = clipSearch.query.trim()
-            gifFilter = GIF_ALL
-            endClipSearch(null)
-            loadGifPanel()
+        if (gifTyping) {
+            // enter: the results in the panel
+            if (event.codePoint == Constants.CODE_ENTER) {
+                finishGifTyping(true)
+                return true
+            }
+            clipSearch.setCombiningSpec(RichInputMethodManager.getInstance().combiningRulesExtraValueOfCurrentSubtype)
+            if (!clipSearch.onEvent(event)) return false
+            toolbar?.setGifQuery(clipSearch.query, typing = true)
             return true
         }
         if (event.codePoint == Constants.CODE_ENTER && gifMode) {
@@ -1322,9 +1334,8 @@ class DynamicToolbarController(private val context: Context) {
 
     private fun updateSearchResults() {
         val tb = toolbar ?: return
-        if (gifMode && gifFromPanel) {
-            // typed for the panel: only the query, enter searches
-            tb.setSearchQuery(clipSearch.query)
+        if (gifTyping) {
+            tb.setGifQuery(clipSearch.query, typing = true)
             return
         }
         if (gifMode) {

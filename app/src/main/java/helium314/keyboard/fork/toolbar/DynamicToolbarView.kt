@@ -399,8 +399,8 @@ class DynamicToolbarView @JvmOverloads constructor(
         }.start()
     }
 
-    /** [gif]: GIF search, the results are GIF previews; [strip] false: only the query (results go to the GIF panel) */
-    fun showSearch(onClose: () -> Unit, gif: Boolean = false, strip: Boolean = true) {
+    /** [gif]: GIF search, the results are GIF previews */
+    fun showSearch(onClose: () -> Unit, gif: Boolean = false) {
         val colors = Settings.getValues().mColors
         searchBar.removeAllViews()
         searchBar.addView(iconButton(if (gif) R.drawable.ic_dot_gif else R.drawable.ic_dot_search,
@@ -410,20 +410,14 @@ class DynamicToolbarView @JvmOverloads constructor(
         queryView.setHintTextColor(colors.get(ColorType.KEY_HINT_TEXT))
         queryView.hint = context.getString(if (gif) R.string.fork_gif_search_hint else R.string.fork_clip_search_hint)
         KeyboardTypeface.applyToTextView(queryView)
-        if (strip) {
-            searchBar.addView(queryView, LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT))
-            searchBar.addView(resultScroll, LinearLayout.LayoutParams(0, LayoutParams.MATCH_PARENT, 1f))
-        } else searchBar.addView(queryView, LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f))
+        searchBar.addView(queryView, LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT))
+        searchBar.addView(resultScroll, LinearLayout.LayoutParams(0, LayoutParams.MATCH_PARENT, 1f))
         searchBar.addView(iconButton(R.drawable.ic_dot_close, context.getString(android.R.string.cancel)) { onClose() },
             LinearLayout.LayoutParams((40 * density).toInt(), LayoutParams.MATCH_PARENT))
         row.visibility = GONE
         header.visibility = GONE
         chipBar.visibility = GONE
         searchBar.visibility = VISIBLE
-    }
-
-    fun setSearchQuery(query: String) {
-        queryView.text = query
     }
 
     fun hideSearch() {
@@ -665,6 +659,17 @@ class DynamicToolbarView @JvmOverloads constructor(
      * GIF panel header: < GIF, a search field filling the middle (tapping it types a search), recent and favorites on
      * the right; [filter] 1 = recent, 2 = favorites shown (drawn in the enter key color)
      */
+    private var gifField: TextView? = null
+
+    /** the GIF header's field while a search is typed: the text with a caret, outlined in the enter key color */
+    fun setGifQuery(query: String, typing: Boolean) {
+        val field = gifField ?: return
+        val colors = Settings.getValues().mColors
+        field.text = if (typing) "$query▏" else query
+        (field.background as? GradientDrawable)?.setStroke(if (typing) (1.5f * density).toInt().coerceAtLeast(1) else 0,
+            colors.get(ColorType.ACTION_KEY_BACKGROUND))
+    }
+
     fun showGifHeader(query: String, filter: Int, onBack: () -> Unit, onSearch: () -> Unit, onRecent: () -> Unit,
                       onFavorites: () -> Unit) {
         val colors = Settings.getValues().mColors
@@ -679,8 +684,9 @@ class DynamicToolbarView @JvmOverloads constructor(
             colors.setColor(this, ColorType.TOOL_BAR_KEY)
         }, LinearLayout.LayoutParams((36 * density).toInt(), LayoutParams.MATCH_PARENT))
         header.addView(TextView(context).apply {
+            gifField = this
             text = query
-            hint = context.getString(R.string.fork_gif_search_hint)
+            hint = context.getString(R.string.fork_search)
             setSingleLine()
             ellipsize = TextUtils.TruncateAt.END
             gravity = Gravity.CENTER_VERTICAL

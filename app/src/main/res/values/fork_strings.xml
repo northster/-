@@ -370,6 +370,7 @@
     <string name="fork_gif_loading">Loading…</string>
     <string name="fork_gif_failed_reason">Couldn\'t load GIFs (%1$s)</string>
     <string name="fork_gif_timeout">No answer. Check the internet connection or the API key</string>
+    <string name="fork_search">Search</string>
     <string name="fork_gif_search_hint">Search GIFs</string>
     <string name="fork_gif_no_key">Enter a KLIPY or GIPHY API key in the toolbar settings for GIFs</string>
     <string name="fork_gif_failed">Couldn\'t load GIFs</string>

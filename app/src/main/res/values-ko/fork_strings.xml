@@ -367,6 +367,7 @@
     <string name="fork_gif_loading">불러오는 중…</string>
     <string name="fork_gif_failed_reason">GIF를 불러오지 못했어요 (%1$s)</string>
     <string name="fork_gif_timeout">응답이 없어요. 인터넷 연결이나 API 키를 확인해 주세요</string>
+    <string name="fork_search">검색</string>
     <string name="fork_gif_search_hint">GIF 검색</string>
     <string name="fork_gif_no_key">GIF를 쓰려면 툴바 설정에 KLIPY나 GIPHY API 키를 넣어 주세요</string>
     <string name="fork_gif_failed">GIF를 불러오지 못했어요</string>
