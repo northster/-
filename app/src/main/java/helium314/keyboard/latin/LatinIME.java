@@ -733,6 +733,8 @@ public class LatinIME extends InputMethodService implements
                 mSettings.getCurrent(), mKeyboardSwitcher.getKeyboardSwitchState());
     }
 
+    private int mForkSmallestWidthDp = 0;
+
     @Override
     public void onConfigurationChanged(final Configuration conf) {
         SettingsValues settingsValues = mSettings.getCurrent();
@@ -757,6 +759,10 @@ public class LatinIME extends InputMethodService implements
                 cleanupInternalStateForFinishInput();
             }
         }
+        // fork: folding / unfolding changes the screen width: settings again, for the automatic split
+        if (mForkSmallestWidthDp != conf.smallestScreenWidthDp)
+            mKeyboardSwitcher.setThemeNeedsReload();
+        mForkSmallestWidthDp = conf.smallestScreenWidthDp;
         // KeyboardSwitcher will check by itself if theme update is necessary
         mKeyboardSwitcher.updateKeyboardTheme(KtxKt.getDisplayContext(this));
         super.onConfigurationChanged(conf);

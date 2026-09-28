@@ -15,8 +15,8 @@ import kotlin.math.roundToInt
  * fork: Claude usage on the toolbar: two dotted lines, the 5-hour session limit above and the weekly one below. The
  * used part is filled with orange dots; after each line the used percentage (white, turning orange and then red as
  * the limit gets close) and the time until it resets
- * ("3h", "2d", white). It asks for a fixed width (less if the toolbar has no room), so it doesn't stretch on wide
- * screens.
+ * ("3h", "2d", white). The content has a fixed width (less if the toolbar has no room) at the view's right end, so it
+ * doesn't stretch on wide screens.
  */
 class UsageView(context: Context) : View(context) {
     private val density = resources.displayMetrics.density
@@ -44,16 +44,8 @@ class UsageView(context: Context) : View(context) {
         invalidate()
     }
 
-    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        // bar, percentage and time; never wider, and narrower when the toolbar has less room
-        val wanted = (4 * density + DOTS * 4.5f * density + percentWidth() + timeWidth()).toInt()
-        val width = when (MeasureSpec.getMode(widthMeasureSpec)) {
-            MeasureSpec.EXACTLY -> MeasureSpec.getSize(widthMeasureSpec)
-            MeasureSpec.AT_MOST -> minOf(wanted, MeasureSpec.getSize(widthMeasureSpec))
-            else -> wanted
-        }
-        setMeasuredDimension(width, getDefaultSize(suggestedMinimumHeight, heightMeasureSpec))
-    }
+    /** bar, percentage and time: never wider than this, it sits at the right end of the view */
+    private fun wantedWidth() = 4 * density + DOTS * 4.5f * density + percentWidth() + timeWidth()
 
     private fun percentWidth() = percent.measureText("100%") + 6 * density
     private fun timeWidth() = text.measureText("00h") + 6 * density
@@ -63,7 +55,7 @@ class UsageView(context: Context) : View(context) {
         val spacing = 4.5f * density
         val r = 1.1f * density
         val timeWidth = timeWidth()
-        val left = 4 * density
+        val left = (width - wantedWidth()).coerceAtLeast(0f) + 4 * density
         val right = width - timeWidth - percentWidth()
         val count = ((right - left) / spacing).toInt().coerceAtLeast(2)
         val rowGap = 9 * density

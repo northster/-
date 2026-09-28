@@ -120,8 +120,9 @@ class DynamicToolbarView @JvmOverloads constructor(
                 val button = iconButton(item.icon, context.getString(item.label)) { onClick(item) }.apply { tag = item.id }
                 buttons.addView(button, LinearLayout.LayoutParams((48 * density).toInt(), LayoutParams.MATCH_PARENT))
             }
-            buttons.addView(View(context), LinearLayout.LayoutParams(0, LayoutParams.MATCH_PARENT, 1f))
-            buttons.addView(usageView, LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT).apply {
+            // weighted, so it gets only the room left after the buttons (settings keeps its full size on narrow
+            // screens); it draws at its right end
+            buttons.addView(usageView, LinearLayout.LayoutParams(0, LayoutParams.MATCH_PARENT, 1f).apply {
                 marginStart = (6 * density).toInt()
                 marginEnd = (4 * density).toInt()
             })

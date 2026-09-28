@@ -250,6 +250,11 @@ object ForkSettings {
     fun isToolbarSwipeEnabled() = initialized && cachedSwipeEnabled
 
     /** sideways fling over the keys switches the one-handed keyboard */
+    /** split keyboard by itself on wide screens (unfolded foldable, tablet), the split switch is used otherwise */
+    const val PREF_SPLIT_AUTO = "fork_split_auto"
+    /** smallest screen width (dp) that counts as wide: a foldable's inner screen, not its cover screen */
+    const val SPLIT_AUTO_MIN_WIDTH_DP = 600
+
     const val PREF_ONE_HANDED_SWIPE = "fork_one_handed_swipe"
     @JvmStatic
     fun isOneHandedSwipeEnabled() = initialized && appPrefs.getBoolean(PREF_ONE_HANDED_SWIPE, true)

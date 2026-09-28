@@ -123,7 +123,7 @@ object GlowPrefs {
             maxAlpha = max,
             minAlpha = prefs.getFloat(AI_GLOW_MIN, DEFAULT_AI_GLOW_MIN).coerceIn(0f, max),
             periodMs = prefs.getFloat(AI_GLOW_BREATH, DEFAULT_AI_GLOW_BREATH).toLong().coerceIn(200, 20_000),
-            height = prefs.getFloat(AI_GLOW_HEIGHT, DEFAULT_AI_GLOW_HEIGHT).coerceIn(0.05f, 1f),
+            height = prefs.getFloat(AI_GLOW_HEIGHT, DEFAULT_AI_GLOW_HEIGHT).coerceIn(0.05f, 2f),
             width = prefs.getFloat(AI_GLOW_WIDTH, DEFAULT_AI_GLOW_WIDTH).coerceIn(0.05f, 2f),
             dotDp = prefs.getFloat(GLOW_DOT_SIZE, DEFAULT_GLOW_DOT_SIZE).coerceIn(0.3f, 4f),
             spacingDp = prefs.getFloat(GLOW_DOT_SPACING, DEFAULT_GLOW_DOT_SPACING).coerceIn(2f, 16f),

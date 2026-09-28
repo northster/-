@@ -95,7 +95,7 @@ fun AppearanceScreen(
     val dayNightMode = Build.VERSION.SDK_INT >= Build.VERSION_CODES.P && prefs.getBoolean(Settings.PREF_THEME_DAY_NIGHT, Defaults.PREF_THEME_DAY_NIGHT)
     // fork: every option is visible (no conditional items), sliders and choices are shown inline,
     //  background images are removed, one size profile for every screen (ForkSettings.SINGLE_SIZE_PROFILE)
-    val items = listOf(
+    val items = listOfNotNull(
         // fork: theme, colors, day / night and icons are in the separate "Theme & colors" screen
         R.string.fork_cat_size,
         Settings.PREF_KEYBOARD_HEIGHT_SCALE_PREFIX,
@@ -106,7 +106,8 @@ fun AppearanceScreen(
         Settings.PREF_KEY_GAP_SCALE_PREFIX,
         ForkSettings.PREF_KEY_GAP_V_DP,
         ForkSettings.PREF_TOOLBAR_HEIGHT_DP,
-        Settings.PREF_ENABLE_SPLIT_KEYBOARD,
+        ForkSettings.PREF_SPLIT_AUTO,
+        Settings.PREF_ENABLE_SPLIT_KEYBOARD.takeIf { !prefs.getBoolean(ForkSettings.PREF_SPLIT_AUTO, true) },
         Settings.PREF_SPLIT_SPACER_SCALE_PREFIX,
         R.string.fork_cat_text,
         Settings.PREF_SPACE_BAR_TEXT,
@@ -239,6 +240,9 @@ fun createAppearanceSettings(context: Context) = listOf(
         R.string.customize_background_image_landscape, R.string.summary_customize_background_image_landscape)
     {
         BackgroundImagePref(it, true)
+    },
+    Setting(context, ForkSettings.PREF_SPLIT_AUTO, R.string.fork_split_auto, R.string.fork_split_auto_summary) {
+        SwitchPreference(it, true) { KeyboardSwitcher.getInstance().setThemeNeedsReload() }
     },
     Setting(context, Settings.PREF_ENABLE_SPLIT_KEYBOARD, R.string.enable_split_keyboard) {
         // fork: one setting for every screen

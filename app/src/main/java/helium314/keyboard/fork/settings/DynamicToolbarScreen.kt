@@ -279,7 +279,7 @@ fun createDynamicToolbarSettings(context: Context) = listOf(
         ), GlowPrefs.POSITION_TOP)
     },
     Setting(context, GlowPrefs.AI_GLOW_HEIGHT, R.string.fork_glow_height) {
-        GlowSlider(it, GlowPrefs.DEFAULT_AI_GLOW_HEIGHT, 0.1f..1f, 0.05f, ::percent)
+        GlowSlider(it, GlowPrefs.DEFAULT_AI_GLOW_HEIGHT, 0.1f..2f, 0.05f, ::percent)
     },
     Setting(context, GlowPrefs.AI_GLOW_WIDTH, R.string.fork_glow_width) {
         GlowSlider(it, GlowPrefs.DEFAULT_AI_GLOW_WIDTH, 0.2f..2f, 0.05f, ::percent)

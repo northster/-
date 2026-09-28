@@ -134,7 +134,8 @@ class AiGlow(private val host: View, private val keyboardView: () -> KeyboardVie
             val ry = h * params.height
             val lx = ArrayList<Float>(); val ly = ArrayList<Float>(); val ls = ArrayList<Float>(); val lc = ArrayList<Int>()
             var edgeDistance = spacing / 2
-            while (edgeDistance < ry) {
+            // taller than the keyboard (height over 100 %): the shape goes on beyond the far edge, unseen
+            while (edgeDistance < minOf(ry, h)) {
                 val y = if (params.fromBottom) h - edgeDistance else edgeDistance
                 var x = spacing / 2
                 while (x < w) {

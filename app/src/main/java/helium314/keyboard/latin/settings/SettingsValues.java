@@ -251,7 +251,10 @@ public class SettingsValues {
         boolean isLandscape = mDisplayOrientation == Configuration.ORIENTATION_LANDSCAPE;
         float displayWidthDp = TypedValueCompat.pxToDp(res.getDisplayMetrics().widthPixels, res.getDisplayMetrics());
         boolean isFolded = FoldableUtils.INSTANCE.isFolded();
-        mIsSplitKeyboardEnabled = Settings.readSplitKeyboardEnabled(prefs, isLandscape, isFolded);
+        // fork: automatic split on wide screens (unfolded), else the switch
+        mIsSplitKeyboardEnabled = prefs.getBoolean(helium314.keyboard.fork.ForkSettings.PREF_SPLIT_AUTO, true)
+                ? res.getConfiguration().smallestScreenWidthDp >= helium314.keyboard.fork.ForkSettings.SPLIT_AUTO_MIN_WIDTH_DP
+                : Settings.readSplitKeyboardEnabled(prefs, isLandscape, isFolded);
         // determine spacerWidth from display width and scale setting
         mSplitKeyboardSpacerRelativeWidth = mIsSplitKeyboardEnabled
                 ? Math.min(Math.max((displayWidthDp - 600) / 600f + 0.15f, 0.15f), 0.35f) * Settings.readSplitSpacerScale(prefs, isLandscape, isFolded)

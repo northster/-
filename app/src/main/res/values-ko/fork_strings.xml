@@ -426,4 +426,6 @@
     <string name="fork_ai_glow_style_ring">파스텔 빛 (HomePod)</string>
     <string name="fork_ai_glow_style_dots">점 글로우</string>
     <string name="fork_ai_glow_in">나타나고 사라지는 시간</string>
+    <string name="fork_split_auto">펼치면 자동 분할</string>
+    <string name="fork_split_auto_summary">넓은 화면(폴드 내부 화면, 태블릿)에서는 분할, 접힌 바깥 화면에서는 한 덩어리로 자동 전환해요</string>
 </resources>
