@@ -253,7 +253,7 @@ WM Keyboard(github.com/wasi-master/wmkeyboard, MIT)에 이미 있는 기능은 �
 
 ## 8-9. 툴바의 Claude 사용량 (`fork/usage/`)
 - 설정 > 툴바 > Claude 사용량에 claude.ai 세션 키(sessionKey 쿠키)를 넣으면 툴바가 [도구들 | 사용량 | ⋮ | ↶ ↷]로 바뀐다. 가운데에 점선 두 줄: 위는 5시간 한도, 아래는 주간 한도. 쓴 만큼 주황 점으로 차고, 오른쪽에 초기화까지 남은 시간(45m, 3h, 2d; 24시간 이상은 일 단위).
-- 공식 API가 없어서 claude.ai 사용량 화면이 쓰는 `claude.ai/api/organizations/{id}/usage`(five_hour / seven_day, utilization %, resets_at)를 세션 키로 읽는다. 키는 암호화 저장, claude.ai에만 보냄. 비공식이라 claude.ai가 바뀌면 멈출 수 있고, 그때는 빈 줄이 나오고 설정에 이유가 나온다. 키보드가 뜰 때 3분 넘게 지났으면 새로 읽는다.
+- 공식 API가 없어서 claude.ai 사용량 화면이 쓰는 `claude.ai/api/organizations/{id}/usage`(five_hour / seven_day, utilization %, resets_at)를 세션 키로 읽는다. 키는 암호화 저장, claude.ai에만 보냄. 비공식이라 claude.ai가 바뀌면 멈출 수 있고, 그때는 빈 줄이 나오고 설정에 이유가 나온다. 키보드가 뜰 때 3분 넘게 지났으면 새로 읽는다. 일반 요청이 Cloudflare 브라우저 확인에 막히면(403, `cf-mitigated` 또는 확인 페이지) 그 뒤로는 숨긴 WebView(실제 브라우저)에 쿠키를 넣어 읽는다(확인 페이지는 WebView가 스스로 통과, 25초 제한). claude.ai의 거절(permission_error 등)과 Cloudflare 차단을 구분해 설정에 보여준다.
 
 ## 9-0. 비밀번호 자동완성 (삼성 패스 등)
 안드로이드 11부터 자동완성 서비스가 키보드에 로그인/비밀번호 제안 칩을 넘겨준다(inline suggestions). HeliBoard는 이를 제안 줄에 보여주는데, 여기서는 그 줄을 숨기므로 동적 툴바에 보여준다(`LatinIME.onInlineSuggestionsResponse` → `DynamicToolbarController.showAutofill`).

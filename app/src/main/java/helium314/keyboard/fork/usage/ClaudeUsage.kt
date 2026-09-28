@@ -31,6 +31,10 @@ object ClaudeUsage {
     private const val PREF_ORG = "fork_claude_org"
     private const val PREF_DATA = "fork_claude_usage_data"
     private const val PREF_STATUS = "fork_claude_usage_status"
+    /** Cloudflare blocked the plain requests: ask through a WebView */
+    private const val PREF_VIA_WEB = "fork_claude_usage_via_web"
+    private const val ORGS_URL = "https://claude.ai/api/organizations"
+    private fun usageUrl(org: String) = "https://claude.ai/api/organizations/$org/usage"
     private const val MAX_AGE_MILLIS = 3 * 60 * 1000L
     private const val TAG = "ClaudeUsage"
 
@@ -49,9 +53,9 @@ object ClaudeUsage {
 
     /** @return false if it could not be stored encrypted; blank removes it */
     fun setKey(prefs: SharedPreferences, key: String): Boolean {
-        prefs.edit { remove(PREF_ORG); remove(PREF_DATA); remove(PREF_STATUS) }
+        prefs.edit { remove(PREF_ORG); remove(PREF_DATA); remove(PREF_STATUS); remove(PREF_VIA_WEB) }
         if (key.isBlank()) { prefs.edit { remove(PREF_SESSION_KEY) }; return true }
-        val encrypted = KeyCipher.encrypt(key.trim().removePrefix("sessionKey=")) ?: return false
+        val encrypted = KeyCipher.encrypt(key.trim().removePrefix("sessionKey=").trimEnd(';').trim()) ?: return false
         prefs.edit { putString(PREF_SESSION_KEY, encrypted) }
         lastAttempt = 0
         return true
@@ -77,23 +81,60 @@ object ClaudeUsage {
         fetching = true
         lastAttempt = now
         val app = context.applicationContext
-        Thread {
-            val result = runCatching { fetch(app.prefs(), key) }
+        fun done(result: Result<Usage>) {
             fetching = false
             result.onFailure { Log.w(TAG, "can't read the usage", it); app.prefs().edit { putString(PREF_STATUS, it.message ?: it.javaClass.simpleName) } }
-            val usage = result.getOrNull()
-            handler.post { onDone(usage) }
+            onDone(result.getOrNull())
+        }
+        if (prefs.getBoolean(PREF_VIA_WEB, false)) {
+            fetchWeb(app, key, ::done)
+            return
+        }
+        Thread {
+            val result = runCatching { fetch(app.prefs(), key) }
+            handler.post {
+                if (result.exceptionOrNull() is CloudflareBlocked) {
+                    // claude.ai's Cloudflare wants a browser: ask through a WebView from now on
+                    app.prefs().edit { putBoolean(PREF_VIA_WEB, true) }
+                    fetchWeb(app, key, ::done)
+                } else done(result)
+            }
         }.start()
     }
 
     private fun fetch(prefs: SharedPreferences, key: String): Usage {
-        val org = prefs.getString(PREF_ORG, null) ?: findOrg(key).also { prefs.edit { putString(PREF_ORG, it) } }
-        val json = runCatching { JSONObject(get("https://claude.ai/api/organizations/$org/usage", key)) }
+        val org = prefs.getString(PREF_ORG, null) ?: findOrg(get(ORGS_URL, key)).also { prefs.edit { putString(PREF_ORG, it) } }
+        val json = runCatching { get(usageUrl(org), key) }
             .getOrElse {
                 // the organization may have changed: look it up again next time
                 prefs.edit { remove(PREF_ORG) }
                 throw it
             }
+        return store(prefs, json)
+    }
+
+    /** the same through a WebView (a real browser, which Cloudflare lets through), on the main thread */
+    private fun fetchWeb(context: Context, key: String, onDone: (Result<Usage>) -> Unit) {
+        val prefs = context.prefs()
+        val web = runCatching { WebGet(context, key) }.getOrElse { onDone(Result.failure(it)); return }
+        fun finish(result: Result<Usage>) { web.destroy(); onDone(result) }
+        fun usage(org: String) = web.get(usageUrl(org)) { r ->
+            if (r.isFailure) prefs.edit { remove(PREF_ORG) }
+            finish(r.mapCatching { store(prefs, it) })
+        }
+        val org = prefs.getString(PREF_ORG, null)
+        if (org != null) usage(org)
+        else web.get(ORGS_URL) { r ->
+            r.mapCatching { findOrg(it) }.fold(
+                { prefs.edit { putString(PREF_ORG, it) }; usage(it) },
+                { finish(Result.failure(it)) },
+            )
+        }
+    }
+
+    /** reads the usage answer and keeps it */
+    private fun store(prefs: SharedPreferences, text: String): Usage {
+        val json = JSONObject(checkError(text))
         fun limit(name: String) = json.optJSONObject(name)?.let {
             Limit((it.optDouble("utilization", 0.0) / 100).toFloat().coerceIn(0f, 1f), parseTime(it.optString("resets_at")))
         }
@@ -105,9 +146,19 @@ object ClaudeUsage {
         return usage
     }
 
+    /** claude.ai's error answers ({"type":"error","error":{...}}) as exceptions */
+    private fun checkError(text: String): String {
+        val o = runCatching { JSONObject(text) }.getOrNull() ?: return text
+        if (o.optString("type") != "error") return text
+        val e = o.optJSONObject("error")
+        val type = e?.optString("type").orEmpty()
+        if (type == "permission_error" || type == "authentication_error") error("sessionKey not accepted ($type)")
+        error(e?.optString("message")?.ifEmpty { null } ?: type.ifEmpty { "error" })
+    }
+
     /** the account's organization with the chat plan (the first one otherwise) */
-    private fun findOrg(key: String): String {
-        val orgs = JSONArray(get("https://claude.ai/api/organizations", key))
+    private fun findOrg(text: String): String {
+        val orgs = JSONArray(checkError(text))
         var first: String? = null
         for (i in 0 until orgs.length()) {
             val o = orgs.optJSONObject(i) ?: continue
@@ -128,8 +179,15 @@ object ClaudeUsage {
         c.setRequestProperty("User-Agent", "Mozilla/5.0 (Linux; Android 14) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0 Mobile Safari/537.36")
         try {
             val code = c.responseCode
-            if (code == 401 || code == 403) error("sessionKey not accepted (HTTP $code)")
-            check(code == 200) { "HTTP $code" }
+            if (code != 200) {
+                val body = runCatching { c.errorStream?.bufferedReader()?.use { it.readText().take(4000) } }.getOrNull().orEmpty()
+                // Cloudflare's browser check, not claude.ai saying no
+                if (c.getHeaderField("cf-mitigated") != null || "Just a moment" in body || "challenge-platform" in body)
+                    throw CloudflareBlocked()
+                checkError(body)
+                if (code == 401 || code == 403) error("sessionKey not accepted (HTTP $code)")
+                error("HTTP $code")
+            }
             return c.inputStream.bufferedReader().use { it.readText() }
         } finally {
             c.disconnect()
@@ -159,6 +217,60 @@ object ClaudeUsage {
             minutes < 60 -> "${minutes}m"
             minutes < 24 * 60 -> "${minutes / 60}h"
             else -> "${minutes / (24 * 60)}d"
+        }
+    }
+
+    private class CloudflareBlocked : Exception("Cloudflare blocked the request")
+
+    /**
+     * GETs claude.ai pages in a hidden WebView with the session cookie, one after the other: Cloudflare lets a real
+     * browser through (it solves the check page by itself, the answer comes with the next page load)
+     */
+    private class WebGet(context: Context, key: String) {
+        private val web = android.webkit.WebView(context)
+        private var callback: ((Result<String>) -> Unit)? = null
+        private val timeout = Runnable { deliver(Result.failure(IllegalStateException("Cloudflare check did not finish"))) }
+
+        init {
+            val cookies = android.webkit.CookieManager.getInstance()
+            cookies.setAcceptCookie(true)
+            cookies.setCookie("https://claude.ai", "sessionKey=$key; path=/; secure")
+            cookies.flush()
+            web.settings.javaScriptEnabled = true
+            web.settings.domStorageEnabled = true
+            web.webViewClient = object : android.webkit.WebViewClient() {
+                override fun onPageFinished(view: android.webkit.WebView, url: String) { read() }
+            }
+        }
+
+        fun get(url: String, onDone: (Result<String>) -> Unit) {
+            callback = onDone
+            handler.postDelayed(timeout, 25_000)
+            web.loadUrl(url)
+        }
+
+        private fun read() {
+            if (callback == null) return
+            // JSON is shown in a <pre> (newer Chrome versions add a "pretty print" box around it)
+            web.evaluateJavascript("(function(){var p=document.querySelector('pre');return (p||document.body||{}).innerText||''})()") { raw ->
+                val text = runCatching { JSONArray("[$raw]").getString(0) }.getOrDefault("").trim()
+                // anything else is the check page: wait for the next load
+                if (text.startsWith("{") || text.startsWith("[")) deliver(Result.success(text))
+            }
+        }
+
+        private fun deliver(result: Result<String>) {
+            val cb = callback ?: return
+            callback = null
+            handler.removeCallbacks(timeout)
+            cb(result)
+        }
+
+        fun destroy() {
+            handler.removeCallbacks(timeout)
+            callback = null
+            web.stopLoading()
+            web.destroy()
         }
     }
 }

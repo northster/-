@@ -500,7 +500,7 @@ private fun ClaudeKeyPreference(title: String) {
                         style = androidx.compose.material3.MaterialTheme.typography.bodyMedium)
                     androidx.compose.material3.OutlinedTextField(text, { text = it.trim() }, singleLine = true,
                         modifier = androidx.compose.ui.Modifier.fillMaxWidth().padding(top = 12.dp),
-                        placeholder = { androidx.compose.material3.Text("sk-ant-sid01-…") })
+                        placeholder = { androidx.compose.material3.Text("sk-ant-sid…") })
                 }
             },
         )
