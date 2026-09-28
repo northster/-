@@ -108,11 +108,13 @@ object ForkSettings {
         return (dp * density).toInt().coerceAtLeast(1)
     }
 
-    /** keys drawn with this opacity (0..1), so the chip glow behind them can show through */
-    const val PREF_KEY_ALPHA = "fork_key_alpha"
-
+    /** alpha (0..255) of the glows drawn over the keys, from the key mask opacity; 0 = keys hide the glows */
     @JvmStatic
-    fun keyAlpha(): Int = if (!initialized) 255 else (appPrefs.getFloat(PREF_KEY_ALPHA, 1f).coerceIn(0f, 1f) * 255).toInt()
+    fun glowOnKeysAlpha(): Int {
+        val mask = if (initialized) appPrefs.getFloat(helium314.keyboard.fork.toolbar.GlowPrefs.KEY_MASK,
+            helium314.keyboard.fork.toolbar.GlowPrefs.DEFAULT_KEY_MASK) else 1f
+        return ((1f - mask.coerceIn(0f, 1f)) * 255).toInt()
+    }
 
     /**
      * HeliBoard options that do nothing here, or fight the fork's own features: word suggestions and autocorrect are

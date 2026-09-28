@@ -54,6 +54,13 @@ object GlowPrefs {
     const val DEFAULT_AI_GLOW_PERIOD = 3200f
     const val DEFAULT_AI_GLOW_DEPTH = 4f
 
+    /**
+     * the glows are drawn behind the keys and again over them, clipped to the key shapes: this is how opaque that
+     * key shaped mask over them is (1 = the keys hide the glows, 0 = the glows show on the keys as between them)
+     */
+    const val KEY_MASK = "fork_key_mask_opacity"
+    const val DEFAULT_KEY_MASK = 0.7f
+
     /** white dot wave running over the keyboard when the toolbar opens (up, into the toolbar) or closes (down) */
     const val WAVE = "fork_wave_enabled"
     const val WAVE_DURATION = "fork_wave_duration"

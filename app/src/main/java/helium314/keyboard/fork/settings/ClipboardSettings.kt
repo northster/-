@@ -216,16 +216,6 @@ fun createForkClipboardSettings(context: Context) = listOf(
             step = 2f,
         )
     },
-    Setting(context, helium314.keyboard.fork.ForkSettings.PREF_KEY_ALPHA, R.string.fork_key_alpha, R.string.fork_key_alpha_summary) { setting ->
-        InlineSliderPreference(
-            name = setting.title,
-            key = setting.key,
-            default = 1f,
-            range = 0.2f..1f,
-            step = 0.05f,
-            live = true,
-        ) { helium314.keyboard.fork.ForkLive.requestReload() }
-    },
     Setting(context, helium314.keyboard.fork.ForkSettings.PREF_VIRTUAL_CARET, R.string.fork_virtual_caret,
         R.string.fork_virtual_caret_summary) {
         SwitchPreference(it, true)

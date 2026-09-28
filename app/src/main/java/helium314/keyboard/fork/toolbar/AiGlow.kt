@@ -9,20 +9,48 @@ import android.graphics.ColorFilter
 import android.graphics.Paint
 import android.graphics.PixelFormat
 import android.graphics.RectF
+import android.graphics.Region
+import android.os.Build
 import android.graphics.drawable.Drawable
 import android.view.View
 import android.view.animation.LinearInterpolator
+import helium314.keyboard.keyboard.KeyboardView
 import helium314.keyboard.latin.utils.prefs
 
 /**
  * fork: pastel gradient glow along the whole keyboard border (toolbar included) while an AI command or translation
- * runs. Drawn in the input view's overlay, so it takes no space and the keys are not redrawn for it; the colors turn
- * slowly around the border, and it fades in and out.
+ * runs. The colors turn slowly around the border, and it fades in and out. Over the keyboard view it is drawn by the
+ * keyboard view, behind the keys and through the key mask like the paste glow; the rest (the toolbar) is drawn in the
+ * input view's overlay.
  */
-class AiGlow(private val host: View, private val bounds: () -> RectF?) {
+class AiGlow(private val host: View, private val bounds: () -> RectF?, private val keyboardView: () -> KeyboardView?) {
     private val drawable = GlowPrefs.glow(host.context.prefs()).let {
         // the same dot grid as the other glows
         GlowDrawable(host.resources.displayMetrics.density, it.spacingDp, it.dotDp)
+    }
+    /** where the keyboard view is in the input view */
+    private val kvRect = RectF()
+    private var kv: KeyboardView? = null
+    /** the part outside the keyboard view, in the input view's overlay */
+    private val outside = object : PartDrawable() {
+        override fun draw(canvas: Canvas) {
+            canvas.save()
+            if (kv != null) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) canvas.clipOutRect(kvRect)
+                else @Suppress("DEPRECATION") canvas.clipRect(kvRect, Region.Op.DIFFERENCE)
+            }
+            drawable.draw(canvas)
+            canvas.restore()
+        }
+    }
+    /** the part on the keyboard view, in its coordinates */
+    private val inside = object : PartDrawable() {
+        override fun draw(canvas: Canvas) {
+            canvas.save()
+            canvas.translate(-kvRect.left, -kvRect.top)
+            drawable.draw(canvas)
+            canvas.restore()
+        }
     }
     private var spin: ValueAnimator? = null
     private var fade: ValueAnimator? = null
@@ -47,8 +75,10 @@ class AiGlow(private val host: View, private val bounds: () -> RectF?) {
                 else prefs.getFloat(GlowPrefs.AI_GLOW_DEPTH, GlowPrefs.DEFAULT_AI_GLOW_DEPTH).toInt().coerceIn(1, 8)
             val period = prefs.getFloat(GlowPrefs.AI_GLOW_PERIOD, GlowPrefs.DEFAULT_AI_GLOW_PERIOD).toLong().coerceIn(500, 20000)
             spin?.duration = period
-            host.overlay.remove(drawable)
-            host.overlay.add(drawable)
+            host.overlay.remove(outside)
+            host.overlay.add(outside)
+            kv?.setForkAiUnderlay(null)
+            kv = keyboardView()?.also { it.setForkAiUnderlay(inside) }
             if (spin == null) spin = ValueAnimator.ofFloat(0f, 360f).apply {
                 duration = period
                 repeatCount = ValueAnimator.INFINITE
@@ -86,7 +116,9 @@ class AiGlow(private val host: View, private val bounds: () -> RectF?) {
                     if (!on && !cancelled) {
                         spin?.cancel()
                         spin = null
-                        host.overlay.remove(drawable)
+                        host.overlay.remove(outside)
+                        kv?.setForkAiUnderlay(null)
+                        kv = null
                     }
                 }
             })
@@ -97,8 +129,27 @@ class AiGlow(private val host: View, private val bounds: () -> RectF?) {
     private fun update() {
         val r = bounds() ?: return
         drawable.setBounds(r.left.toInt(), r.top.toInt(), r.right.toInt(), r.bottom.toInt())
-        drawable.invalidateSelf()
+        kv?.let {
+            // position of the keyboard view in the input view
+            val loc = IntArray(2)
+            val hostLoc = IntArray(2)
+            it.getLocationInWindow(loc)
+            host.getLocationInWindow(hostLoc)
+            val x = (loc[0] - hostLoc[0]).toFloat()
+            val y = (loc[1] - hostLoc[1]).toFloat()
+            // hidden behind the clipboard or emoji panel: all of it in the overlay
+            if (it.isShown) kvRect.set(x, y, x + it.width, y + it.height) else kvRect.setEmpty()
+            it.invalidateAllKeys()
+        }
+        outside.invalidateSelf()
         host.invalidate()
+    }
+
+    private abstract class PartDrawable : Drawable() {
+        override fun setAlpha(alpha: Int) { }
+        override fun setColorFilter(colorFilter: ColorFilter?) { }
+        @Deprecated("Deprecated in Java")
+        override fun getOpacity() = PixelFormat.TRANSLUCENT
     }
 
     /** dots of the glow's grid along the square border, pastel colors turning around it, fading inwards */

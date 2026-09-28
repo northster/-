@@ -305,8 +305,8 @@
     <string name="fork_cursor_char_step">Finger travel per letter</string>
     <string name="fork_cursor_step_summary">In cursor mode: smaller moves the cursor faster</string>
     <string name="fork_cursor_line_step">Finger travel per line</string>
-    <string name="fork_key_alpha">Key opacity</string>
-    <string name="fork_key_alpha_summary">Lower lets the chip glow behind the keys show through</string>
+    <string name="fork_key_mask">Key mask opacity</string>
+    <string name="fork_key_mask_summary">How much the keys cover the glows (paste and AI) behind them. The key colors stay as they are</string>
     <string name="fork_languages_in_use">Languages in use</string>
     <string name="fork_language_add">Add a language</string>
     <string name="fork_language_add_summary">Type in one of %d languages</string>

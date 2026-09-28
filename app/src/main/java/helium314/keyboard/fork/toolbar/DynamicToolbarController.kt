@@ -155,7 +155,7 @@ class DynamicToolbarController(private val context: Context) {
         animator?.cancel()
         inputView = newInputView
         aiGlow?.show(false)
-        aiGlow = AiGlow(newInputView, ::keyboardBounds)
+        aiGlow = AiGlow(newInputView, ::keyboardBounds) { KeyboardSwitcher.getInstance().mainKeyboardView }
         toolbar = newInputView.findViewById(R.id.dynamic_toolbar)
         setHint(false, immediate = true)
         stopWave()

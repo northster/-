@@ -1466,8 +1466,8 @@ public final class PointerTracker implements PointerTrackerQueue.Element,
 
     private int getLongPressTimeout(int code) {
         int longpressTimeout = Settings.getValues().mKeyLongpressTimeout;
-        // fork: the space hold time can be set on its own (cursor movement starts with it)
-        if (code == Constants.CODE_SPACE) return ForkSettings.spaceLongPressMs(longpressTimeout * 3 / 2);
+        // fork: space holds as long as the other keys (not 1.5 times), cursor movement starts with it
+        if (code == Constants.CODE_SPACE) return ForkSettings.spaceLongPressMs(longpressTimeout);
         return switch (code) {
             case Constants.CODE_SPACE, KeyCode.SHIFT, KeyCode.SYMBOL_ALPHA
                 // We use slightly longer timeout for space, shift-lock, and the numpad long-press.

@@ -150,7 +150,7 @@ class ClipboardAdapter(
                 // the card's own pin: coarser, dots as big as the text's (the toolbar's pin looked too fine here)
                 pinnedIconView.setImageResource(if (historyEntry.isPinned) R.drawable.ic_dot_pin_card_filled else R.drawable.ic_dot_pin_card)
                 colors.setColor(pinnedIconView, if (historyEntry.isPinned) ColorType.KEY_TEXT else ColorType.KEY_HINT_TEXT)
-                pinnedIconView.alpha = if (historyEntry.isPinned) 1f else 0.8f
+                pinnedIconView.alpha = 1f
                 itemView.alpha = 1f
             }
             pinnedIconView.visibility = View.VISIBLE

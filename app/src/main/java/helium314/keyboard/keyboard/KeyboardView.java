@@ -283,6 +283,10 @@ public class KeyboardView extends View {
     //  background changes don't remove them. Changes need invalidateAllKeys().
     @Nullable private Drawable mForkUnderlay;
     @Nullable private Drawable mForkOverlay;
+    // fork: the keyboard's part of the AI border glow (see AiGlow), with the paste glow under the keys
+    @Nullable private Drawable mForkAiUnderlay;
+    @Nullable private Paint mForkMaskPaint;
+    @Nullable private Paint mForkSrcInPaint;
 
     /** fork: soft shadow under every key, for keys floating over content (emoji panel bottom row) */
     @Nullable private Paint mForkKeyShadowPaint;
@@ -303,6 +307,13 @@ public class KeyboardView extends View {
     public void setForkUnderlay(@Nullable final Drawable underlay) {
         if (mForkUnderlay == underlay) return;
         mForkUnderlay = underlay;
+        invalidateAllKeys();
+    }
+
+    /** fork: the AI glow's part on the keyboard, drawn like the underlay */
+    public void setForkAiUnderlay(@Nullable final Drawable underlay) {
+        if (mForkAiUnderlay == underlay) return;
+        mForkAiUnderlay = underlay;
         invalidateAllKeys();
     }
 
@@ -341,9 +352,23 @@ public class KeyboardView extends View {
                 background.draw(canvas);
             }
             drawForkDecoration(mForkUnderlay, canvas); // fork: under the keys
-            // Draw all keys.
-            for (final Key key : keyboard.getSortedKeys()) {
-                onDrawKey(key, canvas, paint);
+            drawForkDecoration(mForkAiUnderlay, canvas);
+            final int glowOnKeys = (mForkUnderlay != null || mForkAiUnderlay != null)
+                    ? helium314.keyboard.fork.ForkSettings.glowOnKeysAlpha() : 0;
+            if (glowOnKeys <= 0) {
+                // Draw all keys.
+                for (final Key key : keyboard.getSortedKeys()) {
+                    onDrawKey(key, canvas, paint);
+                }
+            } else {
+                // fork: key backgrounds, the glows again through a key shaped mask, then the labels over them
+                for (final Key key : keyboard.getSortedKeys()) {
+                    onDrawKey(key, canvas, paint, true, false);
+                }
+                drawForkGlowOnKeys(keyboard, canvas, glowOnKeys);
+                for (final Key key : keyboard.getSortedKeys()) {
+                    onDrawKey(key, canvas, paint, false, true);
+                }
             }
             drawForkDecoration(mForkOverlay, canvas); // fork: over the keys
         } else {
@@ -370,8 +395,43 @@ public class KeyboardView extends View {
         mInvalidateAllKeys = false;
     }
 
+    /**
+     * fork: the glows once more over the keys, only where the key backgrounds are ([alpha] = 255 - the key mask's
+     * opacity), so they tint the keys without the keys themselves being see-through
+     */
+    private void drawForkGlowOnKeys(@NonNull final Keyboard keyboard, @NonNull final Canvas canvas, final int alpha) {
+        if (mForkMaskPaint == null) {
+            mForkMaskPaint = new Paint();
+            mForkSrcInPaint = new Paint();
+            mForkSrcInPaint.setXfermode(new android.graphics.PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+        }
+        mForkMaskPaint.setAlpha(alpha);
+        final int saved = canvas.saveLayer(0, 0, getWidth(), getHeight(), mForkMaskPaint);
+        // the key shapes
+        for (final Key key : keyboard.getSortedKeys()) {
+            if (key.isSpacer()) continue;
+            final int keyDrawX = key.getDrawX() + getPaddingLeft();
+            final int keyDrawY = key.getY() + getPaddingTop();
+            canvas.translate(keyDrawX, keyDrawY);
+            onDrawKeyBackground(key, canvas, key.selectBackgroundDrawable(
+                    mKeyBackground, mFunctionalKeyBackground, mSpacebarBackground, mActionKeyBackground));
+            canvas.translate(-keyDrawX, -keyDrawY);
+        }
+        // the glows, kept only where the shapes are
+        canvas.saveLayer(0, 0, getWidth(), getHeight(), mForkSrcInPaint);
+        drawForkDecoration(mForkUnderlay, canvas);
+        drawForkDecoration(mForkAiUnderlay, canvas);
+        canvas.restoreToCount(saved);
+    }
+
     private void onDrawKey(@NonNull final Key key, @NonNull final Canvas canvas,
             @NonNull final Paint paint) {
+        onDrawKey(key, canvas, paint, true, true);
+    }
+
+    // fork: in two parts, so the glows can be drawn between the key backgrounds and the labels
+    private void onDrawKey(@NonNull final Key key, @NonNull final Canvas canvas,
+            @NonNull final Paint paint, final boolean drawBackground, final boolean drawTop) {
         final int keyDrawX = key.getDrawX() + getPaddingLeft();
         final int keyDrawY = key.getY() + getPaddingTop();
         canvas.translate(keyDrawX, keyDrawY);
@@ -381,21 +441,19 @@ public class KeyboardView extends View {
         final KeyDrawParams params = mKeyDrawParams.mayCloneAndUpdateParams((int) (key.getHeight() * mKeyScaleForText), attr);
         params.mAnimAlpha = Constants.Color.ALPHA_OPAQUE;
 
-        if (!key.isSpacer() && mForkKeyShadowPaint != null) {
+        if (drawBackground && !key.isSpacer() && mForkKeyShadowPaint != null) {
             // fork: under the key background, a bit inset so it shows as a soft edge around the key
             final float inset = 2 * getResources().getDisplayMetrics().density;
             final float radius = 12 * getResources().getDisplayMetrics().density;
             canvas.drawRoundRect(inset, inset, key.getDrawWidth() - inset, key.getHeight() - inset, radius, radius,
                     mForkKeyShadowPaint);
         }
-        if (!key.isSpacer()) {
+        if (drawBackground && !key.isSpacer()) {
             final Drawable background = key.selectBackgroundDrawable(
                     mKeyBackground, mFunctionalKeyBackground, mSpacebarBackground, mActionKeyBackground);
-            // fork: key opacity setting; the chip glow is drawn behind the keys and shows through see-through keys
-            background.setAlpha(helium314.keyboard.fork.ForkSettings.keyAlpha());
             onDrawKeyBackground(key, canvas, background);
         }
-        onDrawKeyTopVisuals(key, canvas, paint, params);
+        if (drawTop) onDrawKeyTopVisuals(key, canvas, paint, params);
 
         canvas.translate(-keyDrawX, -keyDrawY);
     }

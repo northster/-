@@ -15,7 +15,6 @@ import sys
 
 # our icon name -> pixelarticons name
 MAP = {
-    'enter': 'corner-down-left',
     'smile': 'smile',
     'search': 'search',
     'clipboard': 'clipboard',
@@ -24,8 +23,6 @@ MAP = {
     'cut': 'scissors',
     'select_all': 'square-dashed-cursor',
     'select_word': 'text-cursor',
-    'undo': 'undo',
-    'redo': 'redo',
     'left': 'chevron-left',
     'right': 'chevron-right',
     'check': 'check',
@@ -53,6 +50,40 @@ SMALL = {'left': 8, 'right': 8, 'check': 8, 'close': 8, 'more': 8}
 
 # drawn straight on the 12x12 grid ('o' = dot), at most SIZE x SIZE: simple key icons read better drawn for the grid
 OWN = {
+    # square corners: resampled, the icon pack's rounded (diagonal) corners looked like a missing dot
+    'undo': """
+..o.......
+.oo.......
+oooooooooo
+.oo......o
+..o......o
+.........o
+.........o
+.........o
+....oooooo
+""",
+    'redo': """
+.......o..
+.......oo.
+oooooooooo
+o......oo.
+o......o..
+o.........
+o.........
+o.........
+oooooo....
+""",
+    'enter': """
+.........o
+.........o
+.........o
+.........o
+..o......o
+.oo......o
+oooooooooo
+.oo.......
+..o.......
+""",
     'shift': """
 ....oo....
 ...o..o...
@@ -351,12 +382,12 @@ CARD_PINS = {
     # a two dot wide outline: a single line of dots was hard to see
     'pin_card': """
 ooooooo
-ooooooo
-oo...oo
-oo...oo
-oo...oo
-oo...oo
-oo.o.oo
+o.....o
+o.....o
+o.....o
+o.....o
+o..o..o
+o.o.o.o
 oo...oo
 """,
     'pin_card_filled': """

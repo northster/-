@@ -302,8 +302,8 @@
     <string name="fork_cursor_char_step">글자당 손가락 이동 거리</string>
     <string name="fork_cursor_step_summary">커서 이동 모드에서: 작을수록 커서가 빨리 움직여요</string>
     <string name="fork_cursor_line_step">줄당 손가락 이동 거리</string>
-    <string name="fork_key_alpha">키 불투명도</string>
-    <string name="fork_key_alpha_summary">낮추면 키 뒤의 칩 글로우가 비쳐 보여요</string>
+    <string name="fork_key_mask">키 마스크 불투명도</string>
+    <string name="fork_key_mask_summary">키가 뒤의 글로우(붙여넣기, AI)를 가리는 정도예요. 키 색은 그대로예요</string>
     <string name="fork_languages_in_use">사용 중인 언어</string>
     <string name="fork_language_add">언어 추가</string>
     <string name="fork_language_add_summary">%d개의 언어 중 하나로 입력</string>

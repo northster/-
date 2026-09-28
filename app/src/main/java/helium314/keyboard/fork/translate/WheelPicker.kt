@@ -60,8 +60,9 @@ class WheelPicker(
             paint.typeface = typefaces[i]
             paint.isFakeBoldText = distance < 0.5f
             paint.textSize = (15f + 7f * near) * density
-            paint.color = colors.get(if (distance < 0.5f) ColorType.KEY_TEXT else ColorType.KEY_HINT_TEXT)
-            paint.alpha = (255 * (0.25f + 0.75f * near).coerceAtMost(1f)).toInt()
+            // the others in the key text color too, only a little dimmer, so they can be read
+            paint.color = colors.get(ColorType.KEY_TEXT)
+            paint.alpha = (255 * (0.6f + 0.4f * near).coerceAtMost(1f)).toInt()
             val text = fit(items[i], width - 8 * density)
             canvas.drawText(text, width / 2f, y - (paint.ascent() + paint.descent()) / 2, paint)
         }

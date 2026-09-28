@@ -66,6 +66,7 @@ fun DynamicToolbarScreen(
                 wave && prefs.getString(GlowPrefs.WAVE_SHAPE, GlowPrefs.SHAPE_LINE) == GlowPrefs.SHAPE_RIPPLE
             },
             R.string.fork_cat_glow,
+            GlowPrefs.KEY_MASK,
             GlowPrefs.GLOW,
             GlowPrefs.GLOW_TEST_UNTIL.takeIf { glow },
             GlowPrefs.GLOW_POSITION.takeIf { glow },
@@ -223,6 +224,9 @@ fun createDynamicToolbarSettings(context: Context) = listOf(
         ChipColorPreference(setting.title, setting.key, setting.description) {
             DynamicToolbarController.current?.onGlowSettingsChanged()
         }
+    },
+    Setting(context, GlowPrefs.KEY_MASK, R.string.fork_key_mask, R.string.fork_key_mask_summary) {
+        GlowSlider(it, GlowPrefs.DEFAULT_KEY_MASK, 0f..1f, 0.05f, ::percent)
     },
     Setting(context, GlowPrefs.GLOW_MAX, R.string.fork_glow_max) {
         GlowSlider(it, GlowPrefs.DEFAULT_GLOW_MAX, 0.05f..1f, 0.05f, ::percent)

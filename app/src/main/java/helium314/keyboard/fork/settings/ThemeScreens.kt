@@ -279,7 +279,6 @@ fun ThemeColorsScreen(onClickBack: () -> Unit) {
                     helium314.keyboard.latin.settings.Settings.PREF_THEME_DAY_NIGHT else null,
                 helium314.keyboard.latin.settings.Settings.PREF_NAVBAR_COLOR,
                 helium314.keyboard.latin.settings.Settings.PREF_CUSTOM_ICON_NAMES,
-                helium314.keyboard.fork.ForkSettings.PREF_KEY_ALPHA,
                 // paste / smart chips on the toolbar
                 R.string.fork_cat_chip_look,
                 helium314.keyboard.fork.clipboard.ClipPrefs.CHIP_BORDER,
