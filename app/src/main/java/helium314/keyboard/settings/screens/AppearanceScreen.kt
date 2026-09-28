@@ -109,6 +109,7 @@ fun AppearanceScreen(
         ForkSettings.PREF_SPLIT_AUTO,
         Settings.PREF_ENABLE_SPLIT_KEYBOARD.takeIf { !prefs.getBoolean(ForkSettings.PREF_SPLIT_AUTO, true) },
         Settings.PREF_SPLIT_SPACER_SCALE_PREFIX,
+        ForkSettings.PREF_SPLIT_SIDE_PADDING_DP,
         R.string.fork_cat_text,
         Settings.PREF_SPACE_BAR_TEXT,
         Settings.PREF_FONT_SCALE,
@@ -247,6 +248,10 @@ fun createAppearanceSettings(context: Context) = listOf(
     Setting(context, Settings.PREF_ENABLE_SPLIT_KEYBOARD, R.string.enable_split_keyboard) {
         // fork: one setting for every screen
         SwitchPreference(it, Defaults.PREF_ENABLE_SPLIT_KEYBOARD) { KeyboardSwitcher.getInstance().setThemeNeedsReload() }
+    },
+    Setting(context, ForkSettings.PREF_SPLIT_SIDE_PADDING_DP, R.string.fork_split_side_padding,
+        R.string.fork_split_side_padding_summary) { setting ->
+        DpSliderPreference(setting.title, ForkSize.SPLIT_SIDE_PADDING, setting.description)
     },
     Setting(context, Settings.PREF_SPLIT_SPACER_SCALE_PREFIX, R.string.split_spacer_scale) { setting ->
         InlineSliderPreference(

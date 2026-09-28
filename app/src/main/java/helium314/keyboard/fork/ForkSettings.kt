@@ -64,6 +64,8 @@ object ForkSettings {
     private const val PREF_KEY_HEIGHT_MIGRATED = "fork_key_height_migrated"
     const val PREF_BOTTOM_PADDING_DP = "fork_bottom_padding_dp"
     const val PREF_SIDE_PADDING_DP = "fork_side_padding_dp"
+    /** side padding of the split keyboard (outer edges), unset = [PREF_SIDE_PADDING_DP] */
+    const val PREF_SPLIT_SIDE_PADDING_DP = "fork_split_side_padding_dp"
     const val PREF_KEY_GAP_H_DP = "fork_key_gap_h_dp"
     const val PREF_KEY_GAP_V_DP = "fork_key_gap_v_dp"
     const val PREF_TOP_PADDING_DP = "fork_top_padding_dp"

@@ -351,3 +351,4 @@ SwiftSlate(github.com/Musheer360/SwiftSlate, MIT)의 명령 방식을 키보드 
 
 ## 툴바 닫힌 채로 열기
 - 설정 > 툴바 > "항상 툴바 닫힌 채로 열기"(기본 끔): 키보드 창이 사라질 때(`LatinIME.onWindowHidden`) 툴바가 열려 있으면 애니메이션 없이 닫아 두어, 다음에 키보드를 열면 항상 닫힌 상태다. 끄면 예전처럼 마지막 상태를 기억한다.
+- 분할 키보드 좌우 여백(설정 > 모양 및 크기, 0~240dp): 분할됐을 때만 쓰는 바깥 여백(`ForkSettings.PREF_SPLIT_SIDE_PADDING_DP`). 옮기기 전에는 일반 좌우 여백을 그대로 쓴다.

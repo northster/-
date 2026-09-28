@@ -337,7 +337,9 @@ public class SettingsValues {
         mForkKeyHeightDp = ForkSettings.sizeDp(prefs, ForkSettings.PREF_KEY_HEIGHT_DP);
         mForkBottomRowDp = ForkSettings.sizeDp(prefs, ForkSettings.PREF_BOTTOM_ROW_DP);
         mForkBottomPaddingDp = mIsFloatingKeyboard ? ForkSettings.SIZE_UNSET : ForkSettings.sizeDp(prefs, ForkSettings.PREF_BOTTOM_PADDING_DP);
-        mForkSidePaddingDp = ForkSettings.sizeDp(prefs, ForkSettings.PREF_SIDE_PADDING_DP);
+        // fork: the split keyboard has its own side padding when set
+        final float splitSide = mIsSplitKeyboardEnabled ? ForkSettings.sizeDp(prefs, ForkSettings.PREF_SPLIT_SIDE_PADDING_DP) : -1f;
+        mForkSidePaddingDp = splitSide >= 0 ? splitSide : ForkSettings.sizeDp(prefs, ForkSettings.PREF_SIDE_PADDING_DP);
         mForkTopPaddingDp = mIsFloatingKeyboard ? ForkSettings.SIZE_UNSET : ForkSettings.sizeDp(prefs, ForkSettings.PREF_TOP_PADDING_DP);
         mForkKeyGapHDp = ForkSettings.sizeDp(prefs, ForkSettings.PREF_KEY_GAP_H_DP);
         mForkKeyGapVDp = ForkSettings.sizeDp(prefs, ForkSettings.PREF_KEY_GAP_V_DP);
