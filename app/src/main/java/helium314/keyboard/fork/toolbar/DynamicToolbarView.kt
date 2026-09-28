@@ -530,7 +530,16 @@ class DynamicToolbarView @JvmOverloads constructor(
 
     private val screenPos = IntArray(2)
 
+    /** drawn over the background, under the buttons (the AI glow's part on the toolbar) */
+    private var underGlow: android.graphics.drawable.Drawable? = null
+
+    fun setUnderGlow(glow: android.graphics.drawable.Drawable?) {
+        underGlow = glow
+        invalidate()
+    }
+
     override fun dispatchDraw(canvas: android.graphics.Canvas) {
+        underGlow?.draw(canvas)
         super.dispatchDraw(canvas)
         val w = wave ?: return
         getLocationOnScreen(screenPos)

@@ -157,7 +157,8 @@ class DynamicToolbarController(private val context: Context) {
         animator?.cancel()
         inputView = newInputView
         aiGlow?.show(false)
-        aiGlow = AiGlow(newInputView) { KeyboardSwitcher.getInstance().mainKeyboardView }
+        aiGlow = AiGlow(newInputView, { KeyboardSwitcher.getInstance().mainKeyboardView },
+            { toolbar?.takeIf { it.visibility == View.VISIBLE && hiddenFraction < 1f } })
         toolbar = newInputView.findViewById(R.id.dynamic_toolbar)
         setHint(false, immediate = true)
         stopWave()
@@ -184,6 +185,18 @@ class DynamicToolbarController(private val context: Context) {
     }
 
     fun onSwipe(up: Boolean) {
+        if (!up && !isExpanded && hintView != null) {
+            // swiping the closed toolbar down again: whatever glows behind it (clip, smart chip, autofill) goes away
+            if (chip != null) dismissChip()
+            if (typedHit != null) {
+                typedSuppressed = true
+                typedHit = null
+            }
+            autofillView = null
+            setHint(false)
+            applyChipState()
+            return
+        }
         val before = isExpanded
         setExpanded(up, true)
         if (isExpanded != before) startWave(isExpanded)

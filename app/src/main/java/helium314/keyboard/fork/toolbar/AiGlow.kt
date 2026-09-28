@@ -22,15 +22,62 @@ import kotlin.math.sin
 import kotlin.math.sqrt
 
 /**
- * fork: pastel glow behind the keys while an AI command or translation runs, seen through the key mask like the chip
- * glow; it breathes and fades in and out. Two looks ([GlowPrefs.AI_GLOW_STYLE]):
+ * fork: pastel glow behind the keys and the toolbar while an AI command or translation runs, seen through the key mask
+ * like the chip glow; it breathes and fades in and out. It is one glow over both: the keyboard view and the toolbar each
+ * draw their part of it. Two looks ([GlowPrefs.AI_GLOW_STYLE]):
  * - [GlowPrefs.AI_STYLE_RING]: like the Siri light on a HomePod, soft blobs of random pastel colors in a ring round the
  *   keyboard's middle, turning slowly, smooth over the whole keyboard
  * - [GlowPrefs.AI_STYLE_DOTS]: the chip glow's dots and shape, the HomePod colors blending softly across it
  */
-class AiGlow(private val host: View, private val keyboardView: () -> KeyboardView?) {
+class AiGlow(
+    private val host: View,
+    private val keyboardView: () -> KeyboardView?,
+    /** the toolbar when it is (at least partly) shown */
+    private val toolbar: () -> DynamicToolbarView?,
+) {
     private var drawable: Layer? = null
     private var kv: KeyboardView? = null
+    private var tb: DynamicToolbarView? = null
+    /** the parts: the glow moved up by where the view is in the whole (toolbar on top, keyboard below) */
+    private val kvPart = Part()
+    private val tbPart = Part()
+    private val loc = IntArray(2)
+
+    private inner class Part : Drawable() {
+        var offsetY = 0
+        override fun draw(canvas: Canvas) {
+            val glow = drawable ?: return
+            canvas.save()
+            canvas.translate(0f, -offsetY.toFloat())
+            glow.draw(canvas)
+            canvas.restore()
+        }
+        override fun setAlpha(alpha: Int) { }
+        override fun setColorFilter(colorFilter: ColorFilter?) { }
+        @Deprecated("Deprecated in Java")
+        override fun getOpacity() = PixelFormat.TRANSLUCENT
+    }
+
+    /** the glow over the keyboard and, when shown, the toolbar above it */
+    private fun place(view: KeyboardView, glow: Layer) {
+        view.getLocationInWindow(loc)
+        val kvTop = loc[1]
+        val bar = toolbar()
+        var top = kvTop
+        if (bar != null) {
+            bar.getLocationInWindow(loc)
+            if (loc[1] < kvTop) top = loc[1]
+            tbPart.offsetY = loc[1] - top
+        }
+        if (bar !== tb) {
+            tb?.setUnderGlow(null)
+            tb = bar
+            bar?.setUnderGlow(tbPart)
+        }
+        kvPart.offsetY = kvTop - top
+        glow.setBounds(0, 0, view.width, kvTop - top + view.height)
+        bar?.invalidate()
+    }
     private var ticker: ValueAnimator? = null
     private var fader: ValueAnimator? = null
     private var shown = false
@@ -50,13 +97,15 @@ class AiGlow(private val host: View, private val keyboardView: () -> KeyboardVie
                 else PastelRingDrawable(params.maxAlpha, params.minAlpha, params.periodMs)
             drawable = glow
             kv = view
-            view.setForkAiUnderlay(glow)
+            place(view, glow)
+            view.setForkAiUnderlay(kvPart)
             val start = SystemClock.uptimeMillis()
             ticker = ValueAnimator.ofFloat(0f, 1f).apply {
                 duration = 1000
                 repeatCount = ValueAnimator.INFINITE
                 addUpdateListener {
                     glow.time = SystemClock.uptimeMillis() - start
+                    place(view, glow)
                     view.invalidateAllKeys()
                 }
                 start()
@@ -84,6 +133,8 @@ class AiGlow(private val host: View, private val keyboardView: () -> KeyboardVie
         ticker = null
         kv?.setForkAiUnderlay(null)
         kv = null
+        tb?.setUnderGlow(null)
+        tb = null
         drawable = null
     }
 
