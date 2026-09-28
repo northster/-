@@ -96,10 +96,15 @@ class AiGlow(private val host: View, private val keyboardView: () -> KeyboardVie
         override fun getOpacity() = PixelFormat.TRANSLUCENT
     }
 
-    /** the chip glow's dots and shape, colored by their distance from its center: three random pastels, center to edge */
+    /**
+     * the chip glow's dots and shape in vivid colors (pastels look white as small dots): four random ones fanned out
+     * round the glow's center and shifting a little outwards, each dot twinkling softly on its own
+     */
     private class PastelDotsDrawable(private val density: Float, private val params: GlowPrefs.Glow) : Layer() {
         private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
-        private val stops = COLORS.toList().shuffled().take(3).toIntArray()
+        private val stops = VIVID.toList().shuffled().take(4).toIntArray()
+        private val random = java.util.Random()
+        private var phases = FloatArray(0)
         // the dots for the current size: position, brightness from the shape, color
         private var size = 0L
         private var xs = FloatArray(0)
@@ -118,7 +123,8 @@ class AiGlow(private val host: View, private val keyboardView: () -> KeyboardVie
             val r = params.dotDp * density
             for (i in xs.indices) {
                 paint.color = dotColors[i]
-                paint.alpha = (255 * alpha * shape[i]).toInt().coerceIn(0, 255)
+                val twinkle = 0.7f + 0.3f * sin(time / TWINKLE_MS.toFloat() + phases[i])
+                paint.alpha = (255 * alpha * shape[i] * twinkle).toInt().coerceIn(0, 255)
                 if (paint.alpha > 0) canvas.drawCircle(bounds.left + xs[i], bounds.top + ys[i], r, paint)
             }
         }
@@ -144,17 +150,21 @@ class AiGlow(private val host: View, private val keyboardView: () -> KeyboardVie
                     val d = sqrt(dx * dx + dy * dy)
                     if (d < 1f) {
                         lx += x; ly += y
-                        ls += (1f - d).pow(1.2f)
-                        lc += gradient(d)
+                        // flatter than the chip glow, so the colored outer dots show too
+                        ls += (1f - d).pow(0.8f)
+                        // around the center (0 left .. 1 right), shifted a little with the distance
+                        val around = (kotlin.math.atan2(dy, -dx) / PI).toFloat()
+                        lc += gradient((around * 0.75f + d * 0.25f).coerceIn(0f, 1f))
                     }
                     x += spacing
                 }
                 edgeDistance += spacing
             }
             xs = lx.toFloatArray(); ys = ly.toFloatArray(); shape = ls.toFloatArray(); dotColors = lc.toIntArray()
+            phases = FloatArray(xs.size) { random.nextFloat() * 2 * PI.toFloat() }
         }
 
-        /** [d] 0 (center) .. 1 (edge) through the three colors */
+        /** [d] 0 .. 1 through the colors */
         private fun gradient(d: Float): Int {
             val pos = d.coerceIn(0f, 1f) * (stops.size - 1)
             val i = pos.toInt().coerceIn(0, stops.size - 2)
@@ -227,6 +237,13 @@ class AiGlow(private val host: View, private val keyboardView: () -> KeyboardVie
 
     companion object {
         private const val BLOBS = 5
+        /** twinkling of the dot glow's dots (radians per ms: about 4 s a cycle) */
+        private const val TWINKLE_MS = 650L
+        /** strong colors for the dot glow: pink, coral, amber, lime, aqua, azure, violet, magenta */
+        private val VIVID = intArrayOf(
+            0xFFFF4FA3.toInt(), 0xFFFF7A59.toInt(), 0xFFFFC23D.toInt(), 0xFF7CE35A.toInt(),
+            0xFF2FD8E8.toInt(), 0xFF4F8BFF.toInt(), 0xFF9B6BFF.toInt(), 0xFFE15CFF.toInt(),
+        )
         private const val TURN_MS = 16_000L
         private const val DRIFT_MS = 5_000L
         /** pink, peach, butter, mint, sky, periwinkle, lavender, orchid */
