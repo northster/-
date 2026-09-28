@@ -364,6 +364,9 @@
     <string name="fork_gif_unfavorite">즐겨찾기에서 빼기</string>
     <string name="fork_gif_no_recent">아직 보낸 GIF가 없어요</string>
     <string name="fork_gif_no_favorites">즐겨찾기한 GIF가 없어요. GIF 오른쪽 위 별을 눌러 추가하세요</string>
+    <string name="fork_gif_loading">불러오는 중…</string>
+    <string name="fork_gif_failed_reason">GIF를 불러오지 못했어요 (%1$s)</string>
+    <string name="fork_gif_timeout">응답이 없어요. 인터넷 연결이나 API 키를 확인해 주세요</string>
     <string name="fork_gif_search_hint">GIF 검색</string>
     <string name="fork_gif_no_key">GIF를 쓰려면 툴바 설정에 KLIPY나 GIPHY API 키를 넣어 주세요</string>
     <string name="fork_gif_failed">GIF를 불러오지 못했어요</string>
@@ -401,7 +404,7 @@
     <string name="fork_clip_unpinned_toast">고정 해제했어요</string>
     <string name="fork_cat_ai_glow">AI 글로우</string>
     <string name="fork_ai_glow">AI 작동 중 글로우</string>
-    <string name="fork_ai_glow_summary">AI 명령이나 번역이 도는 동안 키 뒤에 파스텔 점 글로우(칩 글로우와 같은 모양, 매번 무작위 파스텔 색의 원형 그라데이션)</string>
+    <string name="fork_ai_glow_summary">AI 명령이나 번역이 도는 동안 키보드 배경에 은은한 파스텔 빛 고리(매번 다른 색)</string>
     <string name="fork_translate_empty_short">입력한 글이 없어요</string>
     <string name="fork_cat_claude_usage">Claude 사용량</string>
     <string name="fork_claude_key">claude.ai 세션 키</string>

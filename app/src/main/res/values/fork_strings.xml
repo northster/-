@@ -367,6 +367,9 @@
     <string name="fork_gif_unfavorite">Remove from favorites</string>
     <string name="fork_gif_no_recent">No GIFs sent yet</string>
     <string name="fork_gif_no_favorites">No favorite GIFs. Tap the star at the top right of a GIF to add it</string>
+    <string name="fork_gif_loading">Loading…</string>
+    <string name="fork_gif_failed_reason">Couldn\'t load GIFs (%1$s)</string>
+    <string name="fork_gif_timeout">No answer. Check the internet connection or the API key</string>
     <string name="fork_gif_search_hint">Search GIFs</string>
     <string name="fork_gif_no_key">Enter a KLIPY or GIPHY API key in the toolbar settings for GIFs</string>
     <string name="fork_gif_failed">Couldn\'t load GIFs</string>
@@ -404,7 +407,7 @@
     <string name="fork_clip_unpinned_toast">Unpinned</string>
     <string name="fork_cat_ai_glow">AI glow</string>
     <string name="fork_ai_glow">Glow while AI works</string>
-    <string name="fork_ai_glow_summary">Pastel dot glow behind the keys while an AI command or translation runs (shaped like the chip glow, a round gradient of random pastel colors each time)</string>
+    <string name="fork_ai_glow_summary">Soft pastel light ring behind the keys while an AI command or translation runs (new colors each time)</string>
     <string name="fork_translate_empty_short">Nothing typed yet</string>
     <string name="fork_cat_claude_usage">Claude usage</string>
     <string name="fork_claude_key">claude.ai session key</string>

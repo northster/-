@@ -399,8 +399,8 @@ class DynamicToolbarView @JvmOverloads constructor(
         }.start()
     }
 
-    /** [gif]: GIF search, the results are GIF previews */
-    fun showSearch(onClose: () -> Unit, gif: Boolean = false) {
+    /** [gif]: GIF search, the results are GIF previews; [strip] false: only the query (results go to the GIF panel) */
+    fun showSearch(onClose: () -> Unit, gif: Boolean = false, strip: Boolean = true) {
         val colors = Settings.getValues().mColors
         searchBar.removeAllViews()
         searchBar.addView(iconButton(if (gif) R.drawable.ic_dot_gif else R.drawable.ic_dot_search,
@@ -410,14 +410,20 @@ class DynamicToolbarView @JvmOverloads constructor(
         queryView.setHintTextColor(colors.get(ColorType.KEY_HINT_TEXT))
         queryView.hint = context.getString(if (gif) R.string.fork_gif_search_hint else R.string.fork_clip_search_hint)
         KeyboardTypeface.applyToTextView(queryView)
-        searchBar.addView(queryView, LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT))
-        searchBar.addView(resultScroll, LinearLayout.LayoutParams(0, LayoutParams.MATCH_PARENT, 1f))
+        if (strip) {
+            searchBar.addView(queryView, LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT))
+            searchBar.addView(resultScroll, LinearLayout.LayoutParams(0, LayoutParams.MATCH_PARENT, 1f))
+        } else searchBar.addView(queryView, LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f))
         searchBar.addView(iconButton(R.drawable.ic_dot_close, context.getString(android.R.string.cancel)) { onClose() },
             LinearLayout.LayoutParams((40 * density).toInt(), LayoutParams.MATCH_PARENT))
         row.visibility = GONE
         header.visibility = GONE
         chipBar.visibility = GONE
         searchBar.visibility = VISIBLE
+    }
+
+    fun setSearchQuery(query: String) {
+        queryView.text = query
     }
 
     fun hideSearch() {

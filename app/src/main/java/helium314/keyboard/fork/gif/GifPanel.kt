@@ -60,13 +60,18 @@ class GifPanel(
         addView(status, LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT))
     }
 
-    /** [list] null while loading; [empty] shown when there is nothing */
+    var isLoading = false
+        private set
+
+    /** [list] null while loading; [empty] shown when there is nothing (or while loading) */
     @SuppressLint("NotifyDataSetChanged")
     fun show(list: List<GifItem>?, empty: String) {
+        isLoading = list == null
         items = list.orEmpty()
+        if (grid.adapter !== adapter) grid.adapter = adapter
         adapter.notifyDataSetChanged()
         grid.scrollToPosition(0)
-        status.text = if (list == null) "…" else empty
+        status.text = empty
         status.visibility = if (items.isEmpty()) VISIBLE else GONE
     }
 
@@ -83,11 +88,6 @@ class GifPanel(
     override fun setForkExpandedHeight(height: Int) {
         expandedHeight = height
         requestLayout()
-    }
-
-    override fun onDetachedFromWindow() {
-        super.onDetachedFromWindow()
-        grid.adapter = null // stops the animations
     }
 
     private inner class Holder(val frame: FrameLayout, val image: ImageView, val star: ImageView) : RecyclerView.ViewHolder(frame)

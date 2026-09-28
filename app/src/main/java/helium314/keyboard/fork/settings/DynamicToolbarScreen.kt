@@ -82,12 +82,9 @@ fun DynamicToolbarScreen(
             R.string.fork_cat_ai_glow,
             GlowPrefs.AI_GLOW,
             GlowPrefs.AI_GLOW_TEST.takeIf { aiGlow },
-            GlowPrefs.AI_GLOW_POSITION.takeIf { aiGlow },
             GlowPrefs.AI_GLOW_MAX.takeIf { aiGlow },
             GlowPrefs.AI_GLOW_MIN.takeIf { aiGlow },
             GlowPrefs.AI_GLOW_BREATH.takeIf { aiGlow },
-            GlowPrefs.AI_GLOW_HEIGHT.takeIf { aiGlow },
-            GlowPrefs.AI_GLOW_WIDTH.takeIf { aiGlow },
             GlowPrefs.AI_GLOW_IN.takeIf { aiGlow },
             R.string.fork_cat_autofill,
             DynamicToolbarController.PREF_AUTOFILL,
@@ -262,13 +259,6 @@ fun createDynamicToolbarSettings(context: Context) = listOf(
                 android.widget.Toast.makeText(ctx, R.string.fork_ai_glow_test_no_keyboard, android.widget.Toast.LENGTH_LONG).show()
         })
     },
-    Setting(context, GlowPrefs.AI_GLOW_POSITION, R.string.fork_glow_position) { setting ->
-        val ctx = androidx.compose.ui.platform.LocalContext.current
-        helium314.keyboard.settings.preferences.InlineChoicePreference(setting.title, setting.key, listOf(
-            ctx.getString(R.string.fork_glow_position_top) to GlowPrefs.POSITION_TOP,
-            ctx.getString(R.string.fork_glow_position_bottom) to GlowPrefs.POSITION_BOTTOM,
-        ), GlowPrefs.POSITION_TOP)
-    },
     Setting(context, GlowPrefs.AI_GLOW_MAX, R.string.fork_glow_max) {
         GlowSlider(it, GlowPrefs.DEFAULT_AI_GLOW_MAX, 0.05f..1f, 0.05f, ::percent)
     },
@@ -277,12 +267,6 @@ fun createDynamicToolbarSettings(context: Context) = listOf(
     },
     Setting(context, GlowPrefs.AI_GLOW_BREATH, R.string.fork_glow_period) {
         GlowSlider(it, GlowPrefs.DEFAULT_AI_GLOW_BREATH, 400f..8000f, 100f, ::ms)
-    },
-    Setting(context, GlowPrefs.AI_GLOW_HEIGHT, R.string.fork_glow_height) {
-        GlowSlider(it, GlowPrefs.DEFAULT_AI_GLOW_HEIGHT, 0.1f..1f, 0.05f, ::percent)
-    },
-    Setting(context, GlowPrefs.AI_GLOW_WIDTH, R.string.fork_glow_width) {
-        GlowSlider(it, GlowPrefs.DEFAULT_AI_GLOW_WIDTH, 0.2f..2f, 0.05f, ::percent)
     },
     Setting(context, GlowPrefs.AI_GLOW_IN, R.string.fork_ai_glow_in) {
         GlowSlider(it, GlowPrefs.DEFAULT_AI_GLOW_IN, 200f..4000f, 100f, ::ms)

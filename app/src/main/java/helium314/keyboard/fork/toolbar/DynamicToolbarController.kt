@@ -1116,17 +1116,24 @@ class DynamicToolbarController(private val context: Context) {
             GIF_RECENT -> panel.show(helium314.keyboard.fork.gif.GifStore.recent(prefs), context.getString(R.string.fork_gif_no_recent))
             GIF_FAVORITES -> panel.show(helium314.keyboard.fork.gif.GifStore.favorites(prefs), context.getString(R.string.fork_gif_no_favorites))
             else -> {
-                panel.show(null, "")
+                panel.show(null, context.getString(R.string.fork_gif_loading))
                 val query = gifPanelQuery
                 val app = context.applicationContext
+                // no answer for long: say so instead of loading forever
+                handler.postDelayed({
+                    if (id == gifPanelRequest && gifPanel === panel && panel.isLoading)
+                        panel.show(emptyList(), context.getString(R.string.fork_gif_timeout))
+                }, 20_000)
                 Thread {
                     // an empty query gives the trending GIFs
                     val found = runCatching { helium314.keyboard.fork.gif.GifClient.search(app.prefs(), query) }
                     handler.post {
                         if (id != gifPanelRequest || gifPanel !== panel) return@post
-                        if (found.isFailure) Log.w(TAG, "GIF search failed", found.exceptionOrNull())
-                        panel.show(found.getOrNull() ?: emptyList(), context.getString(
-                            if (found.isFailure) R.string.fork_gif_failed else R.string.fork_gif_nothing))
+                        val error = found.exceptionOrNull()
+                        if (error != null) Log.w(TAG, "GIF search failed", error)
+                        panel.show(found.getOrNull() ?: emptyList(),
+                            if (error != null) context.getString(R.string.fork_gif_failed_reason, error.message ?: error.javaClass.simpleName)
+                            else context.getString(R.string.fork_gif_nothing))
                     }
                 }.start()
             }
@@ -1243,7 +1250,7 @@ class DynamicToolbarController(private val context: Context) {
             ime.mKeyboardActionListener.onCodeInput(KeyCode.ALPHA, Constants.NOT_A_COORDINATE, Constants.NOT_A_COORDINATE, false)
         clipSearch.start(RichInputMethodManager.getInstance().combiningRulesExtraValueOfCurrentSubtype)
         expandedBeforeSearch = before
-        tb.showSearch({ endClipSearch(null) }, gifMode)
+        tb.showSearch({ endClipSearch(null) }, gifMode, strip = !gifFromPanel)
         updateSearchResults()
         setExpanded(true, true)
     }
@@ -1315,6 +1322,11 @@ class DynamicToolbarController(private val context: Context) {
 
     private fun updateSearchResults() {
         val tb = toolbar ?: return
+        if (gifMode && gifFromPanel) {
+            // typed for the panel: only the query, enter searches
+            tb.setSearchQuery(clipSearch.query)
+            return
+        }
         if (gifMode) {
             // the request waits until typing pauses
             if (clipSearch.query.trim() != gifQuery) {
