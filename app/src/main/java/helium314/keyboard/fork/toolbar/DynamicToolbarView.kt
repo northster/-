@@ -655,6 +655,58 @@ class DynamicToolbarView @JvmOverloads constructor(
         header.visibility = VISIBLE
     }
 
+    /**
+     * GIF panel header: < GIF, a search field filling the middle (tapping it types a search), recent and favorites on
+     * the right; [filter] 1 = recent, 2 = favorites shown (drawn in the enter key color)
+     */
+    fun showGifHeader(query: String, filter: Int, onBack: () -> Unit, onSearch: () -> Unit, onRecent: () -> Unit,
+                      onFavorites: () -> Unit) {
+        val colors = Settings.getValues().mColors
+        header.removeAllViews()
+        headerActions.clear()
+        header.addView(iconButton(R.drawable.ic_dot_left, context.getString(R.string.fork_tool_back)) { onBack() },
+            LinearLayout.LayoutParams((48 * density).toInt(), LayoutParams.MATCH_PARENT).apply { marginStart = backMargin })
+        header.addView(ImageView(context).apply {
+            setImageResource(R.drawable.ic_dot_gif)
+            contentDescription = context.getString(R.string.fork_toolbar_gif)
+            scaleType = ImageView.ScaleType.CENTER_INSIDE
+            colors.setColor(this, ColorType.TOOL_BAR_KEY)
+        }, LinearLayout.LayoutParams((36 * density).toInt(), LayoutParams.MATCH_PARENT))
+        header.addView(TextView(context).apply {
+            text = query
+            hint = context.getString(R.string.fork_gif_search_hint)
+            setSingleLine()
+            ellipsize = TextUtils.TruncateAt.END
+            gravity = Gravity.CENTER_VERTICAL
+            setTextSize(TypedValue.COMPLEX_UNIT_SP, 15f)
+            setTextColor(colors.get(ColorType.KEY_TEXT))
+            setHintTextColor(colors.get(ColorType.KEY_HINT_TEXT))
+            KeyboardTypeface.applyToTextView(this)
+            setPadding((14 * density).toInt(), 0, (14 * density).toInt(), 0)
+            background = GradientDrawable().apply {
+                cornerRadius = 16 * density
+                setColor(colors.get(ColorType.KEY_BACKGROUND))
+            }
+            setOnClickListener { onSearch() }
+        }, LinearLayout.LayoutParams(0, (34 * density).toInt(), 1f).apply {
+            marginStart = (6 * density).toInt()
+            marginEnd = (4 * density).toInt()
+        })
+        listOf(
+            Triple(R.drawable.ic_dot_emoji_recents, R.string.fork_gif_recent, onRecent),
+            Triple(if (filter == 2) R.drawable.ic_dot_star_filled else R.drawable.ic_dot_star, R.string.fork_gif_favorites, onFavorites),
+        ).forEachIndexed { i, (icon, label, action) ->
+            val button = iconButton(icon, context.getString(label)) { action() }
+            if (filter == i + 1) button.setColorFilter(colors.get(ColorType.ACTION_KEY_BACKGROUND))
+            headerActions.add(button)
+            header.addView(button, LinearLayout.LayoutParams((44 * density).toInt(), LayoutParams.MATCH_PARENT))
+        }
+        row.visibility = GONE
+        searchBar.visibility = GONE
+        chipBar.visibility = GONE
+        header.visibility = VISIBLE
+    }
+
     private val emojiTabs = ArrayList<ImageView>()
     private var emojiTabScroll: HorizontalScrollView? = null
 

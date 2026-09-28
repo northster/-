@@ -358,6 +358,12 @@
     <string name="fork_gif_giphy_key">GIPHY API 키</string>
     <string name="fork_gif_key_none">설정 안 됨. %1$s에서 무료로 받을 수 있어요</string>
     <string name="fork_gif_key_help">%1$s에서 무료로 발급. 암호화해서 저장해요.</string>
+    <string name="fork_gif_recent">최근 보낸 GIF</string>
+    <string name="fork_gif_favorites">즐겨찾기</string>
+    <string name="fork_gif_favorite">즐겨찾기에 추가</string>
+    <string name="fork_gif_unfavorite">즐겨찾기에서 빼기</string>
+    <string name="fork_gif_no_recent">아직 보낸 GIF가 없어요</string>
+    <string name="fork_gif_no_favorites">즐겨찾기한 GIF가 없어요. GIF 오른쪽 위 별을 눌러 추가하세요</string>
     <string name="fork_gif_search_hint">GIF 검색</string>
     <string name="fork_gif_no_key">GIF를 쓰려면 툴바 설정에 KLIPY나 GIPHY API 키를 넣어 주세요</string>
     <string name="fork_gif_failed">GIF를 불러오지 못했어요</string>

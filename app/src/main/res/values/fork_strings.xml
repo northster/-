@@ -361,6 +361,12 @@
     <string name="fork_gif_giphy_key">GIPHY API key</string>
     <string name="fork_gif_key_none">Not set. A free key from %1$s</string>
     <string name="fork_gif_key_help">Free key from %1$s. Stored encrypted.</string>
+    <string name="fork_gif_recent">Recently sent GIFs</string>
+    <string name="fork_gif_favorites">Favorites</string>
+    <string name="fork_gif_favorite">Add to favorites</string>
+    <string name="fork_gif_unfavorite">Remove from favorites</string>
+    <string name="fork_gif_no_recent">No GIFs sent yet</string>
+    <string name="fork_gif_no_favorites">No favorite GIFs. Tap the star at the top right of a GIF to add it</string>
     <string name="fork_gif_search_hint">Search GIFs</string>
     <string name="fork_gif_no_key">Enter a KLIPY or GIPHY API key in the toolbar settings for GIFs</string>
     <string name="fork_gif_failed">Couldn\'t load GIFs</string>

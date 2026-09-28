@@ -50,6 +50,31 @@ SMALL = {'left': 8, 'right': 8, 'check': 8, 'close': 8, 'more': 8}
 
 # drawn straight on the 12x12 grid ('o' = dot), at most SIZE x SIZE: simple key icons read better drawn for the grid
 OWN = {
+    # favorite GIFs
+    'star': """
+....oo....
+...o..o...
+oooo..oooo
+o........o
+.o......o.
+..o....o..
+.o......o.
+.o..oo..o.
+.o.o..o.o.
+.oo....oo.
+""",
+    'star_filled': """
+....oo....
+...oooo...
+oooooooooo
+oooooooooo
+.oooooooo.
+..oooooo..
+.oooooooo.
+.oooooooo.
+.ooo..ooo.
+.oo....oo.
+""",
     # square corners: resampled, the icon pack's rounded (diagonal) corners looked like a missing dot
     'undo': """
 ..o.......

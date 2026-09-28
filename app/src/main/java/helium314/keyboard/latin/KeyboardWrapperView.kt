@@ -164,7 +164,7 @@ class KeyboardWrapperView @JvmOverloads constructor(
         resizeOneHandedModeBtn.setLayout((keyboardView.measuredHeight * 0.8f).toInt())
     }
 
-    // fork: in the clipboard and emoji panels a sideways swipe that starts at the screen edge is the system's back
+    // fork: in the clipboard, emoji and GIF panels a sideways swipe that starts at the screen edge is the system's back
     //  gesture. The panels (emoji pages, lists) don't get to scroll with it: once it goes sideways they get a cancel.
     private var edgeTouch = false
     private var edgeTaken = false
@@ -176,7 +176,8 @@ class KeyboardWrapperView @JvmOverloads constructor(
         if (ev.actionMasked == MotionEvent.ACTION_DOWN) {
             val switcher = KeyboardSwitcher.getInstance()
             edgeTaken = false
-            edgeTouch = (switcher.isShowingClipboardHistory || switcher.isShowingEmojiPalettes) && isAtScreenEdge(ev.rawX)
+            edgeTouch = (switcher.isShowingClipboardHistory || switcher.isShowingEmojiPalettes
+                    || helium314.keyboard.fork.toolbar.DynamicToolbarController.current?.isGifPanelShown == true) && isAtScreenEdge(ev.rawX)
             edgeDownX = ev.x
             edgeDownY = ev.y
         }
