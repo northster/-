@@ -394,4 +394,21 @@
     <string name="fork_translate_source">Translates the paragraph before the cursor</string>
     <string name="fork_one_handed_swipe">Swipe sideways for one-handed mode</string>
     <string name="fork_one_handed_swipe_summary">A quick, long swipe left or right over the keys moves the keyboard to that side; the other way makes it full width again</string>
+    <string name="fork_clip_pinned_toast">Pinned, moved to the end of the list</string>
+    <string name="fork_clip_unpinned_toast">Unpinned</string>
+    <string name="fork_cat_ai_glow">AI glow</string>
+    <string name="fork_ai_glow">Glow while AI works</string>
+    <string name="fork_ai_glow_summary">Pastel dots along the keyboard border while an AI command or translation runs</string>
+    <string name="fork_ai_glow_brightness">Brightness</string>
+    <string name="fork_ai_glow_period">One turn of the colors</string>
+    <string name="fork_ai_glow_depth">Thickness</string>
+    <string name="fork_ai_glow_rows">%1$d rows of dots</string>
+    <string name="fork_translate_empty_short">Nothing typed yet</string>
+    <string name="fork_cat_claude_usage">Claude usage</string>
+    <string name="fork_claude_key">claude.ai session key</string>
+    <string name="fork_claude_key_none">Not set. With it, the toolbar shows the 5-hour and weekly usage as two dotted lines</string>
+    <string name="fork_claude_key_ok">5 hours: %1$d%% (resets in %2$s) · week: %3$d%% (%4$s)</string>
+    <string name="fork_claude_key_error">Couldn\'t read the usage: %1$s</string>
+    <string name="fork_claude_key_checking">Checking…</string>
+    <string name="fork_claude_key_help">There is no official API for the plan usage, so the keyboard reads it the way the claude.ai usage page does, with your login cookie. On a computer: open claude.ai, developer tools (F12) > Application > Cookies > claude.ai, copy the value of sessionKey. It is stored encrypted and only sent to claude.ai. Anyone with it can use your account, so do not share it. It stops working when you log out.</string>
 </resources>

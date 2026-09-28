@@ -5,9 +5,10 @@
 # (the svg folder is in the npm package: npm pack pixelarticons, package/svg)
 # Replaces the hand drawn icons of scripts/dot_icons.py with the same names.
 #
-# The 24x24 pixels are halved to a 12x12 grid of big round dots, the pitch and dot size of the Doto font at key
-# label size (a 2px line becomes a line of single dots). Pixelarticons don't all sit on even pixels, so each icon is
-# halved at the offset (0 or 1 pixel, per axis) that keeps it closest to the original.
+# Every icon is a 12x12 grid of big round dots, the pitch and dot size of the Doto font at key label size, and all of
+# them fill the same box: the longer side of each drawing is SIZE dots (a few thin ones smaller, see SMALL), centered.
+# That way a row of them reads as a row of equal square buttons. Pixelarticons are resampled to that size by how much
+# of each dot's area the icon covers, at the sub-dot offset where the fewest dots are half covered (crisp lines).
 import os
 import re
 import sys
@@ -33,7 +34,6 @@ MAP = {
     'close': 'close',
     'keyboard': 'keyboard',
     'zap': 'zap',
-    'translate': 'languages',
     'more': 'more-horizontal',
     'question': 'circle-question',
     'emoji_recents': 'clock',
@@ -48,38 +48,120 @@ MAP = {
     'emoji_emoticons': 'laugh',
 }
 
-# drawn straight on the 12x12 grid ('o' = dot): simple key icons read better drawn for the grid, and the AI icon
-# (two stars). The key icons are the hand drawn ones of scripts/dot_icons.py.
-OWN_FROM_DOT_ICONS = ['shift', 'shift_filled', 'shift_locked', 'globe', 'space', 'gif', 'backspace']
+SIZE = 10
+# thin glyphs look too heavy at full size
+SMALL = {'left': 8, 'right': 8, 'check': 8, 'close': 8, 'more': 8}
+
+# drawn straight on the 12x12 grid ('o' = dot), at most SIZE x SIZE: simple key icons read better drawn for the grid
 OWN = {
-    # a gear: ring with eight teeth and a hole
-    'settings': """
-....oooo....
-..o.oooo.o..
-.oooo..oooo.
-..o......o..
-.oo..oo..oo.
-ooo.o..o.ooo
-ooo.o..o.ooo
-.oo..oo..oo.
-..o......o..
-.oooo..oooo.
-..o.oooo.o..
-....oooo....
+    'shift': """
+....oo....
+...o..o...
+..o....o..
+.o......o.
+oooo..oooo
+...o..o...
+...o..o...
+...o..o...
+...o..o...
+...oooo...
 """,
+    'shift_filled': """
+....oo....
+...oooo...
+..oooooo..
+.oooooooo.
+oooooooooo
+...oooo...
+...oooo...
+...oooo...
+...oooo...
+...oooo...
+""",
+    'shift_locked': """
+....oo....
+...oooo...
+..oooooo..
+.oooooooo.
+oooooooooo
+...oooo...
+...oooo...
+...oooo...
+..........
+...oooo...
+""",
+    'backspace': """
+..oooooooo
+.o.......o
+o..o..o..o
+o...oo...o
+o...oo...o
+o..o..o..o
+.o.......o
+..oooooooo
+""",
+    'globe': """
+...oooo...
+.oo.oo.oo.
+.o.o..o.o.
+o..o..o..o
+oooooooooo
+o..o..o..o
+.o.o..o.o.
+.oo.oo.oo.
+...oooo...
+""",
+    'space': """
+o........o
+o........o
+oooooooooo
+""",
+    'gif': """
+.oo..o.ooo
+o..o.o.o..
+o....o.o..
+o.oo.o.oo.
+o..o.o.o..
+o..o.o.o..
+.oo..o.o..
+""",
+    # translate: 가 and A
+    'translate': """
+ooo.o.....
+..o.o.....
+..o.oo....
+.o..o.....
+o...o.....
+.......o..
+......o.o.
+.....o...o
+.....ooooo
+.....o...o
+""",
+    # AI: a big and a small star
     'sparkles': """
-..........o.
-.........ooo
-..........o.
-....o.......
-....o.......
-...ooo......
-..ooooo.....
-ooooooooo...
-..ooooo.....
-...ooo......
-....o.......
-....o.......
+........o.
+.......ooo
+....o...o.
+....o.....
+...ooo....
+ooooooooo.
+...ooo....
+....o.....
+....o.....
+""",
+    # settings: three dots in a column
+    'settings': """
+oo
+oo
+..
+..
+oo
+oo
+..
+..
+oo
+oo
 """,
 }
 
@@ -203,21 +285,36 @@ def center(grid):
     return out
 
 
-def halve(grid):
-    """24x24 -> 12x12: a dot where at least 2 of the 4 pixels are set, at the offset that loses the least"""
-    best, best_err = None, None
-    for oy in (0, 1):
-        for ox in (0, 1):
-            def px(x, y):
-                x, y = x - ox, y - oy
-                return 0 <= x < 24 and 0 <= y < 24 and grid[y][x]
-            small = [[sum(px(2 * cx + dx, 2 * cy + dy) for dx in (0, 1) for dy in (0, 1)) >= 2
-                      for cx in range(12)] for cy in range(12)]
-            err = sum(small[(y + oy) // 2][(x + ox) // 2] != grid[y][x]
-                      for y in range(24) for x in range(24) if (y + oy) // 2 < 12 and (x + ox) // 2 < 12)
-            if best_err is None or err < best_err:
-                best, best_err = small, err
-    return best
+def fit(grid, size):
+    """24x24 pixels -> 12x12 dots, the drawing's longer side scaled to [size] dots and centered"""
+    cells = [(x, y) for y in range(24) for x in range(24) if grid[y][x]]
+    left, right = min(x for x, _ in cells), max(x for x, _ in cells) + 1
+    top, bottom = min(y for _, y in cells), max(y for _, y in cells) + 1
+    scale = max(right - left, bottom - top) / size  # pixels per dot
+    cx, cy = (left + right) / 2, (top + bottom) / 2
+
+    def covered(px, py):
+        x, y = int(px // 1), int(py // 1)
+        return 0 <= x < 24 and 0 <= y < 24 and grid[y][x]
+
+    best, best_blur = None, None
+    for oy in (-0.25, 0, 0.25):
+        for ox in (-0.25, 0, 0.25):
+            dots = [[0.0] * 12 for _ in range(12)]
+            for gy in range(12):
+                for gx in range(12):
+                    # the dot's area in pixels, 4x4 samples
+                    hits = 0
+                    for sy in range(4):
+                        for sx in range(4):
+                            px = cx + (gx - 6 + ox + (sx + 0.5) / 4) * scale
+                            py = cy + (gy - 6 + oy + (sy + 0.5) / 4) * scale
+                            hits += covered(px, py)
+                    dots[gy][gx] = hits / 16
+            blur = sum(min(c, 1 - c) for row in dots for c in row)
+            if best_blur is None or blur < best_blur:
+                best, best_blur = dots, blur
+    return [[c >= 0.45 for c in row] for row in best]
 
 
 def xml(grid, source, r=0.86):
@@ -244,12 +341,8 @@ def main():
         icons[name] = (raster(svg), f'pixelarticons {pix} (MIT)')
     # pinned clips: the bookmark filled in
     icons['pin_filled'] = (filled(icons['pin'][0]), 'pixelarticons bookmark, filled (MIT)')
-    icons = {name: (halve(grid), source) for name, (grid, source) in icons.items()}
-    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-    import dot_icons
-    own_art = {name: dot_icons.ICONS[name] for name in OWN_FROM_DOT_ICONS}
-    own_art.update(OWN)
-    for name, art in own_art.items():
+    icons = {name: (fit(grid, SMALL.get(name, SIZE)), source) for name, (grid, source) in icons.items()}
+    for name, art in OWN.items():
         icons[name] = (own(art), 'own drawing')
     icons = {name: (center(grid), source) for name, (grid, source) in icons.items()}
     for name, (grid, source) in icons.items():

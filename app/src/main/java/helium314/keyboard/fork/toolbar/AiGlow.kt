@@ -29,14 +29,20 @@ class AiGlow(private val host: View, private val bounds: () -> RectF?) {
     private var shown = false
 
     fun show(on: Boolean) {
+        val prefs = host.context.prefs()
+        if (on && !prefs.getBoolean(GlowPrefs.AI_GLOW, true)) return
         if (on == shown) return
         shown = on
         fade?.cancel()
         if (on) {
+            drawable.brightness = prefs.getFloat(GlowPrefs.AI_GLOW_BRIGHTNESS, GlowPrefs.DEFAULT_AI_GLOW_BRIGHTNESS).coerceIn(0.1f, 1f)
+            drawable.depth = prefs.getFloat(GlowPrefs.AI_GLOW_DEPTH, GlowPrefs.DEFAULT_AI_GLOW_DEPTH).toInt().coerceIn(1, 8)
+            val period = prefs.getFloat(GlowPrefs.AI_GLOW_PERIOD, GlowPrefs.DEFAULT_AI_GLOW_PERIOD).toLong().coerceIn(500, 20000)
+            spin?.duration = period
             host.overlay.remove(drawable)
             host.overlay.add(drawable)
             if (spin == null) spin = ValueAnimator.ofFloat(0f, 360f).apply {
-                duration = 3200
+                duration = period
                 repeatCount = ValueAnimator.INFINITE
                 interpolator = LinearInterpolator()
                 addUpdateListener {
@@ -47,7 +53,9 @@ class AiGlow(private val host: View, private val bounds: () -> RectF?) {
             }
         }
         fade = ValueAnimator.ofFloat(drawable.fade, if (on) 1f else 0f).apply {
-            duration = 350
+            // slow and eased, so it doesn't pop in or out
+            duration = if (on) 600 else 800
+            interpolator = android.view.animation.AccelerateDecelerateInterpolator()
             addUpdateListener { drawable.fade = it.animatedValue as Float; update() }
             addListener(object : AnimatorListenerAdapter() {
                 private var cancelled = false
@@ -75,6 +83,8 @@ class AiGlow(private val host: View, private val bounds: () -> RectF?) {
     private class GlowDrawable(private val density: Float, private val spacingDp: Float, private val dotDp: Float) : Drawable() {
         var angle = 0f
         var fade = 0f
+        var brightness = 1f
+        var depth = 4
         private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
 
         override fun draw(canvas: Canvas) {
@@ -94,14 +104,16 @@ class AiGlow(private val host: View, private val bounds: () -> RectF?) {
                 val fromTop = row
                 val fromBottom = rows - 1 - row
                 for (col in 0 until cols) {
-                    val depth = minOf(fromTop, fromBottom, col, cols - 1 - col)
-                    if (depth >= DEPTH) continue
+                    val d = minOf(fromTop, fromBottom, col, cols - 1 - col)
+                    if (d >= depth) continue
                     val x = left + col * spacing
                     val y = top + row * spacing
                     // color from the direction around the center, turning with [angle]
                     val a = ((Math.toDegrees(kotlin.math.atan2((y - cy).toDouble(), (x - cx).toDouble())) + 360 + angle) % 360) / 360.0
                     paint.color = colorAt(a.toFloat())
-                    paint.alpha = (255 * fade * FALLOFF[depth]).toInt()
+                    // brightest at the edge, fading inwards
+                    val falloff = (1f - d / depth.toFloat()).let { it * it }
+                    paint.alpha = (255 * fade * brightness * falloff).toInt().coerceIn(0, 255)
                     canvas.drawCircle(x, y, r, paint)
                 }
             }
@@ -123,9 +135,6 @@ class AiGlow(private val host: View, private val bounds: () -> RectF?) {
         override fun getOpacity() = PixelFormat.TRANSLUCENT
 
         companion object {
-            /** rows of dots from the edge inwards, and how bright each is */
-            private const val DEPTH = 4
-            private val FALLOFF = floatArrayOf(1f, 0.55f, 0.25f, 0.08f)
             /** pink, peach, butter, mint, sky, periwinkle, lavender, back to pink */
             private val COLORS = intArrayOf(
                 0xFFFFB3C7.toInt(), 0xFFFFD6A5.toInt(), 0xFFFDFFB6.toInt(), 0xFFCAFFBF.toInt(),

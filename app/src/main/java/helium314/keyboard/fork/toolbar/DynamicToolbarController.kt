@@ -172,7 +172,7 @@ class DynamicToolbarController(private val context: Context) {
         }
         applyHeight()
         newInputView.post { requestHighRefreshRate() } // attached to the display by then
-        toolbar?.setItems(ToolbarItems.defaultItems, ToolbarItems.endItems, ::onItemClicked)
+        setToolbarItems()
         refreshPasteChips()
         // restore persisted state without animation
         hiddenFraction = if (isExpanded) 0f else 1f
@@ -466,8 +466,27 @@ class DynamicToolbarController(private val context: Context) {
      * Collapsed toolbar: the keyboard's top edge glows. Expanded toolbar: the chip bar (back | chips) replaces the tools,
      * like Samsung's keyboard. Using the chip, going back or closing the toolbar dismisses it.
      */
+    /** the tools row, with the Claude usage lines when a claude.ai key is set */
+    fun setToolbarItems() {
+        val tb = toolbar ?: return
+        val usage = helium314.keyboard.fork.usage.ClaudeUsage.hasKey(context.prefs())
+        tb.setItems(ToolbarItems.defaultItems, ToolbarItems.endItems, ::onItemClicked, usage)
+        if (usage) tb.usageView.setUsage(helium314.keyboard.fork.usage.ClaudeUsage.cached(context.prefs()))
+    }
+
+    /** new usage numbers now and then, when the keyboard shows */
+    private fun refreshUsage() {
+        val tb = toolbar ?: return
+        if (!helium314.keyboard.fork.usage.ClaudeUsage.hasKey(context.prefs())) return
+        tb.usageView.setUsage(helium314.keyboard.fork.usage.ClaudeUsage.cached(context.prefs())) // times left move on
+        helium314.keyboard.fork.usage.ClaudeUsage.refreshIfOld(context) { usage ->
+            if (usage != null) toolbar?.usageView?.setUsage(usage)
+        }
+    }
+
     fun refreshPasteChips() {
         val ime = latinIME ?: return
+        refreshUsage()
         if (helium314.keyboard.fork.smart.SmartPrefs.enabled(context)
             && context.prefs().getBoolean(helium314.keyboard.fork.smart.SmartPrefs.CURRENCY, true))
             helium314.keyboard.fork.smart.CurrencyRates.refreshIfOld(context)
@@ -981,7 +1000,8 @@ class DynamicToolbarController(private val context: Context) {
         translatePanel = panel
         if (!isExpanded) setExpanded(true, true)
         tb.showToolHeader(context.getString(R.string.fork_translate_title), emptyList(), onBack = { closeTranslatePanel() },
-            onAction = { }, button = context.getString(R.string.fork_translate_go) to { panel.translate() })
+            onAction = { }, button = context.getString(R.string.fork_translate_go) to { panel.translate() },
+            subtitle = paragraph.trim().replace('\n', ' ').ifEmpty { context.getString(R.string.fork_translate_empty_short) })
     }
 
     /** the paragraph before the cursor (after the last line break), what the translation works on */

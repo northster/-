@@ -68,6 +68,13 @@ fun DynamicToolbarScreen(
             GlowPrefs.GLOW_WIDTH,
             GlowPrefs.GLOW_DOT_SIZE,
             GlowPrefs.GLOW_DOT_SPACING,
+            R.string.fork_cat_claude_usage,
+            helium314.keyboard.fork.usage.ClaudeUsage.PREF_SESSION_KEY,
+            R.string.fork_cat_ai_glow,
+            GlowPrefs.AI_GLOW,
+            GlowPrefs.AI_GLOW_BRIGHTNESS,
+            GlowPrefs.AI_GLOW_PERIOD,
+            GlowPrefs.AI_GLOW_DEPTH,
             R.string.fork_cat_autofill,
             DynamicToolbarController.PREF_AUTOFILL,
             DynamicToolbarController.PREF_AUTOFILL_OPEN,
@@ -225,6 +232,22 @@ fun createDynamicToolbarSettings(context: Context) = listOf(
     Setting(context, GlowPrefs.GLOW_DOT_SPACING, R.string.fork_glow_dot_spacing) {
         GlowSlider(it, GlowPrefs.DEFAULT_GLOW_DOT_SPACING, 2.5f..12f, 0.5f, ::dp)
     },
+    Setting(context, helium314.keyboard.fork.usage.ClaudeUsage.PREF_SESSION_KEY, R.string.fork_claude_key) {
+        ClaudeKeyPreference(it.title)
+    },
+    Setting(context, GlowPrefs.AI_GLOW, R.string.fork_ai_glow, R.string.fork_ai_glow_summary) {
+        SwitchPreference(it, true)
+    },
+    Setting(context, GlowPrefs.AI_GLOW_BRIGHTNESS, R.string.fork_ai_glow_brightness) {
+        GlowSlider(it, GlowPrefs.DEFAULT_AI_GLOW_BRIGHTNESS, 0.1f..1f, 0.05f, ::percent)
+    },
+    Setting(context, GlowPrefs.AI_GLOW_PERIOD, R.string.fork_ai_glow_period) {
+        GlowSlider(it, GlowPrefs.DEFAULT_AI_GLOW_PERIOD, 800f..10000f, 100f, ::ms)
+    },
+    Setting(context, GlowPrefs.AI_GLOW_DEPTH, R.string.fork_ai_glow_depth) { setting ->
+        val ctx = androidx.compose.ui.platform.LocalContext.current
+        GlowSlider(setting, GlowPrefs.DEFAULT_AI_GLOW_DEPTH, 1f..8f, 1f) { ctx.getString(R.string.fork_ai_glow_rows, it.roundToInt()) }
+    },
     Setting(context, DynamicToolbarController.PREF_AUTOFILL, R.string.fork_autofill, R.string.fork_autofill_summary) {
         SwitchPreference(it, true)
     },
@@ -337,6 +360,68 @@ fun TranslateScreen(onClickBack: () -> Unit) {
                 modifier = androidx.compose.ui.Modifier.padding(horizontal = 16.dp, vertical = 12.dp))
             helium314.keyboard.settings.SettingsSections(items)
         }
+    }
+}
+
+/** the claude.ai session key for the usage lines on the toolbar, with what the last check found */
+@Composable
+private fun ClaudeKeyPreference(title: String) {
+    val ctx = androidx.compose.ui.platform.LocalContext.current
+    val prefs = ctx.prefs()
+    val usage = helium314.keyboard.fork.usage.ClaudeUsage
+    var editing by androidx.compose.runtime.remember { androidx.compose.runtime.mutableStateOf(false) }
+    // the key changed (re-check) / a check finished (show it)
+    var refresh by androidx.compose.runtime.remember { androidx.compose.runtime.mutableIntStateOf(0) }
+    var checked by androidx.compose.runtime.remember { androidx.compose.runtime.mutableIntStateOf(0) }
+    val hasKey = androidx.compose.runtime.remember(refresh) { usage.hasKey(prefs) }
+    androidx.compose.runtime.LaunchedEffect(refresh) {
+        // check right away, the result shows below
+        if (hasKey) usage.refreshIfOld(ctx, force = true) {
+            checked++
+            DynamicToolbarController.current?.setToolbarItems()
+        }
+    }
+    if (checked < 0) return
+    val cached = usage.cached(prefs)
+    val status = usage.status(prefs)
+    val description = when {
+        !hasKey -> stringResource(R.string.fork_claude_key_none)
+        status.isNotEmpty() -> stringResource(R.string.fork_claude_key_error, status)
+        cached != null -> stringResource(R.string.fork_claude_key_ok,
+            ((cached.session?.used ?: 0f) * 100).roundToInt(), usage.remaining(cached.session?.resetsAt ?: 0),
+            ((cached.week?.used ?: 0f) * 100).roundToInt(), usage.remaining(cached.week?.resetsAt ?: 0))
+        else -> stringResource(R.string.fork_claude_key_checking)
+    }
+    helium314.keyboard.settings.preferences.Preference(name = title, description = description, onClick = { editing = true })
+    if (editing) {
+        var text by androidx.compose.runtime.remember { androidx.compose.runtime.mutableStateOf("") }
+        helium314.keyboard.settings.dialogs.ThreeButtonAlertDialog(
+            onDismissRequest = { editing = false },
+            onConfirmed = {
+                if (!usage.setKey(prefs, text))
+                    android.widget.Toast.makeText(ctx, R.string.fork_slate_key_failed, android.widget.Toast.LENGTH_LONG).show()
+                DynamicToolbarController.current?.setToolbarItems()
+                refresh++
+            },
+            checkOk = { text.isNotBlank() },
+            neutralButtonText = if (hasKey) stringResource(R.string.delete) else null,
+            onNeutral = {
+                usage.setKey(prefs, "")
+                DynamicToolbarController.current?.setToolbarItems()
+                refresh++
+            },
+            title = { androidx.compose.material3.Text(title) },
+            scrollContent = true,
+            content = {
+                androidx.compose.foundation.layout.Column {
+                    androidx.compose.material3.Text(stringResource(R.string.fork_claude_key_help),
+                        style = androidx.compose.material3.MaterialTheme.typography.bodyMedium)
+                    androidx.compose.material3.OutlinedTextField(text, { text = it.trim() }, singleLine = true,
+                        modifier = androidx.compose.ui.Modifier.fillMaxWidth().padding(top = 12.dp),
+                        placeholder = { androidx.compose.material3.Text("sk-ant-sid01-…") })
+                }
+            },
+        )
     }
 }
 

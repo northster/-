@@ -146,10 +146,10 @@ class ClipboardAdapter(
                 pinnedIconView.alpha = if (isSelected) 1f else 0.35f
                 itemView.alpha = if (isSelected) 1f else 0.75f
             } else {
-                // pinned: filled in the enter key's color
+                // pinned: filled in the text color, clearly visible; not pinned: a faint outline
                 pinnedIconView.setImageResource(if (historyEntry.isPinned) R.drawable.ic_dot_pin_filled else R.drawable.ic_dot_pin)
-                colors.setColor(pinnedIconView, if (historyEntry.isPinned) ColorType.ACTION_KEY_BACKGROUND else ColorType.KEY_HINT_TEXT)
-                pinnedIconView.alpha = if (historyEntry.isPinned) 1f else 0.45f
+                colors.setColor(pinnedIconView, if (historyEntry.isPinned) ColorType.KEY_TEXT else ColorType.KEY_HINT_TEXT)
+                pinnedIconView.alpha = if (historyEntry.isPinned) 1f else 0.5f
                 itemView.alpha = 1f
             }
             pinnedIconView.visibility = View.VISIBLE

@@ -28,6 +28,17 @@ object GlowPrefs {
     /** until this time (ms) a test chip is offered, to see the glow without copying anything */
     const val GLOW_TEST_UNTIL = "fork_clip_hint_test_until"
 
+    /** pastel dot border while an AI command or translation runs */
+    const val AI_GLOW = "fork_ai_glow_enabled"
+    const val AI_GLOW_BRIGHTNESS = "fork_ai_glow_brightness"
+    /** one turn of the colors around the border, ms */
+    const val AI_GLOW_PERIOD = "fork_ai_glow_period"
+    /** rows of dots from the edge inwards */
+    const val AI_GLOW_DEPTH = "fork_ai_glow_depth"
+    const val DEFAULT_AI_GLOW_BRIGHTNESS = 1f
+    const val DEFAULT_AI_GLOW_PERIOD = 3200f
+    const val DEFAULT_AI_GLOW_DEPTH = 4f
+
     /** white dot wave running over the keyboard when the toolbar opens (up, into the toolbar) or closes (down) */
     const val WAVE = "fork_wave_enabled"
     const val WAVE_DURATION = "fork_wave_duration"

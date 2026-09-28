@@ -100,11 +100,31 @@ class DynamicToolbarView @JvmOverloads constructor(
         Settings.getValues().mColors.setColor(this, ColorType.TOOL_BAR_KEY)
     }
 
-    fun setItems(items: List<ToolbarItem>, endItems: List<ToolbarItem>, onClick: (ToolbarItem) -> Unit) {
+    /** Claude usage between the tools and settings, when a claude.ai key is set ([setItems] with showUsage) */
+    val usageView = helium314.keyboard.fork.usage.UsageView(context)
+
+    fun setItems(items: List<ToolbarItem>, endItems: List<ToolbarItem>, onClick: (ToolbarItem) -> Unit,
+                 showUsage: Boolean = false) {
         buttons.removeAllViews()
+        (usageView.parent as? android.view.ViewGroup)?.removeView(usageView)
         val colors = Settings.getValues().mColors
         colors.setBackground(this, ColorType.MAIN_BACKGROUND) // same as keyboard, looks like the keyboard grows
-        for (item in items) {
+        if (showUsage) {
+            // tools packed to the left, the usage lines in the room up to settings
+            val settings = items.filter { it.id == ToolbarItems.MORE }
+            for (item in items - settings.toSet()) {
+                val button = iconButton(item.icon, context.getString(item.label)) { onClick(item) }.apply { tag = item.id }
+                buttons.addView(button, LinearLayout.LayoutParams((48 * density).toInt(), LayoutParams.MATCH_PARENT))
+            }
+            buttons.addView(usageView, LinearLayout.LayoutParams(0, LayoutParams.MATCH_PARENT, 1f).apply {
+                marginStart = (6 * density).toInt()
+                marginEnd = (4 * density).toInt()
+            })
+            for (item in settings) {
+                val button = iconButton(item.icon, context.getString(item.label)) { onClick(item) }.apply { tag = item.id }
+                buttons.addView(button, LinearLayout.LayoutParams((48 * density).toInt(), LayoutParams.MATCH_PARENT))
+            }
+        } else for (item in items) {
             val button = iconButton(item.icon, context.getString(item.label)) { onClick(item) }.apply { tag = item.id }
             buttons.addView(button, LinearLayout.LayoutParams(0, LayoutParams.MATCH_PARENT, 1f))
         }
@@ -557,16 +577,13 @@ class DynamicToolbarView @JvmOverloads constructor(
     /** [button]: a text button at the right end, in the enter key's colors (translation: translate) */
     fun showToolHeader(title: String, actions: List<Pair<android.graphics.drawable.Drawable?, String>>, onBack: () -> Unit,
                        onAction: (Int) -> Unit, button: Pair<String, () -> Unit>? = null,
-                       endItems: List<ToolbarItem> = emptyList(), onEndItem: (ToolbarItem) -> Unit = {}) {
+                       endItems: List<ToolbarItem> = emptyList(), onEndItem: (ToolbarItem) -> Unit = {},
+                       subtitle: String? = null) {
         val colors = Settings.getValues().mColors
         header.removeAllViews()
         val size = LinearLayout.LayoutParams((48 * density).toInt(), LayoutParams.MATCH_PARENT)
-        header.addView(iconButton(R.drawable.ic_dot_keyboard, context.getString(R.string.fork_tool_back)) { onBack() }, size)
-        header.addView(View(context).apply { setBackgroundColor(colors.get(ColorType.KEY_HINT_TEXT)) },
-            LinearLayout.LayoutParams((1 * density).toInt().coerceAtLeast(1), (18 * density).toInt()).apply {
-                marginStart = (4 * density).toInt()
-                marginEnd = (12 * density).toInt()
-            })
+        // back is < in every header (no divider after it)
+        header.addView(iconButton(R.drawable.ic_dot_left, context.getString(R.string.fork_tool_back)) { onBack() }, size)
         header.addView(TextView(context).apply {
             text = title
             setSingleLine()
@@ -574,7 +591,26 @@ class DynamicToolbarView @JvmOverloads constructor(
             setTextSize(TypedValue.COMPLEX_UNIT_SP, 17f)
             setTextColor(colors.get(ColorType.KEY_TEXT))
             KeyboardTypeface.applyToTextView(this)
-        }, LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f))
+        }, if (subtitle == null) LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f)
+            else LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT))
+        // title | subtitle (translation: the text that will be translated)
+        if (subtitle != null) {
+            header.addView(View(context).apply { setBackgroundColor(colors.get(ColorType.KEY_HINT_TEXT)) },
+                LinearLayout.LayoutParams((1 * density).toInt().coerceAtLeast(1), (16 * density).toInt()).apply {
+                    marginStart = (10 * density).toInt()
+                    marginEnd = (10 * density).toInt()
+                })
+            header.addView(TextView(context).apply {
+                text = subtitle
+                setSingleLine()
+                ellipsize = TextUtils.TruncateAt.START
+                setTextSize(TypedValue.COMPLEX_UNIT_SP, 14f)
+                setTextColor(colors.get(ColorType.KEY_HINT_TEXT))
+                KeyboardTypeface.applyToTextView(this)
+            }, LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f).apply {
+                marginEnd = (8 * density).toInt()
+            })
+        }
         headerActions.clear()
         actions.forEachIndexed { i, (icon, label) ->
             val button = iconButton(icon, label) { onAction(i) }
@@ -626,13 +662,8 @@ class DynamicToolbarView @JvmOverloads constructor(
         val colors = Settings.getValues().mColors
         header.removeAllViews()
         emojiTabs.clear()
-        header.addView(iconButton(R.drawable.ic_dot_keyboard, context.getString(R.string.fork_tool_back)) { onBack() },
+        header.addView(iconButton(R.drawable.ic_dot_left, context.getString(R.string.fork_tool_back)) { onBack() },
             LinearLayout.LayoutParams((48 * density).toInt(), LayoutParams.MATCH_PARENT))
-        header.addView(View(context).apply { setBackgroundColor(colors.get(ColorType.KEY_HINT_TEXT)) },
-            LinearLayout.LayoutParams((1 * density).toInt().coerceAtLeast(1), (18 * density).toInt()).apply {
-                marginStart = (4 * density).toInt()
-                marginEnd = (4 * density).toInt()
-            })
         val strip = LinearLayout(context).apply {
             orientation = LinearLayout.HORIZONTAL
             gravity = Gravity.CENTER_VERTICAL

@@ -251,6 +251,10 @@ WM Keyboard(github.com/wasi-master/wmkeyboard, MIT)에 이미 있는 기능은 �
   - 한국어: 만/억/천 단위, 원/달러/불/엔/유로/위안, 평/근/도 같은 단위를 더했다. 통화는 원화 ↔ 달러가 기본이다.
   - 환율은 키 없는 API에서 받아 저장한다: 먼저 Coinbase(`api.coinbase.com/v2/exchange-rates`, 시장 실시간 시세, WM도 지원), 실패하면 open.er-api.com(하루 한 번 갱신), 그다음 api.frankfurter.dev(유럽중앙은행, 영업일 기준). 저장한 지 1시간이 지나면 키보드를 열 때나 금액을 칠 때 새로 받는다. 스마트 칩 테스트 칸 아래에 출처와 받은 시각이 나온다. 이를 위해 인터넷 권한을 추가했다(환율 말고는 쓰지 않는다). 환율이 없으면 통화 칩은 나오지 않는다.
 
+## 8-9. 툴바의 Claude 사용량 (`fork/usage/`)
+- 설정 > 툴바 > Claude 사용량에 claude.ai 세션 키(sessionKey 쿠키)를 넣으면 툴바가 [도구들 | 사용량 | ⋮ | ↶ ↷]로 바뀐다. 가운데에 점선 두 줄: 위는 5시간 한도, 아래는 주간 한도. 쓴 만큼 주황 점으로 차고, 오른쪽에 초기화까지 남은 시간(45m, 3h, 2d; 24시간 이상은 일 단위).
+- 공식 API가 없어서 claude.ai 사용량 화면이 쓰는 `claude.ai/api/organizations/{id}/usage`(five_hour / seven_day, utilization %, resets_at)를 세션 키로 읽는다. 키는 암호화 저장, claude.ai에만 보냄. 비공식이라 claude.ai가 바뀌면 멈출 수 있고, 그때는 빈 줄이 나오고 설정에 이유가 나온다. 키보드가 뜰 때 3분 넘게 지났으면 새로 읽는다.
+
 ## 9-0. 비밀번호 자동완성 (삼성 패스 등)
 안드로이드 11부터 자동완성 서비스가 키보드에 로그인/비밀번호 제안 칩을 넘겨준다(inline suggestions). HeliBoard는 이를 제안 줄에 보여주는데, 여기서는 그 줄을 숨기므로 동적 툴바에 보여준다(`LatinIME.onInlineSuggestionsResponse` → `DynamicToolbarController.showAutofill`).
 - 칩은 서비스가 직접 그린 뷰라 누르면 서비스가 바로 채운다(삼성 패스는 지문 확인 등을 서비스가 띄운다).
@@ -273,8 +277,8 @@ SwiftSlate(github.com/Musheer360/SwiftSlate, MIT)의 명령 방식을 키보드 
   - 실행하면 명령어는 바로 지워지고, 툴바에 "?fix 실행 중 ●●○"가 뜬다(✕로 취소). 답이 오면 글이 답으로 바뀐다. 그사이 글을 더 쳤으면 덮어쓰지 않고 툴바에 "넣기" 칩으로 보여준다.
 - 텍스트 치환 명령: 명령어 자리에 저장한 글이 들어간다(서명, 자주 쓰는 답장 등, 오프라인).
 - 툴바의 ? 버튼을 누르면 명령들이 많이 쓴 순서로 칩으로 나오고, 누르면 커서 앞 글에 바로 실행한다(쓴 횟수는 명령을 칠 때도 센다).
-- 툴바의 번역 버튼: 키 자리에 번역 패널(`fork/translate/TranslatePanel.kt`), 툴바에는 "⌨ | AI 번역 … [번역하기]". 언어(16개, 많이 쓴 순서) / 문체 / 용도를 알람 시간 고르듯 세 개의 휠(`WheelPicker.kt`)로 나란히 고른다. 번역하는 글은 커서 앞 문단(마지막 줄바꿈 뒤)이고 결과는 항상 원문을 바꾼다. 이미 고른 언어로 쓴 글이면 번역하지 않고 문법/맞춤법과 문체만 고친다. 마지막 선택은 기억한다.
-- AI 명령이나 번역이 도는 동안 키보드 테두리 전체(툴바 포함, 네모)에 글로우와 같은 점 격자로 파스텔 색 점이 돌아간다(`fork/toolbar/AiGlow.kt`, 가장자리 4줄, 안쪽으로 갈수록 어두움, 입력 뷰 오버레이에 그려서 키를 다시 그리지 않음). 진행 문구는 툴바 가운데, 점 애니메이션 없음.
+- 툴바의 번역 버튼: 키 자리에 번역 패널(`fork/translate/TranslatePanel.kt`), 툴바에는 "‹ AI 번역 | 번역할 글 … [번역하기]". 언어(16개, 많이 쓴 순서) / 문체 / 용도를 알람 시간 고르듯 세 개의 휠(`WheelPicker.kt`)로 나란히 고른다. 번역하는 글은 커서 앞 문단(마지막 줄바꿈 뒤)이고 결과는 항상 원문을 바꾼다. 이미 고른 언어로 쓴 글이면 번역하지 않고 문법/맞춤법과 문체만 고친다. 마지막 선택은 기억한다.
+- AI 명령이나 번역이 도는 동안 키보드 테두리 전체(툴바 포함, 네모)에 글로우와 같은 점 격자로 파스텔 색 점이 돌아간다(`fork/toolbar/AiGlow.kt`, 설정 > 툴바 > AI 글로우에서 켜기/밝기/도는 속도/두께(점 줄 수), 0.6초 동안 서서히 나타나고 0.8초 동안 사라짐, 기본 가장자리 4줄, 안쪽으로 갈수록 어두움, 입력 뷰 오버레이에 그려서 키를 다시 그리지 않음). 진행 문구는 툴바 가운데, 점 애니메이션 없음.
 - 명령 편집 창에서 앞 기호(`?`)는 고정이고 이름만 고친다.
 - Gemini API 키는 여러 개 넣을 수 있고 번갈아 쓴다(한도 초과 키는 잠시 쉼). 안드로이드 키 저장소의 AES-256-GCM 키로 암호화해서 저장한다(SwiftSlate의 KeyCipher). 모델 기본값은 `gemini-3.5-flash-lite`.
 - 설정: 도구 > AI 명령. 번역 패널의 기본값은 도구 > AI 번역, GIF API 키는 도구 > GIF.
@@ -292,6 +296,7 @@ SwiftSlate(github.com/Musheer360/SwiftSlate, MIT)의 명령 방식을 키보드 
 - 키와 툴바 아이콘을 도트 매트릭스 스타일로 바꿨다. Doto 같은 도트 글꼴과 어울리게 하려는 것이다.
   - 대상: Shift, ⌫, 엔터, 스페이스, 언어, 이모지, 툴바 도구, 클립보드 동작, 카드의 고정·삭제 버튼.
 - 아이콘은 `scripts/dot_icons.py`에 12×12 점 그림으로 정의되어 있다. `python3 scripts/dot_icons.py app/src/main/res/drawable`를 실행하면 `ic_dot_*.xml`이 다시 만들어진다.
+- 모든 아이콘은 긴 변이 10점인 같은 크기로 맞춘다(얇은 <, >, ✓, ✕는 8점). 한 줄에 놓아도 같은 정사각형 버튼으로 보이게.
 - 대부분은 pixelarticons(github.com/halfmage/pixelarticons, MIT, Copyright (c) 2020 Gerrit Halfmann)의 24×24 픽셀 아이콘을 12×12 점 격자로 줄인 것이다(`scripts/pixel_icons.py`, 대응표 `MAP`). 점 간격과 크기는 키 글자 크기의 Doto 글꼴과 같게(24dp에 12점, 지름 1.7dp). 아이콘마다 가장 덜 뭉개지는 위치(0/1픽셀 어긋남)에서 줄인다. Shift, 지구본, 스페이스, GIF, 지우기와 AI(별 두 개)는 12×12에 직접 그린 그림이다. `npm pack pixelarticons`로 받은 `package/svg` 폴더를 넣어 `python3 scripts/pixel_icons.py <svg 폴더> app/src/main/res/drawable`로 다시 만든다(dot_icons.py 다음에 실행).
 - 새 아이콘은 이 파일에 그림을 추가하고, `KeyboardIconsSet.forkDotIcons`나 툴바 항목에 연결한다.
 

@@ -4,7 +4,6 @@ package helium314.keyboard.fork.translate
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
-import android.text.TextUtils
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
@@ -48,16 +47,9 @@ class TranslatePanel(
         isClickable = true // touches stay here, the keys below don't get them
         val content = LinearLayout(context).apply {
             orientation = LinearLayout.VERTICAL
-            setPadding(dp(14), dp(8), dp(14), dp(6))
+            setPadding(dp(14), dp(10), dp(14), dp(4))
         }
-        // what is translated
-        content.addView(label(context.getString(R.string.fork_translate_source), 12f, ColorType.KEY_HINT_TEXT))
-        content.addView(label(preview.ifBlank { context.getString(R.string.fork_translate_empty) }, 14f,
-            if (preview.isBlank()) ColorType.KEY_HINT_TEXT else ColorType.KEY_TEXT).apply {
-            maxLines = 2
-            ellipsize = TextUtils.TruncateAt.END
-            setPadding(0, dp(2), 0, dp(6))
-        })
+        // the text itself is in the toolbar above (AI translation | text)
         // the three wheels
         val wheels = LinearLayout(context).apply { orientation = LinearLayout.HORIZONTAL }
         fun column(title: Int, options: List<Option>, selected: Option, weight: Float, onPick: (Option) -> Unit) {

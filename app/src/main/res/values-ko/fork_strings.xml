@@ -391,4 +391,21 @@
     <string name="fork_translate_source">커서 앞 문단을 번역해요</string>
     <string name="fork_one_handed_swipe">옆으로 밀어 한손 키보드</string>
     <string name="fork_one_handed_swipe_summary">키 위에서 왼쪽/오른쪽으로 빠르고 길게 밀면 그쪽으로 한손 키보드, 반대로 밀면 원래대로</string>
+    <string name="fork_clip_pinned_toast">고정했어요 (목록 맨 아래로 이동)</string>
+    <string name="fork_clip_unpinned_toast">고정 해제했어요</string>
+    <string name="fork_cat_ai_glow">AI 글로우</string>
+    <string name="fork_ai_glow">AI 작동 중 글로우</string>
+    <string name="fork_ai_glow_summary">AI 명령이나 번역이 도는 동안 키보드 테두리에 파스텔 점</string>
+    <string name="fork_ai_glow_brightness">밝기</string>
+    <string name="fork_ai_glow_period">색이 한 바퀴 도는 시간</string>
+    <string name="fork_ai_glow_depth">두께</string>
+    <string name="fork_ai_glow_rows">점 %1$d줄</string>
+    <string name="fork_translate_empty_short">입력한 글이 없어요</string>
+    <string name="fork_cat_claude_usage">Claude 사용량</string>
+    <string name="fork_claude_key">claude.ai 세션 키</string>
+    <string name="fork_claude_key_none">설정 안 됨. 넣으면 툴바에 5시간·주간 사용량이 점선 두 줄로 나와요</string>
+    <string name="fork_claude_key_ok">5시간: %1$d%% (%2$s 후 초기화) · 주간: %3$d%% (%4$s)</string>
+    <string name="fork_claude_key_error">사용량을 못 읽었어요: %1$s</string>
+    <string name="fork_claude_key_checking">확인 중…</string>
+    <string name="fork_claude_key_help">요금제 사용량을 알려주는 공식 API가 없어서, claude.ai 사용량 화면과 같은 방식으로 로그인 쿠키를 써서 읽어요. 컴퓨터에서 claude.ai를 열고 개발자 도구(F12) > Application > Cookies > claude.ai에서 sessionKey 값을 복사해 넣으세요. 암호화해서 저장하고 claude.ai에만 보내요. 이 값이 있으면 계정을 쓸 수 있으니 남에게 주지 마세요. 로그아웃하면 더 이상 동작하지 않아요.</string>
 </resources>

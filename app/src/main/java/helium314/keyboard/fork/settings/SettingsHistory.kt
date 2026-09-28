@@ -97,7 +97,7 @@ object SettingsHistory {
     }
 
     private val IGNORED_PARTS = listOf("expanded", "recent", "_until", "rates", "last_", "pinned_added",
-        "emoji_category", "page_id", "migrat", "version", "stats", "touch_data", "usage", "gif_klipy", "gif_giphy", "translate_")
+        "emoji_category", "page_id", "migrat", "version", "stats", "touch_data", "usage", "gif_klipy", "gif_giphy", "translate_", "fork_claude")
 
     private const val MERGE_MILLIS = 1500L
     private const val MAX_STEPS = 50

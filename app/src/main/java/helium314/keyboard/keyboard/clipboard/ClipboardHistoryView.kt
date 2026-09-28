@@ -274,7 +274,11 @@ class ClipboardHistoryView @JvmOverloads constructor(
 
     override fun onTogglePin(clipId: Long) {
         keyboardActionListener.onPressKey(KeyCode.NOT_SPECIFIED, 0, 1, HapticEvent.KEY_PRESS)
+        val pinned = clipboardHistoryManager.getHistoryEntryContent(clipId)?.isPinned == true
         clipboardHistoryManager.toggleClipPinned(clipId)
+        // fork: pinned clips move to the end of the list, say so (it looked like the clip was deleted)
+        helium314.keyboard.keyboard.KeyboardSwitcher.getInstance().showToast(
+            context.getString(if (pinned) R.string.fork_clip_unpinned_toast else R.string.fork_clip_pinned_toast), true)
     }
 
     override fun onDeleteClip(clipId: Long) {
@@ -478,7 +482,8 @@ class ClipboardHistoryView @JvmOverloads constructor(
         if (clipboardHistoryManager.pinnedOnly) { clipboardAdapter.notifyDataSetChanged(); return }
         clipboardAdapter.notifyItemMoved(oldPosition, newPosition)
         clipboardAdapter.notifyItemChanged(newPosition)
-        if (newPosition < oldPosition) clipboardRecyclerView.smoothScrollToPosition(newPosition)
+        // fork: follow the clip (pinning moves it to the end)
+        clipboardRecyclerView.smoothScrollToPosition(newPosition)
     }
 
     override fun onSharedPreferenceChanged(prefs: SharedPreferences?, key: String?) {
