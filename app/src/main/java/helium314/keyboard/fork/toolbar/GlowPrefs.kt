@@ -40,6 +40,9 @@ object GlowPrefs {
     const val AI_GLOW_STYLE = "fork_ai_glow_look"
     const val AI_STYLE_RING = "ring"
     const val AI_STYLE_DOTS = "dots"
+    /** dots style: strength of the smooth light under the dots (0 = dots only) */
+    const val AI_GLOW_BLOOM = "fork_ai_glow_bloom"
+    const val DEFAULT_AI_GLOW_BLOOM = 0.35f
     /** shape of the dots style, like the chip glow's */
     const val AI_GLOW_HEIGHT = "fork_ai_glow_height"
     const val AI_GLOW_WIDTH = "fork_ai_glow_width"

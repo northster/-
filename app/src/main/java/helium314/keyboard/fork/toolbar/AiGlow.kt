@@ -45,7 +45,8 @@ class AiGlow(private val host: View, private val keyboardView: () -> KeyboardVie
             val view = keyboardView() ?: return
             val params = GlowPrefs.aiGlow(prefs)
             val glow = if (prefs.getString(GlowPrefs.AI_GLOW_STYLE, GlowPrefs.AI_STYLE_RING) == GlowPrefs.AI_STYLE_DOTS)
-                    PastelDotsDrawable(host.resources.displayMetrics.density, params)
+                    PastelDotsDrawable(host.resources.displayMetrics.density, params,
+                        prefs.getFloat(GlowPrefs.AI_GLOW_BLOOM, GlowPrefs.DEFAULT_AI_GLOW_BLOOM).coerceIn(0f, 1f))
                 else PastelRingDrawable(params.maxAlpha, params.minAlpha, params.periodMs)
             drawable = glow
             kv = view
@@ -99,9 +100,10 @@ class AiGlow(private val host: View, private val keyboardView: () -> KeyboardVie
     /**
      * the chip glow's dots and shape, colored like the HomePod light: soft blobs of HomePod colors (random each time)
      * drift slowly round inside the glow, with a pale light at its center; every dot takes the blend of the colors where
-     * it is, so the colors flow into each other across the glow instead of bunching up
+     * it is, so the colors flow into each other across the glow instead of bunching up. Under the dots the same light
+     * shines smooth and faint ([bloom]), like LEDs lighting up what is around them.
      */
-    private class PastelDotsDrawable(private val density: Float, private val params: GlowPrefs.Glow) : Layer() {
+    private class PastelDotsDrawable(private val density: Float, private val params: GlowPrefs.Glow, private val bloom: Float) : Layer() {
         private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
         private val random = java.util.Random()
         private val colors = HOMEPOD.toList().shuffled(random).take(BLOBS)
@@ -114,6 +116,12 @@ class AiGlow(private val host: View, private val keyboardView: () -> KeyboardVie
         private var shape = FloatArray(0)
         private val bx = FloatArray(BLOBS + 1)
         private val by = FloatArray(BLOBS + 1)
+        // the smooth light: a soft round gradient per blob, kept to the glow's shape by a mask
+        private var blobShaders = arrayOfNulls<RadialGradient>(0)
+        private val bloomPaint = Paint(Paint.ANTI_ALIAS_FLAG)
+        private val maskPaint = Paint().apply { xfermode = android.graphics.PorterDuffXfermode(android.graphics.PorterDuff.Mode.DST_IN) }
+        private var mask: RadialGradient? = null
+        private var layerPaint = Paint()
 
         override fun draw(canvas: Canvas) {
             val w = bounds.width()
@@ -143,6 +151,7 @@ class AiGlow(private val host: View, private val keyboardView: () -> KeyboardVie
             by[BLOBS] = cy
             val blob = maxOf(rx, ry) * 0.55f
             val inv = 1f / (blob * blob)
+            if (bloom > 0f) drawBloom(canvas, alpha * bloom, blob)
             for (d in xs.indices) {
                 var red = 0f; var green = 0f; var blue = 0f; var weight = 0f
                 for (i in 0..BLOBS) {
@@ -162,6 +171,25 @@ class AiGlow(private val host: View, private val keyboardView: () -> KeyboardVie
                 paint.color = (a shl 24) or ((red / weight).toInt() shl 16) or ((green / weight).toInt() shl 8) or (blue / weight).toInt()
                 canvas.drawCircle(bounds.left + xs[d], bounds.top + ys[d], r, paint)
             }
+        }
+
+        /** the blobs smooth, in a layer that the mask keeps to the glow's shape, faint */
+        private fun drawBloom(canvas: Canvas, alpha: Float, blob: Float) {
+            layerPaint.alpha = (255 * alpha).toInt().coerceIn(0, 255)
+            if (layerPaint.alpha <= 0) return
+            val l = bounds.left.toFloat()
+            val t = bounds.top.toFloat()
+            val saved = canvas.saveLayer(l, t, bounds.right.toFloat(), bounds.bottom.toFloat(), layerPaint)
+            for (i in 0..BLOBS) {
+                bloomPaint.shader = blobShaders.getOrNull(i) ?: continue
+                canvas.save()
+                canvas.translate(l + bx[i], t + by[i])
+                canvas.drawCircle(0f, 0f, blob * 1.8f, bloomPaint)
+                canvas.restore()
+            }
+            maskPaint.shader = mask
+            canvas.drawRect(l, t, bounds.right.toFloat(), bounds.bottom.toFloat(), maskPaint)
+            canvas.restoreToCount(saved)
         }
 
         /** the same dot grid and shape as [DotGlowDrawable], a little flatter so the colored outer dots show */
@@ -192,6 +220,20 @@ class AiGlow(private val host: View, private val keyboardView: () -> KeyboardVie
                 edgeDistance += spacing
             }
             xs = lx.toFloatArray(); ys = ly.toFloatArray(); shape = ls.toFloatArray()
+            // the smooth light's gradients and the glow's shape as a mask (as bright as the dots' falloff)
+            val blob = maxOf(rx, ry) * 0.55f
+            blobShaders = Array(BLOBS + 1) { i ->
+                val c = if (i == BLOBS) CENTER_LIGHT else colors[i]
+                RadialGradient(0f, 0f, blob * 1.8f, intArrayOf(c, (c and 0xFFFFFF) or 0x80000000.toInt(), c and 0xFFFFFF),
+                    floatArrayOf(0f, 0.4f, 1f), Shader.TileMode.CLAMP)
+            }
+            mask = RadialGradient(0f, 0f, 1f, intArrayOf(0xFFFFFFFF.toInt(), 0x9EFFFFFF.toInt(), 0x00FFFFFF),
+                floatArrayOf(0f, 0.5f, 1f), Shader.TileMode.CLAMP).apply {
+                setLocalMatrix(android.graphics.Matrix().apply {
+                    setScale(rx, ry)
+                    postTranslate(bounds.left + cx, bounds.top + if (params.fromBottom) h else 0f)
+                })
+            }
         }
     }
 

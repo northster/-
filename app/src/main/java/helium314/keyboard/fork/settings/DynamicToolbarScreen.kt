@@ -85,6 +85,7 @@ fun DynamicToolbarScreen(
             GlowPrefs.AI_GLOW,
             GlowPrefs.AI_GLOW_TEST.takeIf { aiGlow },
             GlowPrefs.AI_GLOW_STYLE.takeIf { aiGlow },
+            GlowPrefs.AI_GLOW_BLOOM.takeIf { aiDots },
             GlowPrefs.AI_GLOW_POSITION.takeIf { aiDots },
             GlowPrefs.AI_GLOW_HEIGHT.takeIf { aiDots },
             GlowPrefs.AI_GLOW_WIDTH.takeIf { aiDots },
@@ -275,6 +276,9 @@ fun createDynamicToolbarSettings(context: Context) = listOf(
             ctx.getString(R.string.fork_ai_glow_style_ring) to GlowPrefs.AI_STYLE_RING,
             ctx.getString(R.string.fork_ai_glow_style_dots) to GlowPrefs.AI_STYLE_DOTS,
         ), GlowPrefs.AI_STYLE_RING)
+    },
+    Setting(context, GlowPrefs.AI_GLOW_BLOOM, R.string.fork_ai_glow_bloom, R.string.fork_ai_glow_bloom_summary) {
+        GlowSlider(it, GlowPrefs.DEFAULT_AI_GLOW_BLOOM, 0f..1f, 0.05f, ::percent)
     },
     Setting(context, GlowPrefs.AI_GLOW_POSITION, R.string.fork_glow_position) { setting ->
         val ctx = androidx.compose.ui.platform.LocalContext.current
