@@ -431,4 +431,6 @@
     <string name="fork_ai_glow_in">Time to appear and go away</string>
     <string name="fork_split_auto">Split when unfolded</string>
     <string name="fork_split_auto_summary">Split on wide screens (foldable inner screen, tablet), whole on the folded cover screen, by itself</string>
+    <string name="fork_toolbar_start_closed">Always open with the toolbar closed</string>
+    <string name="fork_toolbar_start_closed_summary">Even if the toolbar was open when the keyboard went away, it opens closed next time</string>
 </resources>

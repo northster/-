@@ -52,6 +52,8 @@ object ForkSettings {
     const val PREF_TOOLBAR_ANIM_DURATION = "fork_toolbar_anim_duration_ms"
     /** Toolbar state, persisted so it survives input view re-creation (e.g. fold / unfold) and process death. */
     const val PREF_TOOLBAR_EXPANDED = "fork_toolbar_expanded"
+    /** the toolbar is closed whenever the keyboard goes away, so it always opens closed */
+    const val PREF_TOOLBAR_START_CLOSED = "fork_toolbar_start_closed"
 
     // ---- keyboard size in dp (Appearance & size). Absent = HeliBoard's scale values still apply,
     //      so sizes set before the dp sliders existed are kept until a slider is moved.

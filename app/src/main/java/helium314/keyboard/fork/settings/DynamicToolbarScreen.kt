@@ -56,6 +56,7 @@ fun DynamicToolbarScreen(
             ForkSettings.PREF_TOOLBAR_ANIM_DURATION,
             ForkSettings.PREF_TOOLBAR_SMOOTH_RESIZE,
             ForkSettings.PREF_TOOLBAR_OVERLAY,
+            ForkSettings.PREF_TOOLBAR_START_CLOSED,
             R.string.fork_cat_wave,
             GlowPrefs.WAVE,
             GlowPrefs.WAVE_DURATION.takeIf { wave },
@@ -176,6 +177,10 @@ fun createDynamicToolbarSettings(context: Context) = listOf(
     Setting(context, ForkSettings.PREF_TOOLBAR_SMOOTH_RESIZE,
         R.string.fork_toolbar_smooth_resize, R.string.fork_toolbar_smooth_resize_summary) {
         SwitchPreference(it, ForkSettings.DEFAULT_TOOLBAR_SMOOTH_RESIZE)
+    },
+    Setting(context, ForkSettings.PREF_TOOLBAR_START_CLOSED,
+        R.string.fork_toolbar_start_closed, R.string.fork_toolbar_start_closed_summary) {
+        SwitchPreference(it, false)
     },
     Setting(context, ForkSettings.PREF_TOOLBAR_OVERLAY,
         R.string.fork_toolbar_overlay, R.string.fork_toolbar_overlay_summary) {

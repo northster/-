@@ -1086,6 +1086,7 @@ public class LatinIME extends InputMethodService implements
             mainKeyboardView.closing();
         }
         clearNavigationBarColor();
+        if (mDynamicToolbar != null) mDynamicToolbar.onWindowHidden(); // fork
     }
 
     void onFinishInputInternal() {

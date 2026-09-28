@@ -348,3 +348,6 @@ SwiftSlate(github.com/Musheer360/SwiftSlate, MIT)의 명령 방식을 키보드 
 ## 업스트림 버그 수정
 - 분할 키보드: HeliBoard 커밋 e4f8b97f가 `KeyboardLayoutSet.Params.isSplitLayoutEnabled`를 더 이상 채우지 않아 설정을 켜도 분할되지 않았다. `KeyboardId`가 `SettingsValues.mIsSplitKeyboardEnabled`를 직접 읽게 고쳤다(설정 > 모양 및 크기 > 분할 키보드, 이 포크는 모든 화면에 한 설정).
 - 펼치면 자동 분할(설정 > 모양 및 크기, 기본 켬): 화면의 가장 짧은 폭이 600dp 이상(폴드 내부 화면, 태블릿)이면 분할, 아니면(접힌 바깥 화면) 한 덩어리. 켜져 있으면 수동 "분할 키보드 사용"은 숨는다. 접고 펼 때 화면 폭이 바뀌면 설정을 다시 읽어 키보드를 새로 만든다(`LatinIME.onConfigurationChanged`).
+
+## 툴바 닫힌 채로 열기
+- 설정 > 툴바 > "항상 툴바 닫힌 채로 열기"(기본 끔): 키보드 창이 사라질 때(`LatinIME.onWindowHidden`) 툴바가 열려 있으면 애니메이션 없이 닫아 두어, 다음에 키보드를 열면 항상 닫힌 상태다. 끄면 예전처럼 마지막 상태를 기억한다.

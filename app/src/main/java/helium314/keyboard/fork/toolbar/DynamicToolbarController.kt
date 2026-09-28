@@ -985,6 +985,12 @@ class DynamicToolbarController(private val context: Context) {
         applyChipState()
     }
 
+    /** the keyboard went away: with the setting, the toolbar is closed for the next time */
+    fun onWindowHidden() {
+        if (isExpanded && context.prefs().getBoolean(ForkSettings.PREF_TOOLBAR_START_CLOSED, false))
+            setExpanded(false, false)
+    }
+
     /** the field is left: its suggestions are gone */
     fun onFinishInputView() {
         closeGifPanel()
