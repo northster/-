@@ -441,4 +441,6 @@
     <string name="fork_typo_outer_landscape">Cover sideways</string>
     <string name="fork_typo_inner_portrait">Inner upright</string>
     <string name="fork_typo_inner_landscape">Inner sideways</string>
+    <string name="fork_ai_glow_ring_dots">Dots at the edges</string>
+    <string name="fork_ai_glow_ring_dots_summary">Towards the edges the light turns into dots that shrink and fade out</string>
 </resources>

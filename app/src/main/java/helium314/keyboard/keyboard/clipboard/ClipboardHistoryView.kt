@@ -107,6 +107,12 @@ class ClipboardHistoryView @JvmOverloads constructor(
 
     override fun forkNormalHeight() = ResourceUtils.getSecondaryKeyboardHeight(resources, Settings.getValues()) + paddingTop + paddingBottom
 
+    /** fork: the column setting, more of them when the screen is wide (unfolded, sideways) */
+    private fun forkColumns(): Int {
+        val dm = resources.displayMetrics
+        return ClipPrefs.columns(context.prefs(), dm.widthPixels / dm.density)
+    }
+
     @SuppressLint("ClickableViewAccessibility")
     private fun initialize() { // needs to be delayed for access to ClipboardStrip, which is not a child of this view
         if (this::clipboardAdapter.isInitialized) return
@@ -117,7 +123,7 @@ class ClipboardHistoryView @JvmOverloads constructor(
         }
         placeholderView = findViewById(R.id.clipboard_empty_view)
         clipboardRecyclerView = findViewById<ClipboardHistoryRecyclerView>(R.id.clipboard_list).apply {
-            val colCount = ClipPrefs.columns(context.prefs()) // fork: adjustable
+            val colCount = forkColumns() // fork: adjustable, more on wide screens
             layoutManager = StaggeredGridLayoutManager(colCount, StaggeredGridLayoutManager.VERTICAL)
             @Suppress("deprecation") // "no cache" should be fine according to warning in https://developer.android.com/reference/android/view/ViewGroup#setPersistentDrawingCache(int)
             persistentDrawingCache = PERSISTENT_NO_CACHE
@@ -176,7 +182,7 @@ class ClipboardHistoryView @JvmOverloads constructor(
         historyManager.prepareClipboardHistory()
         // fork: grid and card settings
         val prefs = context.prefs()
-        (clipboardRecyclerView.layoutManager as? StaggeredGridLayoutManager)?.spanCount = ClipPrefs.columns(prefs)
+        (clipboardRecyclerView.layoutManager as? StaggeredGridLayoutManager)?.spanCount = forkColumns()
         clipboardAdapter.itemMaxLines = ClipPrefs.previewLines(prefs)
         hideInfoPanel()
         historyManager.setHistoryChangeListener(this)

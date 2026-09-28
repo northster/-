@@ -840,13 +840,17 @@ class DynamicToolbarController(private val context: Context) {
             // the ring spreads from there, starting right at the edge
             val halfWidth = kv.width / 2f
             wave.centerX = kvLeft + halfWidth
-            start = wave.rippleDepthPx
+            // the depth is set for a phone-wide keyboard: on wider ones (unfolded) the center goes down as much as
+            // the keyboard is wider, so the ring curves the same across it instead of looking rounder
+            val widthDp = kv.width / context.resources.displayMetrics.density
+            val depth = wave.rippleDepthPx * (widthDp / RIPPLE_REFERENCE_WIDTH_DP).coerceAtLeast(1f)
+            start = depth
             if (up) {
-                wave.centerY = kvBottom + wave.rippleDepthPx
+                wave.centerY = kvBottom + depth
                 // until the whole band is past the toolbar's top corners
                 end = kotlin.math.hypot(halfWidth, wave.centerY - toolbarTop) + thickness
             } else {
-                wave.centerY = kvTop - wave.rippleDepthPx
+                wave.centerY = kvTop - depth
                 // until the whole band is past the keyboard's bottom corners
                 end = kotlin.math.hypot(halfWidth, kvBottom - wave.centerY) + thickness
             }
@@ -1443,6 +1447,8 @@ class DynamicToolbarController(private val context: Context) {
         const val PREF_AUTOFILL_OPEN = "fork_autofill_open"
         private const val TAG = "DynamicToolbar"
         const val TOOL_NONE = 0
+        /** keyboard width (dp) the ripple depth setting is meant for, see startWave */
+        private const val RIPPLE_REFERENCE_WIDTH_DP = 400f
         private const val GIF_ALL = 0
         private const val GIF_RECENT = 1
         private const val GIF_FAVORITES = 2

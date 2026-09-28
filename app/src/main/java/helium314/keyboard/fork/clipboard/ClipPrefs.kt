@@ -59,6 +59,10 @@ object ClipPrefs {
 
     fun maxItems(prefs: SharedPreferences) = prefs.getInt(MAX_ITEMS, DEFAULT_MAX_ITEMS)
     fun columns(prefs: SharedPreferences) = prefs.getInt(COLUMNS, DEFAULT_COLUMNS).coerceIn(1, 4)
+
+    /** the columns for a panel [widthDp] wide: the setting is for a phone (~400 dp), wider screens get as many more */
+    fun columns(prefs: SharedPreferences, widthDp: Float) =
+        (columns(prefs) * widthDp / 400f).toInt().coerceIn(columns(prefs), 8)
     fun previewLines(prefs: SharedPreferences) = prefs.getInt(PREVIEW_LINES, DEFAULT_PREVIEW_LINES).coerceIn(1, 12)
     fun screenshots(prefs: SharedPreferences) = prefs.getBoolean(SCREENSHOTS, DEFAULT_SCREENSHOTS)
     fun pasteChip(prefs: SharedPreferences) = prefs.getBoolean(PASTE_CHIP, DEFAULT_PASTE_CHIP)
