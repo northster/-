@@ -8,6 +8,8 @@ import android.graphics.Canvas
 import android.graphics.ColorFilter
 import android.graphics.Paint
 import android.graphics.PixelFormat
+import android.graphics.RadialGradient
+import android.graphics.Shader
 import android.graphics.drawable.Drawable
 import android.os.SystemClock
 import android.view.View
@@ -15,16 +17,19 @@ import helium314.keyboard.keyboard.KeyboardView
 import helium314.keyboard.latin.utils.prefs
 import kotlin.math.PI
 import kotlin.math.cos
+import kotlin.math.pow
 import kotlin.math.sin
+import kotlin.math.sqrt
 
 /**
- * fork: pastel light behind the keys while an AI command or translation runs, like the Siri light on a HomePod: soft
- * blobs of random pastel colors in a ring around the keyboard's middle, turning slowly, over the whole keyboard
- * background, shown on the chip glow's dot grid (dot matrix). Seen through the key mask like the chip glow; it breathes
- * and fades in and out.
+ * fork: pastel glow behind the keys while an AI command or translation runs, seen through the key mask like the chip
+ * glow; it breathes and fades in and out. Two looks ([GlowPrefs.AI_GLOW_STYLE]):
+ * - [GlowPrefs.AI_STYLE_RING]: like the Siri light on a HomePod, soft blobs of random pastel colors in a ring round the
+ *   keyboard's middle, turning slowly, smooth over the whole keyboard
+ * - [GlowPrefs.AI_STYLE_DOTS]: the chip glow's dots and shape, in a round gradient of three random pastel colors
  */
 class AiGlow(private val host: View, private val keyboardView: () -> KeyboardView?) {
-    private var drawable: PastelRingDrawable? = null
+    private var drawable: Layer? = null
     private var kv: KeyboardView? = null
     private var ticker: ValueAnimator? = null
     private var fader: ValueAnimator? = null
@@ -38,12 +43,10 @@ class AiGlow(private val host: View, private val keyboardView: () -> KeyboardVie
         fader?.cancel()
         if (on && drawable == null) {
             val view = keyboardView() ?: return
-            val max = prefs.getFloat(GlowPrefs.AI_GLOW_MAX, GlowPrefs.DEFAULT_AI_GLOW_MAX).coerceIn(0f, 1f)
-            val grid = GlowPrefs.glow(prefs)
-            val glow = PastelRingDrawable(host.resources.displayMetrics.density * grid.spacingDp,
-                host.resources.displayMetrics.density * grid.dotDp, max,
-                prefs.getFloat(GlowPrefs.AI_GLOW_MIN, GlowPrefs.DEFAULT_AI_GLOW_MIN).coerceIn(0f, max),
-                prefs.getFloat(GlowPrefs.AI_GLOW_BREATH, GlowPrefs.DEFAULT_AI_GLOW_BREATH).toLong().coerceIn(200, 20_000))
+            val params = GlowPrefs.aiGlow(prefs)
+            val glow = if (prefs.getString(GlowPrefs.AI_GLOW_STYLE, GlowPrefs.AI_STYLE_RING) == GlowPrefs.AI_STYLE_DOTS)
+                    PastelDotsDrawable(host.resources.displayMetrics.density, params)
+                else PastelRingDrawable(params.maxAlpha, params.minAlpha, params.periodMs)
             drawable = glow
             kv = view
             view.setForkAiUnderlay(glow)
@@ -83,16 +86,88 @@ class AiGlow(private val host: View, private val keyboardView: () -> KeyboardVie
         drawable = null
     }
 
-    /**
-     * soft round blobs of pastel light on an ellipse round the middle, turning, and a faint light in the middle; each
-     * dot of the grid takes the mix of the blobs' colors where it is
-     */
-    private class PastelRingDrawable(
-        private val spacing: Float, private val dotRadius: Float,
-        private val maxAlpha: Float, private val minAlpha: Float, private val breathMs: Long,
-    ) : Drawable() {
+    /** a look of the glow: [time] since it started (ms), [fade] 0..1 */
+    private abstract class Layer : Drawable() {
         var time = 0L
         var fade = 0f
+        override fun setAlpha(alpha: Int) { }
+        override fun setColorFilter(colorFilter: ColorFilter?) { }
+        @Deprecated("Deprecated in Java")
+        override fun getOpacity() = PixelFormat.TRANSLUCENT
+    }
+
+    /** the chip glow's dots and shape, colored by their distance from its center: three random pastels, center to edge */
+    private class PastelDotsDrawable(private val density: Float, private val params: GlowPrefs.Glow) : Layer() {
+        private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
+        private val stops = COLORS.toList().shuffled().take(3).toIntArray()
+        // the dots for the current size: position, brightness from the shape, color
+        private var size = 0L
+        private var xs = FloatArray(0)
+        private var ys = FloatArray(0)
+        private var shape = FloatArray(0)
+        private var dotColors = IntArray(0)
+
+        override fun draw(canvas: Canvas) {
+            val w = bounds.width()
+            val h = bounds.height()
+            if (w <= 0 || h <= 0 || fade <= 0f) return
+            if (size != (w.toLong() shl 32 or h.toLong())) layout(w, h)
+            // breathing like the chip glow
+            val breath = 0.5f - 0.5f * cos(2 * PI * time / params.periodMs.coerceAtLeast(1)).toFloat()
+            val alpha = fade * (params.minAlpha + (params.maxAlpha - params.minAlpha) * breath)
+            val r = params.dotDp * density
+            for (i in xs.indices) {
+                paint.color = dotColors[i]
+                paint.alpha = (255 * alpha * shape[i]).toInt().coerceIn(0, 255)
+                if (paint.alpha > 0) canvas.drawCircle(bounds.left + xs[i], bounds.top + ys[i], r, paint)
+            }
+        }
+
+        /** the same dot grid and falloff as [DotGlowDrawable] */
+        private fun layout(width: Int, height: Int) {
+            size = width.toLong() shl 32 or height.toLong()
+            val w = width.toFloat()
+            val h = height.toFloat()
+            val spacing = params.spacingDp * density
+            val cx = w / 2
+            val rx = w * 0.5f * params.width
+            val ry = h * params.height
+            val lx = ArrayList<Float>(); val ly = ArrayList<Float>(); val ls = ArrayList<Float>(); val lc = ArrayList<Int>()
+            var edgeDistance = spacing / 2
+            while (edgeDistance < ry) {
+                val y = if (params.fromBottom) h - edgeDistance else edgeDistance
+                var x = spacing / 2
+                while (x < w) {
+                    val dx = (x - cx) / rx
+                    val dy = edgeDistance / ry
+                    val d = sqrt(dx * dx + dy * dy)
+                    if (d < 1f) {
+                        lx += x; ly += y
+                        ls += (1f - d).pow(1.2f)
+                        lc += gradient(d)
+                    }
+                    x += spacing
+                }
+                edgeDistance += spacing
+            }
+            xs = lx.toFloatArray(); ys = ly.toFloatArray(); shape = ls.toFloatArray(); dotColors = lc.toIntArray()
+        }
+
+        /** [d] 0 (center) .. 1 (edge) through the three colors */
+        private fun gradient(d: Float): Int {
+            val pos = d.coerceIn(0f, 1f) * (stops.size - 1)
+            val i = pos.toInt().coerceIn(0, stops.size - 2)
+            return mix(stops[i], stops[i + 1], pos - i)
+        }
+
+        private fun mix(c1: Int, c2: Int, f: Float): Int {
+            fun ch(shift: Int) = (((c1 shr shift) and 0xFF) * (1 - f) + ((c2 shr shift) and 0xFF) * f).toInt()
+            return (0xFF shl 24) or (ch(16) shl 16) or (ch(8) shl 8) or ch(0)
+        }
+    }
+
+    /** soft round blobs of pastel light on an ellipse round the middle, turning; a faint light in the middle */
+    private class PastelRingDrawable(private val maxAlpha: Float, private val minAlpha: Float, private val breathMs: Long) : Layer() {
         private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
         private val random = java.util.Random()
         /** a different color for each blob */
@@ -101,10 +176,9 @@ class AiGlow(private val host: View, private val keyboardView: () -> KeyboardVie
         private val offsets = FloatArray(BLOBS) { (it + random.nextFloat() * 0.5f) / BLOBS }
         private val wobble = FloatArray(BLOBS) { random.nextFloat() }
         private var size = 0L
-        private var xs = FloatArray(0)
-        private var ys = FloatArray(0)
-        private val bx = FloatArray(BLOBS + 1)
-        private val by = FloatArray(BLOBS + 1)
+        private var shaders = arrayOfNulls<RadialGradient>(0)
+        private var center: RadialGradient? = null
+        private var radius = 0f
 
         override fun draw(canvas: Canvas) {
             val w = bounds.width().toFloat()
@@ -113,68 +187,51 @@ class AiGlow(private val host: View, private val keyboardView: () -> KeyboardVie
             if (size != (w.toLong() shl 32 or h.toLong())) layout(w, h)
             val breath = 0.5f - 0.5f * cos(2 * PI * time / breathMs).toFloat()
             val alpha = fade * (minAlpha + (maxAlpha - minAlpha) * breath)
-            val cx = w / 2
-            val cy = h / 2
+            val cx = bounds.left + w / 2
+            val cy = bounds.top + h / 2
             // the whole ring turns once in TURN_MS, each blob also drifts in and out a little
             val turn = time / TURN_MS.toFloat()
             for (i in 0 until BLOBS) {
                 val angle = 2 * PI * (offsets[i] + turn)
                 val drift = 1f + 0.18f * sin(2 * PI * (time / DRIFT_MS.toFloat() + wobble[i])).toFloat()
-                bx[i] = cx + (w * 0.34f * drift * cos(angle)).toFloat()
-                by[i] = cy + (h * 0.30f * drift * sin(angle)).toFloat()
+                val x = cx + (w * 0.34f * drift * cos(angle)).toFloat()
+                val y = cy + (h * 0.30f * drift * sin(angle)).toFloat()
+                paint.shader = shaders[i]
+                paint.alpha = (255 * alpha).toInt().coerceIn(0, 255)
+                canvas.save()
+                canvas.translate(x, y)
+                canvas.drawCircle(0f, 0f, radius, paint)
+                canvas.restore()
             }
-            bx[BLOBS] = cx
-            by[BLOBS] = cy
-            val radius = maxOf(h * 0.75f, w * 0.28f)
-            val inv = 1f / (radius * radius)
-            for (d in xs.indices) {
-                var r = 0f; var g = 0f; var b = 0f; var weight = 0f
-                for (i in 0..BLOBS) {
-                    val dx = xs[d] - bx[i]
-                    val dy = ys[d] - by[i]
-                    val q = 1f - (dx * dx + dy * dy) * inv
-                    if (q <= 0f) continue
-                    // soft falloff; the white light in the middle is fainter
-                    val f = q * q * (if (i == BLOBS) 0.35f else 1f)
-                    val c = if (i == BLOBS) 0xFFFFFFFF.toInt() else colors[i]
-                    r += ((c shr 16) and 0xFF) * f
-                    g += ((c shr 8) and 0xFF) * f
-                    b += (c and 0xFF) * f
-                    weight += f
-                }
-                if (weight <= 0.01f) continue
-                val a = (255 * alpha * weight.coerceAtMost(1f)).toInt()
-                if (a <= 0) continue
-                paint.color = (a shl 24) or ((r / weight).toInt() shl 16) or ((g / weight).toInt() shl 8) or (b / weight).toInt()
-                canvas.drawCircle(bounds.left + xs[d], bounds.top + ys[d], dotRadius, paint)
-            }
+            paint.shader = center
+            paint.alpha = (255 * alpha * 0.35f).toInt().coerceIn(0, 255)
+            canvas.save()
+            canvas.translate(cx, cy)
+            canvas.drawCircle(0f, 0f, radius * 0.9f, paint)
+            canvas.restore()
         }
 
-        /** the dot grid over the whole keyboard, centered */
         private fun layout(w: Float, h: Float) {
             size = w.toLong() shl 32 or h.toLong()
-            val cols = (w / spacing).toInt().coerceAtLeast(1)
-            val rows = (h / spacing).toInt().coerceAtLeast(1)
-            val left = (w - (cols - 1) * spacing) / 2
-            val top = (h - (rows - 1) * spacing) / 2
-            xs = FloatArray(cols * rows) { left + (it % cols) * spacing }
-            ys = FloatArray(cols * rows) { top + (it / cols) * spacing }
+            radius = maxOf(h * 0.75f, w * 0.28f)
+            val stops = floatArrayOf(0f, 0.45f, 1f)
+            shaders = Array(BLOBS) { i ->
+                val c = colors[i]
+                RadialGradient(0f, 0f, radius, intArrayOf(c, (c and 0xFFFFFF) or 0x88000000.toInt(), c and 0xFFFFFF),
+                    stops, Shader.TileMode.CLAMP)
+            }
+            center = RadialGradient(0f, 0f, radius * 0.9f, intArrayOf(0xFFFFFFFF.toInt(), 0x00FFFFFF), null, Shader.TileMode.CLAMP)
         }
+    }
 
-        override fun setAlpha(alpha: Int) { }
-        override fun setColorFilter(colorFilter: ColorFilter?) { }
-        @Deprecated("Deprecated in Java")
-        override fun getOpacity() = PixelFormat.TRANSLUCENT
-
-        companion object {
-            private const val BLOBS = 5
-            private const val TURN_MS = 16_000L
-            private const val DRIFT_MS = 5_000L
-            /** pink, peach, butter, mint, sky, periwinkle, lavender, orchid */
-            private val COLORS = intArrayOf(
-                0xFFFFB3C7.toInt(), 0xFFFFD6A5.toInt(), 0xFFFDFFB6.toInt(), 0xFFCAFFBF.toInt(),
-                0xFF9BF6FF.toInt(), 0xFFA0C4FF.toInt(), 0xFFBDB2FF.toInt(), 0xFFFFC6FF.toInt(),
-            )
-        }
+    companion object {
+        private const val BLOBS = 5
+        private const val TURN_MS = 16_000L
+        private const val DRIFT_MS = 5_000L
+        /** pink, peach, butter, mint, sky, periwinkle, lavender, orchid */
+        private val COLORS = intArrayOf(
+            0xFFFFB3C7.toInt(), 0xFFFFD6A5.toInt(), 0xFFFDFFB6.toInt(), 0xFFCAFFBF.toInt(),
+            0xFF9BF6FF.toInt(), 0xFFA0C4FF.toInt(), 0xFFBDB2FF.toInt(), 0xFFFFC6FF.toInt(),
+        )
     }
 }

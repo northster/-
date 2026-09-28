@@ -661,13 +661,13 @@ class DynamicToolbarView @JvmOverloads constructor(
      */
     private var gifField: TextView? = null
 
-    /** the GIF header's field while a search is typed: the text with a caret, outlined in the enter key color */
+    /** the GIF header's field while a search is typed: the text with a caret, outlined in the text color (white) */
     fun setGifQuery(query: String, typing: Boolean) {
         val field = gifField ?: return
         val colors = Settings.getValues().mColors
         field.text = if (typing) "$query▏" else query
         (field.background as? GradientDrawable)?.setStroke(if (typing) (1.5f * density).toInt().coerceAtLeast(1) else 0,
-            colors.get(ColorType.ACTION_KEY_BACKGROUND))
+            colors.get(ColorType.KEY_TEXT))
     }
 
     fun showGifHeader(query: String, filter: Int, onBack: () -> Unit, onSearch: () -> Unit, onRecent: () -> Unit,

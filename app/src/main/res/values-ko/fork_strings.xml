@@ -405,7 +405,7 @@
     <string name="fork_clip_unpinned_toast">고정 해제했어요</string>
     <string name="fork_cat_ai_glow">AI 글로우</string>
     <string name="fork_ai_glow">AI 작동 중 글로우</string>
-    <string name="fork_ai_glow_summary">AI 명령이나 번역이 도는 동안 키보드 배경에 은은한 파스텔 빛 고리(매번 다른 색)</string>
+    <string name="fork_ai_glow_summary">AI 명령이나 번역이 도는 동안 키 뒤에 파스텔 글로우(매번 다른 색)</string>
     <string name="fork_translate_empty_short">입력한 글이 없어요</string>
     <string name="fork_cat_claude_usage">Claude 사용량</string>
     <string name="fork_claude_key">claude.ai 세션 키</string>
@@ -422,5 +422,8 @@
     <string name="fork_translate_custom_no_prompt">이름 그대로</string>
     <string name="fork_ai_glow_test_summary">키보드를 연 채로 누르면 6초 동안 보여줘요(아래 테스트 칸을 눌러 키보드를 여세요)</string>
     <string name="fork_ai_glow_test_no_keyboard">키보드가 열려 있지 않아요. 아래 테스트 칸을 눌러 키보드를 연 뒤 다시 누르세요</string>
+    <string name="fork_ai_glow_style">모양</string>
+    <string name="fork_ai_glow_style_ring">파스텔 빛 (HomePod)</string>
+    <string name="fork_ai_glow_style_dots">점 글로우</string>
     <string name="fork_ai_glow_in">나타나고 사라지는 시간</string>
 </resources>

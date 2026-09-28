@@ -41,6 +41,7 @@ fun DynamicToolbarScreen(
     val wave = GlowPrefs.waveEnabled(prefs)
     val glow = GlowPrefs.glowEnabled(prefs)
     val aiGlow = prefs.getBoolean(GlowPrefs.AI_GLOW, true)
+    val aiDots = aiGlow && prefs.getString(GlowPrefs.AI_GLOW_STYLE, GlowPrefs.AI_STYLE_RING) == GlowPrefs.AI_STYLE_DOTS
     val autofill = prefs.getBoolean(DynamicToolbarController.PREF_AUTOFILL, true)
     val items = listOfNotNull(
             R.string.fork_cat_gesture,
@@ -82,6 +83,10 @@ fun DynamicToolbarScreen(
             R.string.fork_cat_ai_glow,
             GlowPrefs.AI_GLOW,
             GlowPrefs.AI_GLOW_TEST.takeIf { aiGlow },
+            GlowPrefs.AI_GLOW_STYLE.takeIf { aiGlow },
+            GlowPrefs.AI_GLOW_POSITION.takeIf { aiDots },
+            GlowPrefs.AI_GLOW_HEIGHT.takeIf { aiDots },
+            GlowPrefs.AI_GLOW_WIDTH.takeIf { aiDots },
             GlowPrefs.AI_GLOW_MAX.takeIf { aiGlow },
             GlowPrefs.AI_GLOW_MIN.takeIf { aiGlow },
             GlowPrefs.AI_GLOW_BREATH.takeIf { aiGlow },
@@ -258,6 +263,26 @@ fun createDynamicToolbarSettings(context: Context) = listOf(
             if (DynamicToolbarController.current?.previewAiGlow() != true)
                 android.widget.Toast.makeText(ctx, R.string.fork_ai_glow_test_no_keyboard, android.widget.Toast.LENGTH_LONG).show()
         })
+    },
+    Setting(context, GlowPrefs.AI_GLOW_STYLE, R.string.fork_ai_glow_style) { setting ->
+        val ctx = androidx.compose.ui.platform.LocalContext.current
+        helium314.keyboard.settings.preferences.InlineChoicePreference(setting.title, setting.key, listOf(
+            ctx.getString(R.string.fork_ai_glow_style_ring) to GlowPrefs.AI_STYLE_RING,
+            ctx.getString(R.string.fork_ai_glow_style_dots) to GlowPrefs.AI_STYLE_DOTS,
+        ), GlowPrefs.AI_STYLE_RING)
+    },
+    Setting(context, GlowPrefs.AI_GLOW_POSITION, R.string.fork_glow_position) { setting ->
+        val ctx = androidx.compose.ui.platform.LocalContext.current
+        helium314.keyboard.settings.preferences.InlineChoicePreference(setting.title, setting.key, listOf(
+            ctx.getString(R.string.fork_glow_position_top) to GlowPrefs.POSITION_TOP,
+            ctx.getString(R.string.fork_glow_position_bottom) to GlowPrefs.POSITION_BOTTOM,
+        ), GlowPrefs.POSITION_TOP)
+    },
+    Setting(context, GlowPrefs.AI_GLOW_HEIGHT, R.string.fork_glow_height) {
+        GlowSlider(it, GlowPrefs.DEFAULT_AI_GLOW_HEIGHT, 0.1f..1f, 0.05f, ::percent)
+    },
+    Setting(context, GlowPrefs.AI_GLOW_WIDTH, R.string.fork_glow_width) {
+        GlowSlider(it, GlowPrefs.DEFAULT_AI_GLOW_WIDTH, 0.2f..2f, 0.05f, ::percent)
     },
     Setting(context, GlowPrefs.AI_GLOW_MAX, R.string.fork_glow_max) {
         GlowSlider(it, GlowPrefs.DEFAULT_AI_GLOW_MAX, 0.05f..1f, 0.05f, ::percent)

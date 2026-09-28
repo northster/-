@@ -36,12 +36,22 @@ object GlowPrefs {
     const val AI_GLOW_MIN = "fork_ai_glow_min"
     /** breathing, like the chip glow's [GLOW_PERIOD] */
     const val AI_GLOW_BREATH = "fork_ai_glow_breath"
+    /** [AI_STYLE_RING] (smooth pastel light over the keyboard) or [AI_STYLE_DOTS] (the chip glow's dots and shape) */
+    const val AI_GLOW_STYLE = "fork_ai_glow_look"
+    const val AI_STYLE_RING = "ring"
+    const val AI_STYLE_DOTS = "dots"
+    /** shape of the dots style, like the chip glow's */
+    const val AI_GLOW_HEIGHT = "fork_ai_glow_height"
+    const val AI_GLOW_WIDTH = "fork_ai_glow_width"
+    const val AI_GLOW_POSITION = "fork_ai_glow_position"
     /** settings entry that shows the glow for a few seconds (nothing stored) */
     const val AI_GLOW_TEST = "fork_ai_glow_test"
     const val DEFAULT_AI_GLOW_IN = 900f
     const val DEFAULT_AI_GLOW_MAX = 0.7f
     const val DEFAULT_AI_GLOW_MIN = 0.4f
     const val DEFAULT_AI_GLOW_BREATH = 2400f
+    const val DEFAULT_AI_GLOW_HEIGHT = 0.8f
+    const val DEFAULT_AI_GLOW_WIDTH = 1.2f
 
     /**
      * the glows are drawn behind the keys and again over them, clipped to the key shapes: this is how opaque that
@@ -103,6 +113,21 @@ object GlowPrefs {
             dotDp = prefs.getFloat(GLOW_DOT_SIZE, DEFAULT_GLOW_DOT_SIZE).coerceIn(0.3f, 4f),
             spacingDp = prefs.getFloat(GLOW_DOT_SPACING, DEFAULT_GLOW_DOT_SPACING).coerceIn(2f, 16f),
             fromBottom = prefs.getString(GLOW_POSITION, POSITION_TOP) == POSITION_BOTTOM,
+        )
+    }
+
+    /** the AI glow: its own brightness, breathing and (dots style) shape, on the chip glow's dot grid */
+    fun aiGlow(prefs: SharedPreferences): Glow {
+        val max = prefs.getFloat(AI_GLOW_MAX, DEFAULT_AI_GLOW_MAX).coerceIn(0f, 1f)
+        return Glow(
+            maxAlpha = max,
+            minAlpha = prefs.getFloat(AI_GLOW_MIN, DEFAULT_AI_GLOW_MIN).coerceIn(0f, max),
+            periodMs = prefs.getFloat(AI_GLOW_BREATH, DEFAULT_AI_GLOW_BREATH).toLong().coerceIn(200, 20_000),
+            height = prefs.getFloat(AI_GLOW_HEIGHT, DEFAULT_AI_GLOW_HEIGHT).coerceIn(0.05f, 1f),
+            width = prefs.getFloat(AI_GLOW_WIDTH, DEFAULT_AI_GLOW_WIDTH).coerceIn(0.05f, 2f),
+            dotDp = prefs.getFloat(GLOW_DOT_SIZE, DEFAULT_GLOW_DOT_SIZE).coerceIn(0.3f, 4f),
+            spacingDp = prefs.getFloat(GLOW_DOT_SPACING, DEFAULT_GLOW_DOT_SPACING).coerceIn(2f, 16f),
+            fromBottom = prefs.getString(AI_GLOW_POSITION, POSITION_TOP) == POSITION_BOTTOM,
         )
     }
 

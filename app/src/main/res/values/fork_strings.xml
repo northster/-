@@ -408,7 +408,7 @@
     <string name="fork_clip_unpinned_toast">Unpinned</string>
     <string name="fork_cat_ai_glow">AI glow</string>
     <string name="fork_ai_glow">Glow while AI works</string>
-    <string name="fork_ai_glow_summary">Soft pastel light ring behind the keys while an AI command or translation runs (new colors each time)</string>
+    <string name="fork_ai_glow_summary">Pastel glow behind the keys while an AI command or translation runs (new colors each time)</string>
     <string name="fork_translate_empty_short">Nothing typed yet</string>
     <string name="fork_cat_claude_usage">Claude usage</string>
     <string name="fork_claude_key">claude.ai session key</string>
@@ -425,5 +425,8 @@
     <string name="fork_translate_custom_no_prompt">By its name</string>
     <string name="fork_ai_glow_test_summary">Shows it for 6 seconds while the keyboard is open (tap the test field below to open it)</string>
     <string name="fork_ai_glow_test_no_keyboard">The keyboard is not open. Tap the test field below to open it, then try again</string>
+    <string name="fork_ai_glow_style">Look</string>
+    <string name="fork_ai_glow_style_ring">Pastel light (HomePod)</string>
+    <string name="fork_ai_glow_style_dots">Dot glow</string>
     <string name="fork_ai_glow_in">Time to appear and go away</string>
 </resources>
