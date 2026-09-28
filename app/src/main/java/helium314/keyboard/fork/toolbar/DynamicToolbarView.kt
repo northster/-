@@ -113,13 +113,15 @@ class DynamicToolbarView @JvmOverloads constructor(
         val colors = Settings.getValues().mColors
         colors.setBackground(this, ColorType.MAIN_BACKGROUND) // same as keyboard, looks like the keyboard grows
         if (showUsage) {
-            // tools packed to the left, the usage lines in the room up to settings
+            // tools packed to the left; the usage (its own width) and everything after it to the right, the room
+            // in between stays empty on wide screens
             val settings = items.filter { it.id == ToolbarItems.MORE }
             for (item in items - settings.toSet()) {
                 val button = iconButton(item.icon, context.getString(item.label)) { onClick(item) }.apply { tag = item.id }
                 buttons.addView(button, LinearLayout.LayoutParams((48 * density).toInt(), LayoutParams.MATCH_PARENT))
             }
-            buttons.addView(usageView, LinearLayout.LayoutParams(0, LayoutParams.MATCH_PARENT, 1f).apply {
+            buttons.addView(View(context), LinearLayout.LayoutParams(0, LayoutParams.MATCH_PARENT, 1f))
+            buttons.addView(usageView, LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT).apply {
                 marginStart = (6 * density).toInt()
                 marginEnd = (4 * density).toInt()
             })

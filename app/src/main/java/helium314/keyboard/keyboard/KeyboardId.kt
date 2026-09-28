@@ -58,7 +58,8 @@ data class KeyboardId(
         params.settingsValues?.mShowsDpadKey ?: false,
         params.editorInfo.actionLabel?.toString(),
         params.settingsValues?.mShowsVoiceInputKey ?: false,
-        params.isSplitLayoutEnabled,
+        // fork: upstream stopped setting params.isSplitLayoutEnabled (e4f8b97f), so the split setting did nothing
+        params.settingsValues?.mIsSplitKeyboardEnabled ?: false,
         params.settingsValues?.mOneHandedModeEnabled ?: false,
         params.internalAction,
         params.emojiSearchAvailable,
