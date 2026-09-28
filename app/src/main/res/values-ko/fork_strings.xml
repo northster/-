@@ -344,8 +344,8 @@
     <string name="fork_typo_meant">의도한 키</string>
     <string name="fork_typo_count">발생 횟수</string>
     <string name="fork_typo_reset">학습 초기화</string>
-    <string name="fork_typo_reset_summary">키 크기를 바꾼 뒤처럼 처음부터 다시 배워요</string>
-    <string name="fork_typo_reset_confirm">지금까지 배운 터치 위치와 오타를 모두 지울까요?</string>
+    <string name="fork_typo_reset_summary">고른 화면 상황에서 배운 것을 처음부터 다시 배워요</string>
+    <string name="fork_typo_reset_confirm">%1$s에서 배운 터치 위치와 오타를 모두 지울까요?</string>
     <string name="fork_emoji_dict">이모지 검색 사전</string>
     <string name="fork_emoji_dict_summary">이모지 패널의 🔍 검색에는 언어별 이모지 사전이 필요해요. 여기서 추가해요</string>
     <string name="fork_toolbar_gif">GIF</string>
@@ -432,4 +432,10 @@
     <string name="fork_toolbar_start_closed_summary">키보드를 닫을 때 툴바가 열려 있었어도 다음에는 닫힌 상태로 열려요</string>
     <string name="fork_split_side_padding">분할 키보드 좌우 여백</string>
     <string name="fork_split_side_padding_summary">분할됐을 때 양쪽 바깥 여백. 옮기기 전에는 일반 좌우 여백과 같아요</string>
+    <string name="fork_typo_profile">화면 상황</string>
+    <string name="fork_typo_profile_summary">접은 화면/펼친 화면, 세로/가로마다 따로 배워요. 지금은 %1$s. 숫자는 학습한 글자 수</string>
+    <string name="fork_typo_outer_portrait">바깥 세로</string>
+    <string name="fork_typo_outer_landscape">바깥 가로</string>
+    <string name="fork_typo_inner_portrait">안쪽 세로</string>
+    <string name="fork_typo_inner_landscape">안쪽 가로</string>
 </resources>

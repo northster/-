@@ -347,8 +347,8 @@
     <string name="fork_typo_meant">Meant</string>
     <string name="fork_typo_count">Times</string>
     <string name="fork_typo_reset">Forget what was learned</string>
-    <string name="fork_typo_reset_summary">Starts learning again, e.g. after changing the key size</string>
-    <string name="fork_typo_reset_confirm">Forget all touches and typos learned so far?</string>
+    <string name="fork_typo_reset_summary">Learns the chosen screen situation from scratch</string>
+    <string name="fork_typo_reset_confirm">Delete the touches and typos learned for %1$s?</string>
     <string name="fork_emoji_dict">Emoji search dictionary</string>
     <string name="fork_emoji_dict_summary">The 🔍 in the emoji panel needs an emoji dictionary for your language; add one here</string>
     <string name="fork_toolbar_gif">GIF</string>
@@ -435,4 +435,10 @@
     <string name="fork_toolbar_start_closed_summary">Even if the toolbar was open when the keyboard went away, it opens closed next time</string>
     <string name="fork_split_side_padding">Split keyboard side padding</string>
     <string name="fork_split_side_padding_summary">Outer padding on both sides while split. Same as the normal side padding until moved</string>
+    <string name="fork_typo_profile">Screen situation</string>
+    <string name="fork_typo_profile_summary">Folded / unfolded, upright / sideways each learn on their own. Now: %1$s. The numbers are the letters learned</string>
+    <string name="fork_typo_outer_portrait">Cover upright</string>
+    <string name="fork_typo_outer_landscape">Cover sideways</string>
+    <string name="fork_typo_inner_portrait">Inner upright</string>
+    <string name="fork_typo_inner_landscape">Inner sideways</string>
 </resources>

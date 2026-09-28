@@ -45,7 +45,8 @@ import helium314.keyboard.settings.preferences.SwitchPreference
 
 /**
  * fork: typo correction (TouchLearning): on / off, where the fingers land on each key (like Samsung's "most common
- * typos" screen: tap a key to see only its touches) and the most frequent typos.
+ * typos" screen: tap a key to see only its touches) and the most frequent typos, for each screen situation (cover /
+ * inner screen, upright / sideways), the current one first.
  */
 @Composable
 fun TypoScreen(onClickBack: () -> Unit) {
@@ -56,10 +57,17 @@ fun TypoScreen(onClickBack: () -> Unit) {
     var refresh by remember { mutableIntStateOf(0) }
     if (refresh < 0) return
     var selected by remember { mutableStateOf<Int?>(null) }
+    var profile by remember { mutableStateOf(TouchLearning.current()) }
     var confirmReset by remember { mutableStateOf(false) }
     val s = LocalShadcn.current
-    val shapes = TouchLearning.keys(ctx)
-    val ranking = TouchLearning.typoRanking(ctx)
+    val shapes = TouchLearning.keys(ctx, profile)
+    val ranking = TouchLearning.typoRanking(ctx, profile)
+    val profileNames = mapOf(
+        TouchLearning.OUTER_PORTRAIT to stringResource(R.string.fork_typo_outer_portrait),
+        TouchLearning.OUTER_LANDSCAPE to stringResource(R.string.fork_typo_outer_landscape),
+        TouchLearning.INNER_PORTRAIT to stringResource(R.string.fork_typo_inner_portrait),
+        TouchLearning.INNER_LANDSCAPE to stringResource(R.string.fork_typo_inner_landscape),
+    )
     val palette = listOf(0xFF7E6BC4, 0xFFF2C94C, 0xFFEB5B3C, 0xFFF4B6A0, 0xFFC9D6A3, 0xFF1BA784, 0xFF5B5EA6, 0xFFE0A0C0)
         .map { Color(it) }
 
@@ -68,6 +76,24 @@ fun TypoScreen(onClickBack: () -> Unit) {
             SettingsSection(null, listOf(@Composable {
                 SwitchPreference(name = stringResource(R.string.fork_typo_enabled), key = TouchLearning.PREF_ENABLED,
                     default = true, description = stringResource(R.string.fork_typo_enabled_summary))
+            }))
+            // ---- which screen situation (each learns on its own)
+            SettingsSection(stringResource(R.string.fork_typo_profile), listOf(@Composable {
+                Column(Modifier.padding(12.dp)) {
+                    Text(stringResource(R.string.fork_typo_profile_summary, profileNames[TouchLearning.current()] ?: ""),
+                        style = MaterialTheme.typography.bodyMedium, color = s.mutedForeground)
+                    for (row in TouchLearning.PROFILES.chunked(2)) Row(Modifier.fillMaxWidth().padding(top = 8.dp)) {
+                        for (name in row) {
+                            val count = TouchLearning.sampleCount(ctx, name)
+                            androidx.compose.material3.FilterChip(
+                                selected = name == profile,
+                                onClick = { profile = name; selected = null },
+                                label = { Text("${profileNames[name]} · $count") },
+                                modifier = Modifier.weight(1f).padding(horizontal = 4.dp),
+                            )
+                        }
+                    }
+                }
             }))
             // ---- where the keys are pressed
             SettingsSection(stringResource(R.string.fork_typo_touches), listOf(@Composable {
@@ -83,7 +109,7 @@ fun TypoScreen(onClickBack: () -> Unit) {
                         val maxY = shapes.values.maxOf { it.y + it.h }
                         val span = (maxY - minY).coerceAtLeast(0.1f)
                         Canvas(
-                            Modifier.fillMaxWidth().padding(top = 8.dp).aspectRatio(TouchLearning.aspect / span)
+                            Modifier.fillMaxWidth().padding(top = 8.dp).aspectRatio(TouchLearning.aspect(profile) / span)
                                 .pointerInput(shapes) {
                                     detectTapGestures { tap ->
                                         // tap a key: only its touches
@@ -108,7 +134,7 @@ fun TypoScreen(onClickBack: () -> Unit) {
                                 drawContext.canvas.nativeCanvas.drawText(k.label, left + w / 2, top + h / 2 + paint.textSize / 3, paint)
                                 if (selected != null && selected != code) continue
                                 val color = palette[codes.indexOf(code) % palette.size].copy(alpha = 0.55f)
-                                for (p in TouchLearning.points(code))
+                                for (p in TouchLearning.points(profile, code))
                                     drawCircle(color, radius = w * 0.07f, center = Offset(left + w / 2 + p[0] * w, top + h / 2 + p[1] * h))
                             }
                         }
@@ -145,7 +171,7 @@ fun TypoScreen(onClickBack: () -> Unit) {
     if (confirmReset)
         ConfirmationDialog(
             onDismissRequest = { confirmReset = false },
-            onConfirmed = { TouchLearning.reset(ctx); selected = null; refresh++ },
-            content = { Text(stringResource(R.string.fork_typo_reset_confirm)) },
+            onConfirmed = { TouchLearning.reset(ctx, profile); selected = null; refresh++ },
+            content = { Text(stringResource(R.string.fork_typo_reset_confirm, profileNames[profile] ?: "")) },
         )
 }
