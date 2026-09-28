@@ -14,19 +14,17 @@ import android.view.View
 import helium314.keyboard.keyboard.KeyboardView
 import helium314.keyboard.latin.utils.prefs
 import kotlin.math.PI
-import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.pow
-import kotlin.math.sin
 import kotlin.math.sqrt
 
 /**
  * fork: pastel glow while an AI command or translation runs. The same shape as the chip glow (dots behind the keys,
- * brightest at the middle of the top or bottom edge, breathing, seen through the key mask), in pastel colors that
- * swirl slowly around the glow's center. It fades in and out.
+ * brightest at the middle of the top or bottom edge, breathing, seen through the key mask), colored with a round
+ * gradient of pastel colors picked at random each time. It fades in and out.
  */
 class AiGlow(private val host: View, private val keyboardView: () -> KeyboardView?) {
-    private var drawable: SwirlGlowDrawable? = null
+    private var drawable: PastelGlowDrawable? = null
     private var kv: KeyboardView? = null
     private var ticker: ValueAnimator? = null
     private var fader: ValueAnimator? = null
@@ -40,8 +38,7 @@ class AiGlow(private val host: View, private val keyboardView: () -> KeyboardVie
         fader?.cancel()
         if (on && drawable == null) {
             val view = keyboardView() ?: return
-            val glow = SwirlGlowDrawable(host.resources.displayMetrics.density, GlowPrefs.aiGlow(prefs),
-                prefs.getFloat(GlowPrefs.AI_GLOW_PERIOD, GlowPrefs.DEFAULT_AI_GLOW_PERIOD).toLong().coerceIn(500, 30_000))
+            val glow = PastelGlowDrawable(host.resources.displayMetrics.density, GlowPrefs.aiGlow(prefs))
             drawable = glow
             kv = view
             view.setForkAiUnderlay(glow)
@@ -81,21 +78,18 @@ class AiGlow(private val host: View, private val keyboardView: () -> KeyboardVie
         drawable = null
     }
 
-    /** the chip glow's dots, each in a pastel color that turns slowly with [time] around the glow's center */
-    private class SwirlGlowDrawable(
-        private val density: Float, private val params: GlowPrefs.Glow, private val swirlMs: Long,
-    ) : Drawable() {
+    /** the chip glow's dots, colored by their distance from the glow's center: three random pastels, center to edge */
+    private class PastelGlowDrawable(private val density: Float, private val params: GlowPrefs.Glow) : Drawable() {
         var time = 0L
         var fade = 0f
         private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
-        // the dots for the current size: position, brightness from the shape, where in the swirl they are
+        private val stops = COLORS.toList().shuffled().take(3).toIntArray()
+        // the dots for the current size: position, brightness from the shape, color
         private var size = 0L
         private var xs = FloatArray(0)
         private var ys = FloatArray(0)
         private var shape = FloatArray(0)
-        private var angle = FloatArray(0)
-        private var across = FloatArray(0)
-        private var dist = FloatArray(0)
+        private var dotColors = IntArray(0)
 
         override fun draw(canvas: Canvas) {
             val w = bounds.width()
@@ -105,13 +99,9 @@ class AiGlow(private val host: View, private val keyboardView: () -> KeyboardVie
             // breathing like the chip glow
             val breath = 0.5f - 0.5f * cos(2 * PI * time / params.periodMs.coerceAtLeast(1)).toFloat()
             val alpha = fade * (params.minAlpha + (params.maxAlpha - params.minAlpha) * breath)
-            val turn = (time % swirlMs) / swirlMs.toFloat()
             val r = params.dotDp * density
             for (i in xs.indices) {
-                // the gradient runs across, bent round the center and turning with time; a gentle wave inwards
-                // makes it look like it swirls without moving the dots
-                val t = across[i] * 0.6f + angle[i] * 0.4f + turn + 0.05f * sin(2 * PI * (turn * 2 + dist[i])).toFloat()
-                paint.color = colorAt(t - kotlin.math.floor(t))
+                paint.color = dotColors[i]
                 paint.alpha = (255 * alpha * shape[i]).toInt().coerceIn(0, 255)
                 if (paint.alpha > 0) canvas.drawCircle(bounds.left + xs[i], bounds.top + ys[i], r, paint)
             }
@@ -126,8 +116,7 @@ class AiGlow(private val host: View, private val keyboardView: () -> KeyboardVie
             val cx = w / 2
             val rx = w * 0.5f * params.width
             val ry = h * params.height
-            val lx = ArrayList<Float>(); val ly = ArrayList<Float>(); val ls = ArrayList<Float>()
-            val la = ArrayList<Float>(); val lc = ArrayList<Float>(); val ld = ArrayList<Float>()
+            val lx = ArrayList<Float>(); val ly = ArrayList<Float>(); val ls = ArrayList<Float>(); val lc = ArrayList<Int>()
             var edgeDistance = spacing / 2
             while (edgeDistance < ry) {
                 val y = if (params.fromBottom) h - edgeDistance else edgeDistance
@@ -139,25 +128,23 @@ class AiGlow(private val host: View, private val keyboardView: () -> KeyboardVie
                     if (d < 1f) {
                         lx += x; ly += y
                         ls += (1f - d).pow(1.2f)
-                        // 0..1 over the half circle round the middle of the edge
-                        la += (atan2(dy, dx) / PI).toFloat()
-                        lc += x / w
-                        ld += d
+                        lc += gradient(d)
                     }
                     x += spacing
                 }
                 edgeDistance += spacing
             }
-            xs = lx.toFloatArray(); ys = ly.toFloatArray(); shape = ls.toFloatArray()
-            angle = la.toFloatArray(); across = lc.toFloatArray(); dist = ld.toFloatArray()
+            xs = lx.toFloatArray(); ys = ly.toFloatArray(); shape = ls.toFloatArray(); dotColors = lc.toIntArray()
         }
 
-        private fun colorAt(t: Float): Int {
-            val pos = t * (COLORS.size - 1)
-            val i = pos.toInt().coerceIn(0, COLORS.size - 2)
-            val f = pos - i
-            val c1 = COLORS[i]
-            val c2 = COLORS[i + 1]
+        /** [d] 0 (center) .. 1 (edge) through the three colors */
+        private fun gradient(d: Float): Int {
+            val pos = d.coerceIn(0f, 1f) * (stops.size - 1)
+            val i = pos.toInt().coerceIn(0, stops.size - 2)
+            return mix(stops[i], stops[i + 1], pos - i)
+        }
+
+        private fun mix(c1: Int, c2: Int, f: Float): Int {
             fun ch(shift: Int) = (((c1 shr shift) and 0xFF) * (1 - f) + ((c2 shr shift) and 0xFF) * f).toInt()
             return (0xFF shl 24) or (ch(16) shl 16) or (ch(8) shl 8) or ch(0)
         }
@@ -168,10 +155,10 @@ class AiGlow(private val host: View, private val keyboardView: () -> KeyboardVie
         override fun getOpacity() = PixelFormat.TRANSLUCENT
 
         companion object {
-            /** pink, peach, butter, mint, sky, periwinkle, lavender, back to pink */
+            /** pink, peach, butter, mint, sky, periwinkle, lavender, orchid */
             private val COLORS = intArrayOf(
                 0xFFFFB3C7.toInt(), 0xFFFFD6A5.toInt(), 0xFFFDFFB6.toInt(), 0xFFCAFFBF.toInt(),
-                0xFF9BF6FF.toInt(), 0xFFA0C4FF.toInt(), 0xFFBDB2FF.toInt(), 0xFFFFC6FF.toInt(), 0xFFFFB3C7.toInt(),
+                0xFF9BF6FF.toInt(), 0xFFA0C4FF.toInt(), 0xFFBDB2FF.toInt(), 0xFFFFC6FF.toInt(),
             )
         }
     }

@@ -401,8 +401,7 @@
     <string name="fork_clip_unpinned_toast">고정 해제했어요</string>
     <string name="fork_cat_ai_glow">AI 글로우</string>
     <string name="fork_ai_glow">AI 작동 중 글로우</string>
-    <string name="fork_ai_glow_summary">AI 명령이나 번역이 도는 동안 키 뒤에 파스텔 점 글로우(칩 글로우와 같은 모양, 색이 천천히 소용돌이)</string>
-    <string name="fork_ai_glow_period">색이 한 바퀴 도는 시간</string>
+    <string name="fork_ai_glow_summary">AI 명령이나 번역이 도는 동안 키 뒤에 파스텔 점 글로우(칩 글로우와 같은 모양, 매번 무작위 파스텔 색의 원형 그라데이션)</string>
     <string name="fork_translate_empty_short">입력한 글이 없어요</string>
     <string name="fork_cat_claude_usage">Claude 사용량</string>
     <string name="fork_claude_key">claude.ai 세션 키</string>

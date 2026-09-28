@@ -86,7 +86,6 @@ fun DynamicToolbarScreen(
             GlowPrefs.AI_GLOW_MAX.takeIf { aiGlow },
             GlowPrefs.AI_GLOW_MIN.takeIf { aiGlow },
             GlowPrefs.AI_GLOW_BREATH.takeIf { aiGlow },
-            GlowPrefs.AI_GLOW_PERIOD.takeIf { aiGlow },
             GlowPrefs.AI_GLOW_HEIGHT.takeIf { aiGlow },
             GlowPrefs.AI_GLOW_WIDTH.takeIf { aiGlow },
             GlowPrefs.AI_GLOW_IN.takeIf { aiGlow },
@@ -278,9 +277,6 @@ fun createDynamicToolbarSettings(context: Context) = listOf(
     },
     Setting(context, GlowPrefs.AI_GLOW_BREATH, R.string.fork_glow_period) {
         GlowSlider(it, GlowPrefs.DEFAULT_AI_GLOW_BREATH, 400f..8000f, 100f, ::ms)
-    },
-    Setting(context, GlowPrefs.AI_GLOW_PERIOD, R.string.fork_ai_glow_period) {
-        GlowSlider(it, GlowPrefs.DEFAULT_AI_GLOW_PERIOD, 1000f..20000f, 500f, ::ms)
     },
     Setting(context, GlowPrefs.AI_GLOW_HEIGHT, R.string.fork_glow_height) {
         GlowSlider(it, GlowPrefs.DEFAULT_AI_GLOW_HEIGHT, 0.1f..1f, 0.05f, ::percent)

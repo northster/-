@@ -32,8 +32,6 @@ object GlowPrefs {
     const val AI_GLOW = "fork_ai_glow_enabled"
     /** how long it takes to appear (and to go away), ms */
     const val AI_GLOW_IN = "fork_ai_glow_in"
-    /** one turn of the swirling colors, ms */
-    const val AI_GLOW_PERIOD = "fork_ai_glow_period"
     const val AI_GLOW_MAX = "fork_ai_glow_max"
     const val AI_GLOW_MIN = "fork_ai_glow_min"
     /** breathing, like the chip glow's [GLOW_PERIOD] */
@@ -44,7 +42,6 @@ object GlowPrefs {
     /** settings entry that shows the glow for a few seconds (nothing stored) */
     const val AI_GLOW_TEST = "fork_ai_glow_test"
     const val DEFAULT_AI_GLOW_IN = 900f
-    const val DEFAULT_AI_GLOW_PERIOD = 6000f
     const val DEFAULT_AI_GLOW_MAX = 0.9f
     const val DEFAULT_AI_GLOW_MIN = 0.45f
     const val DEFAULT_AI_GLOW_BREATH = 2400f

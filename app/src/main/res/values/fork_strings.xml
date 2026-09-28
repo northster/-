@@ -404,8 +404,7 @@
     <string name="fork_clip_unpinned_toast">Unpinned</string>
     <string name="fork_cat_ai_glow">AI glow</string>
     <string name="fork_ai_glow">Glow while AI works</string>
-    <string name="fork_ai_glow_summary">Pastel dot glow behind the keys while an AI command or translation runs (shaped like the chip glow, colors swirl slowly)</string>
-    <string name="fork_ai_glow_period">One turn of the swirling colors</string>
+    <string name="fork_ai_glow_summary">Pastel dot glow behind the keys while an AI command or translation runs (shaped like the chip glow, a round gradient of random pastel colors each time)</string>
     <string name="fork_translate_empty_short">Nothing typed yet</string>
     <string name="fork_cat_claude_usage">Claude usage</string>
     <string name="fork_claude_key">claude.ai session key</string>

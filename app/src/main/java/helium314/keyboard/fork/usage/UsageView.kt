@@ -19,11 +19,12 @@ class UsageView(context: Context) : View(context) {
     private val density = resources.displayMetrics.density
     private val colors = Settings.getValues().mColors
     private val dot = Paint(Paint.ANTI_ALIAS_FLAG)
+    // the times left: bold yellow, a little bigger, so they can be read at a glance
     private val text = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        textSize = 11 * density
+        textSize = 12 * density
         textAlign = Paint.Align.RIGHT
-        typeface = KeyboardTypeface.resolve("0h", Typeface.DEFAULT)
-        color = colors.get(ColorType.KEY_HINT_TEXT)
+        typeface = Typeface.create(KeyboardTypeface.resolve("0h", Typeface.DEFAULT), Typeface.BOLD)
+        color = YELLOW
     }
     private var usage: ClaudeUsage.Usage? = null
 
@@ -48,6 +49,7 @@ class UsageView(context: Context) : View(context) {
         val right = width - textWidth
         val count = ((right - left) / spacing).toInt().coerceAtLeast(2)
         val rowGap = 9 * density
+        val textGap = 15 * density
         val y1 = height / 2f - rowGap / 2
         val y2 = height / 2f + rowGap / 2
         for ((y, limit) in listOf(y1 to u?.session, y2 to u?.week)) {
@@ -63,12 +65,15 @@ class UsageView(context: Context) : View(context) {
                 canvas.drawCircle(left + i * spacing + r, y, r, dot)
             }
             val label = limit?.let { ClaudeUsage.remaining(it.resetsAt) } ?: "–"
-            canvas.drawText(label, width.toFloat() - 2 * density, y - (text.ascent() + text.descent()) / 2, text)
+            // the two times further apart than the dot lines, with a gap between them
+            val textY = height / 2f + (if (y < height / 2f) -1 else 1) * textGap / 2
+            canvas.drawText(label, width.toFloat() - 2 * density, textY - (text.ascent() + text.descent()) / 2, text)
         }
     }
 
     companion object {
         /** Claude's orange */
         private const val ORANGE = 0xFFD97757.toInt()
+        private const val YELLOW = 0xFFFACC15.toInt()
     }
 }
