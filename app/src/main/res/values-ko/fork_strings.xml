@@ -438,6 +438,4 @@
     <string name="fork_typo_outer_landscape">바깥 가로</string>
     <string name="fork_typo_inner_portrait">안쪽 세로</string>
     <string name="fork_typo_inner_landscape">안쪽 가로</string>
-    <string name="fork_ai_glow_ring_dots">가장자리 도트 페이드</string>
-    <string name="fork_ai_glow_ring_dots_summary">테두리로 갈수록 빛이 점으로 바뀌며 작아지고 사라져요</string>
 </resources>
