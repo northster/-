@@ -436,11 +436,13 @@
     <string name="fork_split_side_padding">Split keyboard side padding</string>
     <string name="fork_split_side_padding_summary">Outer padding on both sides while split. Same as the normal side padding until moved</string>
     <string name="fork_typo_profile">Screen situation</string>
-    <string name="fork_typo_profile_summary">Folded / unfolded, upright / sideways each learn on their own. Now: %1$s. The numbers are the letters learned</string>
+    <string name="fork_typo_profile_summary">Folded / unfolded, upright / sideways and one-handed mode (left / right) each learn on their own. Now: %1$s. The numbers are the letters learned</string>
     <string name="fork_typo_outer_portrait">Cover upright</string>
     <string name="fork_typo_outer_landscape">Cover sideways</string>
     <string name="fork_typo_inner_portrait">Inner upright</string>
     <string name="fork_typo_inner_landscape">Inner sideways</string>
     <string name="fork_ai_glow_bloom">Bloom</string>
     <string name="fork_ai_glow_bloom_summary">Smooth light of the same colors added onto the dots (additive), like glowing LEDs. 0 = dots only</string>
+    <string name="fork_typo_one_left">One-handed left</string>
+    <string name="fork_typo_one_right">One-handed right</string>
 </resources>

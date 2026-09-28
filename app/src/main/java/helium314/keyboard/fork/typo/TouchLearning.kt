@@ -21,8 +21,9 @@ import org.json.JSONObject
  *   screen), and its touch point is learned for the key that was meant.
  * - Near the border between two letters, the key whose learned center is closer to the touch wins ([adjust]), instead
  *   of the one whose drawn outline contains it. Only letters, only neighbours, and only once a key has enough samples.
- * - Hands and keys differ between the cover and the inner screen of a foldable, upright and sideways: each of the four
- *   ([PROFILES]) learns on its own, the one in use is taken from the current screen ([current]).
+ * - Hands and keys differ between the cover and the inner screen of a foldable, upright and sideways, and in one-handed
+ *   mode (left or right hand): each of these ([PROFILES]) learns on its own, the one in use is taken from the current
+ *   screen and mode ([current]).
  */
 object TouchLearning {
     const val PREF_ENABLED = "fork_touch_learning"
@@ -55,7 +56,10 @@ object TouchLearning {
     const val OUTER_LANDSCAPE = "outer_l"
     const val INNER_PORTRAIT = "inner_p"
     const val INNER_LANDSCAPE = "inner_l"
-    val PROFILES = listOf(OUTER_PORTRAIT, OUTER_LANDSCAPE, INNER_PORTRAIT, INNER_LANDSCAPE)
+    /** one-handed mode, keyboard on the left / right side (whatever the screen) */
+    const val ONE_HANDED_LEFT = "one_left"
+    const val ONE_HANDED_RIGHT = "one_right"
+    val PROFILES = listOf(OUTER_PORTRAIT, OUTER_LANDSCAPE, INNER_PORTRAIT, INNER_LANDSCAPE, ONE_HANDED_LEFT, ONE_HANDED_RIGHT)
 
     private val profiles = HashMap<String, Profile>()
     private fun profile(name: String) = profiles.getOrPut(name) { Profile() }
@@ -93,6 +97,9 @@ object TouchLearning {
     /** the profile for the screen as it is now */
     @JvmStatic
     fun current(): String {
+        val sv = helium314.keyboard.latin.settings.Settings.getValues()
+        if (sv != null && sv.mOneHandedModeEnabled)
+            return if (sv.mOneHandedModeGravity == android.view.Gravity.RIGHT) ONE_HANDED_RIGHT else ONE_HANDED_LEFT
         val conf = appContext?.resources?.configuration ?: return OUTER_PORTRAIT
         val inner = conf.smallestScreenWidthDp >= helium314.keyboard.fork.ForkSettings.SPLIT_AUTO_MIN_WIDTH_DP
         val landscape = conf.orientation == android.content.res.Configuration.ORIENTATION_LANDSCAPE

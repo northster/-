@@ -67,6 +67,8 @@ fun TypoScreen(onClickBack: () -> Unit) {
         TouchLearning.OUTER_LANDSCAPE to stringResource(R.string.fork_typo_outer_landscape),
         TouchLearning.INNER_PORTRAIT to stringResource(R.string.fork_typo_inner_portrait),
         TouchLearning.INNER_LANDSCAPE to stringResource(R.string.fork_typo_inner_landscape),
+        TouchLearning.ONE_HANDED_LEFT to stringResource(R.string.fork_typo_one_left),
+        TouchLearning.ONE_HANDED_RIGHT to stringResource(R.string.fork_typo_one_right),
     )
     val palette = listOf(0xFF7E6BC4, 0xFFF2C94C, 0xFFEB5B3C, 0xFFF4B6A0, 0xFFC9D6A3, 0xFF1BA784, 0xFF5B5EA6, 0xFFE0A0C0)
         .map { Color(it) }

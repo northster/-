@@ -433,11 +433,13 @@
     <string name="fork_split_side_padding">분할 키보드 좌우 여백</string>
     <string name="fork_split_side_padding_summary">분할됐을 때 양쪽 바깥 여백. 옮기기 전에는 일반 좌우 여백과 같아요</string>
     <string name="fork_typo_profile">화면 상황</string>
-    <string name="fork_typo_profile_summary">접은 화면/펼친 화면, 세로/가로마다 따로 배워요. 지금은 %1$s. 숫자는 학습한 글자 수</string>
+    <string name="fork_typo_profile_summary">접은 화면/펼친 화면, 세로/가로, 한손 모드(왼쪽/오른쪽)마다 따로 배워요. 지금은 %1$s. 숫자는 학습한 글자 수</string>
     <string name="fork_typo_outer_portrait">바깥 세로</string>
     <string name="fork_typo_outer_landscape">바깥 가로</string>
     <string name="fork_typo_inner_portrait">안쪽 세로</string>
     <string name="fork_typo_inner_landscape">안쪽 가로</string>
     <string name="fork_ai_glow_bloom">번짐</string>
     <string name="fork_ai_glow_bloom_summary">점 위에 같은 색의 매끈한 빛을 더해(가산 합성) LED가 빛나는 느낌을 내요. 0이면 점만</string>
+    <string name="fork_typo_one_left">한손 왼쪽</string>
+    <string name="fork_typo_one_right">한손 오른쪽</string>
 </resources>
