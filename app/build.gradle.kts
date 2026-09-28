@@ -24,20 +24,24 @@ android {
         proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
     }
 
-    // fork: fixed test key, so every CI build can be installed over the previous one.
-    // Only for testing, don't use this key for anything published.
+    // fork: the release key is not in the repository. CI writes it from the repository secrets (DT_KEYSTORE_BASE64 ...)
+    // and passes its path and passwords in these variables; without them (local builds) the Android debug key is used.
+    val dtKeystore = System.getenv("DT_KEYSTORE_FILE")?.takeIf { it.isNotBlank() }?.let { file(it) }?.takeIf { it.exists() }
     signingConfigs {
-        create("dtTest") {
-            storeFile = rootProject.file("keystore/dt-test.jks")
-            storePassword = "dtkeyboard"
-            keyAlias = "dt-test"
-            keyPassword = "dtkeyboard"
+        create("dtRelease") {
+            if (dtKeystore != null) {
+                storeFile = dtKeystore
+                storePassword = System.getenv("DT_KEYSTORE_PASSWORD")
+                keyAlias = System.getenv("DT_KEY_ALIAS")
+                keyPassword = System.getenv("DT_KEY_PASSWORD")?.takeIf { it.isNotBlank() } ?: System.getenv("DT_KEYSTORE_PASSWORD")
+            }
         }
     }
+    val dtSigning = if (dtKeystore != null) signingConfigs.getByName("dtRelease") else signingConfigs.getByName("debug")
 
     buildTypes {
         release {
-            signingConfig = signingConfigs.getByName("dtTest")
+            signingConfig = dtSigning
             isMinifyEnabled = true
             isShrinkResources = false
             isDebuggable = false
@@ -55,7 +59,7 @@ android {
             isMinifyEnabled = true
             isJniDebuggable = false
             applicationIdSuffix = ".debug"
-            signingConfig = signingConfigs.getByName("dtTest")
+            signingConfig = dtSigning
         }
         create("runTests") { // build variant for running tests on CI that skips tests known to fail
             isMinifyEnabled = false

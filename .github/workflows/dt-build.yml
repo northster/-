@@ -32,9 +32,24 @@ jobs:
       - name: Unit tests (fork)
         run: ./gradlew testDebugUnitTest --tests 'helium314.keyboard.fork.*' --stacktrace
 
+      - name: Signing key
+        # the key lives only in the repository secrets; a published APK must never be signed with anything else
+        env:
+          DT_KEYSTORE_BASE64: ${{ secrets.DT_KEYSTORE_BASE64 }}
+        run: |
+          if [ -z "$DT_KEYSTORE_BASE64" ]; then
+            echo "::error::Signing key missing: add the DT_KEYSTORE_BASE64, DT_KEYSTORE_PASSWORD and DT_KEY_ALIAS repository secrets"
+            exit 1
+          fi
+          echo "$DT_KEYSTORE_BASE64" | base64 -d > "$RUNNER_TEMP/dt-release.jks"
+          echo "DT_KEYSTORE_FILE=$RUNNER_TEMP/dt-release.jks" >> "$GITHUB_ENV"
+
       - name: Build APK
         env:
           DT_BUILD_NUMBER: ${{ github.run_number }}
+          DT_KEYSTORE_PASSWORD: ${{ secrets.DT_KEYSTORE_PASSWORD }}
+          DT_KEY_ALIAS: ${{ secrets.DT_KEY_ALIAS }}
+          DT_KEY_PASSWORD: ${{ secrets.DT_KEY_PASSWORD }}
         run: ./gradlew assembleDebug --stacktrace
 
       - name: Upload APK
@@ -67,6 +82,10 @@ jobs:
             | grep -E '^dt-[0-9]+$' | sort -t- -k2 -n -r | tail -n +11 \
             | xargs -r -I{} gh release delete {} --yes --cleanup-tag
           gh release delete dev-latest --yes --cleanup-tag || true
+
+      - name: Remove the signing key
+        if: ${{ always() }}
+        run: rm -f "$RUNNER_TEMP/dt-release.jks"
 
       - name: Archive reports for failed job
         uses: actions/upload-artifact@v4
