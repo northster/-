@@ -42,7 +42,9 @@ class AiGlow(private val host: View, private val bounds: () -> RectF?) {
             if (drawsIn) { drawable.fade = 1f; drawable.reveal = 0f; drawable.erase = 0f }
             else { drawable.reveal = 1f; drawable.erase = 0f }
             drawable.brightness = prefs.getFloat(GlowPrefs.AI_GLOW_BRIGHTNESS, GlowPrefs.DEFAULT_AI_GLOW_BRIGHTNESS).coerceIn(0.1f, 1f)
-            drawable.depth = prefs.getFloat(GlowPrefs.AI_GLOW_DEPTH, GlowPrefs.DEFAULT_AI_GLOW_DEPTH).toInt().coerceIn(1, 8)
+            drawable.depth = if (style == GlowPrefs.AI_STYLE_BOTTOM)
+                    prefs.getFloat(GlowPrefs.AI_GLOW_BOTTOM_DEPTH, GlowPrefs.DEFAULT_AI_GLOW_BOTTOM_DEPTH).toInt().coerceIn(1, 60)
+                else prefs.getFloat(GlowPrefs.AI_GLOW_DEPTH, GlowPrefs.DEFAULT_AI_GLOW_DEPTH).toInt().coerceIn(1, 8)
             val period = prefs.getFloat(GlowPrefs.AI_GLOW_PERIOD, GlowPrefs.DEFAULT_AI_GLOW_PERIOD).toLong().coerceIn(500, 20000)
             spin?.duration = period
             host.overlay.remove(drawable)
@@ -65,7 +67,8 @@ class AiGlow(private val host: View, private val bounds: () -> RectF?) {
         }
         fade = ValueAnimator.ofFloat(from, to).apply {
             // slow and eased, so it doesn't pop in or out
-            duration = if (drawsIn) 900 else if (on) 600 else 800
+            val inMs = prefs.getFloat(GlowPrefs.AI_GLOW_IN, GlowPrefs.DEFAULT_AI_GLOW_IN).toLong().coerceIn(100, 5000)
+            duration = if (drawsIn || !on) inMs else inMs * 2 / 3
             interpolator = android.view.animation.AccelerateDecelerateInterpolator()
             addUpdateListener {
                 val v = it.animatedValue as Float
@@ -134,7 +137,9 @@ class AiGlow(private val host: View, private val bounds: () -> RectF?) {
                     val y = top + row * spacing
                     // color from the direction around the center, turning with [angle]
                     val a = ((Math.toDegrees(kotlin.math.atan2((y - cy).toDouble(), (x - cx).toDouble())) + 360 + angle) % 360) / 360.0
-                    paint.color = colorAt(a.toFloat())
+                    // along the bottom the colors flow sideways, elsewhere they turn around the center
+                    paint.color = colorAt(if (style == GlowPrefs.AI_STYLE_BOTTOM)
+                        ((col / cols.toFloat()) + angle / 360f) % 1f else a.toFloat())
                     // brightest at the edge, fading inwards
                     val falloff = (1f - d / depth.toFloat()).let { it * it }
                     val shown = when (style) {

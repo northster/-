@@ -419,4 +419,5 @@
     <string name="fork_ai_glow_style_rise">아래에서 위로</string>
     <string name="fork_ai_glow_style_fade">서서히</string>
     <string name="fork_ai_glow_style_bottom">하단만</string>
+    <string name="fork_ai_glow_in">나타나고 사라지는 시간</string>
 </resources>

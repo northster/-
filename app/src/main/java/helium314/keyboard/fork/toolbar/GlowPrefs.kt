@@ -44,6 +44,12 @@ object GlowPrefs {
     const val AI_GLOW_PERIOD = "fork_ai_glow_period"
     /** rows of dots from the edge inwards */
     const val AI_GLOW_DEPTH = "fork_ai_glow_depth"
+    /** how long it takes to appear (and to go away), ms */
+    const val AI_GLOW_IN = "fork_ai_glow_in"
+    /** rows of dots of the bottom only style (it can be much thicker) */
+    const val AI_GLOW_BOTTOM_DEPTH = "fork_ai_glow_bottom_depth"
+    const val DEFAULT_AI_GLOW_IN = 900f
+    const val DEFAULT_AI_GLOW_BOTTOM_DEPTH = 12f
     const val DEFAULT_AI_GLOW_BRIGHTNESS = 1f
     const val DEFAULT_AI_GLOW_PERIOD = 3200f
     const val DEFAULT_AI_GLOW_DEPTH = 4f

@@ -570,9 +570,11 @@ class DynamicToolbarView @JvmOverloads constructor(
     private val headerActions = ArrayList<ImageButton>()
 
     /** a toggle in the tool header (e.g. pinned clips only) is on: drawn in the enter key color */
-    fun setHeaderActionActive(index: Int, active: Boolean) {
+    /** [icon]: another drawable for the state (pinned clips: the pin filled in while they are shown) */
+    fun setHeaderActionActive(index: Int, active: Boolean, icon: Int? = null) {
         val button = headerActions.getOrNull(index) ?: return
         val colors = Settings.getValues().mColors
+        if (icon != null) button.setImageResource(icon)
         if (active) button.setColorFilter(colors.get(ColorType.ACTION_KEY_BACKGROUND))
         else colors.setColor(button, ColorType.TOOL_BAR_KEY)
     }

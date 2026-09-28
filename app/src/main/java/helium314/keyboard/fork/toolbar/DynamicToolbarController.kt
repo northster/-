@@ -443,7 +443,8 @@ class DynamicToolbarController(private val context: Context) {
             val manager = ime.clipboardHistoryManager
             manager.pinnedOnly = !manager.pinnedOnly
             KeyboardSwitcher.getInstance().clipboardHistoryView?.forkRefreshList()
-            toolbar?.setHeaderActionActive(ClipAction.enabled(context.prefs()).indexOf(ClipAction.PINNED), manager.pinnedOnly)
+            toolbar?.setHeaderActionActive(ClipAction.enabled(context.prefs()).indexOf(ClipAction.PINNED), manager.pinnedOnly,
+                if (manager.pinnedOnly) R.drawable.ic_dot_pin_filled else R.drawable.ic_dot_pin)
             return
         }
         if (action == ClipAction.CLEAR_CLIPBOARD) {
@@ -807,7 +808,7 @@ class DynamicToolbarController(private val context: Context) {
         val tb = toolbar
         val params = GlowPrefs.wave(prefs)
         // opening while a glow shows (clip, smart chip): the wave is in the glow's color
-        val color = if (up && hintGlow != null) hintGlowColor else android.graphics.Color.WHITE
+        val color = if (up && hintGlow != null) visibleWaveColor(hintGlowColor) else android.graphics.Color.WHITE
         val wave = DotWave(context.resources.displayMetrics.density, params, up, color)
         val drawable = DotWaveDrawable(wave)
         val loc = IntArray(2)
@@ -869,6 +870,20 @@ class DynamicToolbarController(private val context: Context) {
             })
             start()
         }
+    }
+
+    /**
+     * The glow's color lightened until it stands out on the dark keys: the wave is a thin band of small dots, and a
+     * dark color like the red enter key disappeared. The hue stays.
+     */
+    private fun visibleWaveColor(color: Int): Int {
+        var t = 0f
+        var c = color
+        while (androidx.core.graphics.ColorUtils.calculateLuminance(c) < 0.45 && t < 0.8f) {
+            t += 0.05f
+            c = androidx.core.graphics.ColorUtils.blendARGB(color, android.graphics.Color.WHITE, t)
+        }
+        return c
     }
 
     private fun stopWave() {

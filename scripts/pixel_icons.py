@@ -29,7 +29,6 @@ MAP = {
     'left': 'chevron-left',
     'right': 'chevron-right',
     'check': 'check',
-    'trash': 'trash',
     'pin': 'bookmark',
     'close': 'close',
     'keyboard': 'keyboard',
@@ -124,6 +123,19 @@ o.oo.o.oo.
 o..o.o.o..
 o..o.o.o..
 .oo..o.o..
+""",
+    # trash can: lid with a handle, grooves on the can (the pack's one looked like the clipboard and the pin)
+    'trash': """
+...oooo...
+oooooooooo
+..........
+.oooooooo.
+.o.o..o.o.
+.o.o..o.o.
+.o.o..o.o.
+.o.o..o.o.
+.o......o.
+..oooooo..
 """,
     # translate: 가 and A
     'translate': """
@@ -336,15 +348,16 @@ def xml(grid, source, r=0.86):
 
 # pin on the clipboard cards: drawn small (16dp), so on a coarser 7x8 grid with the usual 2dp dot pitch
 CARD_PINS = {
+    # a two dot wide outline: a single line of dots was hard to see
     'pin_card': """
 ooooooo
-o.....o
-o.....o
-o.....o
-o.....o
-o.....o
-o..o..o
-o.o.o.o
+ooooooo
+oo...oo
+oo...oo
+oo...oo
+oo...oo
+oo.o.oo
+oo...oo
 """,
     'pin_card_filled': """
 ooooooo

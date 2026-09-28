@@ -41,6 +41,7 @@ fun DynamicToolbarScreen(
     val wave = GlowPrefs.waveEnabled(prefs)
     val glow = GlowPrefs.glowEnabled(prefs)
     val aiGlow = prefs.getBoolean(GlowPrefs.AI_GLOW, true)
+    val aiStyle = prefs.getString(GlowPrefs.AI_GLOW_STYLE, GlowPrefs.AI_STYLE_SWEEP)
     val autofill = prefs.getBoolean(DynamicToolbarController.PREF_AUTOFILL, true)
     val items = listOfNotNull(
             R.string.fork_cat_gesture,
@@ -81,9 +82,12 @@ fun DynamicToolbarScreen(
             R.string.fork_cat_ai_glow,
             GlowPrefs.AI_GLOW,
             GlowPrefs.AI_GLOW_STYLE.takeIf { aiGlow },
+            // the options that do something in the chosen style
+            GlowPrefs.AI_GLOW_IN.takeIf { aiGlow },
             GlowPrefs.AI_GLOW_BRIGHTNESS.takeIf { aiGlow },
-            GlowPrefs.AI_GLOW_PERIOD.takeIf { aiGlow },
-            GlowPrefs.AI_GLOW_DEPTH.takeIf { aiGlow },
+            GlowPrefs.AI_GLOW_PERIOD.takeIf { aiGlow && aiStyle != GlowPrefs.AI_STYLE_RISE },
+            GlowPrefs.AI_GLOW_DEPTH.takeIf { aiGlow && aiStyle != GlowPrefs.AI_STYLE_BOTTOM },
+            GlowPrefs.AI_GLOW_BOTTOM_DEPTH.takeIf { aiGlow && aiStyle == GlowPrefs.AI_STYLE_BOTTOM },
             R.string.fork_cat_autofill,
             DynamicToolbarController.PREF_AUTOFILL,
             DynamicToolbarController.PREF_AUTOFILL_OPEN.takeIf { autofill },
@@ -255,6 +259,13 @@ fun createDynamicToolbarSettings(context: Context) = listOf(
             ctx.getString(R.string.fork_ai_glow_style_fade) to GlowPrefs.AI_STYLE_FADE,
             ctx.getString(R.string.fork_ai_glow_style_bottom) to GlowPrefs.AI_STYLE_BOTTOM,
         ), GlowPrefs.AI_STYLE_SWEEP)
+    },
+    Setting(context, GlowPrefs.AI_GLOW_IN, R.string.fork_ai_glow_in) {
+        GlowSlider(it, GlowPrefs.DEFAULT_AI_GLOW_IN, 200f..4000f, 100f, ::ms)
+    },
+    Setting(context, GlowPrefs.AI_GLOW_BOTTOM_DEPTH, R.string.fork_ai_glow_depth) { setting ->
+        val ctx = androidx.compose.ui.platform.LocalContext.current
+        GlowSlider(setting, GlowPrefs.DEFAULT_AI_GLOW_BOTTOM_DEPTH, 2f..40f, 1f) { ctx.getString(R.string.fork_ai_glow_rows, it.roundToInt()) }
     },
     Setting(context, GlowPrefs.AI_GLOW_BRIGHTNESS, R.string.fork_ai_glow_brightness) {
         GlowSlider(it, GlowPrefs.DEFAULT_AI_GLOW_BRIGHTNESS, 0.1f..1f, 0.05f, ::percent)

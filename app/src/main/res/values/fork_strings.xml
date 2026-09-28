@@ -422,4 +422,5 @@
     <string name="fork_ai_glow_style_rise">Bottom up</string>
     <string name="fork_ai_glow_style_fade">Fade</string>
     <string name="fork_ai_glow_style_bottom">Bottom edge only</string>
+    <string name="fork_ai_glow_in">Time to appear and go away</string>
 </resources>
