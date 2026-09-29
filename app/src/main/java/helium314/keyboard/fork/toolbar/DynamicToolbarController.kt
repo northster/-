@@ -198,8 +198,15 @@ class DynamicToolbarController(private val context: Context) {
             return
         }
         val before = isExpanded
+        // opened for what glowed behind the closed toolbar: it closes again once that is used or dismissed
+        val forGlow = up && !before && hintView != null
         setExpanded(up, true)
         if (isExpanded != before) startWave(isExpanded)
+        if (forGlow && isExpanded) {
+            if (chip != null) autoOpened = true
+            if (typedHit != null) typedAutoOpened = true
+            if (autofillView != null) autofillOpened = true
+        }
     }
 
     fun setExpanded(expanded: Boolean, animate: Boolean) {

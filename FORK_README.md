@@ -366,3 +366,4 @@ SwiftSlate(github.com/Musheer360/SwiftSlate, MIT)의 명령 방식을 키보드 
 - 릴리스 키는 저장소에 없다. CI(`dt-build.yml`)가 저장소 Secrets의 `DT_KEYSTORE_BASE64`(키스토어 base64), `DT_KEYSTORE_PASSWORD`, `DT_KEY_ALIAS`(선택: `DT_KEY_PASSWORD`, 없으면 저장소 비밀번호)로 임시 파일을 만들어 서명하고 끝나면 지운다. Secrets가 없으면 빌드가 실패한다(다른 키로 서명된 APK가 배포되지 않게).
 - 로컬 빌드는 환경변수가 없으면 Android 디버그 키로 서명한다.
 - 예전 테스트 키(`keystore/dt-test.jks`, 비밀번호가 공개돼 있었음)는 삭제했다. 그 키로 서명된 설치본에서 새 키 버전으로는 덮어쓰기 설치가 안 되므로 한 번 지우고 다시 설치해야 한다.
+- 닫힌 툴바 뒤에서 글로우가 뜬 상태(클립 칩, 스마트 칩, 자동완성)에서 위로 스와이프해 연 경우, 그 칩을 쓰거나 닫으면 툴바가 다시 닫힌다(코드 자동 열기와 같은 `autoOpened` 계열 플래그). 원래 열려 있던 툴바는 그대로.
