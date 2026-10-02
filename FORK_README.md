@@ -85,14 +85,22 @@ fork/
 - 스와이프로 열고 닫을 때만 나온다. 인증번호 때문에 자동으로 열리거나 ‹ 버튼으로 닫힐 때는 나오지 않는다.
 
 ## 3. 빌드와 설치
-- 패키지명: `io.github.northster.dtkeyboard`(디버그 빌드는 `.debug`). 앱 이름은 "DT Keyboard".
+- 패키지명: `io.github.northster.dtkeyboard`. 앱 이름은 "DT Keyboard".
   콘텐츠 프로바이더 authority도 바꿨기 때문에 HeliBoard와 함께 설치할 수 있다.
 - ABI는 `arm64-v8a`(폴드8)와 `x86_64`(에뮬레이터)만 넣었다.
-- 서명은 저장소의 `keystore/dt-test.jks`(테스트 전용 고정 키)를 쓴다. 그래서 CI 빌드끼리 덮어쓰기 설치가 된다. **공개 배포에는 쓰지 말 것.**
-- GitHub Actions(`.github/workflows/dt-build.yml`)가 push마다 단위 테스트를 돌리고 APK를 빌드한다.
-  - 빌드마다 버전이 올라가는 릴리스(`dt-<번호>`, 버전 `4.1-dt.<번호>`)를 만들고, 최신 10개만 남긴다.
-  - 항상 최신 APK를 받는 고정 링크: https://github.com/northster/-/releases/latest/download/DTKeyboard-debug.apk
-  - 자동 업데이트: [Obtainium](https://github.com/ImranR98/Obtainium)에 `https://github.com/northster/-`를 추가하면 새 빌드를 알림으로 알려주고 설치한다(Android 12 이상은 백그라운드 자동 설치 가능).
+- 서명: 아래 "서명 키" 참고. 개발 빌드와 정식 빌드는 같은 키로 서명한다.
+- 개발 빌드(`.github/workflows/dt-build.yml`): push마다 단위 테스트, APK 빌드.
+  - 앱 이름 "DT Keyboard Dev", 패키지 `io.github.northster.dtkeyboard.debug`. 정식 앱과 따로 설치된다(설정도 따로).
+  - 빌드마다 사전 릴리스(pre-release) `dt-<번호>`(버전 `4.1-dt.<번호>`)를 만들고, 최신 10개만 남긴다.
+  - "Latest"는 정식 릴리스 몫이라 개발 빌드는 Releases 목록의 맨 위 pre-release에서 받는다.
+  - Obtainium으로 개발 빌드를 받으려면 "Include prereleases"를 켜고 APK 필터를 `debug`로.
+- 정식 릴리스(`.github/workflows/dt-release.yml`): `v`로 시작하는 태그를 push하면(예: `git tag v1.0.0 && git push origin v1.0.0`,
+  또는 GitHub 웹에서 Releases > Draft a new release > 새 태그 `v1.0.0`) 릴리스 빌드를 만들어 "Latest" 릴리스로 올린다.
+  - 앱 이름 "DT Keyboard", 패키지 `io.github.northster.dtkeyboard`, 버전 이름은 태그에서(`v1.0.0` → `1.0.0`).
+  - 고정 링크: https://github.com/northster/-/releases/latest/download/DTKeyboard-release.apk
+  - Actions에서 손으로 실행하면 빌드만 하고 APK를 워크플로 아티팩트로 남긴다(배포 안 함, 확인용).
+- GIF 내장 키: 저장소 Secrets에 `DT_KLIPY_KEY`나 `DT_GIPHY_KEY`가 있으면 빌드에 넣어서, 사용자가 키를 안 넣어도 GIF가 된다.
+  사용자가 설정에서 자기 키를 넣으면 그게 먼저다. 내장 키는 APK에서 뽑아낼 수 있고 모든 사용자가 한도를 나눠 쓴다.
 - 로컬 빌드: Android SDK와 NDK 28이 있는 환경에서 `./gradlew assembleDebug`
 
 ## 4. 무선 디버깅 테스트 (`scripts/adb-wireless-test.sh`)
@@ -363,7 +371,7 @@ SwiftSlate(github.com/Musheer360/SwiftSlate, MIT)의 명령 방식을 키보드 
 - 툴바가 닫힌 채 칩 글로우가 떠 있을 때 아래로 스와이프하면 글로우의 원인(클립 칩, 스마트 칩, 자동완성 제안)을 닫고 글로우를 끈다.
 
 ## 서명 키
-- 릴리스 키는 저장소에 없다. CI(`dt-build.yml`)가 저장소 Secrets의 `DT_KEYSTORE_BASE64`(키스토어 base64), `DT_KEYSTORE_PASSWORD`, `DT_KEY_ALIAS`(선택: `DT_KEY_PASSWORD`, 없으면 저장소 비밀번호)로 임시 파일을 만들어 서명하고 끝나면 지운다. Secrets가 없으면 빌드가 실패한다(다른 키로 서명된 APK가 배포되지 않게).
+- 릴리스 키는 저장소에 없다. CI(`dt-build.yml`, `dt-release.yml`)가 저장소 Secrets의 `DT_KEYSTORE_BASE64`(키스토어 base64), `DT_KEYSTORE_PASSWORD`, `DT_KEY_ALIAS`(선택: `DT_KEY_PASSWORD`, 없으면 저장소 비밀번호)로 임시 파일을 만들어 서명하고 끝나면 지운다. Secrets가 없으면 빌드가 실패한다(다른 키로 서명된 APK가 배포되지 않게).
 - 로컬 빌드는 환경변수가 없으면 Android 디버그 키로 서명한다.
 - 예전 테스트 키(`keystore/dt-test.jks`, 비밀번호가 공개돼 있었음)는 삭제했다. 그 키로 서명된 설치본에서 새 키 버전으로는 덮어쓰기 설치가 안 되므로 한 번 지우고 다시 설치해야 한다.
 - 닫힌 툴바 뒤에서 글로우가 뜬 상태(클립 칩, 스마트 칩, 자동완성)에서 위로 스와이프해 연 경우, 그 칩을 쓰거나 닫으면 툴바가 다시 닫힌다(코드 자동 열기와 같은 `autoOpened` 계열 플래그). 원래 열려 있던 툴바는 그대로.

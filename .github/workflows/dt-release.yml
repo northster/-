@@ -1,22 +1,24 @@
-name: DT Keyboard APK
+name: DT Keyboard release
 
-# Dev builds: an installable APK on every push ("DT Keyboard Dev", its own app id with .debug), published as a
-# pre-release dt-N so it can be downloaded directly on the phone. Proper releases come from dt-release.yml (tag v*).
+# Proper releases: push a tag like v1.0.0 (git tag v1.0.0 && git push origin v1.0.0, or create the release on GitHub
+# with a new v… tag). Builds the release APK ("DT Keyboard", app id without .debug, same key as the dev builds) and
+# publishes it as the latest release:
+#   https://github.com/<repo>/releases/latest/download/DTKeyboard-release.apk
+# Run by hand (Actions > DT Keyboard release > Run workflow) it only builds and keeps the APK as a workflow artifact.
 on:
   push:
-    branches: [ main, 'claude/**' ]
-    paths-ignore: [ '**.md', 'scripts/**' ]
+    tags: [ 'v*' ]
   workflow_dispatch:
 
 permissions:
   contents: write
 
 concurrency:
-  group: dt-build-${{ github.ref }}
-  cancel-in-progress: true
+  group: dt-release-${{ github.ref }}
+  cancel-in-progress: false
 
 jobs:
-  build:
+  release:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -32,8 +34,16 @@ jobs:
       - name: Unit tests (fork)
         run: ./gradlew testDebugUnitTest --tests 'helium314.keyboard.fork.*' --stacktrace
 
+      - name: Version
+        # v1.2.0 -> 1.2.0; a run by hand is a test build
+        run: |
+          if [ "${GITHUB_REF_TYPE}" = "tag" ]; then
+            echo "DT_VERSION_NAME=${GITHUB_REF_NAME#v}" >> "$GITHUB_ENV"
+          else
+            echo "DT_VERSION_NAME=test-${GITHUB_RUN_NUMBER}" >> "$GITHUB_ENV"
+          fi
+
       - name: Signing key
-        # the key lives only in the repository secrets; a published APK must never be signed with anything else
         env:
           DT_KEYSTORE_BASE64: ${{ secrets.DT_KEYSTORE_BASE64 }}
         run: |
@@ -46,44 +56,31 @@ jobs:
 
       - name: Build APK
         env:
+          # rises with every release run; the release app has its own id, so it is independent of the dev numbers
           DT_BUILD_NUMBER: ${{ github.run_number }}
           DT_KEYSTORE_PASSWORD: ${{ secrets.DT_KEYSTORE_PASSWORD }}
           DT_KEY_ALIAS: ${{ secrets.DT_KEY_ALIAS }}
           DT_KEY_PASSWORD: ${{ secrets.DT_KEY_PASSWORD }}
           DT_KLIPY_KEY: ${{ secrets.DT_KLIPY_KEY }}
           DT_GIPHY_KEY: ${{ secrets.DT_GIPHY_KEY }}
-        run: ./gradlew assembleDebug --stacktrace
+        run: ./gradlew assembleRelease --stacktrace
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: DTKeyboard-debug
-          path: app/build/outputs/apk/debug/*.apk
+          name: DTKeyboard-release
+          path: app/build/outputs/apk/release/*.apk
 
       - name: Publish release
-        # one pre-release per build with a rising version; "latest" is kept for the proper releases (dt-release.yml).
-        # Obtainium: track the repo with "include prereleases" and an APK filter "debug" for the dev builds
+        if: ${{ github.ref_type == 'tag' }}
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: dt-${{ github.run_number }}
-          name: DT Keyboard Dev 4.1-dt.${{ github.run_number }}
-          target_commitish: ${{ github.sha }}
-          prerelease: true
-          make_latest: false
-          body: |
-            ${{ github.event.head_commit.message }}
-
-            Built from ${{ github.ref_name }} @ ${{ github.sha }}
-          files: app/build/outputs/apk/debug/*.apk
-
-      - name: Keep only the newest 10 builds
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          gh release list --limit 100 --json tagName --jq '.[].tagName' \
-            | grep -E '^dt-[0-9]+$' | sort -t- -k2 -n -r | tail -n +11 \
-            | xargs -r -I{} gh release delete {} --yes --cleanup-tag
-          gh release delete dev-latest --yes --cleanup-tag || true
+          tag_name: ${{ github.ref_name }}
+          name: DT Keyboard ${{ env.DT_VERSION_NAME }}
+          prerelease: false
+          make_latest: true
+          generate_release_notes: true
+          files: app/build/outputs/apk/release/*.apk
 
       - name: Remove the signing key
         if: ${{ always() }}

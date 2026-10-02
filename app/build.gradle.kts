@@ -16,7 +16,11 @@ android {
         // fork: CI passes its run number, so every build is a higher version (needed for auto-updaters like Obtainium)
         val dtBuild = System.getenv("DT_BUILD_NUMBER")?.toIntOrNull() ?: 0
         versionCode = 4101 * 1000 + dtBuild
-        versionName = "4.1-dt.$dtBuild"
+        // the release workflow passes the tag (v1.2.0 -> 1.2.0); dev builds are numbered
+        versionName = System.getenv("DT_VERSION_NAME")?.takeIf { it.isNotBlank() } ?: "4.1-dt.$dtBuild"
+        // fork: GIF API keys built into the app from the repository secrets (empty without them, users then need their own)
+        buildConfigField("String", "DT_KLIPY_KEY", "\"${System.getenv("DT_KLIPY_KEY").orEmpty().replace("\"", "")}\"")
+        buildConfigField("String", "DT_GIPHY_KEY", "\"${System.getenv("DT_GIPHY_KEY").orEmpty().replace("\"", "")}\"")
         ndk {
             abiFilters.clear()
             abiFilters.addAll(listOf("arm64-v8a", "x86_64")) // fork: Galaxy Z Fold (arm64) + emulator

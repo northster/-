@@ -8,6 +8,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.core.content.edit
 import helium314.keyboard.fork.slate.KeyCipher
+import helium314.keyboard.latin.BuildConfig
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.File
@@ -20,15 +21,33 @@ data class GifItem(val id: String, val previewUrl: String, val fullUrl: String, 
 
 /**
  * GIF search on KLIPY (Tenor's successor, Google closed the Tenor API for other apps) or GIPHY. Both need a free
- * API key, entered in the toolbar settings; KLIPY is used when both are there. An empty query gives trending GIFs.
+ * API key: the user's own from the toolbar settings, else the one built into the app (if the build has one); KLIPY
+ * is used when both are there. An empty query gives trending GIFs.
  */
 object GifClient {
     const val PREF_KLIPY_KEY = "fork_gif_klipy_key"
     const val PREF_GIPHY_KEY = "fork_gif_giphy_key"
     private const val LIMIT = 24
 
+    /** the user's own key (settings) */
     fun key(prefs: SharedPreferences, pref: String): String? =
         prefs.getString(pref, null)?.let { KeyCipher.decrypt(it) }?.takeIf { it.isNotBlank() }
+
+    /** the key built into the app (CI passes it from the repository secrets), used when the user has none */
+    fun builtInKey(pref: String): String? = when (pref) {
+        PREF_KLIPY_KEY -> BuildConfig.DT_KLIPY_KEY
+        PREF_GIPHY_KEY -> BuildConfig.DT_GIPHY_KEY
+        else -> ""
+    }.takeIf { it.isNotBlank() }
+
+    private fun keyOrBuiltIn(prefs: SharedPreferences, pref: String) = key(prefs, pref) ?: builtInKey(pref)
+
+    /** a provider with the user's own key comes before the built-in keys */
+    private fun provider(prefs: SharedPreferences): Pair<String, String>? {
+        for (pref in listOf(PREF_KLIPY_KEY, PREF_GIPHY_KEY)) key(prefs, pref)?.let { return pref to it }
+        for (pref in listOf(PREF_KLIPY_KEY, PREF_GIPHY_KEY)) builtInKey(pref)?.let { return pref to it }
+        return null
+    }
 
     /** @return false if the key could not be encrypted (no keystore), blank removes it */
     fun setKey(prefs: SharedPreferences, pref: String, key: String): Boolean {
@@ -38,13 +57,12 @@ object GifClient {
         return true
     }
 
-    fun hasKey(prefs: SharedPreferences) = key(prefs, PREF_KLIPY_KEY) != null || key(prefs, PREF_GIPHY_KEY) != null
+    fun hasKey(prefs: SharedPreferences) = keyOrBuiltIn(prefs, PREF_KLIPY_KEY) != null || keyOrBuiltIn(prefs, PREF_GIPHY_KEY) != null
 
     /** blocking, call off the main thread */
     fun search(prefs: SharedPreferences, query: String): List<GifItem> {
-        key(prefs, PREF_KLIPY_KEY)?.let { return klipy(query, it) }
-        key(prefs, PREF_GIPHY_KEY)?.let { return giphy(query, it) }
-        throw IllegalStateException("no GIF API key")
+        val (pref, key) = provider(prefs) ?: throw IllegalStateException("no GIF API key")
+        return if (pref == PREF_KLIPY_KEY) klipy(query, key) else giphy(query, key)
     }
 
     private fun klipy(query: String, apiKey: String): List<GifItem> {

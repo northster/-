@@ -360,6 +360,7 @@
     <string name="fork_gif_klipy_key">KLIPY API key</string>
     <string name="fork_gif_giphy_key">GIPHY API key</string>
     <string name="fork_gif_key_none">Not set. A free key from %1$s</string>
+    <string name="fork_gif_key_builtin">Built-in key in use (shared by everyone). Your own free key from %1$s works more reliably</string>
     <string name="fork_gif_key_help">Free key from %1$s. Stored encrypted.</string>
     <string name="fork_gif_recent">Recently sent GIFs</string>
     <string name="fork_gif_favorites">Favorites</string>
@@ -395,7 +396,7 @@
     <string name="fork_desc_translate">Language, style and purpose the translation panel starts with</string>
     <string name="fork_screen_gif">GIF</string>
     <string name="fork_desc_gif">GIF search API keys (KLIPY, GIPHY)</string>
-    <string name="fork_gif_screen_summary">The GIF button on the toolbar searches with KLIPY (used first) or GIPHY. Both need a free API key.</string>
+    <string name="fork_gif_screen_summary">The GIF button on the toolbar searches with KLIPY (used first) or GIPHY. A key built into the app is used if there is one; your own free key comes first.</string>
     <string name="fork_translate_screen_summary">The translate button on the toolbar opens a panel over the keys. It starts with these choices and remembers the last ones used. Uses the Gemini API keys of AI commands.</string>
     <string name="fork_translate_keep_summary">The translation goes under the original instead of replacing it</string>
     <string name="fork_clip_select_all">Select all</string>

@@ -373,7 +373,11 @@ internal fun GifKeyPreference(title: String, pref: String, site: String) {
     val saved = androidx.compose.runtime.remember(refresh) { helium314.keyboard.fork.gif.GifClient.key(prefs, pref) }
     helium314.keyboard.settings.preferences.Preference(
         name = title,
-        description = if (saved != null) "••••" + saved.takeLast(4) else stringResource(R.string.fork_gif_key_none, site),
+        description = when {
+            saved != null -> "••••" + saved.takeLast(4)
+            helium314.keyboard.fork.gif.GifClient.builtInKey(pref) != null -> stringResource(R.string.fork_gif_key_builtin, site)
+            else -> stringResource(R.string.fork_gif_key_none, site)
+        },
         onClick = { editing = true },
     )
     if (editing) {
