@@ -41,30 +41,37 @@ object Trivia {
     private val handler = Handler(Looper.getMainLooper())
     @Volatile private var fetching = false
 
-    private class Fact(val text: String, var seen: Boolean)
+    private class Fact(val text: String, var seen: Boolean, val page: String? = null)
+
+    /** a fact to show and where to read more about it (null if it has no article) */
+    class Shown(val text: String, val page: String?)
 
     private fun read(prefs: SharedPreferences): MutableList<Fact> {
         val arr = runCatching { JSONArray(prefs.getString(PREF_FACTS, "[]")) }.getOrElse { JSONArray() }
         return (0 until arr.length()).mapNotNull { i ->
-            arr.optJSONObject(i)?.let { o -> o.optString("t").takeIf { it.isNotBlank() }?.let { Fact(it, o.optBoolean("s")) } }
+            arr.optJSONObject(i)?.let { o ->
+                o.optString("t").takeIf { it.isNotBlank() }?.let { Fact(it, o.optBoolean("s"), o.optString("p").ifEmpty { null }) }
+            }
         }.toMutableList()
     }
 
     private fun write(prefs: SharedPreferences, facts: List<Fact>) {
         val arr = JSONArray()
-        facts.takeLast(KEEP + BATCH).forEach { arr.put(JSONObject().put("t", it.text).put("s", it.seen)) }
+        facts.takeLast(KEEP + BATCH).forEach {
+            arr.put(JSONObject().put("t", it.text).put("s", it.seen).apply { if (it.page != null) put("p", it.page) })
+        }
         prefs.edit { putString(PREF_FACTS, arr.toString()) }
     }
 
     /** a fact to show now, not seen before if there is one (it counts as seen from now on); null if there are none */
-    fun next(context: Context): String? {
+    fun next(context: Context): Shown? {
         val prefs = context.prefs()
         val facts = read(prefs)
         if (facts.isEmpty()) return null
         val fact = facts.filter { !it.seen }.randomOrNull() ?: facts.random()
         fact.seen = true
         write(prefs, facts)
-        return fact.text
+        return Shown(fact.text, fact.page)
     }
 
     fun count(context: Context) = read(context.prefs()).size
@@ -88,15 +95,15 @@ object Trivia {
             val added = if (fresh != null) {
                 val known = read(app.prefs())
                 val keys = known.mapTo(ArrayList()) { norm(it.text) }
-                val kept = fresh.map { cleanLine(it) }
-                    .filter { it.length in 6..(MAX_CHARS + 10) }
+                val kept = fresh.map { Fact(cleanLine(it.text), false, it.page) }
+                    .filter { it.text.length in 6..(MAX_CHARS + 10) }
                     .filter { f ->
                         // not kept yet (also not written a bit differently), and not twice in this batch
-                        val k = norm(f)
+                        val k = norm(f.text)
                         if (keys.any { it == k || similar(it, k) }) false else { keys.add(k); true }
                     }
                 // the oldest seen ones go first when there are too many
-                val all = known + kept.map { Fact(it, false) }
+                val all = known + kept
                 var over = all.size - KEEP
                 write(app.prefs(), all.filter { fact ->
                     val drop = over > 0 && fact.seen
@@ -126,7 +133,7 @@ object Trivia {
      *    with a web search, only what is definitely true stays: a second call
      * Without Wikipedia (offline, error) and without the experiment there are no new facts this time.
      */
-    private fun fetchBatch(app: Context, korean: Boolean, avoid: String): List<String>? {
+    private fun fetchBatch(app: Context, korean: Boolean, avoid: String): List<Shown>? {
         val prefs = app.prefs()
         val ai = prefs.getBoolean(WidgetPrefs.TRIVIA_AI, false)
         val wikiWanted = if (ai) BATCH - BATCH / 2 else BATCH
@@ -139,7 +146,7 @@ object Trivia {
         val liked = if (forInterests == 0) emptyList()
             else WikiFacts.matching(interests.flatMap { it.keywords }, forInterests + 3, notSeen)
         val general = if (share >= 1f && liked.isNotEmpty()) emptyList()
-            else WikiFacts.hooks(wikiWanted - minOf(liked.size, forInterests) + 6) { notSeen(it) && it !in liked }
+            else WikiFacts.hooks(wikiWanted - minOf(liked.size, forInterests) + 6) { h -> notSeen(h) && liked.none { it.text == h } }
         val wiki = liked + general
         val own = if (!ai) 0 else if (wiki.isEmpty()) BATCH else BATCH / 2
         if (wiki.isEmpty() && own == 0) {
@@ -155,13 +162,13 @@ object Trivia {
             "well established. Never write popular myths or misconceptions (like goldfish having a 3-second memory). " +
             "Avoid exact numbers, superlatives and \"the first / the only\" unless you are certain. If unsure, skip it. " +
             "Each fact is one short sentence in $lang, at most ${MAX_CHARS - 5} characters. " +
-            "Output only lines starting with \"G: \" or \"W: \", nothing else."
+            "Output only lines starting with \"G: \" or \"W<number>: \", nothing else."
         val request = buildString {
             if (own > 0) append("Part G: write $own facts about $topics, one per line, each starting with \"G: \".\n")
             if (wiki.isNotEmpty()) {
-                append("Part W: retell each of these checked facts as one short $lang sentence starting with \"W: \". ")
-                append("Keep the meaning exactly, add nothing. Skip any that can't be said that short.\n")
-                wiki.forEach { append("- ").append(it).append('\n') }
+                append("Part W: retell each of these checked facts as one short $lang sentence starting with \"W\" and ")
+                append("its number, like \"W3: \". Keep the meaning exactly, add nothing. Skip any that can't be said that short.\n")
+                wiki.forEachIndexed { i, h -> append(i + 1).append(". ").append(h.text).append('\n') }
             }
             if (own > 0 && avoid.isNotEmpty()) append("\nDo not repeat these or anything close to them:\n").append(avoid)
         }
@@ -171,11 +178,17 @@ object Trivia {
             return null
         }
         // these hooks are used up, also the ones that were skipped
-        rememberWiki(prefs, seen, wiki)
+        rememberWiki(prefs, seen, wiki.map { it.text })
         val lines = first.text.lines().map { it.trim() }
-        val fromWiki = lines.filter { it.startsWith("W:") }.map { it.removePrefix("W:").trim() }
+        // "W3: …" is the third hook: its article goes with it (the Korean one when there is one)
+        val retold = lines.mapNotNull { line ->
+            val m = Regex("^W\\s*(\\d+)\\s*:\\s*(.+)$").find(line) ?: return@mapNotNull null
+            m.groupValues[2].trim() to wiki.getOrNull(m.groupValues[1].toInt() - 1)?.title
+        }
+        val pages = WikiFacts.pages(retold.mapNotNull { it.second }, korean)
+        val fromWiki = retold.map { (text, title) -> Shown(text, title?.let { pages[it] }) }
         val written = lines.filter { it.startsWith("G:") }.map { it.removePrefix("G:").trim() }.filter { it.isNotEmpty() }
-        return fromWiki + verified(prefs, written)
+        return fromWiki + verified(prefs, written).map { Shown(it, null) }
     }
 
     /** a hook, the same however it is retold */

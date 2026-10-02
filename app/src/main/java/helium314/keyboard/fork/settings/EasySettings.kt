@@ -48,6 +48,7 @@ object EasySettings {
         Settings.PREF_KEY_GAP_SCALE_PREFIX,
         ForkSettings.PREF_KEY_GAP_V_DP,
         ForkSettings.PREF_TOOLBAR_HEIGHT_DP,
+        ForkSettings.PREF_TOOLBAR_PADDING_DP,
         Settings.PREF_SPLIT_SPACER_SCALE_PREFIX,
         ForkSettings.PREF_SPLIT_SIDE_PADDING_DP,
         Settings.PREF_SPACE_BAR_TEXT,

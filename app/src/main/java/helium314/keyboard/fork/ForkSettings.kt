@@ -73,6 +73,9 @@ object ForkSettings {
     const val PREF_BOTTOM_ROW_DP = "fork_bottom_row_dp"
     /** height of the dynamic toolbar */
     const val PREF_TOOLBAR_HEIGHT_DP = "fork_toolbar_height_dp"
+    /** room above and below the toolbar's content (the same on both sides), added to its height */
+    const val PREF_TOOLBAR_PADDING_DP = "fork_toolbar_padding_dp"
+    const val DEFAULT_TOOLBAR_PADDING_DP = 6f
     const val SIZE_UNSET = -1f
 
     /** dp value of a size pref, or [SIZE_UNSET] */

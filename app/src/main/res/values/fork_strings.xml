@@ -154,6 +154,8 @@
     <string name="fork_clip_actions_summary">Buttons on the right of the toolbar while the clipboard is open</string>
     <string name="fork_tool_back">Back to keyboard</string>
     <string name="fork_size_top_padding">Top padding</string>
+    <string name="fork_size_toolbar_padding">Toolbar padding</string>
+    <string name="fork_size_toolbar_padding_desc">Room above and below the toolbar buttons, the same on both sides</string>
     <string name="fork_size_toolbar_height">Toolbar height</string>
     <string name="fork_size_key_height">Key height</string>
     <string name="fork_size_key_height_summary">Height of a letter key. Paddings and gaps are added on top, the keyboard grows instead of the keys shrinking</string>
@@ -480,7 +482,7 @@
     <string name="fork_widget_usage">Claude usage widget</string>
     <string name="fork_widget_usage_summary">5-hour and weekly limits used and time left (needs the claude.ai session key)</string>
     <string name="fork_widget_trivia">Trivia widget</string>
-    <string name="fork_widget_trivia_summary">A useless but true fact each time the toolbar opens (unseen first), from Wikipedia\'s \"Did you know\" (checked by its editors), retold short by Gemini. Tap for the next one, long press to copy. 25 at a time, the next 25 once 20 are seen; none comes twice. Needs a Gemini key</string>
+    <string name="fork_widget_trivia_summary">A useless but true fact each time the toolbar opens (unseen first), from Wikipedia\'s \"Did you know\" (checked by its editors), retold short by Gemini. Tap for the next one, double tap for its Wikipedia article, long press to copy. 25 at a time, the next 25 once 20 are seen; none comes twice. Needs a Gemini key</string>
     <string name="fork_widget_hours">%1$d h</string>
     <string name="fork_trivia_interests">Interests</string>
     <string name="fork_trivia_interests_none">None: trivia about anything</string>
@@ -497,6 +499,7 @@
     <string name="fork_widget_trivia_failed">No new trivia (check the Gemini key)</string>
     <string name="fork_widget_trivia_no_key">Add a Gemini key for trivia · tap for settings</string>
     <string name="fork_widget_trivia_copied">Copied</string>
+    <string name="fork_widget_trivia_no_page">No article for this one</string>
     <string name="fork_widget_trivia_loading">Getting new trivia…</string>
     <string name="fork_widget_emoji">Emoji ideas widget</string>
     <string name="fork_widget_emoji_summary">6 emojis that fit what you are writing. By default from the built-in emoji dictionary (offline, free, instant) for the last words. The ✨ button or automatic AI let Gemini read the whole sentence (needs a key). Tap to type; the ones you use come first.</string>

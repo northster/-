@@ -29,9 +29,9 @@ object GeminiClient {
     /** runs [prompt] on [text] with the stored keys, trying the next key when one is rate limited or broken */
     /** [raw]: [prompt] is the whole instruction and [text] the request (widgets), not a text to transform */
     fun run(prefs: SharedPreferences, prompt: String, text: String, search: Boolean, raw: Boolean = false): Outcome {
-        if (!KeyCipher.available) return Outcome.Failure("키 저장소를 쓸 수 없어요")
+        if (!KeyCipher.available) return Outcome.Failure("키 저장소를 쓸 수 없습니다")
         val keys = SlateKeys.keys(prefs)
-        if (keys.isEmpty()) return Outcome.Failure("Gemini API 키가 없어요 (설정 > AI 명령)")
+        if (keys.isEmpty()) return Outcome.Failure("Gemini API 키가 없습니다 (설정 > 고급)")
         val model = SlateKeys.model(prefs)
         val tried = HashSet<String>()
         var last = "알 수 없는 오류"
@@ -86,12 +86,12 @@ object GeminiClient {
             val message = runCatching { JSONObject(error).optJSONObject("error")?.optString("message") }.getOrNull()
                 ?.takeIf { it.isNotBlank() }
             when (code) {
-                429 -> Attempt.Failed("요청 한도 초과, 잠시 후 다시 해 주세요", true,
+                429 -> Attempt.Failed("요청 한도 초과, 잠시 후 다시 시도해 주십시오", true,
                     connection.getHeaderField("Retry-After")?.toLongOrNull() ?: 60)
                 400, 422 -> if (error.contains("API_KEY_INVALID") || message?.contains("API key not valid", true) == true)
-                    Attempt.Failed("API 키가 올바르지 않아요", true) else Attempt.Failed(message ?: "잘못된 요청 ($code)", false)
-                401, 403 -> Attempt.Failed(message ?: "API 키 권한이 없어요", true)
-                404 -> Attempt.Failed("모델을 찾을 수 없어요: $safeModel", false)
+                    Attempt.Failed("API 키가 올바르지 않습니다", true) else Attempt.Failed(message ?: "잘못된 요청 ($code)", false)
+                401, 403 -> Attempt.Failed(message ?: "API 키 권한이 없습니다", true)
+                404 -> Attempt.Failed("모델을 찾을 수 없습니다: $safeModel", false)
                 in 500..599 -> Attempt.Failed(message ?: "서버 오류 ($code)", true)
                 else -> Attempt.Failed(message ?: "오류 ($code)", false)
             }
@@ -107,17 +107,17 @@ object GeminiClient {
         val candidates = json.optJSONArray("candidates")
         if (candidates == null || candidates.length() == 0) {
             val block = json.optJSONObject("promptFeedback")?.optString("blockReason").orEmpty()
-            return Attempt.Failed(if (block.isNotEmpty()) "안전 필터에 막혔어요 ($block)" else "응답이 비어 있어요", false)
+            return Attempt.Failed(if (block.isNotEmpty()) "안전 필터에 막혔습니다 ($block)" else "응답이 비어 있습니다", false)
         }
         val candidate = candidates.getJSONObject(0)
         val finish = candidate.optString("finishReason")
         if (finish in setOf("SAFETY", "RECITATION", "PROHIBITED_CONTENT", "SPII", "BLOCKLIST"))
-            return Attempt.Failed("안전 필터에 막혔어요", false)
+            return Attempt.Failed("안전 필터에 막혔습니다", false)
         // a grounded answer can come in several parts
-        val parts = candidate.optJSONObject("content")?.optJSONArray("parts") ?: return Attempt.Failed("응답이 비어 있어요", false)
+        val parts = candidate.optJSONObject("content")?.optJSONArray("parts") ?: return Attempt.Failed("응답이 비어 있습니다", false)
         val text = buildString { for (i in 0 until parts.length()) append(parts.getJSONObject(i).optString("text")) }
             .trim().replace(FENCE, "").trim()
-        if (text.isBlank()) return Attempt.Failed("응답이 비어 있어요", false)
+        if (text.isBlank()) return Attempt.Failed("응답이 비어 있습니다", false)
         return Attempt.Ok(text)
     }
 
@@ -128,7 +128,7 @@ object GeminiClient {
             val n = reader.read(buf)
             if (n == -1) break
             sb.append(buf, 0, n)
-            if (sb.length > MAX_RESPONSE_CHARS) throw Exception("응답이 너무 커요")
+            if (sb.length > MAX_RESPONSE_CHARS) throw Exception("응답이 너무 큽니다")
         }
         sb.toString()
     }

@@ -59,6 +59,7 @@ enum class ForkSize(
     TOP_PADDING(ForkSettings.PREF_TOP_PADDING_DP, null, 0f..40f, 0.5f),
     BOTTOM_ROW(ForkSettings.PREF_BOTTOM_ROW_DP, createPrefKeyForBooleanSettings(Settings.PREF_BOTTOM_ROW_SCALE_PREFIX, 0, 2), 24f..90f, 0.5f),
     TOOLBAR_HEIGHT(ForkSettings.PREF_TOOLBAR_HEIGHT_DP, null, 32f..72f, 1f),
+    TOOLBAR_PADDING(ForkSettings.PREF_TOOLBAR_PADDING_DP, null, 0f..24f, 0.5f),
     /** outer side padding of the split keyboard, the normal side padding until set */
     SPLIT_SIDE_PADDING(ForkSettings.PREF_SPLIT_SIDE_PADDING_DP, null, 0f..240f, 1f);
 
@@ -88,6 +89,7 @@ enum class ForkSize(
                 (px(KEY_HEIGHT) + gap) * 3 * scale / (4 - scale) - gap
             }
             TOOLBAR_HEIGHT -> res.getDimension(R.dimen.fork_dynamic_toolbar_height)
+            TOOLBAR_PADDING -> ForkSettings.DEFAULT_TOOLBAR_PADDING_DP * dm.density
             SPLIT_SIDE_PADDING -> px(SIDE_PADDING)
         }
         return ((px / dm.density) / step).roundToInt() * step

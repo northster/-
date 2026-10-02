@@ -15,4 +15,7 @@ class WikiFactsTest {
         WikiFacts.clean("* ... that this [[bird]] (pictured) can fly backwards?"))
     @Test fun template() = assertNull(WikiFacts.clean("* ... that it is {{convert|5|cm}} long?"))
     @Test fun notHook() = assertNull(WikiFacts.clean("== March 2019 =="))
+    @Test fun boldTitle() = assertEquals("Eiffel Tower",
+        WikiFacts.title("* ... that [[Paris|Paris's]] '''[[Eiffel Tower|tower]]''' grows in summer?"))
+    @Test fun firstLinkTitle() = assertEquals("Cat", WikiFacts.title("* ... that [[Cat|cats]] sleep a lot?"))
 }

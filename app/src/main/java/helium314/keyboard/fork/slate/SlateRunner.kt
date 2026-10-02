@@ -72,7 +72,7 @@ class SlateRunner(private val ime: LatinIME, private val ui: Ui) {
     fun runOnRange(command: SlateCommand, start: Int, end: Int, text: String) {
         if (busy) return
         val clean = text.trim()
-        if (clean.isEmpty()) return toast("변환할 글이 없어요")
+        if (clean.isEmpty()) return toast("변환할 글이 없습니다")
         SlateCommands.countUse(prefs, command.trigger)
         busy = true
         val id = ++running
@@ -123,28 +123,28 @@ class SlateRunner(private val ime: LatinIME, private val ui: Ui) {
         val name = command.trigger.removePrefix(SlateCommands.prefix(prefs))
         if (command.isBuiltIn) when {
             name == "undo" -> {
-                val original = lastOriginal ?: return toast("되돌릴 게 없어요")
+                val original = lastOriginal ?: return toast("되돌릴 것이 없습니다")
                 replace(text, original)
                 lastOriginal = preceding // toggles, like SwiftSlate
                 return
             }
             name == "copy" -> {
                 val copy = preceding.trim()
-                if (copy.isEmpty()) return toast("복사할 글이 없어요")
+                if (copy.isEmpty()) return toast("복사할 글이 없습니다")
                 removeTrigger(text, preceding)
                 setClip(copy)
-                return toast("복사했어요")
+                return toast("복사했습니다")
             }
             name == "cut" -> {
                 val cut = preceding.trim()
-                if (cut.isEmpty()) return toast("잘라낼 글이 없어요")
+                if (cut.isEmpty()) return toast("잘라낼 글이 없습니다")
                 lastOriginal = preceding
                 replace(text, "")
                 setClip(cut)
-                return toast("잘라냈어요")
+                return toast("잘라냈습니다")
             }
             name == "paste" || name == "replace" -> {
-                val clip = clipText() ?: return toast("클립보드가 비어 있어요")
+                val clip = clipText() ?: return toast("클립보드가 비어 있습니다")
                 lastOriginal = preceding
                 if (name == "paste") ime.forkReplaceBeforeCursor(text.length - preceding.length, clip)
                 else replace(text, clip)
@@ -158,7 +158,7 @@ class SlateRunner(private val ime: LatinIME, private val ui: Ui) {
         }
         // AI
         val clean = preceding.trim()
-        if (clean.isEmpty()) return toast("변환할 글이 없어요")
+        if (clean.isEmpty()) return toast("변환할 글이 없습니다")
         // the trigger goes away right away, the text stays until the answer is there
         removeTrigger(text, preceding)
         busy = true

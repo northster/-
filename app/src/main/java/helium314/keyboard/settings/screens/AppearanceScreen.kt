@@ -106,6 +106,7 @@ fun AppearanceScreen(
         Settings.PREF_KEY_GAP_SCALE_PREFIX,
         ForkSettings.PREF_KEY_GAP_V_DP,
         ForkSettings.PREF_TOOLBAR_HEIGHT_DP,
+        ForkSettings.PREF_TOOLBAR_PADDING_DP,
         ForkSettings.PREF_SPLIT_AUTO,
         Settings.PREF_ENABLE_SPLIT_KEYBOARD.takeIf { !prefs.getBoolean(ForkSettings.PREF_SPLIT_AUTO, true) },
         Settings.PREF_SPLIT_SPACER_SCALE_PREFIX,
@@ -271,6 +272,9 @@ fun createAppearanceSettings(context: Context) = listOf(
     },
     Setting(context, ForkSettings.PREF_TOP_PADDING_DP, R.string.fork_size_top_padding) { setting ->
         DpSliderPreference(setting.title, ForkSize.TOP_PADDING)
+    },
+    Setting(context, ForkSettings.PREF_TOOLBAR_PADDING_DP, R.string.fork_size_toolbar_padding) { setting ->
+        DpSliderPreference(setting.title, ForkSize.TOOLBAR_PADDING, stringResource(R.string.fork_size_toolbar_padding_desc))
     },
     Setting(context, ForkSettings.PREF_TOOLBAR_HEIGHT_DP, R.string.fork_size_toolbar_height) { setting ->
         DpSliderPreference(setting.title, ForkSize.TOOLBAR_HEIGHT)

@@ -368,15 +368,23 @@ class DynamicToolbarController(private val context: Context) {
     /** toolbar height from settings (Appearance & size), default from resources */
     fun applyHeight() {
         val tb = toolbar ?: return
-        val dp = ForkSettings.sizeDp(context.prefs(), ForkSettings.PREF_TOOLBAR_HEIGHT_DP)
-        val px = if (dp > 0) (dp * context.resources.displayMetrics.density).toInt()
+        val prefs = context.prefs()
+        val density = context.resources.displayMetrics.density
+        val dp = ForkSettings.sizeDp(prefs, ForkSettings.PREF_TOOLBAR_HEIGHT_DP)
+        val content = if (dp > 0) (dp * density).toInt()
             else context.resources.getDimensionPixelSize(R.dimen.fork_dynamic_toolbar_height)
+        // the same room above and below the buttons, the toolbar grows by it
+        val padDp = ForkSettings.sizeDp(prefs, ForkSettings.PREF_TOOLBAR_PADDING_DP)
+        val pad = ((if (padDp >= 0) padDp else ForkSettings.DEFAULT_TOOLBAR_PADDING_DP) * density).toInt()
+        if (tb.paddingTop != pad || tb.paddingBottom != pad) tb.setPadding(tb.paddingLeft, pad, tb.paddingRight, pad)
+        val px = content + 2 * pad
         val lp = tb.layoutParams ?: return
         if (lp.height == px) return
         lp.height = px
         tb.layoutParams = lp
         tb.post { updatePosition(); requestInsetsUpdate() }
     }
+
 
     // ---------------------------------------------------------------- tool header (clipboard panel)
 
@@ -580,21 +588,25 @@ class DynamicToolbarController(private val context: Context) {
         includeFontPadding = false
         setLineSpacing(0f, 1.1f)
         gravity = android.view.Gravity.CENTER_VERTICAL or android.view.Gravity.START
-        // tap: the next one (no Gemini key: the settings)
-        setOnClickListener {
-            if (helium314.keyboard.fork.slate.SlateKeys.keys(context.prefs()).isEmpty()) openSettings() else showTrivia()
-        }
-        // long press: the fact to the clipboard
-        setOnLongClickListener {
-            val fact = text?.toString().orEmpty()
-            if (helium314.keyboard.fork.slate.SlateKeys.keys(context.prefs()).isEmpty() || fact.isBlank()
-                || fact == context.getString(R.string.fork_widget_trivia_loading)) return@setOnLongClickListener false
-            val cm = context.getSystemService(Context.CLIPBOARD_SERVICE) as? android.content.ClipboardManager
-                ?: return@setOnLongClickListener false
-            cm.setPrimaryClip(android.content.ClipData.newPlainText("trivia", fact))
-            KeyboardSwitcher.getInstance().showToast(context.getString(R.string.fork_widget_trivia_copied), true)
-            true
-        }
+        // tap: the next one (no Gemini key: the settings), double tap: its Wikipedia article, long press: copy it
+        val gestures = android.view.GestureDetector(context, object : android.view.GestureDetector.SimpleOnGestureListener() {
+            override fun onDown(e: android.view.MotionEvent) = true
+            override fun onSingleTapConfirmed(e: android.view.MotionEvent): Boolean {
+                if (helium314.keyboard.fork.slate.SlateKeys.keys(context.prefs()).isEmpty()) openSettings() else showTrivia()
+                return true
+            }
+            override fun onDoubleTap(e: android.view.MotionEvent): Boolean {
+                val page = triviaPage
+                if (page == null) KeyboardSwitcher.getInstance().showToast(context.getString(R.string.fork_widget_trivia_no_page), true)
+                else runCatching {
+                    context.startActivity(android.content.Intent(android.content.Intent.ACTION_VIEW, android.net.Uri.parse(page))
+                        .addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK))
+                }
+                return true
+            }
+            override fun onLongPress(e: android.view.MotionEvent) { copyTrivia() }
+        })
+        setOnTouchListener { _, e -> gestures.onTouchEvent(e) }
         trivia = this
     }
 
@@ -619,14 +631,28 @@ class DynamicToolbarController(private val context: Context) {
         runCatching { context.startActivity(intent) }
     }
 
+    /** the Wikipedia article of the fact shown, null if it has none */
+    private var triviaPage: String? = null
+
+    private fun copyTrivia() {
+        val fact = trivia?.text?.toString().orEmpty()
+        if (helium314.keyboard.fork.slate.SlateKeys.keys(context.prefs()).isEmpty() || fact.isBlank()
+            || fact == context.getString(R.string.fork_widget_trivia_loading)) return
+        val cm = context.getSystemService(Context.CLIPBOARD_SERVICE) as? android.content.ClipboardManager ?: return
+        cm.setPrimaryClip(android.content.ClipData.newPlainText("trivia", fact))
+        KeyboardSwitcher.getInstance().showToast(context.getString(R.string.fork_widget_trivia_copied), true)
+    }
+
     private fun showTrivia() {
         val view = trivia ?: return
+        triviaPage = null
         if (helium314.keyboard.fork.slate.SlateKeys.keys(context.prefs()).isEmpty()) {
             view.setText(R.string.fork_widget_trivia_no_key)
             return
         }
         val fact = helium314.keyboard.fork.widget.Trivia.next(context)
-        view.text = fact ?: context.getString(R.string.fork_widget_trivia_loading)
+        triviaPage = fact?.page
+        view.text = fact?.text ?: context.getString(R.string.fork_widget_trivia_loading)
         helium314.keyboard.fork.widget.Trivia.refreshIfDue(context) { added -> if (added && fact == null) showTrivia() }
     }
 
