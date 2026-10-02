@@ -27,6 +27,8 @@ data class GifItem(val id: String, val previewUrl: String, val fullUrl: String, 
 object GifClient {
     const val PREF_KLIPY_KEY = "fork_gif_klipy_key"
     const val PREF_GIPHY_KEY = "fork_gif_giphy_key"
+    /** the panel opens with a search for the words before the cursor */
+    const val PREF_AUTO = "fork_gif_auto"
     private const val LIMIT = 24
 
     /** the user's own key (settings) */
@@ -62,6 +64,30 @@ object GifClient {
         provider(prefs)?.first?.let { if (it == PREF_KLIPY_KEY) "KLIPY" else "GIPHY" }
 
     fun hasKey(prefs: SharedPreferences) = keyOrBuiltIn(prefs, PREF_KLIPY_KEY) != null || keyOrBuiltIn(prefs, PREF_GIPHY_KEY) != null
+
+    /**
+     * A search for the end of [text]: its last two words, Korean ones without the particle / ending ("고양이가" ->
+     * "고양이", "축하해요" -> "축하"). Empty when nothing is written.
+     */
+    fun autoQuery(text: String): String {
+        val sentence = text.split(Regex("[.!?\n。]")).lastOrNull { it.isNotBlank() } ?: return ""
+        return sentence.split(Regex("[^\\p{L}\\p{N}]+")).filter { it.isNotEmpty() }.takeLast(2)
+            .joinToString(" ") { stem(it) }.trim()
+    }
+
+    private val ENDINGS = setOf(
+        "이", "가", "은", "는", "을", "를", "의", "에", "에서", "에게", "한테", "로", "으로", "와", "과", "랑", "이랑",
+        "도", "만", "까지", "부터", "요", "야", "이다", "다", "예요", "에요", "입니다", "죠", "네", "들", "고", "지",
+    )
+
+    private fun stem(word: String): String {
+        if (word.none { it in '가'..'힣' }) return word
+        for (len in 2 until word.length) {
+            val rest = word.substring(len)
+            if (rest in ENDINGS || rest[0] in "하해했한할") return word.substring(0, len)
+        }
+        return word
+    }
 
     /** blocking, call off the main thread */
     fun search(prefs: SharedPreferences, query: String): List<GifItem> {

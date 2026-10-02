@@ -373,6 +373,8 @@
     <string name="fork_glow_color_default">Default (sky blue)</string>
     <string name="fork_smart_rates_from">Rates: %1$s · as of %2$s</string>
     <string name="fork_cat_gif">GIF</string>
+    <string name="fork_gif_auto">Suggest GIFs for what you write</string>
+    <string name="fork_gif_auto_summary">The GIF panel opens with a search for the last words before the cursor (trending if nothing is written or found)</string>
     <string name="fork_gif_klipy_key">KLIPY API key</string>
     <string name="fork_gif_giphy_key">GIPHY API key</string>
     <string name="fork_gif_key_none">Not set. A free key from %1$s</string>

@@ -547,11 +547,13 @@ class DynamicToolbarController(private val context: Context) {
         val colors = Settings.getValues().mColors
         maxLines = 2
         ellipsize = android.text.TextUtils.TruncateAt.END
-        setTextSize(android.util.TypedValue.COMPLEX_UNIT_SP, 12.5f)
-        setTextColor(colors.get(ColorType.KEY_TEXT))
+        setTextSize(android.util.TypedValue.COMPLEX_UNIT_SP, 12f)
+        // quieter than the keys: regular weight, a bit dimmed, centered with the same room above and below
+        setTextColor(colors.get(ColorType.KEY_TEXT) and 0x00FFFFFF or (0xB4 shl 24))
+        typeface = android.graphics.Typeface.DEFAULT
+        includeFontPadding = false
+        setLineSpacing(0f, 1.1f)
         gravity = android.view.Gravity.CENTER_VERTICAL or android.view.Gravity.START
-        setPadding(0, 0, 0, (6 * context.resources.displayMetrics.density).toInt())
-        helium314.keyboard.keyboard.KeyboardTypeface.applyToTextView(this)
         // tap: the next one (no Gemini key: the settings)
         setOnClickListener {
             if (helium314.keyboard.fork.slate.SlateKeys.keys(context.prefs()).isEmpty()) openSettings() else showTrivia()
@@ -1399,6 +1401,8 @@ class DynamicToolbarController(private val context: Context) {
     /** what the panel shows: [GIF_ALL] (trending or [gifPanelQuery]), [GIF_RECENT], [GIF_FAVORITES] */
     private var gifFilter = GIF_ALL
     private var gifPanelQuery = ""
+    /** [gifPanelQuery] came from the text, not typed: trending instead if it finds nothing */
+    private var gifAutoQuery = false
     private var gifPanelRequest = 0
     private var gifExpandedBefore = false
     /** the search is typed from the panel (the letters are shown for it) and goes back to it */
@@ -1420,7 +1424,10 @@ class DynamicToolbarController(private val context: Context) {
         if (KeyboardSwitcher.getInstance().isShowingClipboardHistory || KeyboardSwitcher.getInstance().isShowingEmojiPalettes)
             ime.mKeyboardActionListener.onCodeInput(KeyCode.ALPHA, Constants.NOT_A_COORDINATE, Constants.NOT_A_COORDINATE, false)
         gifFilter = GIF_ALL
-        gifPanelQuery = ""
+        // the words before the cursor as the search (empty: trending), it can be changed by tapping the field
+        gifPanelQuery = if (context.prefs().getBoolean(helium314.keyboard.fork.gif.GifClient.PREF_AUTO, true))
+            helium314.keyboard.fork.gif.GifClient.autoQuery(ime.forkTextBeforeCursor(200)?.toString().orEmpty()) else ""
+        gifAutoQuery = gifPanelQuery.isNotEmpty()
         if (!addGifPanelView()) return
         gifExpandedBefore = isExpanded
         if (!isExpanded) setExpanded(true, true)
@@ -1486,6 +1493,13 @@ class DynamicToolbarController(private val context: Context) {
                     val found = runCatching { helium314.keyboard.fork.gif.GifClient.search(app.prefs(), query) }
                     handler.post {
                         if (id != gifPanelRequest || gifPanel !== panel) return@post
+                        if (gifAutoQuery && found.getOrNull()?.isEmpty() == true) {
+                            gifAutoQuery = false
+                            gifPanelQuery = ""
+                            showGifHeader()
+                            loadGifPanel()
+                            return@post
+                        }
                         val error = found.exceptionOrNull()
                         if (error != null) Log.w(TAG, "GIF search failed", error)
                         panel.show(found.getOrNull() ?: emptyList(),
@@ -1521,6 +1535,7 @@ class DynamicToolbarController(private val context: Context) {
         clipSearch.stop()
         if (search) {
             gifPanelQuery = query
+            gifAutoQuery = false
             gifFilter = GIF_ALL
         }
         if (!addGifPanelView()) return closeGifPanel()

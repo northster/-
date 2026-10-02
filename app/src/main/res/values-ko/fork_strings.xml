@@ -370,6 +370,8 @@
     <string name="fork_glow_color_default">기본 (하늘색)</string>
     <string name="fork_smart_rates_from">환율: %1$s · %2$s 기준</string>
     <string name="fork_cat_gif">GIF</string>
+    <string name="fork_gif_auto">쓴 글에 맞는 GIF 추천</string>
+    <string name="fork_gif_auto_summary">GIF 패널을 열면 커서 앞 마지막 단어로 검색해요(글이 없거나 결과가 없으면 인기 GIF)</string>
     <string name="fork_gif_klipy_key">KLIPY API 키</string>
     <string name="fork_gif_giphy_key">GIPHY API 키</string>
     <string name="fork_gif_key_none">설정 안 됨. %1$s에서 무료로 받을 수 있어요</string>
