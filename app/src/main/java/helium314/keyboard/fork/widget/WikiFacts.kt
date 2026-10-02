@@ -10,7 +10,7 @@ import java.util.Calendar
 /**
  * fork: facts checked by people for the trivia widget: the "Did you know" hooks of English Wikipedia (each one reviewed
  * by editors, with a source in its article), from a random month of the archive
- * (Wikipedia:Recent additions/<year>/<month>). Text from Wikipedia, CC BY-SA 4.0.
+ * (Wikipedia:Did you know archive/<year>/<month>). Text from Wikipedia, CC BY-SA 4.0.
  */
 object WikiFacts {
     /** a hook as plain text and the article it is about (its bold link), null if none is found */
@@ -33,7 +33,7 @@ object WikiFacts {
             if (found.size >= count) return@repeat
             runCatching {
                 val lastYear = Calendar.getInstance().get(Calendar.YEAR) - 1
-                val page = "Wikipedia:Recent additions/${(FIRST_YEAR..lastYear).random()}/${MONTHS.random()}"
+                val page = "Wikipedia:Did you know archive/${(FIRST_YEAR..lastYear).random()}/${MONTHS.random()}"
                 val all = wikitext(page).lineSequence().mapNotNull { hook(it) }.toList()
                 if (all.isEmpty()) lastError = "$page: 0 hooks"
                 all.filter { wanted(it.text) }.shuffled().take(count - found.size).forEach { found[it.text] = it }
@@ -51,7 +51,7 @@ object WikiFacts {
         for (keyword in keywords.shuffled().take(4)) {
             if (found.size >= count) break
             runCatching {
-                val query = "\"$keyword\" prefix:Wikipedia:Recent additions/"
+                val query = "\"$keyword\" prefix:Wikipedia:Did you know archive/"
                 val url = "$API?action=query&format=json&formatversion=2&list=search&srnamespace=4&srlimit=10&srsearch=" +
                     URLEncoder.encode(query, "UTF-8")
                 val results = JSONObject(get(url)).getJSONObject("query").getJSONArray("search")
@@ -114,7 +114,7 @@ object WikiFacts {
         "https://$lang.wikipedia.org/wiki/" + URLEncoder.encode(title.replace(' ', '_'), "UTF-8").replace("+", "_")
 
     private fun wikitext(title: String): String {
-        val url = "$API?action=parse&format=json&formatversion=2&prop=wikitext&page=" + URLEncoder.encode(title, "UTF-8")
+        val url = "$API?action=parse&format=json&formatversion=2&redirects=1&prop=wikitext&page=" + URLEncoder.encode(title, "UTF-8")
         return JSONObject(get(url)).getJSONObject("parse").getString("wikitext")
     }
 

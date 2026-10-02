@@ -229,10 +229,11 @@ object Trivia {
         }
         // these hooks are used up, also the ones that were skipped
         rememberWiki(prefs, seen, wiki.map { it.text })
-        val lines = first.text.lines().map { it.trim() }
+        // markdown or list marks around the labels ("**W3:**", "- G:") are dropped
+        val lines = first.text.lines().map { it.replace("**", "").trim().trimStart('-', '*', '•', ' ') }
         // "W3: …" is the third hook: its article goes with it (the Korean one when there is one)
         val retold = lines.mapNotNull { line ->
-            val m = Regex("^W\\s*(\\d+)\\s*:\\s*(.+)$").find(line) ?: return@mapNotNull null
+            val m = Regex("^W\\s*(\\d+)\\s*[:.)：]\\s*(.+)$").find(line) ?: return@mapNotNull null
             m.groupValues[2].trim() to wiki.getOrNull(m.groupValues[1].toInt() - 1)?.title
         }
         val pages = WikiFacts.pages(retold.mapNotNull { it.second }, korean)
