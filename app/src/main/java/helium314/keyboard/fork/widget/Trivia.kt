@@ -50,16 +50,15 @@ object Trivia {
     private const val PREF_VERSION = "fork_trivia_version"
 
     /**
-     * Once: the facts kept from before Wikipedia (all written by Gemini) go. Gemini wrote the same famous facts again
-     * and again in other words ("sea otters hold hands…"), which an exact comparison let through, so the list was full
-     * of them. The next batch comes from Wikipedia.
+     * Once: the facts kept so far go. Before Wikipedia Gemini wrote the same famous facts again and again in other
+     * words ("sea otters hold hands…"), the first Wikipedia ones were about obscure articles in mixed styles. The next
+     * batch comes from Wikipedia, well-known articles only.
      */
     private fun migrate(prefs: SharedPreferences) {
-        if (prefs.getInt(PREF_VERSION, 0) >= 2) return
-        val arr = runCatching { JSONArray(prefs.getString(PREF_FACTS, "[]")) }.getOrElse { JSONArray() }
-        val keep = JSONArray()
-        for (i in 0 until arr.length()) arr.optJSONObject(i)?.takeIf { it.has("p") }?.let { keep.put(it) }
-        prefs.edit { putString(PREF_FACTS, keep.toString()); putInt(PREF_VERSION, 2); remove(PREF_FAILED) }
+        val version = prefs.getInt(PREF_VERSION, 0)
+        if (version >= 3) return
+        // version 3: the first Wikipedia facts were about obscure articles and in mixed styles, they go too
+        prefs.edit { putString(PREF_FACTS, "[]"); putInt(PREF_VERSION, 3); remove(PREF_FAILED) }
     }
 
     private fun read(prefs: SharedPreferences): MutableList<Fact> {
@@ -194,7 +193,7 @@ object Trivia {
         val liked = if (forInterests == 0) emptyList()
             else WikiFacts.matching(interests.flatMap { it.keywords }, forInterests + 3, notSeen)
         val general = if (share >= 1f && liked.isNotEmpty()) emptyList()
-            else WikiFacts.hooks(wikiWanted - minOf(liked.size, forInterests) + 6) { h -> notSeen(h) && liked.none { it.text == h } }
+            else WikiFacts.hooks(wikiWanted - minOf(liked.size, forInterests) + 12) { h -> notSeen(h) && liked.none { it.text == h } }
         val wiki = liked + general
         val own = if (!ai) 0 else if (wiki.isEmpty()) BATCH else BATCH / 2
         if (wiki.isEmpty() && own == 0) {
@@ -207,16 +206,23 @@ object Trivia {
         val topics = (if (liking.isNotEmpty() && Math.random() < share) liking.take(3) else TOPICS.shuffled().take(3))
             .joinToString(", ")
         val lang = if (korean) "Korean" else "English"
-        val prompt = "You write short, true and delightfully useless trivia facts. Every fact must be correct and " +
-            "well established. Never write popular myths or misconceptions (like goldfish having a 3-second memory). " +
-            "Avoid exact numbers, superlatives and \"the first / the only\" unless you are certain. If unsure, skip it. " +
-            "Each fact is one short sentence in $lang, at most ${MAX_CHARS - 5} characters. " +
-            "Output only lines starting with \"G: \" or \"W<number>: \", nothing else."
+        // one style for all: plain statements ending in -다 in Korean ("해달은 손을 잡고 잔다.")
+        val style = if (korean) "Write every sentence in the plain written style ending in \"-다\" " +
+            "(like \"해달은 서로 손을 잡고 잔다.\"), never -습니다/-요."
+            else "Write plain statements in the present or past tense."
+        val prompt = "You write short, true and delightfully useless trivia facts for anyone, no background knowledge " +
+            "needed. Every fact must be correct and well established. Never write popular myths or misconceptions " +
+            "(like goldfish having a 3-second memory). Avoid exact numbers, superlatives and \"the first / the only\" " +
+            "unless you are certain. If unsure, skip it. Each fact is one short sentence in $lang, at most " +
+            "${MAX_CHARS - 5} characters. $style Output only lines starting with \"G: \" or \"W<number>: \", nothing else."
         val request = buildString {
             if (own > 0) append("Part G: write $own facts about $topics, one per line, each starting with \"G: \".\n")
             if (wiki.isNotEmpty()) {
-                append("Part W: retell each of these checked facts as one short $lang sentence starting with \"W\" and ")
-                append("its number, like \"W3: \". Keep the meaning exactly, add nothing. Skip any that can't be said that short.\n")
+                append("Part W: these facts are checked. Pick the ones an ordinary person finds fun or surprising without ")
+                append("knowing the people, places or works in them; skip the rest (obscure names, local history, ")
+                append("niche works, sports results, politics). Retell each one you pick as one short $lang sentence ")
+                append("starting with \"W\" and its number, like \"W3: \". Keep the meaning exactly, add nothing. A little ")
+                append("known name may be replaced by what it is (\"a French chocolatier\"). Pick at most $wikiWanted.\n")
                 wiki.forEachIndexed { i, h -> append(i + 1).append(". ").append(h.text).append('\n') }
             }
             if (own > 0 && avoid.isNotEmpty()) append("\nDo not repeat these or anything close to them:\n").append(avoid)
@@ -237,9 +243,16 @@ object Trivia {
             m.groupValues[2].trim() to wiki.getOrNull(m.groupValues[1].toInt() - 1)?.title
         }
         val pages = WikiFacts.pages(retold.mapNotNull { it.second }, korean)
-        val fromWiki = retold.map { (text, title) -> Shown(text, title?.let { pages[it] }) }
+        val fromWiki = retold.filter { plainStyle(it.first, korean) }.map { (text, title) -> Shown(text, title?.let { pages[it] }) }
         val written = lines.filter { it.startsWith("G:") }.map { it.removePrefix("G:").trim() }.filter { it.isNotEmpty() }
-        return fromWiki + verified(prefs, written).map { Shown(it, null) }
+        return fromWiki + verified(prefs, written.filter { plainStyle(it, korean) }).map { Shown(it, null) }
+    }
+
+    /** Korean facts all end in -다 (one style in the widget); other languages as they come */
+    private fun plainStyle(text: String, korean: Boolean): Boolean {
+        if (!korean) return true
+        val end = text.trimEnd { !it.isLetterOrDigit() }
+        return end.endsWith("다") && !end.endsWith("니다") // not -습니다 / -입니다
     }
 
     /** a hook, the same however it is retold */

@@ -24,32 +24,73 @@ object WikiFacts {
     @Volatile var lastError: String? = null
 
     /**
-     * up to [count] hooks ("... that X did Y?" without the "... that") that are [wanted] (not taken before), from random
-     * months (a few tries if a month has too few left); blocking, empty on errors
+     * up to [count] hooks ("... that X did Y?" without the "... that") that are [wanted] (not taken before), from two
+     * random months, about well-known things: Did you know is about new, often obscure articles, so the hooks whose
+     * article is read most (Wikipedia page views of the last 30 days) are taken; blocking, empty on errors
      */
     fun hooks(count: Int, wanted: (String) -> Boolean): List<Hook> {
-        val found = LinkedHashMap<String, Hook>()
-        repeat(3) {
-            if (found.size >= count) return@repeat
+        val candidates = LinkedHashMap<String, Hook>()
+        repeat(2) {
             runCatching {
                 val lastYear = Calendar.getInstance().get(Calendar.YEAR) - 1
                 val page = "Wikipedia:Did you know archive/${(FIRST_YEAR..lastYear).random()}/${MONTHS.random()}"
                 val all = wikitext(page).lineSequence().mapNotNull { hook(it) }.toList()
                 if (all.isEmpty()) lastError = "$page: 0 hooks"
-                all.filter { wanted(it.text) }.shuffled().take(count - found.size).forEach { found[it.text] = it }
+                all.filter { it.title != null && wanted(it.text) }.forEach { candidates[it.text] = it }
             }.onFailure { lastError = it.javaClass.simpleName + ": " + it.message }
         }
-        return found.values.toList()
+        return mostRead(candidates.values.shuffled().take(MAX_SCORED), count)
+    }
+
+    /** hooks whose article is read at least this often in 30 days (a cat: 350 000, a sea otter: 35 000) */
+    private const val MIN_VIEWS = 3000L
+    private const val MIN_VIEWS_INTEREST = 300L
+    /** hooks whose page views are looked up per batch (50 per request) */
+    private const val MAX_SCORED = 300
+
+    /** the [count] hooks about the most read articles (and read at least [MIN_VIEWS]), most read first */
+    private fun mostRead(hooks: List<Hook>, count: Int, min: Long = MIN_VIEWS): List<Hook> {
+        if (hooks.isEmpty()) return hooks
+        val views = views(hooks.mapNotNull { it.title })
+        val scored = hooks.map { it to (views[it.title] ?: 0L) }.filter { it.second >= min }
+        if (scored.isEmpty()) lastError = "${hooks.size} hooks, none about a well-known article"
+        return scored.sortedByDescending { it.second }.take(count).map { it.first }
+    }
+
+    /** page views of the last 30 days for each of [titles]; titles missing on errors */
+    private fun views(titles: List<String>): Map<String, Long> {
+        val result = HashMap<String, Long>()
+        for (chunk in titles.distinct().chunked(50)) runCatching {
+            val url = "$API?action=query&format=json&formatversion=2&redirects=1&prop=pageviews&pvipdays=30&titles=" +
+                URLEncoder.encode(chunk.joinToString("|"), "UTF-8")
+            val query = JSONObject(get(url)).getJSONObject("query")
+            // titles may have been normalized or redirected on the way
+            val renamed = HashMap<String, String>()
+            for (key in listOf("normalized", "redirects")) query.optJSONArray(key)?.let { a ->
+                for (i in 0 until a.length()) a.getJSONObject(i).let { renamed[it.getString("to")] = it.getString("from") }
+            }
+            val pages = query.optJSONArray("pages") ?: return@runCatching
+            for (i in 0 until pages.length()) {
+                val page = pages.getJSONObject(i)
+                val pv = page.optJSONObject("pageviews") ?: continue
+                var sum = 0L
+                for (day in pv.keys()) if (!pv.isNull(day)) sum += pv.optLong(day)
+                var title = page.getString("title")
+                var hops = 0
+                while (title !in chunk && hops++ < 3) title = renamed[title] ?: break
+                result[title] = sum
+            }
+        }
+        return result
     }
 
     /**
      * up to [count] hooks that mention one of [keywords] (as a word), found with Wikipedia's search in the archive
-     * pages; blocking, empty on errors
+     * pages, the most read articles first; blocking, empty on errors
      */
     fun matching(keywords: List<String>, count: Int, wanted: (String) -> Boolean): List<Hook> {
         val found = LinkedHashMap<String, Hook>()
         for (keyword in keywords.shuffled().take(4)) {
-            if (found.size >= count) break
             runCatching {
                 val query = "\"$keyword\" prefix:Wikipedia:Did you know archive/"
                 val url = "$API?action=query&format=json&formatversion=2&list=search&srnamespace=4&srlimit=10&srsearch=" +
@@ -58,15 +99,14 @@ object WikiFacts {
                 val titles = (0 until results.length()).map { results.getJSONObject(it).getString("title") }
                 val word = Regex("\\b" + Regex.escape(keyword) + "(?:s|es)?\\b", RegexOption.IGNORE_CASE)
                 for (title in titles.shuffled().take(2)) {
-                    if (found.size >= count) break
                     wikitext(title).lineSequence().mapNotNull { hook(it) }
                         .filter { word.containsMatchIn(it.text) && wanted(it.text) }.toList().shuffled()
-                        .take(minOf(count - found.size, 3)) // a few per keyword, so all interests come up
-                        .forEach { found[it.text] = it }
+                        .take(10).forEach { found[it.text] = it }
                 }
             }
         }
-        return found.values.toList()
+        // about what the user likes, so a lower bar: the most read first, a few hundred views are enough
+        return mostRead(found.values.filter { it.title != null }, count, MIN_VIEWS_INTEREST)
     }
 
     private fun hook(line: String) = clean(line)?.let { Hook(it, title(line)) }
