@@ -487,6 +487,7 @@
     <string name="fork_widget_trivia_added">Got new trivia</string>
     <string name="fork_widget_trivia_failed">No new trivia (check the Gemini key)</string>
     <string name="fork_widget_trivia_no_key">Add a Gemini key for trivia · tap for settings</string>
+    <string name="fork_widget_trivia_copied">Copied</string>
     <string name="fork_widget_trivia_loading">Getting new trivia…</string>
     <string name="fork_widget_emoji">Emoji ideas widget</string>
     <string name="fork_widget_emoji_summary">6 emojis that fit what you are writing. By default from the built-in emoji dictionary (offline, free, instant) for the last words. The ✨ button or automatic AI let Gemini read the whole sentence (needs a key). Tap to type; the ones you use come first.</string>

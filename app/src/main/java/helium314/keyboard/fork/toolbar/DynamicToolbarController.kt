@@ -584,6 +584,17 @@ class DynamicToolbarController(private val context: Context) {
         setOnClickListener {
             if (helium314.keyboard.fork.slate.SlateKeys.keys(context.prefs()).isEmpty()) openSettings() else showTrivia()
         }
+        // long press: the fact to the clipboard
+        setOnLongClickListener {
+            val fact = text?.toString().orEmpty()
+            if (helium314.keyboard.fork.slate.SlateKeys.keys(context.prefs()).isEmpty() || fact.isBlank()
+                || fact == context.getString(R.string.fork_widget_trivia_loading)) return@setOnLongClickListener false
+            val cm = context.getSystemService(Context.CLIPBOARD_SERVICE) as? android.content.ClipboardManager
+                ?: return@setOnLongClickListener false
+            cm.setPrimaryClip(android.content.ClipData.newPlainText("trivia", fact))
+            KeyboardSwitcher.getInstance().showToast(context.getString(R.string.fork_widget_trivia_copied), true)
+            true
+        }
         trivia = this
     }
 
