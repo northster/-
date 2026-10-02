@@ -1,0 +1,25 @@
+name: DT probe (temporary)
+on: workflow_dispatch
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Misconceptions
+        run: |
+          python3 - <<'PY'
+          import json, urllib.request, urllib.parse, re
+          UA={"User-Agent":"DTKeyboard (https://github.com/northster/-)"}
+          API="https://en.wikipedia.org/w/api.php"
+          def get(params):
+              url=API+"?"+urllib.parse.urlencode(params)
+              return json.load(urllib.request.urlopen(urllib.request.Request(url,headers=UA)))
+          d=get(dict(action="query",format="json",formatversion=2,list="allpages",apnamespace=0,apprefix="List of common misconceptions",aplimit=50,apfilterredir="nonredirects"))
+          titles=[p["title"] for p in d["query"]["allpages"]]
+          print(titles)
+          for t in titles:
+              q=get(dict(action="query",format="json",formatversion=2,redirects=1,prop="extracts",explaintext=1,titles=t))
+              ex=q["query"]["pages"][0].get("extract","")
+              paras=[l.strip() for l in ex.split("\n") if len(l.strip())>60 and not l.startswith("=")]
+              print(t, "chars", len(ex), "paragraphs", len(paras))
+              for l in paras[3:6]: print("   ", l[:250])
+          PY
