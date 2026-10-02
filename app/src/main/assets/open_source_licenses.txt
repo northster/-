@@ -96,8 +96,7 @@ Emoji keywords (Korean and English) for the emoji suggestions.
 Unicode License V3, full text below.
 
 Wikipedia (https://en.wikipedia.org)
-Some trivia facts are retold from the "Did you know" sections of English
-Wikipedia. Wikipedia text is under the Creative Commons Attribution-ShareAlike
+Trivia facts are taken from English Wikipedia articles (its "vital articles"). Wikipedia text is under the Creative Commons Attribution-ShareAlike
 4.0 license (CC BY-SA 4.0), by the Wikipedia contributors.
 
 Online services

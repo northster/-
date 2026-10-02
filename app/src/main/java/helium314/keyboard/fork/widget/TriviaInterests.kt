@@ -9,7 +9,7 @@ import org.json.JSONObject
 
 /**
  * fork: what the user likes to hear trivia about, written freely ("고양이", "로마 제국 역사", "F1"). [share] of each
- * batch is about them: Wikipedia's "Did you know" archive is searched with English keywords Gemini makes once per
+ * batch is about them: Wikipedia is searched with English keywords Gemini makes once per
  * interest (kept with it).
  */
 object TriviaInterests {

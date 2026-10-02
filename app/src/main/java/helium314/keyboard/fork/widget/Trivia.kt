@@ -15,7 +15,7 @@ import org.json.JSONObject
 
 /**
  * fork: useless but true trivia for the toolbar ("A day on Venus is longer than its year."). A batch of short facts
- * (see [fetchBatch]: from Wikipedia's "Did you know", Gemini's own only as an experiment); each time the toolbar opens one
+ * (see [fetchBatch]: from Wikipedia's vital articles, Gemini's own only as an experiment); each time the toolbar opens one
  * is shown, those not seen yet first. Once only a few are left unseen (20 of a batch of 25 seen) the next batch is
  * fetched. A few hundred are kept, a new fact that is already kept (also in other words) is dropped.
  */
@@ -32,7 +32,7 @@ object Trivia {
     /** after a failed fetch, wait this long before trying again on its own */
     private const val RETRY_MS = 15 * 60_000L
     private const val PREF_FAILED = "fork_trivia_failed"
-    /** keys of the Wikipedia hooks taken so far, so none comes twice (about 9 characters each) */
+    /** keys of the Wikipedia articles used so far, so none comes twice (about 9 characters each) */
     private const val PREF_WIKI_SEEN = "fork_trivia_wiki_seen"
     private const val WIKI_SEEN_MAX = 30_000
     /** characters a fact may have, so it fits the widget in two lines */
@@ -56,9 +56,9 @@ object Trivia {
      */
     private fun migrate(prefs: SharedPreferences) {
         val version = prefs.getInt(PREF_VERSION, 0)
-        if (version >= 3) return
-        // version 3: the first Wikipedia facts were about obscure articles and in mixed styles, they go too
-        prefs.edit { putString(PREF_FACTS, "[]"); putInt(PREF_VERSION, 3); remove(PREF_FAILED) }
+        if (version >= 4) return
+        // version 3/4: the Did-you-know facts were about obscure articles and in mixed styles, they go too
+        prefs.edit { putString(PREF_FACTS, "[]"); putInt(PREF_VERSION, 4); remove(PREF_FAILED) }
     }
 
     private fun read(prefs: SharedPreferences): MutableList<Fact> {
@@ -174,8 +174,9 @@ object Trivia {
 
     /**
      * About [BATCH] new facts, null if Gemini could not be reached.
-     *  - normally all from Wikipedia's "Did you know" (checked by people), each hook taken once ever ([PREF_WIKI_SEEN]),
-     *    Gemini only retells them as short sentences in the user's language: one call per batch
+     *  - normally all from Wikipedia's vital articles ([WikiFacts], well-known subjects): Gemini takes the most fun fact
+     *    from the start of each article, in the user's language; each article is used once ever ([PREF_WIKI_SEEN]); one
+     *    call per batch
      *  - experimental ([WidgetPrefs.TRIVIA_AI]): half written by Gemini on three random topics, then checked by Gemini
      *    with a web search, only what is definitely true stays: a second call
      * Without Wikipedia (offline, error) and without the experiment there are no new facts this time.
@@ -185,20 +186,20 @@ object Trivia {
         val ai = prefs.getBoolean(WidgetPrefs.TRIVIA_AI, false)
         val wikiWanted = if (ai) BATCH - BATCH / 2 else BATCH
         val seen = wikiSeen(prefs)
-        val notSeen = { hook: String -> hookKey(hook) !in seen }
-        // the interests' share first (as many as are found), the rest general; some get dropped when they can't be short
+        val notUsed = { title: String -> hookKey(title) !in seen }
+        // the interests' share first (as many as are found), the rest general; a few more than needed, Gemini skips dull ones
         val interests = TriviaInterests.withKeywords(prefs)
         val share = if (interests.isEmpty()) 0f else TriviaInterests.share(prefs)
         val forInterests = Math.round(wikiWanted * share)
         val liked = if (forInterests == 0) emptyList()
-            else WikiFacts.matching(interests.flatMap { it.keywords }, forInterests + 3, notSeen)
+            else WikiFacts.matching(interests.flatMap { it.keywords }, forInterests + 2, notUsed)
         val general = if (share >= 1f && liked.isNotEmpty()) emptyList()
-            else WikiFacts.hooks(wikiWanted - minOf(liked.size, forInterests) + 12) { h -> notSeen(h) && liked.none { it.text == h } }
+            else WikiFacts.articles(wikiWanted - minOf(liked.size, forInterests) + 5) { t -> notUsed(t) && liked.none { it.title == t } }
         val wiki = liked + general
         val own = if (!ai) 0 else if (wiki.isEmpty()) BATCH else BATCH / 2
         if (wiki.isEmpty() && own == 0) {
             Log.w(TAG, "no trivia: Wikipedia not reached")
-            lastError = "위키백과에서 문장을 받지 못함 (Wikipedia: ${WikiFacts.lastError ?: "no hooks"})"
+            lastError = "위키백과를 읽지 못함 (Wikipedia: ${WikiFacts.lastError ?: "no articles"})"
             return null
         }
         // Gemini's own (experiment): the interests take their share of the topics
@@ -210,20 +211,19 @@ object Trivia {
         val style = if (korean) "Write every sentence in the plain written style ending in \"-다\" " +
             "(like \"해달은 서로 손을 잡고 잔다.\"), never -습니다/-요."
             else "Write plain statements in the present or past tense."
-        val prompt = "You write short, true and delightfully useless trivia facts for anyone, no background knowledge " +
+        val prompt = "You write short, true and delightfully surprising trivia facts for anyone, no background knowledge " +
             "needed. Every fact must be correct and well established. Never write popular myths or misconceptions " +
-            "(like goldfish having a 3-second memory). Avoid exact numbers, superlatives and \"the first / the only\" " +
-            "unless you are certain. If unsure, skip it. Each fact is one short sentence in $lang, at most " +
-            "${MAX_CHARS - 5} characters. $style Output only lines starting with \"G: \" or \"W<number>: \", nothing else."
+            "(like goldfish having a 3-second memory). Each fact is one short sentence in $lang, at most " +
+            "${MAX_CHARS - 5} characters, and names its subject so it makes sense on its own. $style " +
+            "Output only lines starting with \"G: \" or \"W<number>: \", nothing else."
         val request = buildString {
             if (own > 0) append("Part G: write $own facts about $topics, one per line, each starting with \"G: \".\n")
             if (wiki.isNotEmpty()) {
-                append("Part W: these facts are checked. Pick the ones an ordinary person finds fun or surprising without ")
-                append("knowing the people, places or works in them; skip the rest (obscure names, local history, ")
-                append("niche works, sports results, politics). Retell each one you pick as one short $lang sentence ")
-                append("starting with \"W\" and its number, like \"W3: \". Keep the meaning exactly, add nothing. A little ")
-                append("known name may be replaced by what it is (\"a French chocolatier\"). Pick at most $wikiWanted.\n")
-                wiki.forEachIndexed { i, h -> append(i + 1).append(". ").append(h.text).append('\n') }
+                append("Part W: below are the starts of Wikipedia articles. For each article, take the one fact from its ")
+                append("text that an ordinary person finds most surprising or fun, and write it as one short sentence ")
+                append("starting with \"W\" and the article's number, like \"W3: \". Use only what the text says, add nothing. ")
+                append("Skip dry definitions (\"X is a city in Y\") and articles with nothing fun. At most $wikiWanted facts.\n\n")
+                wiki.forEachIndexed { i, a -> append(i + 1).append(". ").append(a.title).append(": ").append(a.text.replace('\n', ' ')).append("\n\n") }
             }
             if (own > 0 && avoid.isNotEmpty()) append("\nDo not repeat these or anything close to them:\n").append(avoid)
         }
@@ -233,11 +233,11 @@ object Trivia {
             lastError = "Gemini: ${first.message}"
             return null
         }
-        // these hooks are used up, also the ones that were skipped
-        rememberWiki(prefs, seen, wiki.map { it.text })
+        // these articles are used up, also the ones that were skipped
+        rememberWiki(prefs, seen, wiki.map { it.title })
         // markdown or list marks around the labels ("**W3:**", "- G:") are dropped
         val lines = first.text.lines().map { it.replace("**", "").trim().trimStart('-', '*', '•', ' ') }
-        // "W3: …" is the third hook: its article goes with it (the Korean one when there is one)
+        // "W3: …" is from the third article, which goes with it (the Korean one when there is one)
         val retold = lines.mapNotNull { line ->
             val m = Regex("^W\\s*(\\d+)\\s*[:.)：]\\s*(.+)$").find(line) ?: return@mapNotNull null
             m.groupValues[2].trim() to wiki.getOrNull(m.groupValues[1].toInt() - 1)?.title
@@ -255,7 +255,7 @@ object Trivia {
         return end.endsWith("다") && !end.endsWith("니다") // not -습니다 / -입니다
     }
 
-    /** a hook, the same however it is retold */
+    /** an article used for a fact (it is not used again) */
     private fun hookKey(hook: String) = Integer.toHexString(norm(hook).hashCode())
 
     private fun wikiSeen(prefs: SharedPreferences): MutableSet<String> =

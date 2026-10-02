@@ -482,7 +482,7 @@
     <string name="fork_widget_usage">Claude usage widget</string>
     <string name="fork_widget_usage_summary">5-hour and weekly limits used and time left (needs the claude.ai session key)</string>
     <string name="fork_widget_trivia">Trivia widget</string>
-    <string name="fork_widget_trivia_summary">Short facts from Wikipedia. Tap: next, double tap: Wikipedia article, long press: copy. Needs a Gemini key</string>
+    <string name="fork_widget_trivia_summary">Short facts from Wikipedia\'s core articles. Tap: next, double tap: Wikipedia article, long press: copy. Needs a Gemini key</string>
     <string name="fork_widget_hours">%1$d h</string>
     <string name="fork_trivia_interests">Interests</string>
     <string name="fork_trivia_interests_none">None: trivia about anything</string>

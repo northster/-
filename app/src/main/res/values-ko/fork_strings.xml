@@ -479,7 +479,7 @@
     <string name="fork_widget_usage">Claude 사용량 위젯</string>
     <string name="fork_widget_usage_summary">5시간·주간 한도 사용량과 남은 시간(claude.ai 세션 키 필요)</string>
     <string name="fork_widget_trivia">토막상식 위젯</string>
-    <string name="fork_widget_trivia_summary">위키백과의 짧은 상식을 보여 줍니다. 탭: 다음, 두 번 탭: 위키백과 문서, 길게: 복사. Gemini 키 필요</string>
+    <string name="fork_widget_trivia_summary">위키백과 주요 문서에서 짧은 상식을 뽑아 보여 줍니다. 탭: 다음, 두 번 탭: 위키백과 문서, 길게: 복사. Gemini 키 필요</string>
     <string name="fork_widget_hours">%1$d시간</string>
     <string name="fork_trivia_interests">관심사</string>
     <string name="fork_trivia_interests_none">없음: 아무 주제나</string>
