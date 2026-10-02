@@ -355,9 +355,6 @@ fun createDynamicToolbarSettings(context: Context) = listOf(
     Setting(context, helium314.keyboard.fork.translate.TranslatePanel.PREF_PURPOSE, R.string.fork_translate_purpose) {
         TranslateChoice(it, helium314.keyboard.fork.translate.TranslatePanel.KIND_PURPOSE)
     },
-    Setting(context, helium314.keyboard.fork.gif.GifClient.PREF_AUTO, R.string.fork_gif_auto, R.string.fork_gif_auto_summary) {
-        helium314.keyboard.settings.preferences.SwitchPreference(it, true)
-    },
     Setting(context, helium314.keyboard.fork.gif.GifClient.PREF_KLIPY_KEY, R.string.fork_gif_klipy_key) {
         GifKeyPreference(it.title, it.key, "partner.klipy.com")
     },
@@ -512,8 +509,7 @@ fun WidgetScreen(onClickBack: () -> Unit) {
 /** Tools > GIF: the KLIPY / GIPHY keys */
 @Composable
 fun GifScreen(onClickBack: () -> Unit) {
-    val items = listOf(helium314.keyboard.fork.gif.GifClient.PREF_AUTO,
-        helium314.keyboard.fork.gif.GifClient.PREF_KLIPY_KEY, helium314.keyboard.fork.gif.GifClient.PREF_GIPHY_KEY)
+    val items = listOf(helium314.keyboard.fork.gif.GifClient.PREF_KLIPY_KEY, helium314.keyboard.fork.gif.GifClient.PREF_GIPHY_KEY)
     SearchSettingsScreen(onClickBack = onClickBack, title = stringResource(R.string.fork_screen_gif), settings = items) {
         androidx.compose.foundation.layout.Column {
             androidx.compose.material3.Text(stringResource(R.string.fork_gif_screen_summary),
