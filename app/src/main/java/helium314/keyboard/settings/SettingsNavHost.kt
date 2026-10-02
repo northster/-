@@ -80,6 +80,7 @@ fun SettingsNavHost(
                 onClickTranslate = { navController.navigate(SettingsDestination.ForkTranslate) },
                 onClickGif = { navController.navigate(SettingsDestination.ForkGif) },
                 onClickWidgets = { navController.navigate(SettingsDestination.ForkWidgets) },
+                onClickPermissions = { navController.navigate(SettingsDestination.ForkPermissions) },
                 onClickTypo = { navController.navigate(SettingsDestination.ForkTypo) },
                 onClickGestureTyping = { navController.navigate(SettingsDestination.GestureTyping) },
                 onClickDataGathering = { navController.navigate(SettingsDestination.DataGathering) },
@@ -118,6 +119,9 @@ fun SettingsNavHost(
         }
         composable(SettingsDestination.ForkTranslate) {
             helium314.keyboard.fork.settings.TranslateScreen(onClickBack = ::goBack)
+        }
+        composable(SettingsDestination.ForkPermissions) {
+            helium314.keyboard.fork.settings.PermissionsScreen(onClickBack = ::goBack)
         }
         composable(SettingsDestination.ForkWidgets) {
             helium314.keyboard.fork.settings.WidgetScreen(onClickBack = ::goBack)
@@ -212,6 +216,7 @@ object SettingsDestination {
     const val ForkTranslate = "fork_translate"
     const val ForkGif = "fork_gif"
     const val ForkWidgets = "fork_widgets"
+    const val ForkPermissions = "fork_permissions"
     const val ForkTypo = "fork_typo"
     const val DataGathering = "data_gathering" // remove when data gathering phase is done (end of 2026 latest)
     const val DataReview = "data_review" // remove when data gathering phase is done (end of 2026 latest)

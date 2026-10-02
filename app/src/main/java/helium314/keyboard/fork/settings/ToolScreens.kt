@@ -28,6 +28,8 @@ fun ClipboardScreen(onClickBack: () -> Unit) {
     val b = (ctx.getActivity() as? SettingsActivity)?.prefChanged?.collectAsState()
     if ((b?.value ?: 0) < 0)
         Log.v("irrelevant", "stupid way to trigger recomposition on preference change")
+    // the screenshot switch shows off while the photo permission is missing (it asks again when switched on)
+    androidx.compose.runtime.LaunchedEffect(Unit) { fixScreenshotSwitch(ctx) }
     val history = prefs.getBoolean(Settings.PREF_ENABLE_CLIPBOARD_HISTORY, Defaults.PREF_ENABLE_CLIPBOARD_HISTORY)
     val files = prefs.getBoolean(Settings.PREF_CLIPBOARD_USE_FILES, Defaults.PREF_CLIPBOARD_USE_FILES)
     SearchSettingsScreen(

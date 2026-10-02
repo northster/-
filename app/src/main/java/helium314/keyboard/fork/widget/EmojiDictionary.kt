@@ -26,7 +26,7 @@ object EmojiDictionary {
                     for (line in lines) {
                         val tab = line.indexOf('\t')
                         if (tab <= 0) continue
-                        map[line.substring(0, tab)] = line.substring(tab + 1).split(' ')
+                        map[line.substring(0, tab)] = line.substring(tab + 1).split(' ').filter { !isBoxedLetter(it) }
                     }
                 }
             }
@@ -34,6 +34,9 @@ object EmojiDictionary {
             return map
         }
     }
+
+    /** 🈂 🈚 🅰 …: squares with a letter in them, they look like text rather than an emoji */
+    private fun isBoxedLetter(emoji: String) = emoji.isNotEmpty() && emoji.codePointAt(0) in 0x1F170..0x1F2FF
 
     /** loads the dictionary now (it takes a moment), off the main thread */
     fun preload(context: Context) {
@@ -62,12 +65,27 @@ object EmojiDictionary {
         map[word]?.let { return it }
         // English plural
         if (word.length > 3 && word.endsWith("s")) map[word.dropLast(1)]?.let { return it }
-        // Korean with a particle / ending: the longest start that is a keyword
+        // Korean with a particle / ending ("피자를", "축하해요"): a keyword followed by a known particle or ending.
+        // Any start of the word gave odd emojis ("보여줘" -> "보"), so the rest must be a real particle / ending.
         if (word.any { it in '가'..'힣' }) {
-            for (len in word.length - 1 downTo 1) map[word.substring(0, len)]?.let { return it }
+            for (len in word.length - 1 downTo 1) {
+                val rest = word.substring(len)
+                if (!isEnding(rest) && !(len >= 2 && rest.length == 1)) continue
+                map[word.substring(0, len)]?.let { return it }
+            }
         }
         return emptyList()
     }
+
+    /** particles and endings after a noun or the stem of a 하다 verb */
+    private fun isEnding(rest: String) = rest in ENDINGS || rest.startsWith("하") || rest.startsWith("해")
+        || rest.startsWith("했") || rest.startsWith("한") || rest.startsWith("할") || rest.startsWith("이에") || rest.startsWith("이야")
+
+    private val ENDINGS = setOf(
+        "이", "가", "은", "는", "을", "를", "의", "에", "에서", "에게", "한테", "께", "로", "으로", "와", "과", "랑", "이랑",
+        "도", "만", "까지", "부터", "보다", "처럼", "같이", "이나", "나", "요", "야", "이다", "다", "예요", "에요", "입니다",
+        "이죠", "죠", "인데", "인가", "이네", "네", "들", "들이", "들을", "들은", "들도", "이고", "고", "이지", "지",
+    )
 
     private fun uses(context: Context): Map<String, Int> {
         val o = runCatching { JSONObject(context.prefs().getString(PREF_USE, "{}") ?: "{}") }.getOrNull() ?: return emptyMap()

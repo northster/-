@@ -521,7 +521,8 @@ class DynamicToolbarController(private val context: Context) {
             tb.usageView.setUsage(helium314.keyboard.fork.usage.ClaudeUsage.cached(prefs))
             pages.add(helium314.keyboard.fork.widget.WidgetArea.Page(WidgetPrefs.ID_USAGE, tb.usageView))
         }
-        if (prefs.getBoolean(WidgetPrefs.TRIVIA, true) && gemini)
+        // without a Gemini key it shows how to get one, so the widgets can still be swiped through
+        if (prefs.getBoolean(WidgetPrefs.TRIVIA, true))
             pages.add(helium314.keyboard.fork.widget.WidgetArea.Page(WidgetPrefs.ID_TRIVIA, triviaView()))
         if (prefs.getBoolean(WidgetPrefs.EMOJI, true) && (gemini || emojiSource() != WidgetPrefs.EMOJI_AI)) {
             helium314.keyboard.fork.widget.EmojiDictionary.preload(context)
@@ -551,8 +552,10 @@ class DynamicToolbarController(private val context: Context) {
         gravity = android.view.Gravity.CENTER_VERTICAL or android.view.Gravity.START
         setPadding(0, 0, 0, (6 * context.resources.displayMetrics.density).toInt())
         helium314.keyboard.keyboard.KeyboardTypeface.applyToTextView(this)
-        // tap: the next one
-        setOnClickListener { showTrivia() }
+        // tap: the next one (no Gemini key: the settings)
+        setOnClickListener {
+            if (helium314.keyboard.fork.slate.SlateKeys.keys(context.prefs()).isEmpty()) openSettings() else showTrivia()
+        }
         trivia = this
     }
 
@@ -571,8 +574,18 @@ class DynamicToolbarController(private val context: Context) {
         }
     }
 
+    private fun openSettings() {
+        val intent = android.content.Intent(context, helium314.keyboard.settings.SettingsActivity::class.java)
+            .addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK or android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        runCatching { context.startActivity(intent) }
+    }
+
     private fun showTrivia() {
         val view = trivia ?: return
+        if (helium314.keyboard.fork.slate.SlateKeys.keys(context.prefs()).isEmpty()) {
+            view.setText(R.string.fork_widget_trivia_no_key)
+            return
+        }
         val fact = helium314.keyboard.fork.widget.Trivia.next(context)
         view.text = fact ?: context.getString(R.string.fork_widget_trivia_loading)
         helium314.keyboard.fork.widget.Trivia.refreshIfDue(context) { added -> if (added && fact == null) showTrivia() }
@@ -594,13 +607,20 @@ class DynamicToolbarController(private val context: Context) {
         if (source != WidgetPrefs.EMOJI_AI) {
             // the built-in dictionary, right away
             val aiButton = source == WidgetPrefs.EMOJI_LOCAL_AI && helium314.keyboard.fork.slate.SlateKeys.keys(context.prefs()).isNotEmpty()
-            return showEmojis(helium314.keyboard.fork.widget.EmojiDictionary.suggest(context, text,
-                helium314.keyboard.fork.widget.EmojiSuggest.COUNT), aiButton)
+            val found = helium314.keyboard.fork.widget.EmojiDictionary.suggest(context, text,
+                helium314.keyboard.fork.widget.EmojiSuggest.COUNT)
+            // nothing fits the words: the emojis used last
+            return showEmojis(found.ifEmpty { recentEmojis() }, aiButton)
         }
         val cached = helium314.keyboard.fork.widget.EmojiSuggest.cached(text)
         if (cached != null) return showEmojis(cached, false)
+        // the emojis used last until Gemini answers (and if it finds nothing)
+        showEmojis(recentEmojis(), false)
         helium314.keyboard.fork.widget.EmojiSuggest.suggest(context, text) { showEmojis(it, false) }
     }
+
+    private fun recentEmojis() = runCatching { helium314.keyboard.keyboard.emoji.RecentEmojis.get() }.getOrDefault(mutableListOf())
+        .take(helium314.keyboard.fork.widget.EmojiSuggest.COUNT)
 
     /** ✨: Gemini reads the whole text for emojis */
     private fun askEmojiAi() {
@@ -629,6 +649,7 @@ class DynamicToolbarController(private val context: Context) {
             setTextSize(android.util.TypedValue.COMPLEX_UNIT_SP, 20f)
             setOnClickListener {
                 helium314.keyboard.fork.widget.EmojiDictionary.used(context, e)
+                runCatching { helium314.keyboard.keyboard.emoji.RecentEmojis.add(e) }
                 latinIME?.onTextInput(e)
             }
         }, android.widget.LinearLayout.LayoutParams((38 * density).toInt(), android.widget.LinearLayout.LayoutParams.MATCH_PARENT))

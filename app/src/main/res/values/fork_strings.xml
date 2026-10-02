@@ -51,6 +51,17 @@
     <string name="fork_cat_general">General</string>
     <string name="fork_cat_size">Size &amp; spacing</string>
     <string name="fork_cat_font">Text &amp; fonts</string>
+    <string name="fork_screen_permissions">Permissions</string>
+    <string name="fork_desc_permissions">Photos for screenshots, notification access for codes</string>
+    <string name="fork_permissions_summary">What the app may do and what for. Tap a line to allow it (or change it in the system settings).</string>
+    <string name="fork_permission_photos">Photos</string>
+    <string name="fork_permission_photos_desc">New screenshots go to the clipboard. Choose "Allow all", limited access can\'t see new screenshots</string>
+    <string name="fork_permission_notifications">Notification access</string>
+    <string name="fork_permission_notifications_desc">Verification codes from notifications become a paste chip</string>
+    <string name="fork_permission_app">All app permissions</string>
+    <string name="fork_permission_app_desc">The system page of this app</string>
+    <string name="fork_permission_granted">Allowed</string>
+    <string name="fork_permission_needed">Not allowed</string>
     <string name="fork_open_source">Open-source notices</string>
     <string name="fork_open_source_summary">HeliBoard (GPL-3.0), WM Keyboard, SwiftSlate, pixelarticons (MIT), Unicode CLDR</string>
     <string name="fork_cat_settings_mode">Settings mode</string>
@@ -476,6 +487,7 @@
     <string name="fork_widget_trivia_count">%1$d facts kept</string>
     <string name="fork_widget_trivia_added">Got new trivia</string>
     <string name="fork_widget_trivia_failed">No new trivia (check the Gemini key)</string>
+    <string name="fork_widget_trivia_no_key">Add a Gemini key for trivia · tap for settings</string>
     <string name="fork_widget_trivia_loading">Getting new trivia…</string>
     <string name="fork_widget_emoji">Emoji ideas widget</string>
     <string name="fork_widget_emoji_summary">6 emojis that fit what you are writing. By default from the built-in emoji dictionary (offline, free, instant) for the last words. The ✨ button or automatic AI let Gemini read the whole sentence (needs a key). Tap to type; the ones you use come first.</string>
