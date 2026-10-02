@@ -48,6 +48,11 @@
     <string name="fork_cat_general">일반</string>
     <string name="fork_cat_size">크기 및 간격</string>
     <string name="fork_cat_font">글자 및 글꼴</string>
+    <string name="fork_open_source">오픈소스 고지</string>
+    <string name="fork_open_source_summary">HeliBoard(GPL-3.0), WM Keyboard, SwiftSlate, pixelarticons(MIT), Unicode CLDR</string>
+    <string name="fork_cat_settings_mode">설정 모드</string>
+    <string name="fork_easy_settings">쉬운 설정 모드</string>
+    <string name="fork_easy_settings_summary">자주 쓰는 설정만 보여요. 세부 조절, 애니메이션 세부값, 테스트 기능은 숨겨요(값은 그대로, 검색하면 다 나와요)</string>
     <string name="fork_cat_behavior">키 동작</string>
     <string name="fork_cat_auto_switch">자동으로 문자 자판으로 돌아가기</string>
     <string name="fork_cat_custom_keys">키 사용자 지정</string>

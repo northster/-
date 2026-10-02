@@ -51,6 +51,11 @@
     <string name="fork_cat_general">General</string>
     <string name="fork_cat_size">Size &amp; spacing</string>
     <string name="fork_cat_font">Text &amp; fonts</string>
+    <string name="fork_open_source">Open-source notices</string>
+    <string name="fork_open_source_summary">HeliBoard (GPL-3.0), WM Keyboard, SwiftSlate, pixelarticons (MIT), Unicode CLDR</string>
+    <string name="fork_cat_settings_mode">Settings mode</string>
+    <string name="fork_easy_settings">Easy settings</string>
+    <string name="fork_easy_settings_summary">Shows only the everyday options. Fine tuning, animation details and testers are hidden (they keep their values; search still finds them)</string>
     <string name="fork_cat_behavior">Key behavior</string>
     <string name="fork_cat_auto_switch">Return to letters automatically</string>
     <string name="fork_cat_custom_keys">Custom keys</string>

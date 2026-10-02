@@ -43,6 +43,8 @@ class GifPanel(
     private val adapter = Adapter()
     private val grid = RecyclerView(context)
     private val status = TextView(context)
+    /** "Powered by GIPHY / KLIPY", which the providers ask for wherever their GIFs are shown */
+    private val attribution = TextView(context)
 
     init {
         setBackgroundColor(palette.get(ColorType.MAIN_BACKGROUND))
@@ -58,6 +60,18 @@ class GifPanel(
         status.setTextColor(palette.get(ColorType.KEY_HINT_TEXT))
         KeyboardTypeface.applyToTextView(status)
         addView(status, LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT))
+        attribution.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10f)
+        attribution.setTextColor(palette.get(ColorType.KEY_TEXT))
+        attribution.background = GradientDrawable().apply {
+            cornerRadius = 6 * density
+            setColor(palette.get(ColorType.MAIN_BACKGROUND) and 0x00FFFFFF or (0xD0 shl 24))
+        }
+        val apad = (5 * density).toInt()
+        attribution.setPadding(apad, apad / 3, apad, apad / 3)
+        attribution.text = GifClient.providerName(prefs)?.let { "Powered by $it" }
+        attribution.visibility = if (attribution.text.isNullOrEmpty()) GONE else VISIBLE
+        addView(attribution, LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, Gravity.BOTTOM or Gravity.END)
+            .apply { setMargins(0, 0, (8 * density).toInt(), (6 * density).toInt()) })
     }
 
     var isLoading = false

@@ -247,6 +247,8 @@ fun ThemeColorsScreen(onClickBack: () -> Unit) {
                     )
                 }
             }
+            // easy settings mode: themes are picked, not edited
+            if (!EasySettings.enabled(prefs)) {
             SettingsSection(stringResource(R.string.fork_theme_cat_board), colorRows(boardSlots))
             SettingsSection(stringResource(R.string.fork_theme_cat_keys), colorRows(keySlots) + listOf(
                 @Composable {
@@ -272,6 +274,7 @@ fun ThemeColorsScreen(onClickBack: () -> Unit) {
             ))
             SettingsSection(stringResource(R.string.fork_theme_cat_accent), colorRows(accentSlots))
             SettingsSection(stringResource(R.string.fork_theme_cat_toolbar), colorRows(toolbarSlots))
+            }
             // things that belong to the look but are not part of a theme file
             SettingsSections(listOf(
                 R.string.fork_theme_cat_display,

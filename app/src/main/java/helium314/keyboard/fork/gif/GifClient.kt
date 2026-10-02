@@ -57,6 +57,10 @@ object GifClient {
         return true
     }
 
+    /** whose GIFs are shown, for the attribution the providers ask for ("Powered by GIPHY") */
+    fun providerName(prefs: SharedPreferences): String? =
+        provider(prefs)?.first?.let { if (it == PREF_KLIPY_KEY) "KLIPY" else "GIPHY" }
+
     fun hasKey(prefs: SharedPreferences) = keyOrBuiltIn(prefs, PREF_KLIPY_KEY) != null || keyOrBuiltIn(prefs, PREF_GIPHY_KEY) != null
 
     /** blocking, call off the main thread */

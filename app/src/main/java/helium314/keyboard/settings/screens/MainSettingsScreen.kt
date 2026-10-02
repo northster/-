@@ -40,6 +40,7 @@ import helium314.keyboard.latin.utils.SubtypeLocaleUtils.displayName
 import helium314.keyboard.latin.utils.SubtypeSettings
 import helium314.keyboard.latin.utils.Theme
 import helium314.keyboard.latin.utils.previewDark
+import helium314.keyboard.latin.utils.prefs
 import helium314.keyboard.settings.ImeSetupState
 import helium314.keyboard.settings.SearchSettingsScreen
 import helium314.keyboard.settings.SettingsActivity
@@ -92,6 +93,8 @@ fun MainSettingsScreen(
         }
         val setupState by SettingsActivity.imeSetupState.collectAsState()
         val appName = stringResource(R.string.english_ime_name)
+        // fork: easy settings mode leaves out the screens that are only details
+        val easy = helium314.keyboard.fork.settings.EasySettings.enabled(ctx.prefs())
         // fork: the bottom inset (keyboard, dynamic toolbar) is taken by SearchScreen while laying out. Reading
         // Scaffold's innerPadding here recomposed the whole screen on every frame the keyboard or toolbar moved, on
         // the main thread the keyboard shares with this activity. The keyboard test field is at the bottom of every
@@ -124,7 +127,8 @@ fun MainSettingsScreen(
                     R.drawable.ic_settings_preferences, onClickPreferences),
                 entry(R.string.settings_screen_correction, stringResource(R.string.fork_desc_correction),
                     R.drawable.ic_settings_correction, onClickTextCorrection),
-                entry(R.string.fork_screen_typo, stringResource(R.string.fork_desc_typo),
+                if (easy) null
+                else entry(R.string.fork_screen_typo, stringResource(R.string.fork_desc_typo),
                     R.drawable.ic_settings_gesture, onClickTypo),
                 // fork: no dictionary entry: word suggestions are off, the only dictionary still used is the emoji
                 //  search one, reached from Size & fonts > emoji (ForkSettings.PREF_EMOJI_DICT_LINK)
@@ -133,16 +137,17 @@ fun MainSettingsScreen(
                         R.drawable.ic_settings_gesture, onClickGestureTyping)
                 else null,
                 // we don't even show the menu if data gathering phase ended more than 2 weeks ago
-                if (JniUtils.sHaveGestureLib && System.currentTimeMillis() < END_DATE_EPOCH_MILLIS + TWO_WEEKS_IN_MILLIS)
+                if (!easy && JniUtils.sHaveGestureLib && System.currentTimeMillis() < END_DATE_EPOCH_MILLIS + TWO_WEEKS_IN_MILLIS)
                     entry(R.string.gesture_data_screen, null, R.drawable.ic_settings_gesture, onClickDataGathering)
                 else null,
             ))
-            SettingsSection(stringResource(R.string.fork_main_look), listOf(
+            SettingsSection(stringResource(R.string.fork_main_look), listOfNotNull(
                 entry(R.string.fork_theme_colors, stringResource(R.string.fork_desc_theme_colors),
                     R.drawable.ic_settings_appearance, onClickThemeColors),
                 entry(R.string.settings_screen_appearance, stringResource(R.string.fork_desc_appearance),
                     R.drawable.ic_settings_size, onClickAppearance),
-                entry(R.string.settings_screen_secondary_layouts, stringResource(R.string.fork_desc_layouts),
+                if (easy) null
+                else entry(R.string.settings_screen_secondary_layouts, stringResource(R.string.fork_desc_layouts),
                     R.drawable.ic_settings_layout, onClickLayouts),
             ))
             SettingsSection(stringResource(R.string.fork_main_tools), listOf(

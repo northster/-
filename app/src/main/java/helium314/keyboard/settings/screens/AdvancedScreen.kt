@@ -61,6 +61,8 @@ fun AdvancedSettingsScreen(
     // fork: vertical space swipe, language swipe, touchpad, delete swipe and space long press language
     //  picker are disabled in this fork (see ForkSettings), so they are not shown
     val items = listOf(
+        R.string.fork_cat_settings_mode,
+        helium314.keyboard.fork.settings.EasySettings.PREF,
         R.string.fork_cat_behavior,
         Settings.PREF_KEY_LONGPRESS_TIMEOUT,
         Settings.PREFS_LONG_PRESS_SYMBOLS_FOR_NUMPAD,
@@ -92,6 +94,11 @@ fun AdvancedSettingsScreen(
 
 @SuppressLint("ApplySharedPref")
 fun createAdvancedSettings(context: Context) = listOf(
+    Setting(context, helium314.keyboard.fork.settings.EasySettings.PREF,
+        R.string.fork_easy_settings, R.string.fork_easy_settings_summary)
+    {
+        SwitchPreference(it, false)
+    },
     Setting(context, Settings.PREF_ALWAYS_INCOGNITO_MODE,
         R.string.incognito, R.string.prefs_force_incognito_mode_summary)
     {

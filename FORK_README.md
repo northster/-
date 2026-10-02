@@ -393,3 +393,15 @@ SwiftSlate(github.com/Musheer360/SwiftSlate, MIT)의 명령 방식을 키보드 
   - AI 자동: 예전처럼 입력이 1.2초 멈추면 Gemini에 묻기(같은 글은 캐시, `EmojiSuggest.kt`).
 - 설정 > 팝업 위젯: 위젯별 켜기, 세션 키, 지식 간격/지금 받기. Gemini 요청은 `GeminiClient.run(raw = true)`(변환 프롬프트 없이, 온도 1.0).
 - 분할 키보드 가운데 빈 곳(키가 없는 곳)에서 시작한 위/아래 스와이프와 한손 모드 스와이프도 동작한다(`PointerTracker.onDownEvent`).
+
+## 쉬운 설정 모드
+- 고급 > 설정 모드 > 쉬운 설정 모드. 켜면 자주 쓰는 설정만 보인다(`fork/settings/EasySettings.kt`의 HIDDEN 목록).
+- 숨기는 것: 스와이프 세부 조절, 툴바 애니메이션, 웨이브 / 글로우 / AI 글로우 세부값, 크기 세부(여백, 키 간격), 글꼴,
+  칩 모양, 테스트 기능, 고급의 세부 키 설정. 메인에서는 오타 학습, 보조 레이아웃 화면이 빠지고, 테마는 고르기만 한다(색 편집 숨김).
+- 값은 그대로 유지되고, 검색하면 숨긴 설정도 나온다. 숨긴 키를 `SettingsSections`가 걸러서 모든 화면에 같이 적용된다.
+
+## 라이선스 고지
+- 설정 > 정보 > 오픈소스 고지: `assets/open_source_licenses.txt`(HeliBoard GPL, WM Keyboard / SwiftSlate / pixelarticons MIT 전문)와
+  `assets/emoji_keywords.LICENSE`(Unicode)를 보여 준다. 새로 코드를 가져오면 이 파일에 고지를 추가할 것.
+- GIF 패널 오른쪽 아래에 "Powered by KLIPY / GIPHY"(제공사 요구 사항).
+- 정보 화면의 GitHub와 라이선스 링크는 이 저장소, 레이아웃 / 색상 위키와 토론은 HeliBoard 것을 그대로 쓴다.

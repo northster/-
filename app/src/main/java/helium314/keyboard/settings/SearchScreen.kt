@@ -253,13 +253,15 @@ fun ExpandableSearchField(
 /** fork: shadcn style, settings between two categories (Int string res ids) are grouped in one card */
 @Composable
 fun SettingsSections(settings: List<Any?>) {
+    // fork: easy settings mode hides the details (EasySettings)
+    val prefs = androidx.compose.ui.platform.LocalContext.current.prefs()
     val sections = mutableListOf<Pair<Int?, MutableList<String>>>()
     settings.forEach {
         when (it) {
             is Int -> sections.add(it to mutableListOf())
             is String -> {
                 if (sections.isEmpty()) sections.add(null to mutableListOf())
-                sections.last().second.add(it)
+                if (helium314.keyboard.fork.settings.EasySettings.shows(prefs, it)) sections.last().second.add(it)
             }
         }
     }

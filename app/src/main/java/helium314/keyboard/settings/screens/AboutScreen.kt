@@ -55,10 +55,11 @@ fun AboutScreen(
         SettingsWithoutKey.APP,
         SettingsWithoutKey.VERSION,
         SettingsWithoutKey.LICENSE,
-        SettingsWithoutKey.HIDDEN_FEATURES,
-        SettingsWithoutKey.GITHUB_WIKI,
-        SettingsWithoutKey.COMMUNITY_LINKS,
+        SettingsWithoutKey.OPEN_SOURCE,
         SettingsWithoutKey.GITHUB,
+        SettingsWithoutKey.HIDDEN_FEATURES,
+        // fork: HeliBoard's wiki and community are about HeliBoard, not this app
+
         SettingsWithoutKey.SAVE_LOG,
     )
     SearchSettingsScreen(
@@ -105,6 +106,33 @@ fun createAboutSettings(context: Context) = listOf(
                 intent.data = Links.LICENSE.toUri()
                 intent.action = Intent.ACTION_VIEW
                 ctx.startActivity(intent)
+            },
+            icon = R.drawable.ic_settings_about_license
+        )
+    },
+    // fork: notices of the code and data this app uses (GPL / MIT / Unicode), from assets
+    Setting(context, SettingsWithoutKey.OPEN_SOURCE, R.string.fork_open_source, R.string.fork_open_source_summary) {
+        val ctx = LocalContext.current
+        Preference(
+            name = it.title,
+            description = it.description,
+            onClick = {
+                val text = runCatching {
+                    ctx.assets.open("open_source_licenses.txt").bufferedReader().use { r -> r.readText() } + "\n\n" +
+                        ctx.assets.open("emoji_keywords.LICENSE").bufferedReader().use { r -> r.readText() }
+                }.getOrDefault("")
+                val view = TextView(ctx).apply {
+                    this.text = text
+                    setTextIsSelectable(true)
+                    textSize = 12f
+                    val pad = (20 * resources.displayMetrics.density).toInt()
+                    setPadding(pad, pad / 2, pad, pad)
+                }
+                AlertDialog.Builder(ctx)
+                    .setTitle(R.string.fork_open_source)
+                    .setView(android.widget.ScrollView(ctx).apply { addView(view) })
+                    .setPositiveButton(R.string.dialog_close, null)
+                    .show()
             },
             icon = R.drawable.ic_settings_about_license
         )
