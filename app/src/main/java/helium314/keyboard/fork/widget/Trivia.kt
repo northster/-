@@ -131,14 +131,25 @@ object Trivia {
         val ai = prefs.getBoolean(WidgetPrefs.TRIVIA_AI, false)
         val wikiWanted = if (ai) BATCH - BATCH / 2 else BATCH
         val seen = wikiSeen(prefs)
-        // some get dropped when they can't be said short
-        val wiki = WikiFacts.hooks(wikiWanted + 8) { hookKey(it) !in seen }
+        val notSeen = { hook: String -> hookKey(hook) !in seen }
+        // the interests' share first (as many as are found), the rest general; some get dropped when they can't be short
+        val interests = TriviaInterests.withKeywords(prefs)
+        val share = if (interests.isEmpty()) 0f else TriviaInterests.share(prefs)
+        val forInterests = Math.round(wikiWanted * share)
+        val liked = if (forInterests == 0) emptyList()
+            else WikiFacts.matching(interests.flatMap { it.keywords }, forInterests + 3, notSeen)
+        val general = if (share >= 1f && liked.isNotEmpty()) emptyList()
+            else WikiFacts.hooks(wikiWanted - minOf(liked.size, forInterests) + 6) { notSeen(it) && it !in liked }
+        val wiki = liked + general
         val own = if (!ai) 0 else if (wiki.isEmpty()) BATCH else BATCH / 2
         if (wiki.isEmpty() && own == 0) {
             Log.w(TAG, "no trivia: Wikipedia not reached")
             return null
         }
-        val topics = TOPICS.shuffled().take(3).joinToString(", ")
+        // Gemini's own (experiment): the interests take their share of the topics
+        val liking = interests.map { it.text }.shuffled()
+        val topics = (if (liking.isNotEmpty() && Math.random() < share) liking.take(3) else TOPICS.shuffled().take(3))
+            .joinToString(", ")
         val lang = if (korean) "Korean" else "English"
         val prompt = "You write short, true and delightfully useless trivia facts. Every fact must be correct and " +
             "well established. Never write popular myths or misconceptions (like goldfish having a 3-second memory). " +

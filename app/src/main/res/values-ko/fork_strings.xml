@@ -479,6 +479,13 @@
     <string name="fork_widget_trivia">랜덤 지식 위젯</string>
     <string name="fork_widget_trivia_summary">툴바를 열 때마다 쓸데없지만 사실인 지식 하나(안 본 것 먼저). 위키백과 \"Did you know\"에서 가져와(편집자가 검토한 문장) Gemini가 짧게 옮겨요. 누르면 다음 지식, 길게 누르면 복사. 25개씩 받고 20개를 보면 다음 25개, 같은 건 다시 안 나와요. Gemini 키 필요</string>
     <string name="fork_widget_hours">%1$d시간</string>
+    <string name="fork_trivia_interests">관심사</string>
+    <string name="fork_trivia_interests_none">없음: 아무 주제나</string>
+    <string name="fork_trivia_interests_help">좋아하는 걸 편하게 적어요(고양이, 로마 역사, F1…). 매번 받는 지식 중 일부가 이 주제로 나와요.</string>
+    <string name="fork_trivia_interests_hint">예: 심해 생물</string>
+    <string name="fork_trivia_interests_add">추가</string>
+    <string name="fork_trivia_interest_share">관심사 비율</string>
+    <string name="fork_trivia_interest_share_value">25개 중 %1$d개 (%2$d%%)</string>
     <string name="fork_widget_trivia_ai">Gemini가 쓴 상식 섞기 (실험)</string>
     <string name="fork_widget_trivia_ai_summary">매번 절반을 위키백과 대신 Gemini가 쓰고, 웹 검색으로 다시 확인해요. 더 다양하지만 사람이 검토한 내용은 아니에요</string>
     <string name="fork_widget_trivia_now">지금 새 지식 받기</string>

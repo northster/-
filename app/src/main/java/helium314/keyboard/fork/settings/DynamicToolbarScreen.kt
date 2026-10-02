@@ -268,6 +268,16 @@ fun createDynamicToolbarSettings(context: Context) = listOf(
     Setting(context, helium314.keyboard.fork.widget.WidgetPrefs.TRIVIA, R.string.fork_widget_trivia, R.string.fork_widget_trivia_summary) {
         SwitchPreference(it, true) { DynamicToolbarController.current?.setToolbarItems() }
     },
+    Setting(context, helium314.keyboard.fork.widget.TriviaInterests.PREF, R.string.fork_trivia_interests) {
+        TriviaInterestsPreference(it.title)
+    },
+    Setting(context, helium314.keyboard.fork.widget.TriviaInterests.PREF_SHARE, R.string.fork_trivia_interest_share) { setting ->
+        val ctx = androidx.compose.ui.platform.LocalContext.current
+        // a plain number: how many of each batch of 25 are about the interests
+        InlineSliderPreference(name = setting.title, key = setting.key,
+            default = helium314.keyboard.fork.widget.TriviaInterests.DEFAULT_SHARE, range = 0f..1f, step = 0.2f,
+            format = { ctx.getString(R.string.fork_trivia_interest_share_value, (it * 25).roundToInt(), (it * 100).roundToInt()) })
+    },
     Setting(context, helium314.keyboard.fork.widget.WidgetPrefs.TRIVIA_AI, R.string.fork_widget_trivia_ai,
         R.string.fork_widget_trivia_ai_summary) {
         SwitchPreference(it, false)
@@ -488,6 +498,10 @@ fun WidgetScreen(onClickBack: () -> Unit) {
         helium314.keyboard.fork.usage.ClaudeUsage.PREF_SESSION_KEY.takeIf { usage },
         R.string.fork_widget_cat_trivia,
         helium314.keyboard.fork.widget.WidgetPrefs.TRIVIA,
+        helium314.keyboard.fork.widget.TriviaInterests.PREF.takeIf { trivia },
+        helium314.keyboard.fork.widget.TriviaInterests.PREF_SHARE.takeIf {
+            trivia && helium314.keyboard.fork.widget.TriviaInterests.all(prefs).isNotEmpty()
+        },
         helium314.keyboard.fork.widget.WidgetPrefs.TRIVIA_AI.takeIf { trivia },
         helium314.keyboard.fork.widget.WidgetPrefs.TRIVIA_NOW.takeIf { trivia },
         R.string.fork_widget_cat_emoji,

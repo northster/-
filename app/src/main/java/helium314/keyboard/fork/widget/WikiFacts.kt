@@ -16,6 +16,7 @@ object WikiFacts {
     private val MONTHS = listOf("January", "February", "March", "April", "May", "June", "July", "August", "September",
         "October", "November", "December")
     private const val FIRST_YEAR = 2012
+    private const val API = "https://en.wikipedia.org/w/api.php"
 
     /**
      * up to [count] hooks ("... that X did Y?" without the "... that") that are [wanted] (not taken before), from random
@@ -28,14 +29,43 @@ object WikiFacts {
             runCatching {
                 val lastYear = Calendar.getInstance().get(Calendar.YEAR) - 1
                 val page = "Wikipedia:Recent additions/${(FIRST_YEAR..lastYear).random()}/${MONTHS.random()}"
-                val url = "https://en.wikipedia.org/w/api.php?action=parse&format=json&formatversion=2&prop=wikitext&page=" +
-                    URLEncoder.encode(page, "UTF-8")
-                val wikitext = JSONObject(get(url)).getJSONObject("parse").getString("wikitext")
-                wikitext.lineSequence().mapNotNull { clean(it) }.filter(wanted).toList().shuffled()
+                wikitext(page).lineSequence().mapNotNull { clean(it) }.filter(wanted).toList().shuffled()
                     .take(count - found.size).forEach { found.add(it) }
             }
         }
         return found.toList()
+    }
+
+    /**
+     * up to [count] hooks that mention one of [keywords] (as a word), found with Wikipedia's search in the archive
+     * pages; blocking, empty on errors
+     */
+    fun matching(keywords: List<String>, count: Int, wanted: (String) -> Boolean): List<String> {
+        val found = LinkedHashSet<String>()
+        for (keyword in keywords.shuffled().take(4)) {
+            if (found.size >= count) break
+            runCatching {
+                val query = "\"$keyword\" prefix:Wikipedia:Recent additions/"
+                val url = "$API?action=query&format=json&formatversion=2&list=search&srnamespace=4&srlimit=10&srsearch=" +
+                    URLEncoder.encode(query, "UTF-8")
+                val results = JSONObject(get(url)).getJSONObject("query").getJSONArray("search")
+                val titles = (0 until results.length()).map { results.getJSONObject(it).getString("title") }
+                val word = Regex("\\b" + Regex.escape(keyword) + "(?:s|es)?\\b", RegexOption.IGNORE_CASE)
+                for (title in titles.shuffled().take(2)) {
+                    if (found.size >= count) break
+                    wikitext(title).lineSequence().mapNotNull { clean(it) }
+                        .filter { word.containsMatchIn(it) && wanted(it) }.toList().shuffled()
+                        .take(minOf(count - found.size, 3)) // a few per keyword, so all interests come up
+                        .forEach { found.add(it) }
+                }
+            }
+        }
+        return found.toList()
+    }
+
+    private fun wikitext(title: String): String {
+        val url = "$API?action=parse&format=json&formatversion=2&prop=wikitext&page=" + URLEncoder.encode(title, "UTF-8")
+        return JSONObject(get(url)).getJSONObject("parse").getString("wikitext")
     }
 
     /** a hook line as plain text, null if it is not one or has markup that can't be read simply */
