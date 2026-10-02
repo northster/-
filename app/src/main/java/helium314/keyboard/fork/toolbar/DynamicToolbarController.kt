@@ -24,6 +24,7 @@ import helium314.keyboard.keyboard.KeyboardSwitcher
 import helium314.keyboard.latin.R
 import helium314.keyboard.latin.settings.Settings
 import helium314.keyboard.latin.common.ColorType
+import helium314.keyboard.fork.widget.WidgetPrefs
 import helium314.keyboard.latin.utils.Log
 import helium314.keyboard.latin.utils.prefs
 
@@ -245,6 +246,8 @@ class DynamicToolbarController(private val context: Context) {
         applyChipState()
         context.prefs().edit { putBoolean(ForkSettings.PREF_TOOLBAR_EXPANDED, expanded) }
         Log.i(TAG, "toolbar ${if (expanded) "expanded" else "collapsed"}")
+        // a new fact each time the toolbar opens
+        if (expanded) onWidgetShown(toolbar?.widgetArea?.currentId, opened = true)
 
         if (expanded) {
             // resize the app once, at the start
@@ -510,9 +513,104 @@ class DynamicToolbarController(private val context: Context) {
     /** the tools row, with the Claude usage lines when a claude.ai key is set */
     fun setToolbarItems() {
         val tb = toolbar ?: return
-        val usage = helium314.keyboard.fork.usage.ClaudeUsage.hasKey(context.prefs())
-        tb.setItems(ToolbarItems.defaultItems, ToolbarItems.endItems, ::onItemClicked, usage)
-        if (usage) tb.usageView.setUsage(helium314.keyboard.fork.usage.ClaudeUsage.cached(context.prefs()))
+        val prefs = context.prefs()
+        // the popup widgets that are on and can work (keys set)
+        val pages = ArrayList<helium314.keyboard.fork.widget.WidgetArea.Page>()
+        val gemini = helium314.keyboard.fork.slate.SlateKeys.keys(prefs).isNotEmpty()
+        if (prefs.getBoolean(WidgetPrefs.USAGE, true) && helium314.keyboard.fork.usage.ClaudeUsage.hasKey(prefs)) {
+            tb.usageView.setUsage(helium314.keyboard.fork.usage.ClaudeUsage.cached(prefs))
+            pages.add(helium314.keyboard.fork.widget.WidgetArea.Page(WidgetPrefs.ID_USAGE, tb.usageView))
+        }
+        if (prefs.getBoolean(WidgetPrefs.TRIVIA, true) && gemini)
+            pages.add(helium314.keyboard.fork.widget.WidgetArea.Page(WidgetPrefs.ID_TRIVIA, triviaView()))
+        if (prefs.getBoolean(WidgetPrefs.EMOJI, true) && gemini)
+            pages.add(helium314.keyboard.fork.widget.WidgetArea.Page(WidgetPrefs.ID_EMOJI, emojiView()))
+        tb.setItems(ToolbarItems.defaultItems, ToolbarItems.endItems, ::onItemClicked, widgets = pages.isNotEmpty())
+        tb.widgetArea.setPages(pages, prefs.getString(WidgetPrefs.PAGE, null))
+        tb.widgetArea.onPageChanged = { id ->
+            prefs.edit { putString(WidgetPrefs.PAGE, id) }
+            onWidgetShown(id, opened = false)
+        }
+        onWidgetShown(tb.widgetArea.currentId, opened = true)
+    }
+
+    // ---------------------------------------------------------------- popup widgets
+
+    private var trivia: android.widget.TextView? = null
+    private var emojiRow: android.widget.LinearLayout? = null
+    private val emojiSoon = Runnable { suggestEmoji() }
+
+    private fun triviaView() = trivia ?: android.widget.TextView(context).apply {
+        val colors = Settings.getValues().mColors
+        maxLines = 2
+        ellipsize = android.text.TextUtils.TruncateAt.END
+        setTextSize(android.util.TypedValue.COMPLEX_UNIT_SP, 12.5f)
+        setTextColor(colors.get(ColorType.KEY_TEXT))
+        gravity = android.view.Gravity.CENTER_VERTICAL or android.view.Gravity.START
+        setPadding(0, 0, 0, (6 * context.resources.displayMetrics.density).toInt())
+        helium314.keyboard.keyboard.KeyboardTypeface.applyToTextView(this)
+        // tap: the next one
+        setOnClickListener { showTrivia() }
+        trivia = this
+    }
+
+    private fun emojiView() = emojiRow ?: android.widget.LinearLayout(context).apply {
+        orientation = android.widget.LinearLayout.HORIZONTAL
+        gravity = android.view.Gravity.CENTER_VERTICAL or android.view.Gravity.START
+        emojiRow = this
+        showEmojis(emptyList())
+    }
+
+    /** [id] is shown now; [opened]: because the toolbar opened (a new fact then) */
+    private fun onWidgetShown(id: String?, opened: Boolean) {
+        when (id) {
+            WidgetPrefs.ID_TRIVIA -> if (opened || trivia?.text.isNullOrEmpty()) showTrivia()
+            WidgetPrefs.ID_EMOJI -> suggestEmoji()
+        }
+    }
+
+    private fun showTrivia() {
+        val view = trivia ?: return
+        val fact = helium314.keyboard.fork.widget.Trivia.next(context)
+        view.text = fact ?: context.getString(R.string.fork_widget_trivia_loading)
+        helium314.keyboard.fork.widget.Trivia.refreshIfDue(context) { added -> if (added && fact == null) showTrivia() }
+    }
+
+    /** typing paused: emojis for the text, when the emoji widget is what shows */
+    private fun scheduleEmoji() {
+        handler.removeCallbacks(emojiSoon)
+        if (toolbar?.widgetArea?.currentId != WidgetPrefs.ID_EMOJI || !isExpanded) return
+        handler.postDelayed(emojiSoon, 1200)
+    }
+
+    private fun suggestEmoji() {
+        if (toolbar?.widgetArea?.currentId != WidgetPrefs.ID_EMOJI) return
+        val text = latinIME?.forkTextBeforeCursor(200)?.toString().orEmpty()
+        val cached = helium314.keyboard.fork.widget.EmojiSuggest.cached(text)
+        if (cached != null) return showEmojis(cached)
+        helium314.keyboard.fork.widget.EmojiSuggest.suggest(context, text) { showEmojis(it) }
+    }
+
+    private fun showEmojis(emojis: List<String>) {
+        val row = emojiRow ?: return
+        val colors = Settings.getValues().mColors
+        val density = context.resources.displayMetrics.density
+        row.removeAllViews()
+        if (emojis.isEmpty()) {
+            row.addView(android.widget.TextView(context).apply {
+                setText(R.string.fork_widget_emoji_hint)
+                setTextSize(android.util.TypedValue.COMPLEX_UNIT_SP, 12f)
+                setTextColor(colors.get(ColorType.KEY_HINT_TEXT))
+                helium314.keyboard.keyboard.KeyboardTypeface.applyToTextView(this)
+            })
+            return
+        }
+        for (e in emojis) row.addView(android.widget.TextView(context).apply {
+            text = e
+            gravity = android.view.Gravity.CENTER
+            setTextSize(android.util.TypedValue.COMPLEX_UNIT_SP, 20f)
+            setOnClickListener { latinIME?.onTextInput(e) }
+        }, android.widget.LinearLayout.LayoutParams((38 * density).toInt(), android.widget.LinearLayout.LayoutParams.MATCH_PARENT))
     }
 
     /** new usage numbers now and then, when the keyboard shows */
@@ -644,6 +742,7 @@ class DynamicToolbarController(private val context: Context) {
 
     /** the text or the cursor changed: look at the text before the cursor once the caches are updated */
     fun onTextChangedSoon() {
+        scheduleEmoji()
         handler.removeCallbacks(textCheck)
         handler.post(textCheck)
     }

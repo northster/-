@@ -27,7 +27,8 @@ object GeminiClient {
     private val FENCE = Regex("^```[a-zA-Z]*\\n?|\\n?```$")
 
     /** runs [prompt] on [text] with the stored keys, trying the next key when one is rate limited or broken */
-    fun run(prefs: SharedPreferences, prompt: String, text: String, search: Boolean): Outcome {
+    /** [raw]: [prompt] is the whole instruction and [text] the request (widgets), not a text to transform */
+    fun run(prefs: SharedPreferences, prompt: String, text: String, search: Boolean, raw: Boolean = false): Outcome {
         if (!KeyCipher.available) return Outcome.Failure("키 저장소를 쓸 수 없어요")
         val keys = SlateKeys.keys(prefs)
         if (keys.isEmpty()) return Outcome.Failure("Gemini API 키가 없어요 (설정 > AI 명령)")
@@ -37,7 +38,7 @@ object GeminiClient {
         while (tried.size < keys.size) {
             val key = SlateKeys.nextKey(prefs, tried) ?: break
             tried.add(key)
-            val result = generate(prompt, text, key, model, search)
+            val result = generate(prompt, text, key, model, search, raw)
             if (result is Attempt.Ok) return Outcome.Success(result.text)
             val failed = result as Attempt.Failed
             last = failed.message
@@ -52,7 +53,7 @@ object GeminiClient {
         class Failed(val message: String, val tryNextKey: Boolean, val retryAfterSeconds: Long? = null) : Attempt
     }
 
-    private fun generate(prompt: String, text: String, apiKey: String, model: String, search: Boolean): Attempt {
+    private fun generate(prompt: String, text: String, apiKey: String, model: String, search: Boolean, raw: Boolean): Attempt {
         var connection: HttpURLConnection? = null
         return try {
             val safeModel = model.replace(Regex("[^a-zA-Z0-9._-]"), "")
@@ -65,14 +66,16 @@ object GeminiClient {
             connection.connectTimeout = 30_000
             connection.readTimeout = 60_000
             val body = JSONObject()
-                .put("systemInstruction", JSONObject().put("parts", JSONArray().put(JSONObject().put("text", SYSTEM_PROMPT_PREFIX + prompt))))
-                .put("contents", JSONArray().put(JSONObject().put("parts", JSONArray().put(JSONObject().put("text", "<input>\n$text\n</input>")))))
+                .put("systemInstruction", JSONObject().put("parts", JSONArray().put(JSONObject().put("text",
+                    if (raw) prompt else SYSTEM_PROMPT_PREFIX + prompt))))
+                .put("contents", JSONArray().put(JSONObject().put("parts", JSONArray().put(JSONObject().put("text",
+                    if (raw) text else "<input>\n$text\n</input>")))))
                 .put("safetySettings", JSONArray().apply {
                     for (cat in arrayOf("HARM_CATEGORY_HARASSMENT", "HARM_CATEGORY_HATE_SPEECH", "HARM_CATEGORY_SEXUALLY_EXPLICIT",
                             "HARM_CATEGORY_DANGEROUS_CONTENT", "HARM_CATEGORY_CIVIC_INTEGRITY"))
                         put(JSONObject().put("category", cat).put("threshold", "BLOCK_NONE"))
                 })
-                .put("generationConfig", JSONObject().put("temperature", 0.5))
+                .put("generationConfig", JSONObject().put("temperature", if (raw) 1.0 else 0.5))
             // fork: let the model search the web first (Gemini grounding with Google Search)
             if (search) body.put("tools", JSONArray().put(JSONObject().put("google_search", JSONObject())))
             connection.outputStream.use { it.write(body.toString().toByteArray(Charsets.UTF_8)) }

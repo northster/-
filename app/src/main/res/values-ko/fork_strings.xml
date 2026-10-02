@@ -451,4 +451,24 @@
     <string name="fork_translate_target_sentence">문장</string>
     <string name="fork_translate_target_paragraph">문단</string>
     <string name="fork_translate_target_all">전체</string>
+    <string name="fork_screen_widgets">팝업 위젯</string>
+    <string name="fork_desc_widgets">툴바 오른쪽 칸: Claude 사용량, 랜덤 지식, 이모지 추천</string>
+    <string name="fork_widget_screen_summary">툴바의 도구 버튼 오른쪽 칸에 위젯을 하나씩 보여줘요. 그 칸을 좌우로 밀면 다음 위젯으로 넘어가요.</string>
+    <string name="fork_widget_cat_usage">Claude 사용량</string>
+    <string name="fork_widget_cat_trivia">랜덤 지식</string>
+    <string name="fork_widget_cat_emoji">이모지 추천</string>
+    <string name="fork_widget_usage">Claude 사용량 위젯</string>
+    <string name="fork_widget_usage_summary">5시간·주간 한도 사용량과 남은 시간(claude.ai 세션 키 필요)</string>
+    <string name="fork_widget_trivia">랜덤 지식 위젯</string>
+    <string name="fork_widget_trivia_summary">툴바를 열 때마다 쓸데없지만 사실인 지식 하나(안 본 것 먼저). 누르면 다음 지식. Gemini 키 필요</string>
+    <string name="fork_widget_trivia_hours">새 지식 받는 간격</string>
+    <string name="fork_widget_hours">%1$d시간</string>
+    <string name="fork_widget_trivia_now">지금 새 지식 받기</string>
+    <string name="fork_widget_trivia_count">모아 둔 지식 %1$d개</string>
+    <string name="fork_widget_trivia_added">새 지식을 받았어요</string>
+    <string name="fork_widget_trivia_failed">지식을 받지 못했어요 (Gemini 키 확인)</string>
+    <string name="fork_widget_trivia_loading">새 지식을 받는 중…</string>
+    <string name="fork_widget_emoji">이모지 추천 위젯</string>
+    <string name="fork_widget_emoji_summary">쓰고 있는 글에 어울리는 이모지 6개를 추천해요(입력이 멈추면 Gemini에 물어봄). 누르면 입력. Gemini 키 필요</string>
+    <string name="fork_widget_emoji_hint">글을 쓰면 어울리는 이모지를 추천해요</string>
 </resources>

@@ -454,4 +454,24 @@
     <string name="fork_translate_target_sentence">Sentence</string>
     <string name="fork_translate_target_paragraph">Paragraph</string>
     <string name="fork_translate_target_all">All</string>
+    <string name="fork_screen_widgets">Popup widgets</string>
+    <string name="fork_desc_widgets">The toolbar\'s right part: Claude usage, random trivia, emoji ideas</string>
+    <string name="fork_widget_screen_summary">The part of the toolbar right of the tool buttons shows one widget at a time. Swipe it sideways for the next one.</string>
+    <string name="fork_widget_cat_usage">Claude usage</string>
+    <string name="fork_widget_cat_trivia">Random trivia</string>
+    <string name="fork_widget_cat_emoji">Emoji ideas</string>
+    <string name="fork_widget_usage">Claude usage widget</string>
+    <string name="fork_widget_usage_summary">5-hour and weekly limits used and time left (needs the claude.ai session key)</string>
+    <string name="fork_widget_trivia">Trivia widget</string>
+    <string name="fork_widget_trivia_summary">A useless but true fact each time the toolbar opens (unseen first). Tap for the next one. Needs a Gemini key</string>
+    <string name="fork_widget_trivia_hours">New trivia every</string>
+    <string name="fork_widget_hours">%1$d h</string>
+    <string name="fork_widget_trivia_now">Get new trivia now</string>
+    <string name="fork_widget_trivia_count">%1$d facts kept</string>
+    <string name="fork_widget_trivia_added">Got new trivia</string>
+    <string name="fork_widget_trivia_failed">No new trivia (check the Gemini key)</string>
+    <string name="fork_widget_trivia_loading">Getting new trivia…</string>
+    <string name="fork_widget_emoji">Emoji ideas widget</string>
+    <string name="fork_widget_emoji_summary">6 emojis that fit what you are writing (asks Gemini when typing pauses). Tap to type. Needs a Gemini key</string>
+    <string name="fork_widget_emoji_hint">Write something for emoji ideas</string>
 </resources>

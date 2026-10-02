@@ -103,33 +103,28 @@ class DynamicToolbarView @JvmOverloads constructor(
         Settings.getValues().mColors.setColor(this, ColorType.TOOL_BAR_KEY)
     }
 
-    /** Claude usage between the tools and settings, when a claude.ai key is set ([setItems] with showUsage) */
+    /** Claude usage, one of the popup widgets */
     val usageView = helium314.keyboard.fork.usage.UsageView(context)
+    /** the popup area right of the tool buttons (widgets switched with a sideways swipe) */
+    val widgetArea = helium314.keyboard.fork.widget.WidgetArea(context)
 
+    /** [widgets]: the tools packed to the left, the popup area in the room up to the end buttons */
     fun setItems(items: List<ToolbarItem>, endItems: List<ToolbarItem>, onClick: (ToolbarItem) -> Unit,
-                 showUsage: Boolean = false) {
+                 widgets: Boolean = false) {
         buttons.removeAllViews()
-        (usageView.parent as? android.view.ViewGroup)?.removeView(usageView)
+        (widgetArea.parent as? android.view.ViewGroup)?.removeView(widgetArea)
         val colors = Settings.getValues().mColors
         colors.setBackground(this, ColorType.MAIN_BACKGROUND) // same as keyboard, looks like the keyboard grows
-        if (showUsage) {
-            // tools packed to the left; the usage (its own width) and everything after it to the right, the room
-            // in between stays empty on wide screens
-            val settings = items.filter { it.id == ToolbarItems.MORE }
-            for (item in items - settings.toSet()) {
+        if (widgets) {
+            for (item in items) {
                 val button = iconButton(item.icon, context.getString(item.label)) { onClick(item) }.apply { tag = item.id }
                 buttons.addView(button, LinearLayout.LayoutParams((48 * density).toInt(), LayoutParams.MATCH_PARENT))
             }
-            // weighted, so it gets only the room left after the buttons (settings keeps its full size on narrow
-            // screens); it draws at its right end
-            buttons.addView(usageView, LinearLayout.LayoutParams(0, LayoutParams.MATCH_PARENT, 1f).apply {
+            // weighted: it gets the room left after the buttons
+            buttons.addView(widgetArea, LinearLayout.LayoutParams(0, LayoutParams.MATCH_PARENT, 1f).apply {
                 marginStart = (6 * density).toInt()
                 marginEnd = (4 * density).toInt()
             })
-            for (item in settings) {
-                val button = iconButton(item.icon, context.getString(item.label)) { onClick(item) }.apply { tag = item.id }
-                buttons.addView(button, LinearLayout.LayoutParams((48 * density).toInt(), LayoutParams.MATCH_PARENT))
-            }
         } else for (item in items) {
             val button = iconButton(item.icon, context.getString(item.label)) { onClick(item) }.apply { tag = item.id }
             buttons.addView(button, LinearLayout.LayoutParams(0, LayoutParams.MATCH_PARENT, 1f))

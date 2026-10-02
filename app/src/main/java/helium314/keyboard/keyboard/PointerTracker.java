@@ -696,7 +696,9 @@ public final class PointerTracker implements PointerTrackerQueue.Element,
         if (!isOnlyPointer) abortAllToolbarSwipes();
         sPointerTrackerQueue.add(this);
         onDownEventInternal(x, y, eventTime);
-        if (isOnlyPointer && key != null && mCurrentKey != null && !mIsTrackingForActionDisabled
+        // fork: swipes also start where there is no key, e.g. the empty middle of the split keyboard
+        final boolean onEmpty = key == null || key.isSpacer();
+        if (isOnlyPointer && (onEmpty || mCurrentKey != null) && !mIsTrackingForActionDisabled
                 && ForkSettings.isToolbarSwipeEnabled()) {
             mToolbarSwipeDetector.onDown(x, y, eventTime,
                     ForkSettings.swipeThresholds(Resources.getSystem().getDisplayMetrics().density));
@@ -704,8 +706,8 @@ public final class PointerTracker implements PointerTrackerQueue.Element,
             mToolbarSwipeDetector.abort();
         }
         // fork: not from space / delete (their own sideways swipes), not with gesture typing (a fast stroke is a word)
-        if (isOnlyPointer && key != null && mCurrentKey != null && !mIsTrackingForActionDisabled
-                && key.getCode() != Constants.CODE_SPACE && key.getCode() != KeyCode.DELETE
+        if (isOnlyPointer && (onEmpty || (mCurrentKey != null
+                && key.getCode() != Constants.CODE_SPACE && key.getCode() != KeyCode.DELETE)) && !mIsTrackingForActionDisabled
                 && !sGestureEnabler.shouldHandleGesture() && ForkSettings.isOneHandedSwipeEnabled()
                 && mKeyboard != null) {
             mOneHandedFlingDetector.onDown(x, y, eventTime,

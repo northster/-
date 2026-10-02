@@ -78,6 +78,7 @@ fun MainSettingsScreen(
     onClickBack: () -> Unit,
     onClickTranslate: () -> Unit = {},
     onClickGif: () -> Unit = {},
+    onClickWidgets: () -> Unit = {},
 ) {
     SearchSettingsScreen(
         onClickBack = onClickBack,
@@ -158,6 +159,8 @@ fun MainSettingsScreen(
                     R.drawable.ic_dot_translate, onClickTranslate),
                 entry(R.string.fork_screen_gif, stringResource(R.string.fork_desc_gif),
                     R.drawable.ic_dot_gif, onClickGif),
+                entry(R.string.fork_screen_widgets, stringResource(R.string.fork_desc_widgets),
+                    R.drawable.ic_dot_more, onClickWidgets),
             ))
             SettingsSection(stringResource(R.string.fork_main_more), listOf(
                 entry(R.string.settings_screen_advanced, stringResource(R.string.fork_desc_advanced),

@@ -80,8 +80,6 @@ fun DynamicToolbarScreen(
             GlowPrefs.GLOW_DOT_SIZE.takeIf { glow },
             GlowPrefs.GLOW_DOT_SPACING.takeIf { glow },
             GlowPrefs.GLOW_BLOOM.takeIf { glow },
-            R.string.fork_cat_claude_usage,
-            helium314.keyboard.fork.usage.ClaudeUsage.PREF_SESSION_KEY,
             R.string.fork_cat_ai_glow,
             GlowPrefs.AI_GLOW,
             GlowPrefs.AI_GLOW_TEST.takeIf { aiGlow },
@@ -264,6 +262,31 @@ fun createDynamicToolbarSettings(context: Context) = listOf(
     Setting(context, helium314.keyboard.fork.usage.ClaudeUsage.PREF_SESSION_KEY, R.string.fork_claude_key) {
         ClaudeKeyPreference(it.title)
     },
+    Setting(context, helium314.keyboard.fork.widget.WidgetPrefs.USAGE, R.string.fork_widget_usage, R.string.fork_widget_usage_summary) {
+        SwitchPreference(it, true) { DynamicToolbarController.current?.setToolbarItems() }
+    },
+    Setting(context, helium314.keyboard.fork.widget.WidgetPrefs.TRIVIA, R.string.fork_widget_trivia, R.string.fork_widget_trivia_summary) {
+        SwitchPreference(it, true) { DynamicToolbarController.current?.setToolbarItems() }
+    },
+    Setting(context, helium314.keyboard.fork.widget.WidgetPrefs.TRIVIA_HOURS, R.string.fork_widget_trivia_hours) { setting ->
+        val ctx = androidx.compose.ui.platform.LocalContext.current
+        InlineSliderPreference(name = setting.title, key = setting.key, default = helium314.keyboard.fork.widget.WidgetPrefs.DEFAULT_TRIVIA_HOURS,
+            range = 1f..48f, step = 1f, format = { ctx.getString(R.string.fork_widget_hours, it.roundToInt()) })
+    },
+    Setting(context, helium314.keyboard.fork.widget.WidgetPrefs.TRIVIA_NOW, R.string.fork_widget_trivia_now) { setting ->
+        val ctx = androidx.compose.ui.platform.LocalContext.current
+        helium314.keyboard.settings.preferences.Preference(name = setting.title,
+            description = ctx.getString(R.string.fork_widget_trivia_count, helium314.keyboard.fork.widget.Trivia.count(ctx)),
+            onClick = {
+                helium314.keyboard.fork.widget.Trivia.refreshIfDue(ctx, force = true) { added ->
+                    android.widget.Toast.makeText(ctx, if (added) R.string.fork_widget_trivia_added else R.string.fork_widget_trivia_failed,
+                        android.widget.Toast.LENGTH_SHORT).show()
+                }
+            })
+    },
+    Setting(context, helium314.keyboard.fork.widget.WidgetPrefs.EMOJI, R.string.fork_widget_emoji, R.string.fork_widget_emoji_summary) {
+        SwitchPreference(it, true) { DynamicToolbarController.current?.setToolbarItems() }
+    },
     Setting(context, GlowPrefs.AI_GLOW, R.string.fork_ai_glow, R.string.fork_ai_glow_summary) {
         SwitchPreference(it, true)
     },
@@ -436,6 +459,37 @@ private fun TranslateChoice(setting: Setting, kind: String) {
                 }
             },
         )
+    }
+}
+
+/** Tools > Popup widgets: what the toolbar's popup area shows (switched with a sideways swipe) */
+@Composable
+fun WidgetScreen(onClickBack: () -> Unit) {
+    val ctx = androidx.compose.ui.platform.LocalContext.current
+    val prefs = ctx.prefs()
+    val b = (ctx.getActivity() as? helium314.keyboard.settings.SettingsActivity)?.prefChanged?.collectAsState()
+    if ((b?.value ?: 0) < 0) helium314.keyboard.latin.utils.Log.v("irrelevant", "recompose on preference change")
+    val usage = prefs.getBoolean(helium314.keyboard.fork.widget.WidgetPrefs.USAGE, true)
+    val trivia = prefs.getBoolean(helium314.keyboard.fork.widget.WidgetPrefs.TRIVIA, true)
+    val items = listOfNotNull(
+        R.string.fork_widget_cat_usage,
+        helium314.keyboard.fork.widget.WidgetPrefs.USAGE,
+        helium314.keyboard.fork.usage.ClaudeUsage.PREF_SESSION_KEY.takeIf { usage },
+        R.string.fork_widget_cat_trivia,
+        helium314.keyboard.fork.widget.WidgetPrefs.TRIVIA,
+        helium314.keyboard.fork.widget.WidgetPrefs.TRIVIA_HOURS.takeIf { trivia },
+        helium314.keyboard.fork.widget.WidgetPrefs.TRIVIA_NOW.takeIf { trivia },
+        R.string.fork_widget_cat_emoji,
+        helium314.keyboard.fork.widget.WidgetPrefs.EMOJI,
+    )
+    SearchSettingsScreen(onClickBack = onClickBack, title = stringResource(R.string.fork_screen_widgets), settings = items) {
+        androidx.compose.foundation.layout.Column {
+            androidx.compose.material3.Text(stringResource(R.string.fork_widget_screen_summary),
+                style = androidx.compose.material3.MaterialTheme.typography.bodyMedium,
+                color = helium314.keyboard.latin.utils.LocalShadcn.current.mutedForeground,
+                modifier = androidx.compose.ui.Modifier.padding(horizontal = 16.dp, vertical = 8.dp))
+            helium314.keyboard.settings.SettingsSections(items)
+        }
     }
 }
 
