@@ -212,7 +212,7 @@ class DynamicToolbarView @JvmOverloads constructor(
 
     /**
      * Paste chips instead of the tools: [text] (or an image thumbnail for [imageUri]) and what was found in it.
-     * With [smart] chips the clip moves to the left and the [actions] (code, open, call, mail) sit on the right,
+     * With [smart] chips the clip is centered in the room left of the [actions] (code, open, call, mail) on the right,
      * otherwise a found code is shown as a chip before the centered clip. [onBack] goes back to the tools.
      */
     fun showChipBar(
@@ -229,8 +229,9 @@ class DynamicToolbarView @JvmOverloads constructor(
             LinearLayout.LayoutParams(side, LayoutParams.MATCH_PARENT).apply { marginStart = backMargin })
         val code = actions.firstOrNull { it is helium314.keyboard.fork.clipboard.ClipPrefs.SmartAction.Code }?.value
         if (smart && imageUri == null && text != null && actions.isNotEmpty()) {
-            // smart chips: the clip on the left, what can be done with it on the right
-            chips.gravity = Gravity.START or Gravity.CENTER_VERTICAL
+            // smart chips: the clip centered in the room left of what can be done with it (on the right); a long one
+            // fills that room
+            chips.gravity = Gravity.CENTER
             chips.addView(if (preview != null) previewChip(preview, 400) { onPaste(text) }
                 else chip(text.replace('\n', ' '), false, 400, border = true) { onPaste(text) }, chipParams())
             chipBar.addView(chips, LinearLayout.LayoutParams(0, LayoutParams.MATCH_PARENT, 1f))

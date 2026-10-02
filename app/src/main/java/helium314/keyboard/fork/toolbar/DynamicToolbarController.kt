@@ -757,6 +757,14 @@ class DynamicToolbarController(private val context: Context) {
             else -> null
         }
         chip = clip?.takeIf { it.key != dismissedChipKey }
+        // a copied link: its icon and title are read now (also while the keyboard is hidden: copying in another app
+        // ends up here), so the chip shows them right away when the toolbar opens
+        chip?.takeIf { it.imageUri == null }?.text?.let { text ->
+            ClipPrefs.findActions(text).firstOrNull { it is ClipPrefs.SmartAction.Link }?.value
+        }?.let { link ->
+            val c = chip
+            helium314.keyboard.fork.clipboard.LinkPreview.load(context, link) { if (chip === c && isExpanded) applyChipState() }
+        }
         chip?.let {
             // it stops being recent after a while
             val left = ClipboardHistoryManager.RECENT_TIME_MILLIS - (System.currentTimeMillis() - it.timestamp)
