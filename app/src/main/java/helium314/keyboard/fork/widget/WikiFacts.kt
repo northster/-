@@ -7,21 +7,20 @@ import java.net.URL
 import java.net.URLEncoder
 
 /**
- * fork: where the trivia comes from: Wikipedia's "vital articles" (Level 4, about ten thousand subjects editors chose
- * as the ones every encyclopedia needs: cat, Moon, chocolate, Roman Empire…), so facts are about things people know.
- * A fact is taken from the start of such an article (its intro, written and sourced by people). Text from Wikipedia,
- * CC BY-SA 4.0.
+ * fork: where the trivia comes from:
+ *  - subjects: Wikipedia's "vital articles" (Level 4, about ten thousand subjects editors chose as the ones every
+ *    encyclopedia needs: cat, Moon, chocolate, Roman Empire…), a different one for every fact, so they don't repeat
+ *  - Wikipedia's lists of common misconceptions, each one corrected with sources
+ * Text from Wikipedia, CC BY-SA 4.0.
  */
 object WikiFacts {
-    /** an article and the start of its text */
+    /** a text from an article (a misconception and its correction) */
     class Article(val title: String, val text: String)
 
     private const val API = "https://en.wikipedia.org/w/api.php"
     /** the Level 4 lists, without mathematics (too abstract for a toolbar) */
     private val LISTS = listOf("Biology and health sciences", "Everyday life", "Geography", "History", "Arts",
         "Physical sciences", "Technology", "Society and social sciences", "Philosophy and religion", "People")
-    /** characters of an intro sent along, enough for a few facts */
-    private const val INTRO_CHARS = 1200
 
     /** what went wrong last, for the settings */
     @Volatile var lastError: String? = null
@@ -29,21 +28,18 @@ object WikiFacts {
     /** the titles of each list, kept while the keyboard runs (a few requests each) */
     private val listCache = HashMap<String, List<String>>()
 
-    /** up to [count] random vital articles that are [wanted] (not used before), with their intros; blocking */
-    fun articles(count: Int, wanted: (String) -> Boolean): List<Article> {
+    /** up to [count] random vital article titles that are [wanted] (not used before); blocking */
+    fun randomTitles(count: Int, wanted: (String) -> Boolean): List<String> {
         val titles = LinkedHashSet<String>()
         for (list in LISTS.shuffled().take(3)) runCatching {
             titles.addAll(listTitles(list).filter(wanted).shuffled().take(count))
         }.onFailure { lastError = it.javaClass.simpleName + ": " + it.message }
         if (titles.isEmpty() && lastError == null) lastError = "no vital articles"
-        return intros(titles.shuffled().take(count))
+        return titles.shuffled().take(count)
     }
 
-    /**
-     * up to [count] articles found by Wikipedia's search for the [keywords] (the interests), the best matches of each
-     * keyword, with their intros; blocking
-     */
-    fun matching(keywords: List<String>, count: Int, wanted: (String) -> Boolean): List<Article> {
+    /** up to [count] article titles found by Wikipedia's search for the [keywords] (the interests); blocking */
+    fun matchingTitles(keywords: List<String>, count: Int, wanted: (String) -> Boolean): List<String> {
         val titles = LinkedHashSet<String>()
         for (keyword in keywords.shuffled().take(4)) runCatching {
             val url = "$API?action=query&format=json&formatversion=2&list=search&srnamespace=0&srlimit=15&srsearch=" +
@@ -52,7 +48,37 @@ object WikiFacts {
             (0 until results.length()).map { results.getJSONObject(it).getString("title") }
                 .filter { wanted(it) && !it.startsWith("List of") }.take(4).forEach { titles.add(it) }
         }.onFailure { lastError = it.javaClass.simpleName + ": " + it.message }
-        return intros(titles.shuffled().take(count))
+        return titles.shuffled().take(count)
+    }
+
+    /** the lists of common misconceptions: each paragraph corrects one belief, with sources (about 480 in all) */
+    private val MYTH_PAGES = listOf("List of common misconceptions about arts and culture",
+        "List of common misconceptions about history", "List of common misconceptions about science, technology, and mathematics")
+    private val mythCache = HashMap<String, List<String>>()
+
+    /** up to [count] misconceptions (page title to its paragraph) that are [wanted] (not used before); blocking */
+    fun misconceptions(count: Int, wanted: (String) -> Boolean): List<Article> {
+        val found = ArrayList<Article>()
+        for (page in MYTH_PAGES.shuffled()) {
+            if (found.size >= count) break
+            runCatching {
+                mythParagraphs(page).filter(wanted).shuffled().take(count - found.size).forEach { found.add(Article(page, it)) }
+            }.onFailure { lastError = it.javaClass.simpleName + ": " + it.message }
+        }
+        return found
+    }
+
+    private fun mythParagraphs(page: String): List<String> {
+        synchronized(mythCache) { mythCache[page]?.let { return it } }
+        val url = "$API?action=query&format=json&formatversion=2&redirects=1&prop=extracts&explaintext=1&titles=" +
+            URLEncoder.encode(page, "UTF-8")
+        val text = JSONObject(get(url)).getJSONObject("query").getJSONArray("pages").getJSONObject(0).optString("extract")
+        // the paragraphs after the introduction, without headings and references
+        val paragraphs = text.split('\n').map { it.trim() }
+            .filter { it.length in 60..700 && !it.startsWith("=") && "ISBN" !in it && "Retrieved" !in it }
+            .drop(2)
+        if (paragraphs.isNotEmpty()) synchronized(mythCache) { mythCache[page] = paragraphs }
+        return paragraphs
     }
 
     private fun listTitles(list: String): List<String> {
@@ -72,22 +98,6 @@ object WikiFacts {
         }
         if (titles.isNotEmpty()) synchronized(listCache) { listCache[list] = titles }
         return titles
-    }
-
-    /** the start of each article as plain text (20 per request); articles without text are left out */
-    private fun intros(titles: List<String>): List<Article> {
-        val result = ArrayList<Article>()
-        for (chunk in titles.chunked(20)) runCatching {
-            val url = "$API?action=query&format=json&formatversion=2&redirects=1&prop=extracts&exintro=1&explaintext=1" +
-                "&exlimit=20&titles=" + URLEncoder.encode(chunk.joinToString("|"), "UTF-8")
-            val pages = JSONObject(get(url)).getJSONObject("query").optJSONArray("pages") ?: return@runCatching
-            for (i in 0 until pages.length()) {
-                val page = pages.getJSONObject(i)
-                val text = page.optString("extract").trim().takeIf { it.length > 80 } ?: continue
-                result.add(Article(page.getString("title"), text.take(INTRO_CHARS)))
-            }
-        }.onFailure { lastError = it.javaClass.simpleName + ": " + it.message }
-        return result
     }
 
     /**

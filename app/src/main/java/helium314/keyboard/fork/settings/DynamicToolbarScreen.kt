@@ -278,10 +278,6 @@ fun createDynamicToolbarSettings(context: Context) = listOf(
             default = helium314.keyboard.fork.widget.TriviaInterests.DEFAULT_SHARE, range = 0f..1f, step = 0.2f,
             format = { ctx.getString(R.string.fork_trivia_interest_share_value, (it * 25).roundToInt(), (it * 100).roundToInt()) })
     },
-    Setting(context, helium314.keyboard.fork.widget.WidgetPrefs.TRIVIA_AI, R.string.fork_widget_trivia_ai,
-        R.string.fork_widget_trivia_ai_summary) {
-        SwitchPreference(it, false)
-    },
     Setting(context, helium314.keyboard.fork.widget.WidgetPrefs.TRIVIA_NOW, R.string.fork_widget_trivia_now) { setting ->
         val ctx = androidx.compose.ui.platform.LocalContext.current
         helium314.keyboard.settings.preferences.Preference(name = setting.title,
@@ -505,7 +501,6 @@ fun WidgetScreen(onClickBack: () -> Unit) {
         helium314.keyboard.fork.widget.TriviaInterests.PREF_SHARE.takeIf {
             trivia && helium314.keyboard.fork.widget.TriviaInterests.all(prefs).isNotEmpty()
         },
-        helium314.keyboard.fork.widget.WidgetPrefs.TRIVIA_AI.takeIf { trivia },
         helium314.keyboard.fork.widget.WidgetPrefs.TRIVIA_NOW.takeIf { trivia },
         R.string.fork_widget_cat_emoji,
         helium314.keyboard.fork.widget.WidgetPrefs.EMOJI,

@@ -15,7 +15,8 @@ import org.json.JSONObject
 
 /**
  * fork: useless but true trivia for the toolbar ("A day on Venus is longer than its year."). A batch of short facts
- * (see [fetchBatch]: from Wikipedia's vital articles, Gemini's own only as an experiment); each time the toolbar opens one
+ * (see [fetchBatch]: Gemini on a different Wikipedia subject each, checked with a web search, and corrected
+ * misconceptions from Wikipedia); each time the toolbar opens one
  * is shown, those not seen yet first. Once only a few are left unseen (20 of a batch of 25 seen) the next batch is
  * fetched. A few hundred are kept, a new fact that is already kept (also in other words) is dropped.
  */
@@ -24,6 +25,8 @@ object Trivia {
     private const val PREF_FETCHED = "fork_trivia_fetched"
     private const val TAG = "Trivia"
     private const val BATCH = 25
+    /** share of a batch from Wikipedia's lists of common misconceptions */
+    private const val MYTH_SHARE = 0.3f
     /** a new batch once this few are unseen */
     private const val LOW = 5
     private const val KEEP = 400
@@ -56,9 +59,9 @@ object Trivia {
      */
     private fun migrate(prefs: SharedPreferences) {
         val version = prefs.getInt(PREF_VERSION, 0)
-        if (version >= 4) return
-        // version 3/4: the Did-you-know facts were about obscure articles and in mixed styles, they go too
-        prefs.edit { putString(PREF_FACTS, "[]"); putInt(PREF_VERSION, 4); remove(PREF_FAILED) }
+        if (version >= 5) return
+        // versions 3 to 5: the Wikipedia-only facts were obscure or dry, they go too
+        prefs.edit { putString(PREF_FACTS, "[]"); putInt(PREF_VERSION, 5); remove(PREF_FAILED) }
     }
 
     private fun read(prefs: SharedPreferences): MutableList<Fact> {
@@ -168,64 +171,62 @@ object Trivia {
             return added
     }
 
-    private val TOPICS = listOf("animals", "insects", "the ocean", "space", "planets", "the human body", "food", "drinks",
-        "plants", "history", "ancient times", "language and words", "everyday objects", "inventions", "sports",
-        "music", "geography", "countries", "weather", "chemistry", "physics", "money", "art", "birds", "dinosaurs")
-
     /**
-     * About [BATCH] new facts, null if Gemini could not be reached.
-     *  - normally all from Wikipedia's vital articles ([WikiFacts], well-known subjects): Gemini takes the most fun fact
-     *    from the start of each article, in the user's language; each article is used once ever ([PREF_WIKI_SEEN]); one
-     *    call per batch
-     *  - experimental ([WidgetPrefs.TRIVIA_AI]): half written by Gemini on three random topics, then checked by Gemini
-     *    with a web search, only what is definitely true stays: a second call
-     * Without Wikipedia (offline, error) and without the experiment there are no new facts this time.
+     * About [BATCH] new facts, null if nothing could be made. Two Gemini calls per batch:
+     *  1. for most of the batch Gemini gets a subject each (a different Wikipedia vital article every time, the
+     *     interests' share from a Wikipedia search for them) and writes the one fact about it people don't know but
+     *     enjoy learning; [MYTH_SHARE] of the batch are Wikipedia's corrected misconceptions, retold short
+     *  2. Gemini checks its own facts with Google Search, only what is definitely true stays
+     * Subjects and misconceptions are used once ever ([PREF_WIKI_SEEN]).
      */
     private fun fetchBatch(app: Context, korean: Boolean, avoid: String): List<Shown>? {
         val prefs = app.prefs()
-        val ai = prefs.getBoolean(WidgetPrefs.TRIVIA_AI, false)
-        val wikiWanted = if (ai) BATCH - BATCH / 2 else BATCH
         val seen = wikiSeen(prefs)
-        val notUsed = { title: String -> hookKey(title) !in seen }
-        // the interests' share first (as many as are found), the rest general; a few more than needed, Gemini skips dull ones
+        val notUsed = { key: String -> hookKey(key) !in seen }
+        val mythsWanted = Math.round(BATCH * MYTH_SHARE)
+        val subjectsWanted = BATCH - mythsWanted
+        // the interests' share of the subjects first, the rest random; a few more than needed, some get skipped
         val interests = TriviaInterests.withKeywords(prefs)
         val share = if (interests.isEmpty()) 0f else TriviaInterests.share(prefs)
-        val forInterests = Math.round(wikiWanted * share)
+        val forInterests = Math.round(subjectsWanted * share)
         val liked = if (forInterests == 0) emptyList()
-            else WikiFacts.matching(interests.flatMap { it.keywords }, forInterests + 2, notUsed)
+            else WikiFacts.matchingTitles(interests.flatMap { it.keywords }, forInterests + 2, notUsed)
         val general = if (share >= 1f && liked.isNotEmpty()) emptyList()
-            else WikiFacts.articles(wikiWanted - minOf(liked.size, forInterests) + 5) { t -> notUsed(t) && liked.none { it.title == t } }
-        val wiki = liked + general
-        val own = if (!ai) 0 else if (wiki.isEmpty()) BATCH else BATCH / 2
-        if (wiki.isEmpty() && own == 0) {
+            else WikiFacts.randomTitles(subjectsWanted - minOf(liked.size, forInterests) + 4) { notUsed(it) && it !in liked }
+        val subjects = liked + general
+        val myths = WikiFacts.misconceptions(mythsWanted + 2) { notUsed(it) }
+        if (subjects.isEmpty() && myths.isEmpty()) {
             Log.w(TAG, "no trivia: Wikipedia not reached")
-            lastError = "위키백과를 읽지 못함 (Wikipedia: ${WikiFacts.lastError ?: "no articles"})"
+            lastError = "위키백과를 읽지 못함 (Wikipedia: ${WikiFacts.lastError ?: "nothing found"})"
             return null
         }
-        // Gemini's own (experiment): the interests take their share of the topics
-        val liking = interests.map { it.text }.shuffled()
-        val topics = (if (liking.isNotEmpty() && Math.random() < share) liking.take(3) else TOPICS.shuffled().take(3))
-            .joinToString(", ")
         val lang = if (korean) "Korean" else "English"
         // one style for all: plain statements ending in -다 in Korean ("해달은 손을 잡고 잔다.")
         val style = if (korean) "Write every sentence in the plain written style ending in \"-다\" " +
             "(like \"해달은 서로 손을 잡고 잔다.\"), never -습니다/-요."
             else "Write plain statements in the present or past tense."
-        val prompt = "You write short, true and delightfully surprising trivia facts for anyone, no background knowledge " +
-            "needed. Every fact must be correct and well established. Never write popular myths or misconceptions " +
-            "(like goldfish having a 3-second memory). Each fact is one short sentence in $lang, at most " +
-            "${MAX_CHARS - 5} characters, and names its subject so it makes sense on its own. $style " +
-            "Output only lines starting with \"G: \" or \"W<number>: \", nothing else."
+        val prompt = "You write short trivia facts people don't know but love to learn: surprising, a little useless, " +
+            "understandable without background knowledge. Every fact must be true and well established. Never write " +
+            "popular myths or misconceptions (like goldfish having a 3-second memory). Avoid exact numbers unless you " +
+            "are certain. Each fact is one short sentence in $lang, at most ${MAX_CHARS - 5} characters, and names its " +
+            "subject so it makes sense on its own. $style Output only lines starting with \"S<number>: \" or " +
+            "\"M<number>: \", nothing else."
         val request = buildString {
-            if (own > 0) append("Part G: write $own facts about $topics, one per line, each starting with \"G: \".\n")
-            if (wiki.isNotEmpty()) {
-                append("Part W: below are the starts of Wikipedia articles. For each article, take the one fact from its ")
-                append("text that an ordinary person finds most surprising or fun, and write it as one short sentence ")
-                append("starting with \"W\" and the article's number, like \"W3: \". Use only what the text says, add nothing. ")
-                append("Skip dry definitions (\"X is a city in Y\") and articles with nothing fun. At most $wikiWanted facts.\n\n")
-                wiki.forEachIndexed { i, a -> append(i + 1).append(". ").append(a.title).append(": ").append(a.text.replace('\n', ' ')).append("\n\n") }
+            if (subjects.isNotEmpty()) {
+                append("Part S: for each numbered subject, write the one fact about it that most people don't know but find ")
+                append("surprising or fun. Skip a subject if you know no such fact for sure. Start each line with \"S\" and ")
+                append("the subject's number, like \"S3: \".\n")
+                subjects.forEachIndexed { i, t -> append(i + 1).append(". ").append(t).append('\n') }
+                append('\n')
             }
-            if (own > 0 && avoid.isNotEmpty()) append("\nDo not repeat these or anything close to them:\n").append(avoid)
+            if (myths.isNotEmpty()) {
+                append("Part M: each numbered text corrects a common misconception. Write the true fact it states as one ")
+                append("short sentence (what is actually true, not the myth), starting with \"M\" and its number, like \"M2: \". ")
+                append("Use only what the text says.\n")
+                myths.forEachIndexed { i, m -> append(i + 1).append(". ").append(m.text.replace('\n', ' ')).append('\n') }
+                append('\n')
+            }
+            if (avoid.isNotEmpty()) append("Do not repeat these or anything close to them:\n").append(avoid)
         }
         val first = GeminiClient.run(prefs, prompt, request, search = false, raw = true)
         if (first !is GeminiClient.Outcome.Success) {
@@ -233,19 +234,24 @@ object Trivia {
             lastError = "Gemini: ${first.message}"
             return null
         }
-        // these articles are used up, also the ones that were skipped
-        rememberWiki(prefs, seen, wiki.map { it.title })
-        // markdown or list marks around the labels ("**W3:**", "- G:") are dropped
+        // these subjects and misconceptions are used up, also the ones that were skipped
+        rememberWiki(prefs, seen, subjects + myths.map { it.text })
+        // markdown or list marks around the labels ("**S3:**", "- M1:") are dropped
         val lines = first.text.lines().map { it.replace("**", "").trim().trimStart('-', '*', '•', ' ') }
-        // "W3: …" is from the third article, which goes with it (the Korean one when there is one)
-        val retold = lines.mapNotNull { line ->
-            val m = Regex("^W\\s*(\\d+)\\s*[:.)：]\\s*(.+)$").find(line) ?: return@mapNotNull null
-            m.groupValues[2].trim() to wiki.getOrNull(m.groupValues[1].toInt() - 1)?.title
-        }
-        val pages = WikiFacts.pages(retold.mapNotNull { it.second }, korean)
-        val fromWiki = retold.filter { plainStyle(it.first, korean) }.map { (text, title) -> Shown(text, title?.let { pages[it] }) }
-        val written = lines.filter { it.startsWith("G:") }.map { it.removePrefix("G:").trim() }.filter { it.isNotEmpty() }
-        return fromWiki + verified(prefs, written.filter { plainStyle(it, korean) }).map { Shown(it, null) }
+        fun labelled(letter: Char) = lines.mapNotNull { line ->
+            val m = Regex("^$letter\\s*(\\d+)\\s*[:.)：]\\s*(.+)$").find(line) ?: return@mapNotNull null
+            m.groupValues[1].toInt() - 1 to m.groupValues[2].trim()
+        }.filter { plainStyle(it.second, korean) }
+        // Gemini's own facts are checked with a web search, the corrected misconceptions come with sources already
+        val written = labelled('S')
+        val checked = verified(prefs, written.map { it.second }).toSet()
+        val fromSubjects = written.filter { it.second in checked }.map { (i, text) -> text to subjects.getOrNull(i) }
+        val fromMyths = labelled('M').map { (i, text) -> text to myths.getOrNull(i)?.title }
+        val all = fromSubjects + fromMyths
+        if (all.isEmpty()) lastError = "Gemini 답에서 쓸 문장이 없음 (S ${written.size}줄, 확인 통과 ${checked.size}줄)"
+        // the article to read more (the Korean one when there is one)
+        val pages = WikiFacts.pages(all.mapNotNull { it.second }, korean)
+        return all.map { (text, title) -> Shown(text, title?.let { pages[it] }) }.shuffled()
     }
 
     /** Korean facts all end in -다 (one style in the widget); other languages as they come */

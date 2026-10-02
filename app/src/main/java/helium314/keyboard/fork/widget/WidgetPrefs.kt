@@ -6,8 +6,6 @@ object WidgetPrefs {
     const val USAGE = "fork_widget_usage"
     const val TRIVIA = "fork_widget_trivia"
     const val EMOJI = "fork_widget_emoji"
-    /** experiment: half of the trivia written by Gemini (checked with a web search) instead of all from Wikipedia */
-    const val TRIVIA_AI = "fork_widget_trivia_ai"
     /** settings entry: get new trivia now (nothing stored) */
     const val TRIVIA_NOW = "fork_widget_trivia_now"
     /** where emoji ideas come from: [EMOJI_LOCAL] (built-in dictionary), [EMOJI_LOCAL_AI] (dictionary, ✨ asks
