@@ -289,8 +289,10 @@ fun createDynamicToolbarSettings(context: Context) = listOf(
                 helium314.keyboard.fork.widget.Trivia.unseen(ctx)),
             onClick = {
                 helium314.keyboard.fork.widget.Trivia.refreshIfDue(ctx, force = true) { added ->
-                    android.widget.Toast.makeText(ctx, if (added) R.string.fork_widget_trivia_added else R.string.fork_widget_trivia_failed,
-                        android.widget.Toast.LENGTH_SHORT).show()
+                    android.widget.Toast.makeText(ctx,
+                        if (added) ctx.getString(R.string.fork_widget_trivia_added)
+                        else ctx.getString(R.string.fork_widget_trivia_failed, helium314.keyboard.fork.widget.Trivia.lastError ?: "?"),
+                        android.widget.Toast.LENGTH_LONG).show()
                 }
             })
     },
@@ -510,7 +512,7 @@ fun WidgetScreen(onClickBack: () -> Unit) {
         helium314.keyboard.fork.widget.WidgetPrefs.EMOJI_SOURCE.takeIf { prefs.getBoolean(helium314.keyboard.fork.widget.WidgetPrefs.EMOJI, true) },
     )
     SearchSettingsScreen(onClickBack = onClickBack, title = stringResource(R.string.fork_screen_widgets), settings = items) {
-        androidx.compose.foundation.layout.Column {
+        androidx.compose.foundation.layout.Column(androidx.compose.ui.Modifier.verticalScroll(androidx.compose.foundation.rememberScrollState())) {
             androidx.compose.material3.Text(stringResource(R.string.fork_widget_screen_summary),
                 style = androidx.compose.material3.MaterialTheme.typography.bodyMedium,
                 color = helium314.keyboard.latin.utils.LocalShadcn.current.mutedForeground,
@@ -525,7 +527,7 @@ fun WidgetScreen(onClickBack: () -> Unit) {
 fun GifScreen(onClickBack: () -> Unit) {
     val items = listOf(helium314.keyboard.fork.gif.GifClient.PREF_KLIPY_KEY, helium314.keyboard.fork.gif.GifClient.PREF_GIPHY_KEY)
     SearchSettingsScreen(onClickBack = onClickBack, title = stringResource(R.string.fork_screen_gif), settings = items) {
-        androidx.compose.foundation.layout.Column {
+        androidx.compose.foundation.layout.Column(androidx.compose.ui.Modifier.verticalScroll(androidx.compose.foundation.rememberScrollState())) {
             androidx.compose.material3.Text(stringResource(R.string.fork_gif_screen_summary),
                 style = androidx.compose.material3.MaterialTheme.typography.bodyMedium,
                 color = helium314.keyboard.latin.utils.LocalShadcn.current.mutedForeground,

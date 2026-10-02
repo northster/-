@@ -101,10 +101,20 @@ object Trivia {
     /** same fact, written a bit differently */
     private fun norm(s: String) = s.lowercase().filter { it.isLetterOrDigit() }
 
-    /** a new batch once few are unseen (or [force]); [onDone] on the main thread */
+    /** why the last batch brought nothing, for the settings */
+    @Volatile var lastError: String? = null
+        private set
+
+    /** a new batch once few are unseen (or [force]); [onDone] on the main thread (also when nothing is tried, if [force]) */
     fun refreshIfDue(context: Context, force: Boolean = false, onDone: (Boolean) -> Unit = {}) {
         val prefs = context.prefs()
-        if (fetching || SlateKeys.keys(prefs).isEmpty()) return
+        if (fetching || SlateKeys.keys(prefs).isEmpty()) {
+            if (force) {
+                lastError = if (fetching) "이미 받는 중 (already fetching)" else "Gemini 키 없음 (no Gemini key)"
+                handler.post { onDone(false) }
+            }
+            return
+        }
         val unseen = read(prefs).count { !it.seen }
         if (!force && unseen > LOW) return
         if (!force && System.currentTimeMillis() - prefs.getLong(PREF_FAILED, 0) < RETRY_MS) return
@@ -113,6 +123,22 @@ object Trivia {
         val app = context.applicationContext
         val korean = java.util.Locale.getDefault().language == "ko"
         Thread {
+            // whatever goes wrong, the fetch ends (a stuck flag kept "getting trivia…" forever) and says why
+            val added = try {
+                fetchAndKeep(app, korean, avoid)
+            } catch (e: Exception) {
+                Log.w(TAG, "trivia failed", e)
+                lastError = e.javaClass.simpleName + (e.message?.let { ": $it" } ?: "")
+                app.prefs().edit { putLong(PREF_FAILED, System.currentTimeMillis()) }
+                false
+            } finally {
+                fetching = false
+            }
+            handler.post { onDone(added) }
+        }.start()
+    }
+
+    private fun fetchAndKeep(app: Context, korean: Boolean, avoid: String): Boolean {
             val fresh = fetchBatch(app, korean, avoid)
             val added = if (fresh != null) {
                 val known = read(app.prefs())
@@ -133,14 +159,14 @@ object Trivia {
                     !drop
                 })
                 app.prefs().edit { putLong(PREF_FETCHED, System.currentTimeMillis()); remove(PREF_FAILED) }
+                if (kept.isEmpty()) lastError = "새 문장 없음: Gemini 답 ${fresh.size}줄, 모두 걸러짐 (nothing new in the answer)"
+                else lastError = null
                 kept.isNotEmpty()
             } else {
                 app.prefs().edit { putLong(PREF_FAILED, System.currentTimeMillis()) }
                 false
             }
-            fetching = false
-            handler.post { onDone(added) }
-        }.start()
+            return added
     }
 
     private val TOPICS = listOf("animals", "insects", "the ocean", "space", "planets", "the human body", "food", "drinks",
@@ -173,6 +199,7 @@ object Trivia {
         val own = if (!ai) 0 else if (wiki.isEmpty()) BATCH else BATCH / 2
         if (wiki.isEmpty() && own == 0) {
             Log.w(TAG, "no trivia: Wikipedia not reached")
+            lastError = "위키백과에서 문장을 받지 못함 (Wikipedia: ${WikiFacts.lastError ?: "no hooks"})"
             return null
         }
         // Gemini's own (experiment): the interests take their share of the topics
@@ -197,6 +224,7 @@ object Trivia {
         val first = GeminiClient.run(prefs, prompt, request, search = false, raw = true)
         if (first !is GeminiClient.Outcome.Success) {
             Log.w(TAG, "no trivia: ${(first as GeminiClient.Outcome.Failure).message}")
+            lastError = "Gemini: ${first.message}"
             return null
         }
         // these hooks are used up, also the ones that were skipped

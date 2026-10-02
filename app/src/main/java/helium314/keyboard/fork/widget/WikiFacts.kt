@@ -20,6 +20,8 @@ object WikiFacts {
         "October", "November", "December")
     private const val FIRST_YEAR = 2012
     private const val API = "https://en.wikipedia.org/w/api.php"
+    /** what went wrong last, for the settings */
+    @Volatile var lastError: String? = null
 
     /**
      * up to [count] hooks ("... that X did Y?" without the "... that") that are [wanted] (not taken before), from random
@@ -32,9 +34,10 @@ object WikiFacts {
             runCatching {
                 val lastYear = Calendar.getInstance().get(Calendar.YEAR) - 1
                 val page = "Wikipedia:Recent additions/${(FIRST_YEAR..lastYear).random()}/${MONTHS.random()}"
-                wikitext(page).lineSequence().mapNotNull { hook(it) }.filter { wanted(it.text) }.toList().shuffled()
-                    .take(count - found.size).forEach { found[it.text] = it }
-            }
+                val all = wikitext(page).lineSequence().mapNotNull { hook(it) }.toList()
+                if (all.isEmpty()) lastError = "$page: 0 hooks"
+                all.filter { wanted(it.text) }.shuffled().take(count - found.size).forEach { found[it.text] = it }
+            }.onFailure { lastError = it.javaClass.simpleName + ": " + it.message }
         }
         return found.values.toList()
     }
