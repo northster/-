@@ -1,0 +1,19 @@
+name: DT probe (temporary)
+on: workflow_dispatch
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Wikipedia pageviews
+        run: |
+          UA="DTKeyboard (https://github.com/northster/-)"
+          curl -s -A "$UA" "https://en.wikipedia.org/w/api.php?action=query&format=json&formatversion=2&redirects=1&prop=pageviews&pvipdays=30&titles=Sea%20otter|Christine%20Ferber|Scottish%20Titanic|Cat" -o pv.json -w "HTTP %{http_code}\n"
+          python3 - <<'PY'
+          import json
+          d=json.load(open('pv.json'))
+          print(json.dumps(d)[:300])
+          for p in d['query']['pages']:
+              pv=p.get('pageviews') or {}
+              vals=[v for v in pv.values() if v]
+              print(p['title'], len(pv), sum(vals))
+          PY
