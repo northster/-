@@ -445,4 +445,13 @@
     <string name="fork_ai_glow_bloom_summary">Smooth light of the same colors added onto the dots (additive), like glowing LEDs. 0 = dots only</string>
     <string name="fork_typo_one_left">One-handed left</string>
     <string name="fork_typo_one_right">One-handed right</string>
+    <string name="fork_link_preview">Link preview</string>
+    <string name="fork_link_preview_summary">Shows a copied link as the site icon and its title (video title, post text ...). Opens the site once when copied</string>
+    <string name="fork_clip_details">Details</string>
+    <string name="fork_translate_custom">Own instruction</string>
+    <string name="fork_translate_custom_hint">How to translate (e.g. casual Japanese)</string>
+    <string name="fork_translate_target_selection">Selection</string>
+    <string name="fork_translate_target_sentence">Sentence</string>
+    <string name="fork_translate_target_paragraph">Paragraph</string>
+    <string name="fork_translate_target_all">All</string>
 </resources>

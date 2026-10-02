@@ -98,6 +98,9 @@ fun createForkClipboardSettings(context: Context) = listOf(
     Setting(context, ClipPrefs.PASTE_CHIP, R.string.fork_clip_paste_chip, R.string.fork_clip_paste_chip_summary) {
         SwitchPreference(it, ClipPrefs.DEFAULT_PASTE_CHIP)
     },
+    Setting(context, helium314.keyboard.fork.clipboard.LinkPreview.PREF_ENABLED, R.string.fork_link_preview, R.string.fork_link_preview_summary) {
+        SwitchPreference(it, true)
+    },
     Setting(context, ClipPrefs.SMART_CHIPS, R.string.fork_smart_chips, R.string.fork_smart_chips_summary) {
         SwitchPreference(it, ClipPrefs.DEFAULT_SMART_CHIPS)
     },

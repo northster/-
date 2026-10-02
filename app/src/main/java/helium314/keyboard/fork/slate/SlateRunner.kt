@@ -65,6 +65,59 @@ class SlateRunner(private val ime: LatinIME, private val ui: Ui) {
         execute(command, tail, tail)
     }
 
+    /**
+     * run an AI [command] on [text], the field's characters [start] to [end] (translation of a selection, a sentence,
+     * the whole text): the answer replaces them if they are still the same, else it is offered
+     */
+    fun runOnRange(command: SlateCommand, start: Int, end: Int, text: String) {
+        if (busy) return
+        val clean = text.trim()
+        if (clean.isEmpty()) return toast("변환할 글이 없어요")
+        SlateCommands.countUse(prefs, command.trigger)
+        busy = true
+        val id = ++running
+        ui.showProgress(command.trigger) {
+            running++
+            busy = false
+            ui.hide()
+        }
+        val app = ime.applicationContext
+        Thread {
+            val outcome = GeminiClient.run(app.prefs(), command.prompt, clean, command.search)
+            handler.post {
+                if (id != running) return@post
+                busy = false
+                when (outcome) {
+                    is GeminiClient.Outcome.Failure -> { ui.hide(); toast(outcome.message) }
+                    is GeminiClient.Outcome.Success -> {
+                        val ic = ime.currentInputConnection
+                        val now = ic?.getExtractedText(android.view.inputmethod.ExtractedTextRequest(), 0)
+                        val nowText = now?.text?.toString()
+                        val offset = now?.startOffset ?: 0
+                        val s = start - offset
+                        val e = end - offset
+                        if (ic != null && nowText != null && s >= 0 && e <= nowText.length && nowText.substring(s, e) == text) {
+                            ui.hide()
+                            // keep the spaces around the text, the model's answer has none
+                            val lead = text.takeWhile { it.isWhitespace() }
+                            val trail = text.takeLastWhile { it.isWhitespace() }
+                            ic.beginBatchEdit()
+                            ic.finishComposingText()
+                            ic.setSelection(start, end)
+                            ic.commitText(lead + outcome.text + trail, 1)
+                            ic.endBatchEdit()
+                        } else {
+                            ui.showResult(command.trigger, outcome.text, onInsert = {
+                                ui.hide()
+                                ime.forkReplaceBeforeCursor(0, outcome.text)
+                            }, onDismiss = { ui.hide() })
+                        }
+                    }
+                }
+            }
+        }.start()
+    }
+
     private fun execute(command: SlateCommand, text: String, preceding: String) {
         SlateCommands.countUse(prefs, command.trigger)
         val name = command.trigger.removePrefix(SlateCommands.prefix(prefs))

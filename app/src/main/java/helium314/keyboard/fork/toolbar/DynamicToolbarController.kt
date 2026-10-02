@@ -23,6 +23,7 @@ import helium314.keyboard.latin.database.ClipboardDao
 import helium314.keyboard.keyboard.KeyboardSwitcher
 import helium314.keyboard.latin.R
 import helium314.keyboard.latin.settings.Settings
+import helium314.keyboard.latin.common.ColorType
 import helium314.keyboard.latin.utils.Log
 import helium314.keyboard.latin.utils.prefs
 
@@ -223,8 +224,9 @@ class DynamicToolbarController(private val context: Context) {
             endClipSearch(null)
             return
         }
-        // closing the toolbar while it shows a paste chip dismisses the chip
-        if (!expanded && toolbar?.isChipBarShown == true) {
+        // closing the toolbar while it shows a paste chip dismisses the chip (not when the keyboard just went away:
+        //  the copied text is still wanted in the next app, the glow shows it there)
+        if (!expanded && toolbar?.isChipBarShown == true && !closingForHide) {
             // autofill suggestions shown: those are what the user closes
             if (autofillView != null) autofillView = null else dismissChip()
         }
@@ -428,6 +430,10 @@ class DynamicToolbarController(private val context: Context) {
 
     /** back key: shrinks a tall panel first. Returns true if it was used. */
     fun onBackKey(): Boolean {
+        if (translateTyping) {
+            finishTranslateTyping(false)
+            return true
+        }
         if (gifTyping) {
             finishGifTyping(false)
             return true
@@ -607,6 +613,11 @@ class DynamicToolbarController(private val context: Context) {
             // a code from a notification is the one to paste
             val actions = if (c.code == null) found
                 else listOf(ClipPrefs.SmartAction.Code(c.code)) + found.filter { it !is ClipPrefs.SmartAction.Code }
+            // a copied link shows what it is about (site icon and title) once that is read
+            val link = found.firstOrNull { it is ClipPrefs.SmartAction.Link }?.value
+            val preview = link?.let { helium314.keyboard.fork.clipboard.LinkPreview.cached(it) }
+            if (link != null && preview == null)
+                helium314.keyboard.fork.clipboard.LinkPreview.load(context, link) { if (chip === c) applyChipState() }
             tb.showChipBar(c.text?.take(300), actions, ClipPrefs.smartChips(prefs), c.imageUri,
                 onPaste = { text ->
                     when {
@@ -618,7 +629,8 @@ class DynamicToolbarController(private val context: Context) {
                     }
                 },
                 onAction = ::onSmartAction,
-                onBack = { closeChip() })
+                onBack = { closeChip() },
+                preview = preview)
         } else {
             tb.hideChipBar()
         }
@@ -1011,9 +1023,15 @@ class DynamicToolbarController(private val context: Context) {
 
     /** the keyboard went away: with the setting, the toolbar is closed for the next time */
     fun onWindowHidden() {
-        if (isExpanded && context.prefs().getBoolean(ForkSettings.PREF_TOOLBAR_START_CLOSED, false))
+        if (isExpanded && context.prefs().getBoolean(ForkSettings.PREF_TOOLBAR_START_CLOSED, false)) {
+            closingForHide = true
             setExpanded(false, false)
+            closingForHide = false
+        }
     }
+
+    /** the toolbar is closed because the keyboard went away, not by the user */
+    private var closingForHide = false
 
     /** the field is left: its suggestions are gone */
     fun onFinishInputView() {
@@ -1031,12 +1049,20 @@ class DynamicToolbarController(private val context: Context) {
     // ---------------------------------------------------------------- AI translation panel
 
     private var translatePanel: helium314.keyboard.fork.translate.TranslatePanel? = null
+    /** what is translated: [TARGET_SELECTION], [TARGET_SENTENCE], [TARGET_PARAGRAPH], [TARGET_ALL] */
+    private var translateKind = TARGET_PARAGRAPH
+    /** the instruction of a custom translation is being typed (the letters are shown for it) */
+    private var translateTyping = false
+
+    /** a part of the field: its [start] and [end] in the whole text, and the [text] */
+    private class Range(val start: Int, val end: Int, val text: String)
 
     /**
      * The translation panel over the letters (same size) and a header in the toolbar: back to the keyboard | AI
-     * translation, translate button on the right. Translates the paragraph before the cursor.
+     * translation | what will be translated, custom instruction and translate buttons on the right. On top of the
+     * panel the choice what to translate: the selection, the sentence or paragraph at the cursor, or everything.
      */
-    private fun showTranslatePanel() {
+    private fun showTranslatePanel(fresh: Boolean = true) {
         val ime = latinIME ?: return
         val tb = toolbar ?: return
         if (translatePanel != null) return closeTranslatePanel()
@@ -1045,32 +1071,164 @@ class DynamicToolbarController(private val context: Context) {
             ime.mKeyboardActionListener.onCodeInput(KeyCode.ALPHA, Constants.NOT_A_COORDINATE, Constants.NOT_A_COORDINATE, false)
         val kv = KeyboardSwitcher.getInstance().mainKeyboardView ?: return
         val parent = kv.parent as? android.widget.FrameLayout ?: return
-        val paragraph = translateTarget()
-        val panel = helium314.keyboard.fork.translate.TranslatePanel(context, kv, context.prefs(), paragraph.trim()) { prompt, label ->
+        // a selection is what is meant when there is one
+        if (fresh) translateKind = if (translateRange(TARGET_SELECTION) != null) TARGET_SELECTION else TARGET_PARAGRAPH
+        val panel = helium314.keyboard.fork.translate.TranslatePanel(context, kv, context.prefs(), "", targetRow()) { prompt, label ->
             closeTranslatePanel()
-            val target = translateTarget()
-            if (target.isBlank()) {
-                KeyboardSwitcher.getInstance().showToast(context.getString(R.string.fork_translate_empty), true)
-                return@TranslatePanel
-            }
-            slate?.runOnTail(helium314.keyboard.fork.slate.SlateCommand(label, prompt), target)
+            runTranslation(prompt, label)
         }
         parent.addView(panel, android.widget.FrameLayout.LayoutParams(
             android.widget.FrameLayout.LayoutParams.MATCH_PARENT, android.widget.FrameLayout.LayoutParams.MATCH_PARENT))
         translatePanel = panel
         if (!isExpanded) setExpanded(true, true)
-        tb.showToolHeader(context.getString(R.string.fork_translate_title), emptyList(), onBack = { closeTranslatePanel() },
-            onAction = { }, button = context.getString(R.string.fork_translate_go) to { panel.translate() },
-            subtitle = paragraph.trim().replace('\n', ' ').ifEmpty { context.getString(R.string.fork_translate_empty_short) })
+        showTranslateHeader()
     }
 
-    /** the paragraph before the cursor (after the last line break), what the translation works on */
+    private fun showTranslateHeader() {
+        val tb = toolbar ?: return
+        val panel = translatePanel ?: return
+        val text = translateRange(translateKind)?.text ?: translateTarget()
+        tb.showToolHeader(context.getString(R.string.fork_translate_title),
+            listOf(androidx.core.content.ContextCompat.getDrawable(context, R.drawable.ic_dot_select_word) to
+                context.getString(R.string.fork_translate_custom)),
+            onBack = { closeTranslatePanel() },
+            onAction = { startTranslateTyping() },
+            button = context.getString(R.string.fork_translate_go) to { panel.translate() },
+            subtitle = text.trim().replace('\n', ' ').ifEmpty { context.getString(R.string.fork_translate_empty_short) })
+    }
+
+    /** chips above the wheels: selection | sentence | paragraph | all */
+    private fun targetRow(): View {
+        val colors = Settings.getValues().mColors
+        val density = context.resources.displayMetrics.density
+        val hasSelection = translateRange(TARGET_SELECTION) != null
+        val row = android.widget.LinearLayout(context).apply {
+            orientation = android.widget.LinearLayout.HORIZONTAL
+            gravity = android.view.Gravity.CENTER
+        }
+        val labels = listOf(R.string.fork_translate_target_selection, R.string.fork_translate_target_sentence,
+            R.string.fork_translate_target_paragraph, R.string.fork_translate_target_all)
+        val chips = ArrayList<android.widget.TextView>()
+        fun paint() = chips.forEachIndexed { i, chip ->
+            val on = i == translateKind
+            val enabled = i != TARGET_SELECTION || hasSelection
+            chip.alpha = if (enabled) 1f else 0.35f
+            chip.setTextColor(colors.get(if (on) ColorType.ACTION_KEY_ICON else ColorType.KEY_TEXT))
+            chip.background = android.graphics.drawable.GradientDrawable().apply {
+                cornerRadius = 14 * density
+                setColor(colors.get(if (on) ColorType.ACTION_KEY_BACKGROUND else ColorType.KEY_BACKGROUND))
+            }
+        }
+        labels.forEachIndexed { i, label ->
+            val chip = android.widget.TextView(context).apply {
+                setText(label)
+                gravity = android.view.Gravity.CENTER
+                setTextSize(android.util.TypedValue.COMPLEX_UNIT_SP, 13f)
+                helium314.keyboard.keyboard.KeyboardTypeface.applyToTextView(this)
+                setOnClickListener {
+                    if (i == TARGET_SELECTION && !hasSelection) return@setOnClickListener
+                    translateKind = i
+                    paint()
+                    showTranslateHeader()
+                }
+            }
+            chips.add(chip)
+            row.addView(chip, android.widget.LinearLayout.LayoutParams(0, (30 * density).toInt(), 1f).apply {
+                marginStart = (3 * density).toInt()
+                marginEnd = (3 * density).toInt()
+            })
+        }
+        paint()
+        return row
+    }
+
+    /** translates the chosen part of the field with [prompt] */
+    private fun runTranslation(prompt: String, label: String) {
+        val command = helium314.keyboard.fork.slate.SlateCommand(label, prompt)
+        val range = translateRange(translateKind)
+        if (range == null) {
+            // the app doesn't tell its text: the paragraph before the cursor, as before
+            val target = translateTarget()
+            if (target.isBlank()) return KeyboardSwitcher.getInstance().showToast(context.getString(R.string.fork_translate_empty), true)
+            slate?.runOnTail(command, target)
+            return
+        }
+        if (range.text.isBlank()) return KeyboardSwitcher.getInstance().showToast(context.getString(R.string.fork_translate_empty), true)
+        slate?.runOnRange(command, range.start, range.end, range.text)
+    }
+
+    /** the part of the field [kind] means, null when the app gives no text (or no selection for a selection) */
+    private fun translateRange(kind: Int): Range? {
+        val ic = latinIME?.currentInputConnection ?: return null
+        val et = ic.getExtractedText(android.view.inputmethod.ExtractedTextRequest().apply { hintMaxChars = 20000 }, 0) ?: return null
+        val t = et.text?.toString() ?: return null
+        val off = et.startOffset
+        val a = minOf(et.selectionStart, et.selectionEnd).coerceIn(0, t.length)
+        val b = maxOf(et.selectionStart, et.selectionEnd).coerceIn(0, t.length)
+        var from: Int
+        var to: Int
+        when (kind) {
+            TARGET_SELECTION -> { if (a == b) return null; from = a; to = b }
+            TARGET_SENTENCE -> {
+                // the sentence at the cursor; one that just ended right before the cursor counts
+                var i = a
+                while (i > 0 && t[i - 1] == ' ') i--
+                val endedBefore = i > 0 && t[i - 1] in SENTENCE_END && t[i - 1] != '\n'
+                if (endedBefore) i--
+                from = (i - 1 downTo 0).firstOrNull { t[it] in SENTENCE_END }?.plus(1) ?: 0
+                to = if (endedBefore && a == b) a
+                    else (b until t.length).firstOrNull { t[it] in SENTENCE_END }?.let { if (t[it] == '\n') it else it + 1 } ?: t.length
+            }
+            TARGET_PARAGRAPH -> {
+                from = t.lastIndexOf('\n', a - 1) + 1
+                to = t.indexOf('\n', b).let { if (it < 0) t.length else it }
+            }
+            else -> { from = 0; to = t.length }
+        }
+        while (from < to && t[from].isWhitespace()) from++
+        return Range(off + from, off + to, t.substring(from, to))
+    }
+
+    /** the paragraph before the cursor (after the last line break), when the app doesn't give its text */
     private fun translateTarget(): String {
         val text = latinIME?.forkTextBeforeCursor(helium314.keyboard.fork.slate.SlateRunner.MAX_TEXT)?.toString().orEmpty()
         return text.substring(text.lastIndexOf('\n') + 1)
     }
 
+    /** custom translation: the panel goes, the letters type the instruction into the toolbar */
+    private fun startTranslateTyping() {
+        val tb = toolbar ?: return
+        val panel = translatePanel ?: return
+        translatePanel = null
+        (panel.parent as? android.view.ViewGroup)?.removeView(panel)
+        translateTyping = true
+        clipSearch.start(RichInputMethodManager.getInstance().combiningRulesExtraValueOfCurrentSubtype)
+        tb.showInputHeader(context.getString(R.string.fork_translate_custom_hint),
+            onBack = { finishTranslateTyping(false) },
+            button = context.getString(R.string.fork_translate_go) to { finishTranslateTyping(true) })
+        tb.setInputText("")
+    }
+
+    /** [run]: translate with the typed instruction; else back to the panel */
+    private fun finishTranslateTyping(run: Boolean) {
+        if (!translateTyping) return
+        val instruction = clipSearch.query.trim()
+        translateTyping = false
+        clipSearch.stop()
+        if (run && instruction.isNotEmpty()) {
+            if (!toolActive) toolbar?.hideToolHeader()
+            runTranslation("Rewrite the text following this instruction: \"$instruction\". It is usually a translation " +
+                "(a language, a tone, a style). Keep the meaning, line breaks, names and numbers unless the instruction says " +
+                "otherwise. Output only the resulting text.", instruction.take(24))
+        } else showTranslatePanel(fresh = false)
+    }
+
     private fun closeTranslatePanel() {
+        if (translateTyping) {
+            translateTyping = false
+            clipSearch.stop()
+            if (!toolActive) toolbar?.hideToolHeader()
+        }
         val panel = translatePanel ?: return
         translatePanel = null
         (panel.parent as? android.view.ViewGroup)?.removeView(panel)
@@ -1326,6 +1484,7 @@ class DynamicToolbarController(private val context: Context) {
     /** Close the search bar, [paste] goes to the app. */
     fun endClipSearch(paste: String?) {
         if (gifTyping) return finishGifTyping(false)
+        if (translateTyping) return finishTranslateTyping(false)
         if (!clipSearch.isActive) return
         clipSearch.stop()
         if (gifMode) {
@@ -1342,6 +1501,16 @@ class DynamicToolbarController(private val context: Context) {
     /** Key input while searching. Returns true if it was used for the search and must not reach the app. */
     fun onKeyEvent(event: Event): Boolean {
         if (!clipSearch.isActive) return false
+        if (translateTyping) {
+            if (event.codePoint == Constants.CODE_ENTER) {
+                finishTranslateTyping(true)
+                return true
+            }
+            clipSearch.setCombiningSpec(RichInputMethodManager.getInstance().combiningRulesExtraValueOfCurrentSubtype)
+            if (!clipSearch.onEvent(event)) return false
+            toolbar?.setInputText(clipSearch.query)
+            return true
+        }
         if (gifTyping) {
             // enter: the results in the panel
             if (event.codePoint == Constants.CODE_ENTER) {
@@ -1389,6 +1558,10 @@ class DynamicToolbarController(private val context: Context) {
         val tb = toolbar ?: return
         if (gifTyping) {
             tb.setGifQuery(clipSearch.query, typing = true)
+            return
+        }
+        if (translateTyping) {
+            tb.setInputText(clipSearch.query)
             return
         }
         if (gifMode) {
@@ -1470,6 +1643,11 @@ class DynamicToolbarController(private val context: Context) {
         /** keyboard width (dp) the ripple depth setting is meant for, see startWave */
         private const val RIPPLE_REFERENCE_WIDTH_DP = 400f
         private const val GIF_ALL = 0
+        private const val TARGET_SELECTION = 0
+        private const val TARGET_SENTENCE = 1
+        private const val TARGET_PARAGRAPH = 2
+        private const val TARGET_ALL = 3
+        private const val SENTENCE_END = ".!?。！？\n"
         private const val GIF_RECENT = 1
         private const val GIF_FAVORITES = 2
         const val TOOL_CLIPBOARD = 1

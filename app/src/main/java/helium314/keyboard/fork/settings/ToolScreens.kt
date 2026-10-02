@@ -75,6 +75,7 @@ fun SmartChipsScreen(onClickBack: () -> Unit) {
             R.string.fork_cat_smart_clip,
             ClipPrefs.SMART_CHIPS,
             ClipPrefs.SMART_TESTER.takeIf { prefs.getBoolean(ClipPrefs.SMART_CHIPS, ClipPrefs.DEFAULT_SMART_CHIPS) },
+            helium314.keyboard.fork.clipboard.LinkPreview.PREF_ENABLED,
             R.string.fork_cat_codes,
             ClipPrefs.CODE_AUTO_OPEN,
             NotificationOtpCapture.PREF,

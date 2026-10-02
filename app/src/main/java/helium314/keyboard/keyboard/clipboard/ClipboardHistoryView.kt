@@ -275,7 +275,95 @@ class ClipboardHistoryView @JvmOverloads constructor(
 
     override fun onLongPressClip(clipId: Long) {
         keyboardActionListener.onLongPressKey(KeyCode.NOT_SPECIFIED)
+        // fork: a picture shows big, a link opens (in its app when one handles it), other clips show their details
+        val entry = clipboardHistoryManager.getHistoryEntryContent(clipId)
+        if (entry?.filename != null) {
+            showImagePreview(clipId)
+            return
+        }
+        val text = entry?.text?.trim().orEmpty()
+        val link = ClipPrefs.findActions(text).firstOrNull { it is ClipPrefs.SmartAction.Link }?.value
+        if (link != null && link.length >= text.length - 2) {
+            openLink(link)
+            return
+        }
         showInfoPanel(clipId)
+    }
+
+    /** fork: the link in the app that takes it (YouTube, X ... claim their links), else the browser */
+    private fun openLink(link: String) {
+        val uri = android.net.Uri.parse(if (link.contains("://")) link else "https://$link")
+        val intent = android.content.Intent(android.content.Intent.ACTION_VIEW, uri)
+            .addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK)
+        try {
+            context.startActivity(intent)
+        } catch (e: android.content.ActivityNotFoundException) {
+            helium314.keyboard.keyboard.KeyboardSwitcher.getInstance().showToast(context.getString(R.string.fork_smart_no_app), true)
+        }
+    }
+
+    /** fork: a picture clip over the list as big as it fits; tap closes, paste and details below it */
+    private fun showImagePreview(clipId: Long) {
+        hideInfoPanel()
+        val entry = clipboardHistoryManager.getHistoryEntryContent(clipId) ?: return
+        val container = clipboardRecyclerView.parent as? FrameLayout ?: return
+        val colors = Settings.getValues().mColors
+        val density = resources.displayMetrics.density
+        val image = android.widget.ImageView(context).apply {
+            scaleType = android.widget.ImageView.ScaleType.FIT_CENTER
+            adjustViewBounds = true
+        }
+        val path = java.io.File(helium314.keyboard.latin.database.ClipboardDao.clipFilesDir, entry.filename ?: return).absolutePath
+        val opt = android.graphics.BitmapFactory.Options().apply { inJustDecodeBounds = true }
+        android.graphics.BitmapFactory.decodeFile(path, opt)
+        opt.inSampleSize = (opt.outWidth / resources.displayMetrics.widthPixels).coerceAtLeast(1)
+        opt.inJustDecodeBounds = false
+        val bitmap = android.graphics.BitmapFactory.decodeFile(path, opt)
+        if (bitmap == null) {
+            showInfoPanel(clipId)
+            return
+        }
+        image.setImageBitmap(bitmap)
+        fun button(label: Int, primary: Boolean, action: () -> Unit) = TextView(context).apply {
+            setText(label)
+            gravity = android.view.Gravity.CENTER
+            setTextSize(TypedValue.COMPLEX_UNIT_SP, 14f)
+            KeyboardTypeface.applyToTextView(this)
+            setTextColor(colors.get(if (primary) ColorType.ACTION_KEY_ICON else ColorType.KEY_TEXT))
+            background = android.graphics.drawable.GradientDrawable().apply {
+                cornerRadius = 20 * density
+                setColor(colors.get(if (primary) ColorType.ACTION_KEY_BACKGROUND else ColorType.KEY_BACKGROUND))
+            }
+            val p = (10 * density).toInt()
+            setPadding(p * 2, p, p * 2, p)
+            setOnClickListener {
+                keyboardActionListener.onPressKey(KeyCode.NOT_SPECIFIED, 0, 1, HapticEvent.KEY_PRESS)
+                action()
+            }
+        }
+        val column = LinearLayout(context).apply {
+            orientation = VERTICAL
+            gravity = android.view.Gravity.CENTER
+            val m = (12 * density).toInt()
+            setPadding(m, m, m, m)
+            addView(image, LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 1f))
+            addView(LinearLayout(context).apply {
+                orientation = HORIZONTAL
+                gravity = android.view.Gravity.CENTER
+                setPadding(0, m, 0, 0)
+                addView(button(R.string.fork_clip_details, false) { showInfoPanel(clipId) })
+                addView(View(context), LinearLayout.LayoutParams(m, 1))
+                addView(button(R.string.fork_clip_paste, true) { hideInfoPanel(); onKeyUp(clipId) })
+            })
+        }
+        val scrim = FrameLayout(context).apply {
+            setBackgroundColor(0xCC000000.toInt())
+            setOnClickListener { hideInfoPanel() }
+            addView(column, FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT))
+        }
+        image.setOnClickListener { hideInfoPanel() }
+        container.addView(scrim, FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT))
+        infoPanel = scrim
     }
 
     override fun onTogglePin(clipId: Long) {

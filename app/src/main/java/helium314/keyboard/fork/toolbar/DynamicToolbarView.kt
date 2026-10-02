@@ -165,6 +165,25 @@ class DynamicToolbarView @JvmOverloads constructor(
         setOnClickListener { onClick() }
     }
 
+    /** paste chip for a link: the site's icon and the title instead of the address */
+    private fun previewChip(preview: helium314.keyboard.fork.clipboard.LinkPreview.Preview, maxWidthDp: Int,
+                            onClick: () -> Unit) = LinearLayout(context).apply {
+        orientation = LinearLayout.HORIZONTAL
+        gravity = Gravity.CENTER_VERTICAL
+        val h = (10 * density).toInt()
+        setPadding(h, 0, (12 * density).toInt(), 0)
+        background = chipBackground(false, true)
+        setOnClickListener { onClick() }
+        if (preview.icon != null) addView(ImageView(context).apply {
+            setImageBitmap(preview.icon)
+            scaleType = ImageView.ScaleType.FIT_CENTER
+        }, LinearLayout.LayoutParams((18 * density).toInt(), (18 * density).toInt()).apply { marginEnd = (6 * density).toInt() })
+        addView(chip(preview.title, false, maxWidthDp - 30) { onClick() }.apply {
+            background = null
+            setPadding(0, 0, 0, 0)
+        }, LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT))
+    }
+
     /**
      * Pill in key colors. Paste / smart chips ([border]) follow the chip look settings: outline dotted, dashed or
      * solid (or none), outline, fill and text colors (enter key and key colors unless set), corner radius.
@@ -205,6 +224,8 @@ class DynamicToolbarView @JvmOverloads constructor(
         text: String?, actions: List<helium314.keyboard.fork.clipboard.ClipPrefs.SmartAction>, smart: Boolean,
         imageUri: android.net.Uri?, onPaste: (String?) -> Unit,
         onAction: (helium314.keyboard.fork.clipboard.ClipPrefs.SmartAction) -> Unit, onBack: () -> Unit,
+        /** a copied link: its site icon and title in place of the link (tapping still pastes the clip) */
+        preview: helium314.keyboard.fork.clipboard.LinkPreview.Preview? = null,
     ) {
         chipBar.removeAllViews()
         chips.removeAllViews()
@@ -215,7 +236,8 @@ class DynamicToolbarView @JvmOverloads constructor(
         if (smart && imageUri == null && text != null && actions.isNotEmpty()) {
             // smart chips: the clip on the left, what can be done with it on the right
             chips.gravity = Gravity.START or Gravity.CENTER_VERTICAL
-            chips.addView(chip(text.replace('\n', ' '), false, 400, border = true) { onPaste(text) }, chipParams())
+            chips.addView(if (preview != null) previewChip(preview, 400) { onPaste(text) }
+                else chip(text.replace('\n', ' '), false, 400, border = true) { onPaste(text) }, chipParams())
             chipBar.addView(chips, LinearLayout.LayoutParams(0, LayoutParams.MATCH_PARENT, 1f))
             val actionRow = LinearLayout(context).apply {
                 orientation = LinearLayout.HORIZONTAL
@@ -234,7 +256,8 @@ class DynamicToolbarView @JvmOverloads constructor(
             } else if (text != null) {
                 if (code != null && code != text.trim())
                     chips.addView(chip(code, true, 120, border = true) { onPaste(code) }, chipParams())
-                chips.addView(chip(text.replace('\n', ' '), false, 200, border = true) { onPaste(text) }, chipParams())
+                chips.addView(if (preview != null) previewChip(preview, 260) { onPaste(text) }
+                    else chip(text.replace('\n', ' '), false, 200, border = true) { onPaste(text) }, chipParams())
             }
             chipBar.addView(chips, LinearLayout.LayoutParams(0, LayoutParams.MATCH_PARENT, 1f))
             // balance the back button so the chips are centered
@@ -672,6 +695,61 @@ class DynamicToolbarView @JvmOverloads constructor(
      * the right; [filter] 1 = recent, 2 = favorites shown (drawn in the enter key color)
      */
     private var gifField: TextView? = null
+    private var inputField: TextView? = null
+
+    /**
+     * A header to type into: < | the typed text (outlined, with a caret) | [button]. The letters type into it (the
+     * controller feeds it with [setInputText]); [onField] when the field is tapped.
+     */
+    fun showInputHeader(hint: String, onBack: () -> Unit, button: Pair<String, () -> Unit>, onField: () -> Unit = {}) {
+        val colors = Settings.getValues().mColors
+        header.removeAllViews()
+        headerActions.clear()
+        header.addView(iconButton(R.drawable.ic_dot_left, context.getString(R.string.fork_tool_back)) { onBack() },
+            LinearLayout.LayoutParams((48 * density).toInt(), LayoutParams.MATCH_PARENT).apply { marginStart = backMargin })
+        header.addView(TextView(context).apply {
+            inputField = this
+            this.hint = hint
+            setSingleLine()
+            ellipsize = TextUtils.TruncateAt.START // the end of what is typed stays in view
+            gravity = Gravity.CENTER_VERTICAL
+            setTextSize(TypedValue.COMPLEX_UNIT_SP, 15f)
+            setTextColor(colors.get(ColorType.KEY_TEXT))
+            setHintTextColor(colors.get(ColorType.KEY_HINT_TEXT))
+            KeyboardTypeface.applyToTextView(this)
+            setPadding((14 * density).toInt(), 0, (14 * density).toInt(), 0)
+            background = GradientDrawable().apply {
+                cornerRadius = 16 * density
+                setColor(colors.get(ColorType.KEY_BACKGROUND))
+                setStroke((1.5f * density).toInt().coerceAtLeast(1), colors.get(ColorType.KEY_TEXT))
+            }
+            setOnClickListener { onField() }
+        }, LinearLayout.LayoutParams(0, (34 * density).toInt(), 1f).apply { marginEnd = (8 * density).toInt() })
+        header.addView(TextView(context).apply {
+            text = button.first
+            setSingleLine()
+            gravity = Gravity.CENTER
+            setTextSize(TypedValue.COMPLEX_UNIT_SP, 14f)
+            KeyboardTypeface.applyToTextView(this)
+            setTextColor(colors.get(ColorType.ACTION_KEY_ICON))
+            setPadding((16 * density).toInt(), 0, (16 * density).toInt(), 0)
+            background = GradientDrawable().apply {
+                cornerRadius = 16 * density
+                setColor(colors.get(ColorType.ACTION_KEY_BACKGROUND))
+            }
+            setOnClickListener { button.second() }
+        }, LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, (32 * density).toInt()).apply {
+            marginEnd = (8 * density).toInt()
+        })
+        row.visibility = GONE
+        searchBar.visibility = GONE
+        chipBar.visibility = GONE
+        header.visibility = VISIBLE
+    }
+
+    fun setInputText(text: String) {
+        inputField?.text = if (text.isEmpty()) "" else "$text▏"
+    }
 
     /** the GIF header's field while a search is typed: the text with a caret, outlined in the text color (white) */
     fun setGifQuery(query: String, typing: Boolean) {
@@ -784,7 +862,9 @@ class DynamicToolbarView @JvmOverloads constructor(
     fun setEmojiTabSelected(index: Int) {
         val colors = Settings.getValues().mColors
         emojiTabs.forEachIndexed { i, tab ->
-            colors.setColor(tab, if (i == index) ColorType.EMOJI_CATEGORY_SELECTED else ColorType.EMOJI_CATEGORY)
+            // the selected tab in the enter key's color, so it stands out
+            if (i == index) tab.setColorFilter(colors.get(ColorType.ACTION_KEY_BACKGROUND))
+            else colors.setColor(tab, ColorType.EMOJI_CATEGORY)
         }
         val tab = emojiTabs.getOrNull(index) ?: return
         emojiTabScroll?.post { emojiTabScroll?.smoothScrollTo((tab.left - (48 * density).toInt()).coerceAtLeast(0), 0) }

@@ -29,6 +29,8 @@ class TranslatePanel(
     private val prefs: SharedPreferences,
     /** the text that will be translated, shown at the top */
     private val preview: String,
+    /** shown above the wheels (what to translate: selection, sentence, paragraph, all) */
+    private val top: View?,
     private val onTranslate: (prompt: String, label: String) -> Unit,
 ) : FrameLayout(context) {
     private val density = resources.displayMetrics.density
@@ -52,6 +54,8 @@ class TranslatePanel(
             setPadding(dp(14), dp(10), dp(14), dp(4))
         }
         // the text itself is in the toolbar above (AI translation | text)
+        if (top != null) content.addView(top, LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT).apply { bottomMargin = dp(6) })
         // the three wheels
         val wheels = LinearLayout(context).apply { orientation = LinearLayout.HORIZONTAL }
         fun column(title: Int, options: List<Option>, selected: Option, weight: Float, onPick: (Option) -> Unit) {

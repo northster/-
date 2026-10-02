@@ -442,4 +442,13 @@
     <string name="fork_ai_glow_bloom_summary">점 위에 같은 색의 매끈한 빛을 더해(가산 합성) LED가 빛나는 느낌을 내요. 0이면 점만</string>
     <string name="fork_typo_one_left">한손 왼쪽</string>
     <string name="fork_typo_one_right">한손 오른쪽</string>
+    <string name="fork_link_preview">링크 미리보기</string>
+    <string name="fork_link_preview_summary">복사한 링크를 사이트 아이콘과 제목(영상 제목, 글 내용 등)으로 보여줘요. 복사할 때 그 사이트에 한 번 접속해요</string>
+    <string name="fork_clip_details">자세히</string>
+    <string name="fork_translate_custom">직접 입력</string>
+    <string name="fork_translate_custom_hint">번역 방법 입력 (예: 일본어 반말로)</string>
+    <string name="fork_translate_target_selection">선택</string>
+    <string name="fork_translate_target_sentence">문장</string>
+    <string name="fork_translate_target_paragraph">문단</string>
+    <string name="fork_translate_target_all">전체</string>
 </resources>

@@ -31,8 +31,7 @@ object ToolbarItems {
         ToolbarItem(AI, R.drawable.ic_dot_sparkles, R.string.fork_toolbar_ai),
         ToolbarItem(TRANSLATE, R.drawable.ic_dot_translate, R.string.fork_toolbar_translate),
         ToolbarItem(GIF, R.drawable.ic_dot_gif, R.string.fork_toolbar_gif),
-        // opens the keyboard settings
-        ToolbarItem(MORE, R.drawable.ic_dot_settings, R.string.fork_toolbar_settings),
+        // the settings button (MORE) is gone: the settings open from the app icon
     )
 
     /** always at the right end of the toolbar, after a divider */
