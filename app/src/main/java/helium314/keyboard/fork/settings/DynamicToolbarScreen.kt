@@ -9,6 +9,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.layout.size
 import androidx.compose.ui.unit.dp
 import helium314.keyboard.latin.utils.getActivity
 import helium314.keyboard.latin.utils.prefs
@@ -280,17 +281,35 @@ fun createDynamicToolbarSettings(context: Context) = listOf(
     },
     Setting(context, helium314.keyboard.fork.widget.WidgetPrefs.TRIVIA_NOW, R.string.fork_widget_trivia_now) { setting ->
         val ctx = androidx.compose.ui.platform.LocalContext.current
+        val trivia = helium314.keyboard.fork.widget.Trivia
+        // fetching (also when the keyboard started it) and the counts, looked at again while the screen shows
+        var loading by androidx.compose.runtime.remember { androidx.compose.runtime.mutableStateOf(trivia.isFetching) }
+        var counts by androidx.compose.runtime.remember { androidx.compose.runtime.mutableStateOf(trivia.count(ctx) to trivia.unseen(ctx)) }
+        androidx.compose.runtime.LaunchedEffect(Unit) {
+            while (true) {
+                loading = trivia.isFetching
+                counts = trivia.count(ctx) to trivia.unseen(ctx)
+                kotlinx.coroutines.delay(if (loading) 500 else 2000)
+            }
+        }
         helium314.keyboard.settings.preferences.Preference(name = setting.title,
-            description = ctx.getString(R.string.fork_widget_trivia_count, helium314.keyboard.fork.widget.Trivia.count(ctx),
-                helium314.keyboard.fork.widget.Trivia.unseen(ctx)),
+            description = if (loading) ctx.getString(R.string.fork_widget_trivia_fetching)
+                else ctx.getString(R.string.fork_widget_trivia_count, counts.first, counts.second),
             onClick = {
-                helium314.keyboard.fork.widget.Trivia.refreshIfDue(ctx, force = true) { added ->
+                if (loading) return@Preference
+                loading = true
+                trivia.refreshIfDue(ctx, force = true) { added ->
+                    loading = false
+                    counts = trivia.count(ctx) to trivia.unseen(ctx)
                     android.widget.Toast.makeText(ctx,
-                        if (added) ctx.getString(R.string.fork_widget_trivia_added)
-                        else ctx.getString(R.string.fork_widget_trivia_failed, helium314.keyboard.fork.widget.Trivia.lastError ?: "?"),
+                        if (added) ctx.getString(R.string.fork_widget_trivia_added_count, trivia.lastAdded)
+                        else ctx.getString(R.string.fork_widget_trivia_failed, trivia.lastError ?: "?"),
                         android.widget.Toast.LENGTH_LONG).show()
                 }
-            })
+            }) {
+            if (loading) androidx.compose.material3.CircularProgressIndicator(
+                modifier = androidx.compose.ui.Modifier.padding(start = 12.dp).size(22.dp), strokeWidth = 2.5.dp)
+        }
     },
     Setting(context, helium314.keyboard.fork.widget.WidgetPrefs.EMOJI, R.string.fork_widget_emoji, R.string.fork_widget_emoji_summary) {
         SwitchPreference(it, true) { DynamicToolbarController.current?.setToolbarItems() }

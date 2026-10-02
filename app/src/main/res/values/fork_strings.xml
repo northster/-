@@ -493,6 +493,8 @@
     <string name="fork_trivia_interest_share_value">%1$d of 25 (%2$d%%)</string>
     <string name="fork_widget_trivia_now">Get new trivia</string>
     <string name="fork_widget_trivia_count">%1$d kept (%2$d not seen yet)</string>
+    <string name="fork_widget_trivia_fetching">Getting trivia… (about 30 seconds)</string>
+    <string name="fork_widget_trivia_added_count">Got %1$d new facts</string>
     <string name="fork_widget_trivia_added">Got new trivia</string>
     <string name="fork_widget_trivia_failed">No new trivia: %1$s</string>
     <string name="fork_widget_trivia_no_key">Needs a Gemini key · tap for settings</string>

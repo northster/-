@@ -7,16 +7,11 @@ import java.net.URL
 import java.net.URLEncoder
 
 /**
- * fork: where the trivia comes from:
- *  - subjects: Wikipedia's "vital articles" (Level 4, about ten thousand subjects editors chose as the ones every
- *    encyclopedia needs: cat, Moon, chocolate, Roman Empire…), a different one for every fact, so they don't repeat
- *  - Wikipedia's lists of common misconceptions, each one corrected with sources
- * Text from Wikipedia, CC BY-SA 4.0.
+ * fork: the subjects of the trivia: Wikipedia's "vital articles" (Level 4, about ten thousand subjects editors chose
+ * as the ones every encyclopedia needs: cat, Moon, chocolate, Roman Empire…), a different one for every fact, so they
+ * don't repeat; for the interests, Wikipedia's search. Also where to read more about a subject.
  */
 object WikiFacts {
-    /** a text from an article (a misconception and its correction) */
-    class Article(val title: String, val text: String)
-
     private const val API = "https://en.wikipedia.org/w/api.php"
     /** the Level 4 lists, without mathematics (too abstract for a toolbar) */
     private val LISTS = listOf("Biology and health sciences", "Everyday life", "Geography", "History", "Arts",
@@ -49,36 +44,6 @@ object WikiFacts {
                 .filter { wanted(it) && !it.startsWith("List of") }.take(4).forEach { titles.add(it) }
         }.onFailure { lastError = it.javaClass.simpleName + ": " + it.message }
         return titles.shuffled().take(count)
-    }
-
-    /** the lists of common misconceptions: each paragraph corrects one belief, with sources (about 480 in all) */
-    private val MYTH_PAGES = listOf("List of common misconceptions about arts and culture",
-        "List of common misconceptions about history", "List of common misconceptions about science, technology, and mathematics")
-    private val mythCache = HashMap<String, List<String>>()
-
-    /** up to [count] misconceptions (page title to its paragraph) that are [wanted] (not used before); blocking */
-    fun misconceptions(count: Int, wanted: (String) -> Boolean): List<Article> {
-        val found = ArrayList<Article>()
-        for (page in MYTH_PAGES.shuffled()) {
-            if (found.size >= count) break
-            runCatching {
-                mythParagraphs(page).filter(wanted).shuffled().take(count - found.size).forEach { found.add(Article(page, it)) }
-            }.onFailure { lastError = it.javaClass.simpleName + ": " + it.message }
-        }
-        return found
-    }
-
-    private fun mythParagraphs(page: String): List<String> {
-        synchronized(mythCache) { mythCache[page]?.let { return it } }
-        val url = "$API?action=query&format=json&formatversion=2&redirects=1&prop=extracts&explaintext=1&titles=" +
-            URLEncoder.encode(page, "UTF-8")
-        val text = JSONObject(get(url)).getJSONObject("query").getJSONArray("pages").getJSONObject(0).optString("extract")
-        // the paragraphs after the introduction, without headings and references
-        val paragraphs = text.split('\n').map { it.trim() }
-            .filter { it.length in 60..700 && !it.startsWith("=") && "ISBN" !in it && "Retrieved" !in it }
-            .drop(2)
-        if (paragraphs.isNotEmpty()) synchronized(mythCache) { mythCache[page] = paragraphs }
-        return paragraphs
     }
 
     private fun listTitles(list: String): List<String> {

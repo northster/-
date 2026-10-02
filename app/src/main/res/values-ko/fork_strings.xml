@@ -490,6 +490,8 @@
     <string name="fork_trivia_interest_share_value">25개 중 %1$d개 (%2$d%%)</string>
     <string name="fork_widget_trivia_now">토막상식 새로 받기</string>
     <string name="fork_widget_trivia_count">%1$d개 보관 중 (안 본 것 %2$d개)</string>
+    <string name="fork_widget_trivia_fetching">토막상식을 받는 중… (30초쯤 걸립니다)</string>
+    <string name="fork_widget_trivia_added_count">토막상식 %1$d개를 받았습니다</string>
     <string name="fork_widget_trivia_added">토막상식을 받았습니다</string>
     <string name="fork_widget_trivia_failed">받지 못했습니다: %1$s</string>
     <string name="fork_widget_trivia_no_key">Gemini 키가 필요합니다 · 탭해서 설정</string>
