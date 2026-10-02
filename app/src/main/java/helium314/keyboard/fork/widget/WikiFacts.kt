@@ -17,15 +17,26 @@ object WikiFacts {
         "October", "November", "December")
     private const val FIRST_YEAR = 2012
 
-    /** up to [count] hooks ("... that X did Y?" without the "... that"), blocking; empty on any error */
-    fun hooks(count: Int): List<String> = runCatching {
-        val lastYear = Calendar.getInstance().get(Calendar.YEAR) - 1
-        val page = "Wikipedia:Recent additions/${(FIRST_YEAR..lastYear).random()}/${MONTHS.random()}"
-        val url = "https://en.wikipedia.org/w/api.php?action=parse&format=json&formatversion=2&prop=wikitext&page=" +
-            URLEncoder.encode(page, "UTF-8")
-        val wikitext = JSONObject(get(url)).getJSONObject("parse").getString("wikitext")
-        wikitext.lineSequence().mapNotNull { clean(it) }.toList().shuffled().take(count)
-    }.getOrDefault(emptyList())
+    /**
+     * up to [count] hooks ("... that X did Y?" without the "... that") that are [wanted] (not taken before), from random
+     * months (a few tries if a month has too few left); blocking, empty on errors
+     */
+    fun hooks(count: Int, wanted: (String) -> Boolean): List<String> {
+        val found = LinkedHashSet<String>()
+        repeat(3) {
+            if (found.size >= count) return@repeat
+            runCatching {
+                val lastYear = Calendar.getInstance().get(Calendar.YEAR) - 1
+                val page = "Wikipedia:Recent additions/${(FIRST_YEAR..lastYear).random()}/${MONTHS.random()}"
+                val url = "https://en.wikipedia.org/w/api.php?action=parse&format=json&formatversion=2&prop=wikitext&page=" +
+                    URLEncoder.encode(page, "UTF-8")
+                val wikitext = JSONObject(get(url)).getJSONObject("parse").getString("wikitext")
+                wikitext.lineSequence().mapNotNull { clean(it) }.filter(wanted).toList().shuffled()
+                    .take(count - found.size).forEach { found.add(it) }
+            }
+        }
+        return found.toList()
+    }
 
     /** a hook line as plain text, null if it is not one or has markup that can't be read simply */
     internal fun clean(line: String): String? {

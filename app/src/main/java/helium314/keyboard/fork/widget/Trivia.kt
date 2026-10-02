@@ -15,7 +15,7 @@ import org.json.JSONObject
 
 /**
  * fork: useless but true trivia for the toolbar ("A day on Venus is longer than its year."). A batch of short facts
- * (see [fetchBatch]: half from Wikipedia, half by Gemini and checked with a web search); each time the toolbar opens one
+ * (see [fetchBatch]: from Wikipedia's "Did you know", Gemini's own only as an experiment); each time the toolbar opens one
  * is shown, those not seen yet first. Once only a few are left unseen (20 of a batch of 25 seen) the next batch is
  * fetched. A few hundred are kept, a new fact that is already kept (also in other words) is dropped.
  */
@@ -32,6 +32,9 @@ object Trivia {
     /** after a failed fetch, wait this long before trying again on its own */
     private const val RETRY_MS = 15 * 60_000L
     private const val PREF_FAILED = "fork_trivia_failed"
+    /** keys of the Wikipedia hooks taken so far, so none comes twice (about 9 characters each) */
+    private const val PREF_WIKI_SEEN = "fork_trivia_wiki_seen"
+    private const val WIKI_SEEN_MAX = 30_000
     /** characters a fact may have, so it fits the widget in two lines */
     const val MAX_CHARS = 40
 
@@ -116,16 +119,25 @@ object Trivia {
         "music", "geography", "countries", "weather", "chemistry", "physics", "money", "art", "birds", "dinosaurs")
 
     /**
-     * About [BATCH] new facts, null if Gemini could not be reached. Two Gemini calls per batch:
-     *  1. half written by Gemini on three random topics, half retold from Wikipedia's "Did you know" (checked by
-     *     people), as short sentences in the user's language
-     *  2. Gemini checks its own half with Google Search and keeps only what is definitely true (not myths)
-     * Without Wikipedia (offline, error) the whole batch is Gemini's, still checked.
+     * About [BATCH] new facts, null if Gemini could not be reached.
+     *  - normally all from Wikipedia's "Did you know" (checked by people), each hook taken once ever ([PREF_WIKI_SEEN]),
+     *    Gemini only retells them as short sentences in the user's language: one call per batch
+     *  - experimental ([WidgetPrefs.TRIVIA_AI]): half written by Gemini on three random topics, then checked by Gemini
+     *    with a web search, only what is definitely true stays: a second call
+     * Without Wikipedia (offline, error) and without the experiment there are no new facts this time.
      */
     private fun fetchBatch(app: Context, korean: Boolean, avoid: String): List<String>? {
         val prefs = app.prefs()
-        val wiki = WikiFacts.hooks(BATCH - BATCH / 2 + 6) // some get dropped when they can't be short
-        val own = if (wiki.isEmpty()) BATCH else BATCH / 2
+        val ai = prefs.getBoolean(WidgetPrefs.TRIVIA_AI, false)
+        val wikiWanted = if (ai) BATCH - BATCH / 2 else BATCH
+        val seen = wikiSeen(prefs)
+        // some get dropped when they can't be said short
+        val wiki = WikiFacts.hooks(wikiWanted + 8) { hookKey(it) !in seen }
+        val own = if (!ai) 0 else if (wiki.isEmpty()) BATCH else BATCH / 2
+        if (wiki.isEmpty() && own == 0) {
+            Log.w(TAG, "no trivia: Wikipedia not reached")
+            return null
+        }
         val topics = TOPICS.shuffled().take(3).joinToString(", ")
         val lang = if (korean) "Korean" else "English"
         val prompt = "You write short, true and delightfully useless trivia facts. Every fact must be correct and " +
@@ -134,23 +146,36 @@ object Trivia {
             "Each fact is one short sentence in $lang, at most ${MAX_CHARS - 5} characters. " +
             "Output only lines starting with \"G: \" or \"W: \", nothing else."
         val request = buildString {
-            append("Part G: write $own facts about $topics, one per line, each starting with \"G: \".\n")
+            if (own > 0) append("Part G: write $own facts about $topics, one per line, each starting with \"G: \".\n")
             if (wiki.isNotEmpty()) {
                 append("Part W: retell each of these checked facts as one short $lang sentence starting with \"W: \". ")
                 append("Keep the meaning exactly, add nothing. Skip any that can't be said that short.\n")
                 wiki.forEach { append("- ").append(it).append('\n') }
             }
-            if (avoid.isNotEmpty()) append("\nDo not repeat these or anything close to them:\n").append(avoid)
+            if (own > 0 && avoid.isNotEmpty()) append("\nDo not repeat these or anything close to them:\n").append(avoid)
         }
         val first = GeminiClient.run(prefs, prompt, request, search = false, raw = true)
         if (first !is GeminiClient.Outcome.Success) {
             Log.w(TAG, "no trivia: ${(first as GeminiClient.Outcome.Failure).message}")
             return null
         }
+        // these hooks are used up, also the ones that were skipped
+        rememberWiki(prefs, seen, wiki)
         val lines = first.text.lines().map { it.trim() }
         val fromWiki = lines.filter { it.startsWith("W:") }.map { it.removePrefix("W:").trim() }
         val written = lines.filter { it.startsWith("G:") }.map { it.removePrefix("G:").trim() }.filter { it.isNotEmpty() }
         return fromWiki + verified(prefs, written)
+    }
+
+    /** a hook, the same however it is retold */
+    private fun hookKey(hook: String) = Integer.toHexString(norm(hook).hashCode())
+
+    private fun wikiSeen(prefs: SharedPreferences): MutableSet<String> =
+        prefs.getString(PREF_WIKI_SEEN, "").orEmpty().split(',').filterTo(LinkedHashSet()) { it.isNotEmpty() }
+
+    private fun rememberWiki(prefs: SharedPreferences, seen: MutableSet<String>, hooks: List<String>) {
+        hooks.forEach { seen.add(hookKey(it)) }
+        prefs.edit { putString(PREF_WIKI_SEEN, seen.toList().takeLast(WIKI_SEEN_MAX).joinToString(",")) }
     }
 
     /** the facts Gemini, searching the web, says are definitely true; none if the check can't be made */

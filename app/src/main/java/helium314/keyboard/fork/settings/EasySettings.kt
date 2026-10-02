@@ -114,6 +114,7 @@ object EasySettings {
         ClipPrefs.CODE_TEST_UNTIL,
         // widgets
         WidgetPrefs.TRIVIA_NOW,
+        WidgetPrefs.TRIVIA_AI,
         // advanced
         Settings.PREF_KEY_LONGPRESS_TIMEOUT,
         Settings.PREFS_LONG_PRESS_SYMBOLS_FOR_NUMPAD,

@@ -480,8 +480,10 @@
     <string name="fork_widget_usage">Claude usage widget</string>
     <string name="fork_widget_usage_summary">5-hour and weekly limits used and time left (needs the claude.ai session key)</string>
     <string name="fork_widget_trivia">Trivia widget</string>
-    <string name="fork_widget_trivia_summary">A useless but true fact each time the toolbar opens (unseen first). Tap for the next one. 25 at a time, the next 25 come once 20 are seen; up to 400 are kept without repeats. Needs a Gemini key</string>
+    <string name="fork_widget_trivia_summary">A useless but true fact each time the toolbar opens (unseen first), from Wikipedia\'s \"Did you know\" (checked by its editors), retold short by Gemini. Tap for the next one, long press to copy. 25 at a time, the next 25 once 20 are seen; none comes twice. Needs a Gemini key</string>
     <string name="fork_widget_hours">%1$d h</string>
+    <string name="fork_widget_trivia_ai">Facts written by Gemini (experimental)</string>
+    <string name="fork_widget_trivia_ai_summary">Half of each batch written by Gemini instead of Wikipedia, then checked by Gemini with a web search. More variety, but not checked by people</string>
     <string name="fork_widget_trivia_now">Get new trivia now</string>
     <string name="fork_widget_trivia_count">%1$d facts kept</string>
     <string name="fork_widget_trivia_added">Got new trivia</string>
