@@ -477,8 +477,7 @@
     <string name="fork_widget_usage">Claude 사용량 위젯</string>
     <string name="fork_widget_usage_summary">5시간·주간 한도 사용량과 남은 시간(claude.ai 세션 키 필요)</string>
     <string name="fork_widget_trivia">랜덤 지식 위젯</string>
-    <string name="fork_widget_trivia_summary">툴바를 열 때마다 쓸데없지만 사실인 지식 하나(안 본 것 먼저). 누르면 다음 지식. Gemini 키 필요</string>
-    <string name="fork_widget_trivia_hours">새 지식 받는 간격</string>
+    <string name="fork_widget_trivia_summary">툴바를 열 때마다 쓸데없지만 사실인 지식 하나(안 본 것 먼저). 누르면 다음 지식. 25개씩 받고 20개를 보면 다음 25개를 받아요. 최대 400개까지 겹치지 않게 모아 둬요. Gemini 키 필요</string>
     <string name="fork_widget_hours">%1$d시간</string>
     <string name="fork_widget_trivia_now">지금 새 지식 받기</string>
     <string name="fork_widget_trivia_count">모아 둔 지식 %1$d개</string>

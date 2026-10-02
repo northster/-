@@ -6,9 +6,6 @@ object WidgetPrefs {
     const val USAGE = "fork_widget_usage"
     const val TRIVIA = "fork_widget_trivia"
     const val EMOJI = "fork_widget_emoji"
-    /** hours between two batches of trivia */
-    const val TRIVIA_HOURS = "fork_widget_trivia_hours"
-    const val DEFAULT_TRIVIA_HOURS = 6f
     /** settings entry: get new trivia now (nothing stored) */
     const val TRIVIA_NOW = "fork_widget_trivia_now"
     /** where emoji ideas come from: [EMOJI_LOCAL] (built-in dictionary), [EMOJI_LOCAL_AI] (dictionary, ✨ asks

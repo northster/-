@@ -113,7 +113,6 @@ object EasySettings {
         ClipPrefs.SMART_TESTER,
         ClipPrefs.CODE_TEST_UNTIL,
         // widgets
-        WidgetPrefs.TRIVIA_HOURS,
         WidgetPrefs.TRIVIA_NOW,
         // advanced
         Settings.PREF_KEY_LONGPRESS_TIMEOUT,

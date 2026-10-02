@@ -73,9 +73,14 @@ public final class InputView extends FrameLayout {
         final int x = (int)me.getX(index) + rect.left;
         final int y = (int)me.getY(index) + rect.top;
 
+        // fork: the dynamic toolbar covers the top padding while it is shown, its touches are its own
+        final helium314.keyboard.fork.toolbar.DynamicToolbarController toolbar =
+                helium314.keyboard.fork.toolbar.DynamicToolbarController.Companion.getCurrent();
+        final boolean onToolbar = toolbar != null && toolbar.isOnToolbar(me.getY(index));
+
         // The touch events that hit the top padding of keyboard should be forwarded to
         // {@link SuggestionStripView}.
-        if (mKeyboardTopPaddingForwarder.onInterceptTouchEvent(x, y, me)) {
+        if (!onToolbar && mKeyboardTopPaddingForwarder.onInterceptTouchEvent(x, y, me)) {
             mActiveForwarder = mKeyboardTopPaddingForwarder;
             return true;
         }

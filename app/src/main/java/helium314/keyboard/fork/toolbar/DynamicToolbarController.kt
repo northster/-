@@ -304,7 +304,33 @@ class DynamicToolbarController(private val context: Context) {
             return
         }
         val frameTop = frame.top + frame.translationY
-        tb.translationY = frameTop - tb.bottom + hiddenFraction * tb.height
+        // the toolbar sits on the keyboard's top padding, right above the keys: the room above and below its icons
+        // stays the same whatever the padding is. Drawn in front of the keyboard frame and cut at the keys' top, so
+        // while it slides away it looks like going behind the keys.
+        tb.translationZ = 1f
+        tb.outlineProvider = null // no shadow from the elevation
+        tb.translationY = frameTop + padOverlap() - tb.bottom + hiddenFraction * tb.height
+        val shown = (tb.height * (1f - hiddenFraction)).toInt().coerceAtLeast(0)
+        val clip = tb.clipBounds
+        if (clip == null || clip.bottom != shown || clip.right != tb.width)
+            tb.clipBounds = android.graphics.Rect(0, 0, tb.width, shown)
+    }
+
+    /** the part of the keyboard's top padding the toolbar covers (all of it, at most the toolbar's height) */
+    private fun padOverlap(): Int {
+        val tb = toolbar ?: return 0
+        val pad = runCatching {
+            helium314.keyboard.latin.utils.ResourceUtils.getForkVerticalMetrics(context.resources, Settings.getValues())[0]
+        }.getOrDefault(0)
+        return pad.coerceIn(0, tb.height)
+    }
+
+    /** [y] (input view coordinates) is on the shown toolbar: its touches are not the keyboard padding's */
+    fun isOnToolbar(y: Float): Boolean {
+        val tb = toolbar ?: return false
+        if (tb.visibility != View.VISIBLE || hiddenFraction >= 1f) return false
+        val top = tb.top + tb.translationY
+        return y >= top && y < top + tb.height * (1f - hiddenFraction)
     }
 
     private fun requestInsetsUpdate() {
@@ -316,7 +342,7 @@ class DynamicToolbarController(private val context: Context) {
     private fun expandedTop(): Int {
         val tb = toolbar ?: return Int.MAX_VALUE
         val frame = keyboardFrame ?: return Int.MAX_VALUE
-        return (frame.top + frame.translationY).toInt() - tb.height
+        return (frame.top + frame.translationY).toInt() + padOverlap() - tb.height
     }
 
     /** Top of the area the app should be resized for (contentTopInsets), Int.MAX_VALUE if toolbar is not relevant. */

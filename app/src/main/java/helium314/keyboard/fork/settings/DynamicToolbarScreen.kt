@@ -268,11 +268,6 @@ fun createDynamicToolbarSettings(context: Context) = listOf(
     Setting(context, helium314.keyboard.fork.widget.WidgetPrefs.TRIVIA, R.string.fork_widget_trivia, R.string.fork_widget_trivia_summary) {
         SwitchPreference(it, true) { DynamicToolbarController.current?.setToolbarItems() }
     },
-    Setting(context, helium314.keyboard.fork.widget.WidgetPrefs.TRIVIA_HOURS, R.string.fork_widget_trivia_hours) { setting ->
-        val ctx = androidx.compose.ui.platform.LocalContext.current
-        InlineSliderPreference(name = setting.title, key = setting.key, default = helium314.keyboard.fork.widget.WidgetPrefs.DEFAULT_TRIVIA_HOURS,
-            range = 1f..48f, step = 1f, format = { ctx.getString(R.string.fork_widget_hours, it.roundToInt()) })
-    },
     Setting(context, helium314.keyboard.fork.widget.WidgetPrefs.TRIVIA_NOW, R.string.fork_widget_trivia_now) { setting ->
         val ctx = androidx.compose.ui.platform.LocalContext.current
         helium314.keyboard.settings.preferences.Preference(name = setting.title,
@@ -489,7 +484,6 @@ fun WidgetScreen(onClickBack: () -> Unit) {
         helium314.keyboard.fork.usage.ClaudeUsage.PREF_SESSION_KEY.takeIf { usage },
         R.string.fork_widget_cat_trivia,
         helium314.keyboard.fork.widget.WidgetPrefs.TRIVIA,
-        helium314.keyboard.fork.widget.WidgetPrefs.TRIVIA_HOURS.takeIf { trivia },
         helium314.keyboard.fork.widget.WidgetPrefs.TRIVIA_NOW.takeIf { trivia },
         R.string.fork_widget_cat_emoji,
         helium314.keyboard.fork.widget.WidgetPrefs.EMOJI,
