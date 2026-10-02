@@ -1235,6 +1235,11 @@ class DynamicToolbarController(private val context: Context) {
     }
 
     /** the keyboard went away: with the setting, the toolbar is closed for the next time */
+    /** the keyboard came up: a toolbar left open shows a new fact too, not the one from last time */
+    fun onWindowShown() {
+        if (isExpanded) onWidgetShown(toolbar?.widgetArea?.currentId, opened = true)
+    }
+
     fun onWindowHidden() {
         if (isExpanded && context.prefs().getBoolean(ForkSettings.PREF_TOOLBAR_START_CLOSED, false)) {
             closingForHide = true

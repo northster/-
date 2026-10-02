@@ -40,6 +40,7 @@ object Trivia {
 
     private val handler = Handler(Looper.getMainLooper())
     @Volatile private var fetching = false
+    private var lastShown: String? = null
 
     private class Fact(val text: String, var seen: Boolean, val page: String? = null)
 
@@ -68,7 +69,10 @@ object Trivia {
         val prefs = context.prefs()
         val facts = read(prefs)
         if (facts.isEmpty()) return null
-        val fact = facts.filter { !it.seen }.randomOrNull() ?: facts.random()
+        // all seen (no new batch came): an old one, but not the one just shown
+        val fact = facts.filter { !it.seen }.randomOrNull()
+            ?: facts.filter { it.text != lastShown }.randomOrNull() ?: facts.random()
+        lastShown = fact.text
         fact.seen = true
         write(prefs, facts)
         return Shown(fact.text, fact.page)
