@@ -285,7 +285,8 @@ fun createDynamicToolbarSettings(context: Context) = listOf(
     Setting(context, helium314.keyboard.fork.widget.WidgetPrefs.TRIVIA_NOW, R.string.fork_widget_trivia_now) { setting ->
         val ctx = androidx.compose.ui.platform.LocalContext.current
         helium314.keyboard.settings.preferences.Preference(name = setting.title,
-            description = ctx.getString(R.string.fork_widget_trivia_count, helium314.keyboard.fork.widget.Trivia.count(ctx)),
+            description = ctx.getString(R.string.fork_widget_trivia_count, helium314.keyboard.fork.widget.Trivia.count(ctx),
+                helium314.keyboard.fork.widget.Trivia.unseen(ctx)),
             onClick = {
                 helium314.keyboard.fork.widget.Trivia.refreshIfDue(ctx, force = true) { added ->
                     android.widget.Toast.makeText(ctx, if (added) R.string.fork_widget_trivia_added else R.string.fork_widget_trivia_failed,

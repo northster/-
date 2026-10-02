@@ -494,7 +494,7 @@
     <string name="fork_widget_trivia_ai">Facts written by Gemini (experimental)</string>
     <string name="fork_widget_trivia_ai_summary">Half of each batch written by Gemini instead of Wikipedia, then checked by Gemini with a web search. More variety, but not checked by people</string>
     <string name="fork_widget_trivia_now">Get new trivia now</string>
-    <string name="fork_widget_trivia_count">%1$d facts kept</string>
+    <string name="fork_widget_trivia_count">%1$d facts kept (%2$d not seen yet)</string>
     <string name="fork_widget_trivia_added">Got new trivia</string>
     <string name="fork_widget_trivia_failed">No new trivia (check the Gemini key)</string>
     <string name="fork_widget_trivia_no_key">Add a Gemini key for trivia · tap for settings</string>

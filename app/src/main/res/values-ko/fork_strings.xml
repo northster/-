@@ -491,7 +491,7 @@
     <string name="fork_widget_trivia_ai">Gemini가 쓴 상식 섞기 (실험)</string>
     <string name="fork_widget_trivia_ai_summary">매번 절반을 위키백과 대신 Gemini가 쓰고, 웹 검색으로 다시 확인합니다. 더 다양하지만 사람이 검토한 내용은 아닙니다</string>
     <string name="fork_widget_trivia_now">지금 새 지식 받기</string>
-    <string name="fork_widget_trivia_count">모아 둔 지식 %1$d개</string>
+    <string name="fork_widget_trivia_count">모아 둔 지식 %1$d개 (안 본 것 %2$d개)</string>
     <string name="fork_widget_trivia_added">새 지식을 받았습니다</string>
     <string name="fork_widget_trivia_failed">지식을 받지 못했습니다 (Gemini 키 확인)</string>
     <string name="fork_widget_trivia_no_key">Gemini 키를 넣으면 상식이 나옵니다 · 탭해서 설정</string>

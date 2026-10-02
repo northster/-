@@ -47,7 +47,23 @@ object Trivia {
     /** a fact to show and where to read more about it (null if it has no article) */
     class Shown(val text: String, val page: String?)
 
+    private const val PREF_VERSION = "fork_trivia_version"
+
+    /**
+     * Once: the facts kept from before Wikipedia (all written by Gemini) go. Gemini wrote the same famous facts again
+     * and again in other words ("sea otters hold hands…"), which an exact comparison let through, so the list was full
+     * of them. The next batch comes from Wikipedia.
+     */
+    private fun migrate(prefs: SharedPreferences) {
+        if (prefs.getInt(PREF_VERSION, 0) >= 2) return
+        val arr = runCatching { JSONArray(prefs.getString(PREF_FACTS, "[]")) }.getOrElse { JSONArray() }
+        val keep = JSONArray()
+        for (i in 0 until arr.length()) arr.optJSONObject(i)?.takeIf { it.has("p") }?.let { keep.put(it) }
+        prefs.edit { putString(PREF_FACTS, keep.toString()); putInt(PREF_VERSION, 2); remove(PREF_FAILED) }
+    }
+
     private fun read(prefs: SharedPreferences): MutableList<Fact> {
+        migrate(prefs)
         val arr = runCatching { JSONArray(prefs.getString(PREF_FACTS, "[]")) }.getOrElse { JSONArray() }
         return (0 until arr.length()).mapNotNull { i ->
             arr.optJSONObject(i)?.let { o ->
@@ -79,6 +95,8 @@ object Trivia {
     }
 
     fun count(context: Context) = read(context.prefs()).size
+
+    fun unseen(context: Context) = read(context.prefs()).count { !it.seen }
 
     /** same fact, written a bit differently */
     private fun norm(s: String) = s.lowercase().filter { it.isLetterOrDigit() }
