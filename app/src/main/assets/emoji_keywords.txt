@@ -1,0 +1,12003 @@
+!	❕ ❗
+"가능"	🉑
+"금지"	🈲
+"무료	🈶
+"무료 아님"	🈶
+"무료"	🈚
+"봉사료"	🈂
+"비어	🈳
+"비어 있음"	🈳
+"빈방없음"	🈵
+"신청"	🈸
+"여기"	🈁
+"영업	🈺
+"영업 중"	🈺
+"예약"	🈯
+"월간"	🈷
+"할인"	🉐 🈹
+"합격"	🈴
+%	🔣
+&	🔣
+(blood	🅰 🆎 🅱 🅾
+*	✨ ✳ ✴ ❇
++	➕
++1	👍
+-	➖
+-1	👎
+...	😒
+0	🕖 🕙
+00	🕛 🕐 🕑 🕒 🕓 🕔 🕕 🕖 🕗 🕘 🕙 🕚
+00분	🕐 🕑 🕒 🕓 🕔 🕕 🕖 🕗 🕙 🕚
+1	👁 🕐 🕜 🔂
+10	🕙 🕥
+100	💯 💶
+10:00	🕙
+10:30	🕥
+10시	🕙 🕥
+10억	💰 💷
+11	🕚 🕦
+11:00	🕚
+11:30	🕦
+11시	🕚 🕦
+12	🕛 🕧
+1234	🔢
+12:00	🕛
+12:30	🕧
+12시	🕛 🕧
+12시 30분	🕧
+143	😍 😗 😚 😙 💘 💝 💖 💗 💓 💞 💕 💟
+18	🔞
+18금	🔞
+18세	🔞
+18세 이하 금지	🔞
+1:00	🕐
+1:30	🕜
+1st	🥇
+1st place medal	🥇
+1시	🕐 🕜
+1시 30분	🕜
+2	🕑 🕝
+24	🏪
+24시	🏪
+2:00	🕑
+2:30	🕝
+2nd	🥈
+2nd place medal	🥈
+2가	⨧
+2등	🥈
+2시	🕑 🕝
+3	🥰 👌 🕒 🕞
+30	🕧 🕜 🕝 🕞 🕟 🕠 🕡 🕢 🕣 🕤 🕥 🕦
+30분	🕧 🕝 🕞 🕟 🕠 🕡 🕣 🕤 🕥 🕦 🕜 🕢
+3:00	🕒
+3:30	🕞
+3rd	🥉
+3rd place medal	🥉
+3개와	🥰
+3시	🕒 🕞
+3종	🏊 🏊‍♂
+4	🍀 🕓 🕟
+4:00	🕓
+4:30	🕟
+4시	🕓 🕟
+5	✋ 🕔 🕠
+500잔	🍺
+5:00	🕔
+5:30	🕠
+5–0	🚓
+5시	🕔 🕠
+5시 30분	🕠
+6	🕕 🕡
+6:00	🕕
+6:30	🕡
+6시	🕕 🕡
+6시 30분	🕡
+7	🕖 🕢
+7:00	🕖
+7:30	🕢
+7시	🕖 🕢
+7시 30분	🕢
+8	🕗 🕣 🎱
+8:00	🕗
+8:30	🕣
+8ball	🎱
+8번	🎱
+8번 공	🎱
+8시	🕗 🕣
+8시 30분	🕣
+9	🕘 🕤
+9:00	🕘
+9:30	🕤
+9시	🕘 🕤
+9시 30분	🕤
+<3	🫰 🫶
+?	❓ ❔
+a	🅰 😘 💠
+a button (blood type)	🅰
+a+	💯
+ab	🆎
+ab button (blood type)	🆎
+abacus	🧮
+abc	🔤
+abcd	🔠 🔡
+above	⪍ ⪺
+absentminded	😶‍🌫
+absolutely	👊
+absorbing	🧽
+ac	∧
+acceptable	🉑
+access	♿
+accessibility	🦾 🦿 🦻 🧏 🧏‍♂ 🧏‍♀ 🧑‍🦯 👨‍🦯 👩‍🦯 🧑‍🦼 👨‍🦼 👩‍🦼
+accident	🫗
+accordion	🪗
+accounting	🧾
+acidity	🍋‍🟩
+act	🤹 🤹‍♂ 🤹‍♀
+action	🎬
+active	🤸 🤸‍♂ 🤸‍♀
+actor	🧑‍🎤 👨‍🎤 👩‍🎤 🎭
+actress	🎭
+acute	∠
+addition-like	⊞
+address	📢
+adhesive	🩹
+adhesive bandage	🩹
+admiration	🥹
+admission	🎟 🎫
+admission tickets	🎟
+adorable	🩷
+adorbs	😘 💘 💞 🐶
+adore	🥰
+adult	🧑 👨 👩 🧓 👴 👵 🧑‍🧑‍🧒 🧑‍🧑‍🧒‍🧒 🧑‍🧒 🧑‍🧒‍🧒
+aerial	🚡
+aerial tramway	🚡
+aeroplane	✈ 🛩 🛫 🛬
+aesculapius	⚕
+af	🔥
+afraid	😨
+africa	🌍
+afro	🦱 🪮
+again	🤦 🤦‍♂ 🤦‍♀ 🔄
+age	🔞
+agree	💯 👊
+agreement	🤝
+aid	🦻 ⛑ 🩼
+air	🪟
+airplane	✈ 🛩 🛫 🛬
+airplane arrival	🛬
+airplane departure	🛫
+alarm	🚨 ⏰
+alarm clock	⏰
+alces	🫎
+alcohol	🍷 🍸 🍹 🍺 🍻
+ale	🍺
+alembic	⚗
+alert	🚨
+alien	👽 👾
+alien monster	👾
+aliens	🛸 📡
+all	∀ ≌ ◕
+all equal	≌
+almond	🌰
+almost	≈ ⪺
+almost equal	≈
+alpaca	🦙
+alpha	🦁
+alphabet	🔤
+amazed	😳
+amazement	🫢
+amble	🚶 🚶‍♂ 🚶‍♀
+ambulance	🚑
+american	🏈
+american football	🏈
+americas	🌎
+amoeba	🦠
+amount	🤏 🈷
+amount”	🈷
+amphora	🏺
+amulet	🧿 🪬
+amusement	🛝 🎡 🎢
+an	∉
+anatomical	🫀
+anatomical heart	🫀
+anchor	⚓ 🔱
+and	⇅ ∧ 🫢 ☠ 🫰 👫 🍽 🍴 ⛈ ⚒ 🛠 🏹
+angel	😇 👼
+angelic	😇 🪽
+angels	😇
+anger	😤 😡 😠 💢 🗯
+anger symbol	💢
+angle	∠ ∟ 📏 📐
+angry	😤 😡 😠 👿 👺 💢 🗯
+angry face	😠
+angry face with horns	👿
+anguished	😧
+anguished face	😧
+animal	😺 😸 😹 😻 😼 😽 🙀 😿 😾 🙉 🙊 🐵
+animals	🐕 🐈 🐂 🐄 🐁
+ankle	🦶
+annelid	🪱
+anniversary	💝 💞 💕 💏 💑 💐
+annoyed	😖 🙍 🙍‍♂ 🙍‍♀
+answer	🟰
+ant	🐜
+antarctica	🐧
+antenna	📡 📶
+antenna bars	📶
+anticlockwise	↶ ↺ 🔄
+anticlockwise open circle arrow	↺
+anticlockwise top semicircle arrow	↶
+antlers	🫎
+anxiety	🫪
+anxious	😟 😨 😰 😥 🫦
+anxious face with sweat	😰
+any	∀
+ape	🦧
+apocalypse	🧟 🧟‍♂ 🧟‍♀
+apology	🙇 🙇‍♂ 🙇‍♀
+applause	👏
+apple	🍎 🍏 🥧
+application	🈸
+appreciate	🙏
+apprehend	👮 👮‍♂ 👮‍♀
+approval	👏
+approximate	≈
+approximately	≅ ≒
+approximately equal	≅
+approximately equal the image	≒
+approximation	≈
+aquarium	🪼
+aquarius	♒ 🏺
+arc	◜ ◝ ◞ ◟
+archer	🏹 ♐
+archery	🏹
+architect	🧑‍💼 👨‍💼 👩‍💼
+arctic	🐻‍❄
+arepa	🫓
+argument	🫯
+aries	♈ 🐏
+arm	💪 🦾
+army	🪖
+arrest	👮 👮‍♂ 👮‍♀
+arrival	🛬
+arrivals	🛬
+arrived	🚆 🚈 🛄
+arriving	🛬
+arrow	← ↚ → ↛ ↑ ↓ ↜ ↝ ↞ ↟ ↠ ↡
+arrows	⇅ ⇆ ⇇ ⇈ ⇉ ⇊ 🔃 🔄
+art	🎭 🖼 🎨
+articulated	🚛
+articulated lorry	🚛
+artist	🧑‍🎨 👨‍🎨 👩‍🎨 🎨
+artist palette	🎨
+arts	🥋 🎭
+artsy	🎨
+arty	🎨
+as	∋ ⋭
+ascend	🪽 🐦‍🔥
+ascension	🐦‍🔥
+ashes	⚱
+asia	🌏
+asia-australia	🌏
+ask	🙏 🙇 🙇‍♂ 🙇‍♀
+ass	🫏
+assassin	🥷
+assembly	🧑‍🏭 👨‍🏭 👩‍🏭
+assistance	🐕‍🦺
+asterisk	∗ ⊛ ✳
+asterisk operator	∗
+astonished	😲
+astonished face	😲
+astronaut	🧑‍🚀 👨‍🚀 👩‍🚀
+astronomy	⭐
+asymptote	≃
+asymptotically	≃
+asymptotically equal	≃
+at	🫵 🌆 🌉
+atheist	⚛
+athletic	⛹ ⛹‍♂ ⛹‍♀ 👟
+athletics	🤾 🤾‍♂ 🤾‍♀ 🎽
+atm	🏧
+atm sign	🏧
+atom	⚛
+atom symbol	⚛
+atque	∧
+attraction	🧲
+aubergine	🍆
+australia	🐨 🌏
+auto	🛺
+auto rickshaw	🛺
+automated	🏧
+automobile	🚗 🚘 🛻
+autumn	🍂 🥮
+avalanche	🛘
+aviation	🪽
+avocado	🥑
+award	🎖 🏅
+away	💨
+awe	🫢
+awesome	😃 😛 😎 👌 👏 🎉
+awful	😔 😢 😞
+awk	😬
+awkward	😐 😑 😶 😬 😳
+aww	🥹
+ax	🪓
+axe	🪓
+b	🅱
+b button (blood type)	🅱
+baa	🐑
+babe	💏 💑
+babies	👶 🍼
+babooshka	🪆
+baboushka	🪆
+babushka	🪆
+baby	👶 🤱 👩‍🍼 👨‍🍼 🧑‍🍼 👼 🐣 🐤 🐥 🍼 🚼
+baby angel	👼
+baby bottle	🍼
+baby chick	🐤
+baby symbol	🚼
+back	🥹 🤚 🚪 🔙
+back arrow	🔙
+backhand	🤚 👈 👉 👆 👇
+backhand index pointing down	👇
+backhand index pointing left	👈
+backhand index pointing right	👉
+backhand index pointing up	👆
+backpack	🎒
+backpacking	🎒 🥾
+bacon	🥓 🐷 🐖
+bacteria	🦠 🧫
+bactrian	🐫
+bad	👎 🦹 🦹‍♂ 🦹‍♀
+badge	📛
+badger	🦡
+badminton	🏸
+bae	😍 😘 😚 🧑‍🤝‍🧑 👭 👫 👬 💏 💑
+bag	🧳 👜 👝 🛍 🎒 💰
+bagel	🥯
+baggage	🛄 🛅
+baggage claim	🛄
+bags	🫩 🛍 🛄
+baguette	🥖
+baguette bread	🥖
+bait	🪤
+bakery	🥯 🧁
+balance	🤹 🤹‍♂ 🤹‍♀ ⚖ ♎
+balance scale	⚖
+balancing	🤹 🤹‍♂ 🤹‍♀
+bald	🦲 👴
+ball	🏌 🏌‍♂ 🏌‍♀ ⛹ ⛹‍♂ ⛹‍♀ 🤾 🤾‍♂ 🤾‍♀ 🍙 🎊 ⚽
+ballet	🧑‍🩰 🥿 🩰
+ballet dancer	🧑‍🩰
+ballet shoes	🩰
+balloon	🎈 💬 👁‍🗨 🗨 🗯 💭
+ballot	🗳 ☑
+ballot box with ballot	🗳
+ballpoint	🖊
+bamboo	🐼 🎍
+banana	🍌 🐵 🐒
+band	🪈
+bandage	🤕 🩹
+bandana	🧕
+banjo	🪕
+bank	🏦 💰 💴 💵 💶 💷 💸 💳 💹 🏧 💱
+banknote	💴 💵 💶 💷 💸
+banner	🎋
+bar	↤ ↥ ↦ ↧ ↸ ↹ ⇤ ⇥ ⇪ 🍫 🍶 🍾
+bar chart	📊
+barb	↼ ↽ ↾ ↿ ⇀ ⇁ ⇂ ⇃
+barbell	🏋 🏋‍♂ 🏋‍♀
+barber	💇 💇‍♂ 💇‍♀ 💈
+barber pole	💈
+bare	🪾
+barefoot	👣
+barf	🤮
+bargain	🉐
+barrel	🍯
+barren	🪾
+barrier	🚧
+bars	↹ 📶
+base	↨
+baseball	⚾ 🧢
+basket	🧺
+basketball	🏀 ⛹ ⛹‍♂ ⛹‍♀
+bat	🦇 🏏 🏓
+bath	🛀 🛁
+bathing	🩱 🩲 🩳 👙 🧼
+bathroom	🚽 🪥 🚹 🚺 🚻 🚾
+bathtub	🛁 🛀
+battery	🔋 🪫
+bawling	😭
+bday	🥳 🎂
+beach	😎 🏄 🏄‍♂ 🏄‍♀ 🐳 🐋 🐬 🐚 🌴 🏖 🌞 👙
+beach with umbrella	🏖
+beacon	🚨
+bead	🧿
+beads	📿
+beak	🐦‍⬛
+beaming	😁
+beaming face with smiling eyes	😁
+beans	🫘 🫛
+beanstalk	🫛
+bear	🐻 🐻‍❄ 🐨 🍯 🧸
+beard	🧔 🧔‍♂ 🧔‍♀
+bearded	🧔 🧔‍♂ 🧔‍♀
+bearer	🐍 ♒ ⛎
+beast	💪
+beat	🫀 🪘
+beating	💓
+beating heart	💓
+beauty	👄 💇 💇‍♂ 💇‍♀ 🪷 🌹
+beaver	🦫
+because	∵
+beckon	🫴
+bed	🛏 😴 🛌
+bedtime	😴 🥱 🛌
+bee	🐝
+beer	🫚 🍺 🍻
+beer mug	🍺
+beet	🫜
+beetle	🪲 🐞
+befuddled	😕
+beg	🙏 🙇 🙇‍♂ 🙇‍♀
+begging	🥺
+beginner	🔰
+behind	⛅ 🌤 🌥 🌦
+believe	😮
+bell	🔔 🫑 🛎 🎐 🔕
+bell pepper	🫑
+bell with slash	🔕
+bellhop	🛎
+bellhop bell	🛎
+belly	🫃 🫄
+bemolle	♭
+bench	💪
+bent	🦵 🧢
+bento	🍱
+bento box	🍱
+berries	🍒 🫐
+berry	🍓 🫐
+bestest	💜
+bestie	👯 👯‍♂ 👯‍♀ 🧑‍🤝‍🧑 👭 👫 👬
+bet	👌 💰
+between	≬
+beverage	☕ 🍵 🍶 🍷 🧃
+beverage box	🧃
+bewilder	🤦 🤦‍♂ 🤦‍♀
+bff	👯 👯‍♂ 👯‍♀ 🧑‍🤝‍🧑 👭 👫 👬 👥
+biceps	💪
+bicycle	🚲 🚴 🚴‍♂ 🚴‍♀ 🚵 🚵‍♂ 🚵‍♀ 🚳
+bicycles	🚳
+bicyclist	🚴 🚴‍♂ 🚴‍♀ 🚵 🚵‍♂ 🚵‍♀
+big	😃 🥺 🐯 🐅 🐆
+bigfoot	🫈
+bike	🚴 🚴‍♂ 🚴‍♀ 🚵 🚵‍♂ 🚵‍♀ 🚲 🔐 🚳
+biking	🚴 🚴‍♂ 🚴‍♀ 🚵 🚵‍♂ 🚵‍♀
+bikini	👙
+bilberry	🫐
+bill	💴 💵 💶 💷 💸
+billed	🧢
+billed cap	🧢
+billiard	🎱
+billion	💰 💷 💸 💲
+billionaire	🚤
+bin	🚮
+binary	⋈
+biohazard	☣
+biologist	🧑‍🔬 👨‍🔬 👩‍🔬 🧫 🧬
+biology	🧫
+bird	🐦 🦃 🐔 🐓 🐣 🐤 🐥 🐧 🕊 🦅 🦆 🦢
+birdie	🏌 🏌‍♂ 🏌‍♀ 🏸
+birth	🍼
+birthday	🥳 💐 🎂 🎈 🎉 🎁
+birthday cake	🎂
+bisexual	🏳‍🌈
+bison	🦬
+bisque	🦞
+bit	🤏
+bite	🫦 🦟
+biting	🫦
+biting lip	🫦
+black	🖤 🐈‍⬛ 🐦‍⬛ ✒ ⚫ ⬛ ◼ ◾ ▪ 🔲 🏴
+black bird	🐦‍⬛
+black cat	🐈‍⬛
+black circle	⚫
+black flag	🏴
+black heart	🖤
+black large square	⬛
+black medium square	◼
+black medium-small square	◾
+black nib	✒
+black small square	▪
+black square button	🔲
+blades	🛼
+blame	😨 😞 😠
+blank	😐 😶
+bleed	🩸
+bless	⛪
+blessed	😇 🙏
+blind	🧑‍🦯 👨‍🦯 👩‍🦯 🦮 🦯
+bloated	🫪 🫃 🫄
+block	🫷 🫸
+blond	👱 👱‍♂ 👱‍♀
+blond-haired	👱 👱‍♂ 👱‍♀
+blonde	👱‍♀
+blood	🧛 🧛‍♂ 🧛‍♀ 🩸 🅰 🆎 🅱 🅾
+bloom	🪻
+blossom	🌼 🌸 🌷
+blouse	👚
+blow	😮‍💨 🍃 🌬
+blowfish	🐡
+blowing	😘 😮‍💨
+blown	🤯
+blu-ray	💿 📀
+blue	🥶 😰 💙 🩵 🫐 👕 👖 📘 🧿 🔵 🟦 🔷
+blue book	📘
+blue circle	🔵
+blue heart	💙
+blue square	🟦
+blue-faced	🥶
+blueberries	🫐
+blueberry	🫐
+bluebonnet	🪻
+blush	😊 😚
+boar	🐗
+board	🛹 🎬
+boat	🚣 🚣‍♂ 🚣‍♀ ⛵ 🛶 🚤 ⛴ 🛥 🚢
+boba	🧋
+body	💀 👂 👃 👀 👁 👅 👄
+bodybuilder	💪 🏋 🏋‍♂ 🏋‍♀
+bok	🥬
+bollywood	🎥
+bolt	🔩
+bomb	💣 💥
+bone	🦴 ☠ 🍖 🍗
+bones	🦴 🩻
+boo	👻
+book	📔 📕 📖 📗 📘 📙 📚
+bookbag	🎒
+bookkeeping	🧾
+bookmark	🔖 📑
+bookmark tabs	📑
+books	📚
+boom	💥 👊 🎆 🎇 💣
+boomerang	🪃
+boot	🥾 👢
+booze	🍷 🍸 🍹 🍺 🍻
+bored	😒 😔 🫩 🥱 💅
+born	🍼
+boss	😏
+bottle	🍼 🍶 🍾 🧴
+bottle with popping cork	🍾
+bottoms	🍻
+boulder	🪨
+bouncing	⛹ ⛹‍♂ ⛹‍♀
+bouquet	💐
+bow	🙏 🙇 🙇‍♂ 🙇‍♀ 🎁 🏹
+bow and arrow	🏹
+bowing	🙇 🙇‍♂ 🙇‍♀
+bowl	🥣 🍜 🏈
+bowl with spoon	🥣
+bowling	🎳
+bowtie	⋈
+box	🍱 🥡 🧃 🎁 🪗 📤 📥 📦 🗳 🗃 🧰 ☑
+boxing	🥊
+boxing glove	🥊
+boy	👦
+boys	👬
+brachiosaurus	🦕
+brain	🧠
+brainy	🤓
+branch	🪹 🪺
+branches	🪾
+brass	🪊
+brawl	🫯
+brb	🔜
+bread	🍞 🥐 🥖 🫓 🥯 🥪
+break	💔 🔔 ⛓‍💥
+breakfast	🥐 🥯 🥞 🧇 🥓 🥚 🍳 🥣 🍩 🍴
+breaking	⛓‍💥
+breaky	🍴
+breast	🤱
+breast-feeding	🤱
+breath	🫁
+breathe	🫁
+brew	🫖
+brick	🧱
+bricks	🧱
+bride	👰‍♀
+bridge	🌉
+bridge at night	🌉
+briefcase	💼
+briefs	🩲
+bright	😎 ☀ 🌝 🌞 🔆
+bright button	🔆
+bright-eyed	🧒 👦 👧
+brightness	🔅 🔆
+bro	😎 👊 💪 👨
+broadband	🛜
+broccoli	🥦
+broken	💔 ⛓‍💥
+broken chain	⛓‍💥
+broken heart	💔
+brontosaurus	🦕
+bronze	🥉
+broom	🧹
+brothers	👬
+brown	🤎 👞 🥾 🟤 🟫 🍄‍🟫
+brown circle	🟤
+brown heart	🤎
+brown mushroom	🍄‍🟫
+brown square	🟫
+brr	🧥
+bruh	👊
+brush	🪥
+bs	💩
+bubble	💬 👁‍🗨 🗨 🗯 💭 🧋 🫧
+bubble tea	🧋
+bubbles	🫧
+bucket	🪣
+buckingham	💂 💂‍♂ 💂‍♀
+buddhism	🪷
+buddhist	☸
+buffalo	🦬 🐃
+bug	🐛 🪲 🦗
+build	👷 👷‍♂ 👷‍♀ 📲
+building	🏛 🏗 🏠 🏡 🏢 🏣 🏤 🏥 🏦 🏨 🏩 🏪
+building construction	🏗
+bulb	💡
+bull	🐂 🎯 ♉
+bullet	∙ ◘ ◦ 🚅
+bullet operator	∙
+bullet train	🚅
+bullseye	🎯
+bumblebee	🐝
+bump	👊
+bundle	🧣 🧥
+bunny	👯 👯‍♂ 👯‍♀ 🐰 🐇
+buoy	🛟
+burger	🍔
+burgers	🥬
+burn	❤‍🔥 🪼 🔥
+burp	🫧
+burrito	🌯
+burro	🫏
+bury	🪏
+bus	🚌 🚋 🚍 🚎 🚐 🚏
+bus stop	🚏
+business	🧑‍💼 👨‍💼 👩‍💼 🕴 🈺
+business”	🈺
+busstop	🚏
+bust	👤 👥
+bust in silhouette	👤
+busts	👥
+busts in silhouette	👥
+but	◕ 😥
+butter	🧈
+buttercup	🌼
+butterflies	😟
+butterfly	🦋
+button	🔄 🔀 🔁 🔂 ▶ ⏩ ⏭ ⏯ ◀ ⏪ ⏮ 🔼
+bye	👋
+b형	🅱
+c	🍊 ©
+cab	🚕 🚖
+cabbage	🥬 🥦
+cabbie	🚕 🚖
+cabinet	🗄
+cable	🚠 🚡
+cableway	🚠
+caboose	🚂
+cactus	🌵
+caddy	🏌 🏌‍♂ 🏌‍♀
+cafe	☕
+caffeine	☕
+cake	🍥 🥮 🎂 🍰
+calculation	🧮
+calculator	🧮
+calculus	∫ ∬
+calendar	📅 📆 🗓
+call	😥 🤙 📲
+call me hand	🤙
+calm	😌 🪷
+camcorder	📹
+camel	🐪 🐫
+camera	📷 🤳 🎥 📸 📹 🎦
+camera with flash	📸
+camping	🏕 ⛺ 🥾
+can	🥫 🗑
+cancel	✖ ❌
+cancer	♋ 🦀
+candelabrum	🕎
+candle	🕯
+candlestick	🕎
+candy	🍬 🍫 🍭 🪅
+cane	🧑‍🦯 👨‍🦯 👩‍🦯 🦯 🩼
+canned	🥫
+canned food	🥫
+canoe	🛶 🚣 🚣‍♂ 🚣‍♀
+cantaloupe	🍈
+cap	👲 🎓 🧢
+capricorn	♑ 🐐
+capsicum	🫑
+captivated	🫣
+car	🚃 🚞 🚋 🚓 🚔 🚕 🚗 🚘 🚙 🛻 🚚 🚛
+carbs	🍞
+card	♠ ♥ ♦ ♣ 🃏 🎴 💳 🗂 📇 🗃 🪧 🪪
+card file box	🗃
+card index	📇
+card index dividers	🗂
+cardiac	💛
+cardinal	⬆ ➡ ⬇ ⬅
+cardio	💓
+cardiology	🫀
+cards	🎴
+care	💅
+carousel	🎠
+carousel horse	🎠
+carp	🎏
+carp streamer	🎏
+carpenter	🪚
+carpentry	🪚
+carpentry saw	🪚
+carrot	🥕
+cars	🚍 🚖 🚘
+cart	🛒
+cartoon	💭
+cartwheel	🤸 🤸‍♂ 🤸‍♀
+cartwheeling	🤸 🤸‍♂ 🤸‍♀
+case	🛄 🛅
+cash	💰 💷 💸 💳 🏧 💲
+casino	🎰
+cask	🪣
+casserole	🥘
+castle	🏰 🏯
+casual	👕 👖
+cat	🐈 😺 😸 😹 😻 😼 😽 🙀 😿 😾 🐱 🐈‍⬛
+cat face	🐱
+cat with tears of joy	😹
+cat with wry smile	😼
+catch	🫴 🤾 🤾‍♂ 🤾‍♀ 🪝
+cats	🐈
+caught	😦
+caution	⚠
+cavities	🍬
+caw	🐦‍⬛
+cd	💿 📀
+celebrate	🥳 🥂 🎈 🎉 🎊 🪅
+celebration	🥳 🙌 🎅 🤶 🧑‍🎄 🎂 🎃 🎄 🎆 🎇 🎈 🎉
+cell	📱 📲 📵 📶 📳 📴
+cemetery	🪦
+censor	🤬
+cereal	🥣
+ceremony	🎑
+cha	🪇
+chai	☕
+chain	⛓‍💥 ⛓
+chains	⛓
+chair	🪑 💺
+champion	🏆
+championship	⛹ ⛹‍♂ ⛹‍♀
+champs	🏆
+change	🪸
+changing	🚼
+chapel	💒 ⛪
+charge	💳 💲 🈂 🈶 🈚
+charge”	🈂 🈶 🈚
+charm	🧿
+chart	💹 📈 📉 📊
+chart decreasing	📉
+chart increasing	📈
+chart increasing with yen	💹
+check	✅ ☑ ✔
+check box with check	☑
+check mark	✔
+check mark button	✅
+check-in	🛫
+checked	🛄 ✅ ☑ ✔
+checkered	🏁
+checkmark	✅ ✔
+cheerful	😀
+cheering	📣
+cheers	🍻
+cheery	😀
+cheese	🧀 🍕 🫕 🪤
+cheese wedge	🧀
+chef	🧑‍🍳 👨‍🍳 👩‍🍳 🔪
+chemist	🧑‍🔬 👨‍🔬 👩‍🔬 🧪
+chemistry	⚗ 🧪
+chemotherapy	🦲
+chequered	🏁
+chequered flag	🏁
+cherries	🍒
+cherry	🌸 🍒
+cherry blossom	🌸
+chess	♟
+chess pawn	♟
+chest	🧰 🪎
+chestnut	🌰
+chevron	🔰
+chick	🐣 🐤 🐥
+chicken	🐔 🍗
+chickpea	🧆
+child	🧒 👦 👧 👪 🧑‍🧑‍🧒 🧑‍🧑‍🧒‍🧒 🧑‍🧒 🧑‍🧒‍🧒 🚸
+children	👶 🚸
+children crossing	🚸
+chilling	😎
+chime	🎐
+chin	🤔
+chinese	👲
+chip	🍪
+chipmunk	🐿
+chocolate	🫕 🍪 🍫
+chocolate bar	🍫
+choo	🚆
+chop	💇 💇‍♂ 💇‍♀ 🥩 🪓
+chopsticks	🥢 🍜 🥡
+choy	🥬
+christ	✝
+christian	⛪ ✝ ☦
+christmas	🎅 🤶 🧑‍🎄 🌲 🎄 🎁
+christmas tree	🎄
+chuck	🤾 🤾‍♂ 🤾‍♀
+church	⛪ 👼 🔔
+cicles	◉
+cigarette	🚬
+cinco	🪅
+cinema	🎦 🎥 🎞 📽
+circle	↺ ↻ ◉ ○ ◌ ◍ ◎ ● ◐ ◑ ◒ ◓
+circle all but upper left quadrant filled	◕
+circle left half filled	◐
+circle lower half filled	◒
+circle right half filled	◑
+circle upper half filled	◓
+circle upper right quadrant filled	◔
+circle with vertical fill	◍
+circled	⊕ ⊖ ⊗ ⊘ ⊙ ⊚ ⊛ ◉ Ⓜ
+circled asterisk operator	⊛
+circled division slash	⊘
+circled dot operator	⊙
+circled m	Ⓜ
+circled minus	⊖
+circled plus	⊕
+circled ring operator	⊚
+circled times	⊗
+circles	◎
+circular	◜ ◝ ◞ ◟
+circus	🎪
+circus tent	🎪
+citation	👮 👮‍♂ 👮‍♀
+citrus	🍊 🍋 🍋‍🟩
+city	🏢 🏙 🌆
+cityscape	🏙 🌆
+cityscape at dusk	🌆
+cl	🆑
+cl button	🆑
+cl 버튼	🆑
+clack	🪭
+claim	🛄
+clamp	🗜
+clap	👏 🪭
+clapper	🎬
+clapper board	🎬
+clapping	👏
+clapping hands	👏
+class	🚲
+classical	🏛
+classical building	🏛
+classy	🧐
+claus	🎅 🤶 🧑‍🎄
+claws	🦞
+clay	🧱
+clean	🧼 🫧 🪥
+cleaning	🧹 🧼 🧽
+clearly	💯
+clenched	✊ 👊
+clever	🤓
+climate	🪸
+climb	🧗 🧗‍♂ 🧗‍♀ 🪜
+climber	🧗 🧗‍♂ 🧗‍♀
+climbing	🧗 🧗‍♂ 🧗‍♀
+clink	🍻 🥂
+clinking	🍻 🥂
+clinking beer mugs	🍻
+clinking glasses	🥂
+clipboard	📋
+clock	⌚ ⏰ ⏱ ⏲ 🕰 🕛 🕧 🕐 🕜 🕑 🕝 🕒
+clockwise	↷ ↻ 🔃 🔁 🔂
+clockwise open circle arrow	↻
+clockwise top semicircle arrow	↷
+clockwise vertical arrows	🔃
+close	😥 😓
+closed	😆 😚 😙 😝 😽 🌂 📕 📫 📪 🔒 🔐
+closed book	📕
+closed mailbox with lowered flag	📪
+closed mailbox with raised flag	📫
+closed umbrella	🌂
+closet	🚪 🚾
+clothes	🥼 👕 👖 👗 👚 👛 👜 👝 👞 👟 👠 👢
+clothing	👣 🌂 ☂ ☔ 👓 👔 👕 👖 👗 👘 🥻 👙
+cloud	☁ 💨 💭 ⛅ ⛈ 🌤 🌥 🌦 🌧 🌨 🌩 🌪
+cloud with lightning	🌩
+cloud with lightning and rain	⛈
+cloud with rain	🌧
+cloud with snow	🌨
+clouds	😶‍🌫
+cloudy	⛅
+clover	🍀
+clown	🤡
+clown face	🤡
+club	🍷 🍸 🍹 ♣
+club suit	♣
+clubs	♣
+clue	🫆 🧩 🗝
+clutch	👝
+clutch bag	👝
+cmon	🙏
+coaster	🎢
+coat	🧥 🥼
+cockroach	🪳
+cocktail	🍋‍🟩 🍸 🍹
+cocktail glass	🍸
+coconut	🥥
+coder	🧑‍💻 👨‍💻 👩‍💻
+coffee	☕
+coffin	⚰
+cog	⚙
+cogwheel	⚙
+coin	🪙 👛
+colada	🍍 🥥
+cold	😅 😷 🥶 😰 😓 🧊 🏔 🌨 ❄ ☃ ⛄ 💧
+cold face	🥶
+collage	📌
+collar	👕 👚
+collection	∪
+collide	💥
+collision	💥
+colorful	🦚 🎨
+comb	🪮
+combat	🤼 🤼‍♂ 🤼‍♀
+come	🫴
+comet	☄
+comfort	🫂
+comfortable	👘
+comfy	🥿
+comic	💩 💢 💥 💫 💦 💨 💬 💭 💤 💧 💡 💣
+communication	📢 📱 📲 📞 📟 📠 📰 📩 📦 📫 📝 📶
+compass	🧭
+complete	✅
+completed	✅
+complicated	😥
+composition	∘
+compress	🗜
+computer	🧑‍💻 👨‍💻 👩‍💻 💻 🖥 🖨 ⌨ 🖱 🖲 💽 💾 💿
+computer disk	💽
+computer mouse	🖱
+concentrate	😣
+concentration	😣
+concentric	◉ ◎
+concentric circles	◎
+concertina	🪗
+conch	🐚
+condiment	🧂 🫙
+confetti	🎊
+confetti ball	🎊
+confounded	😖
+confounded face	😖
+confused	😵‍💫 😕 🫤 😖
+confused face	😕
+confusing	😕
+confusion	🫤
+conga	🪘
+congee	🥣
+congrats	👏
+congratulations	👏
+congruence	≅
+conjugate	⊹
+connectivity	🛜
+consider	🤔
+construction	🚧 👷 👷‍♂ 👷‍♀ 🏗 🚩
+construction worker	👷
+contact	🔎 🔭 📡
+contain	⋭
+container	🫙
+containing	▣ ◈ ◉ ◙
+contains	∈ ∋
+contains as member	∋
+contour	∮
+contour integral	∮
+control	🎛 🛂
+control knobs	🎛
+controller	🎮
+convenience	🏪
+convenience store	🏪
+convoluted	🥨
+cook	🧑‍🍳 👨‍🍳 👩‍🍳
+cooked	🍚
+cooked rice	🍚
+cookie	🍪 🥠
+cooking	🍳 🍽 🍴 🔪 🏺
+cool	😛 😎 🪭 🆒
+cool button	🆒
+cooling	🪭
+cop	👮 👮‍♂ 👮‍♀
+cops	🚓
+copter	🚁
+copyright	©
+coral	🪸
+cord	🪢
+cork	🍾
+corn	🌽 🍿
+corner	↴ ↵
+corners	▢
+correct	👊
+corvid	🐦‍⬛
+cosmetics	💅 💄
+cosmetology	💇 💇‍♂ 💇‍♀
+cost	😲 😫 💰
+couch	🛋
+couch and lamp	🛋
+counterclockwise	🔄
+counterclockwise arrows button	🔄
+counterpart	👯 👯‍♂ 👯‍♀
+country	🏠 🏡
+couple	🧑‍🤝‍🧑 👭 👫 👬 💏 💑
+couple with heart	💑
+cover	📔
+cow	🐄 🐮
+cow face	🐮
+cowboy	🤠
+cowboy hat face	🤠
+cowgirl	🤠
+crab	🦀 ♋
+cracked	🔓
+cracker	🍘
+crane	🏗
+crayon	🖍
+crazy	😜 🤪 🫨 😳
+cream	🍦 🍨
+creative	🎨
+creature	👹 👺 👻 👽 👾 🧜 🧜‍♂ 🧜‍♀ 🐙 🫈
+credentials	🪪
+credit	💳
+credit card	💳
+crescent	🥐 🌒 🌘 🌙 ☪
+crescent moon	🌙
+cricket	🦗 🏏
+cricket game	🏏
+crime	🫆
+criminal	🦹 🦹‍♂ 🦹‍♀
+cringe	😖
+crochet	🧶
+crocodile	🐊
+croissant	🥐
+crook	🪝
+crops	🌽
+cross	⨯ 🤞 🧘 🧘‍♂ 🧘‍♀ ⛪ ⛑ ✝ ☦ ❌ ❎ 🎌
+cross mark	❌
+cross mark button	❎
+crossbones	☠
+crossed	🤞 🫰 ⚔ 🔀 🎌
+crossed fingers	🤞
+crossed flags	🎌
+crossed swords	⚔
+crossed-out	😵
+crosshatch	▦ ▩
+crossing	🚸
+crow	🐦‍⬛
+crown	👑 🫅 🤴 👸
+cruise	🚣 🚣‍♂ 🚣‍♀
+crush	🥰
+crushed	💔
+crutch	🩼
+cry	🥹 😢 😭 😿
+crying	🤣 😂 😪 😢 😭 😩 😿
+crying cat	😿
+crying face	😢
+cryptid	🫈
+crystal	🔮
+crystal ball	🔮
+crêpe	🥞
+cube	🧊
+cubical	🏢
+cucumber	🥒
+cuffs	⛓‍💥
+culture	🧫
+cup	🍵 🍶 🥤 🪠
+cup with straw	🥤
+cupcake	🧁
+cupid	💘 🪉
+cupped	🤲
+curious	🦝
+curl	📃 ➰ ➿
+curling	🥌
+curling stone	🥌
+curls	💪
+curly	🦱 ➰ ➿
+curly hair	🦱
+curly loop	➰
+currency	💴 💵 💶 💷 💹 💱 💲
+currency exchange	💱
+curry	🍛
+curry rice	🍛
+cursing	🤬
+curve	🪝
+curving	↩ ↪ ⤴ ⤵
+cussing	🤬
+custard	🍮
+customs	🛃
+cut	💇 💇‍♂ 💇‍♀ 🥩 💈 ✂ 🪚
+cut of meat	🥩
+cute	🩷 🩵
+cutlery	🍴
+cutting	✂
+cya	👋
+cyan	🩵
+cycle	🚴 🚴‍♂ 🚴‍♀ 🚵 🚵‍♂ 🚵‍♀ 🚲
+cycling	🚲
+cyclist	🚴 🚴‍♂ 🚴‍♀ 🚵 🚵‍♂ 🚵‍♀ 🚲
+cyclone	🌀
+cygnet	🦢
+dad	👨‍🍼 🧢
+dagger	🗡
+dairy	🧈
+dam	🦫
+dance	💃 🕺 🪩 🪭 🩰 🪇
+dancer	🧑‍🩰 💃 🕺 👯 👯‍♂ 👯‍♀
+dancing	💃 🕺
+dandelion	🌼
+danger	🛘 ⚡
+dangerous	💣
+dango	🍡
+dapper	😏
+dark	🌑 🕶
+dart	🎯
+dash	💨
+dashed	⇠ ⇡ ⇢ ⇣
+dashing	💨
+dashing away	💨
+data	📈 📉 📊
+date	😗 😚 😙 💘 💕 💏 💐 💄 📅
+dating	😗 😚 😙 💕 💋 🧑‍🤝‍🧑 👭 👫 👬 💏 💑
+daughter	👧
+david	✡
+day	🧖 🧖‍♂ 🧖‍♀ 🌞
+daydream	💭
+daze	🫨
+dazed	😳
+de	🪅
+dead	😑 😵 😳 💀 ☠ 🧟 🧟‍♂ 🧟‍♀ 🪾 ⚰ 🪦
+deadlift	🏋 🏋‍♂ 🏋‍♀
+deadpan	😐
+deaf	🧏 🧏‍♂ 🧏‍♀
+deaf man	🧏‍♂
+deaf person	🧏
+deaf woman	🧏‍♀
+deal	🤝
+death	💀 ☠ ⚰ ⚱
+debate	🫯
+deciduous	🌳
+deciduous tree	🌳
+decisions	💭
+decor	🪴
+decorated	📔
+decoration	💟 🎍
+decorative	📔
+decreasing	📉
+deer	🦌
+definitely	💯
+deg	🪯
+deja	🔄
+dejected	😅 😔 😞
+delicious	😋 🍴
+delivering	📨
+delivery	🥡 🚚 📦
+delivery truck	🚚
+demon	😈 👿
+demonstration	🪧
+denim	👖
+dental	🪥
+dentist	😬 😷 🦷
+department	🏬
+department store	🏬
+departure	🛫
+departures	🛫
+depressed	🫥
+derelict	🏚
+derelict house	🏚
+dermatologist	😷
+desert	🏜 🐪 🐫 🌵 🏝
+desert island	🏝
+desktop	🖥
+desktop computer	🖥
+dessert	🍡 🍦 🍧 🍨 🍩 🍪 🎂 🍰 🧁 🍫 🍬 🍭
+detective	🕵 🕵‍♂ 🕵‍♀ 🫆
+developer	🧑‍💻 👨‍💻 👩‍💻
+devil	😈 👿 👹
+dharma	☸
+diagonal	⋰ ⋱ ▩ 🫤
+dialog	💬 🗨
+diamond	◆ ◇ ◈ ◊ ♦ 💍 💎 🔶 🔷 🔸 🔹 💠
+diamond suit	♦
+diamond with a dot	💠
+diaper	🧷
+dice	🎲
+die	🎲
+died	😔
+diesel	⛽
+diesis	♯
+diet	🍎
+difference	⊖
+differential	∂
+difficult	☯
+dig	🪏
+dim	🔅
+dim button	🔅
+dinner	🐟 🍽 🍴
+dinosaur	🦕 🦖
+dionysus	🍇
+diplodocus	🦕
+direct	🎯
+direction	🧭 ⬆ ↗ ➡ ↘ ⬇ ↙ ⬅ ↖
+disability	🩼
+disagreement	🫯
+disappear	🫠 🫥
+disappointed	😔 🫤 😥 😞 🙍 🙍‍♂ 🙍‍♀ 🙎 🙎‍♂ 🙎‍♀
+disappointed face	😞
+disapproval	🤨
+disaster	🛘
+disbelief	🫢 🤨 😳 🤦 🤦‍♂ 🤦‍♀
+disc	🥏
+disco	🪩
+discount	🈹
+disease	🦟 🪰
+disgruntled	🙍 🙍‍♂ 🙍‍♀
+disguise	🥸
+disguised	🥸
+disguised face	🥸
+dish	🧫 📡
+disjunction	⋁
+disk	💽 💾 💿 📀
+dislike	👎
+dismiss	🫳
+dissolve	🫠
+distorted	🫪
+distorted face	🫪
+distraught	😖
+distrust	🤨
+disturbed	🙍 🙍‍♂ 🙍‍♀
+dive	🥽
+divide	➗
+dividers	🗂
+divides	∣
+diving	🦪 🤿
+diving mask	🤿
+division	∕ ⊘ ➗
+division slash	∕
+division-like	⊘
+divisor	∣
+diya	🪔
+diya lamp	🪔
+dizzy	💫 🥴 😵 😵‍💫 🌀
+dièse	♯
+djinn	🧞 🧞‍♂ 🧞‍♀
+dna	🧬
+do	📋 ⛔
+doctor	😷 🧑‍⚕ 👨‍⚕ 👩‍⚕ 🏥 🥼 💉 💊 🩺 🩻
+document	📃 📄 🪪
+dodo	🦤
+does	⊁ ⊮ ⋭
+does not contain as normal subgroup equal	⋭
+does not force	⊮
+does not succeed	⊁
+dog	🐕 🦴 🐶 🦮 🐕‍🦺 🐩 🌭
+dog face	🐶
+dogs	🐕
+doll	🎎 🪆
+dollar	🪙 💰 💵 💸 💲
+dollar banknote	💵
+dolls	🎎 🪆
+dolphin	🐬
+donation	🩸
+done	💅 ⌛ ⏳ ✅ ☑ ✔
+donkey	🫏
+donut	🍩
+doo	💩
+door	🚪
+dope	👌
+dot	⊙ ⋅ ◉ 💠
+dot operator	⋅
+dotted	◌ 🫥 🔯
+dotted circle	◌
+dotted line face	🫥
+dotted six-pointed star	🔯
+double	⇐ ⇍ ⇑ ⇒ ⇏ ⇓ ⇔ ⇎ ⇖ ⇗ ⇘ ⇙
+double curly loop	➿
+double integral	∬
+double intersection	⋒
+double-line	⪚
+double-line equal greater-than	⪚
+doubt	🫤 🤷 🤷‍♂ 🤷‍♀
+doubtful	🫤
+doughnut	🍩
+dove	🕊
+down	↓ ↨ ⇅ ⋱ ▼ 🫳 👇 👎 🐨 📩 📉 ⬇
+down arrow	⬇
+down right diagonal ellipsis	⋱
+down-left	↙
+down-left arrow	↙
+down-pointing	↓ ⇅ ▼ ▽ ▾ ▿
+down-pointing arrow	↓
+down-right	↘
+down-right arrow	↘
+downcast	😓
+downcast face with sweat	😓
+downtrodden	🙎 🙎‍♂ 🙎‍♀
+downward	📉
+downwards	↡ ↧ ↯ ↲ ↳ ↴ ↵ ↽ ⇁ ⇂ ⇃ ⇊
+downwards arrow corner leftwards	↵
+downwards arrow double stroke	⇟
+downwards arrow from bar	↧
+downwards arrow leftwards upwards arrow	⇵
+downwards arrow tip leftwards	↲
+downwards arrow tip rightwards	↳
+downwards button	🔽
+downwards dashed arrow	⇣
+downwards double arrow	⇓
+downwards harpoon barb leftwards	⇃
+downwards harpoon barb rightwards	⇂
+downwards hollow arrow	⇩
+downwards paired arrows	⇊
+downwards two headed arrow	↡
+downwards zigzag arrow	↯
+dr	😷 🥼
+dracula	🧛
+dragon	🐉 🐲 🀄
+dragon face	🐲
+drained	🪫
+dream	💭
+dreams	🌒 🌜
+dress	👗 🥻 👚 👛 👜 👝 👠 👢
+dressage	🐴
+dressed	👕 👖 👗 👚
+dribble	⛹ ⛹‍♂ ⛹‍♀
+drink	🍼 🥛 ☕ 🫖 🍵 🍶 🍾 🍷 🍸 🍹 🍺 🥂
+drinking	🍷 🍸 🍹 🍺 🍻 🚰
+drinks	🍷 🍸 🍹 🍺 🍻
+drip	💦 🫟
+drive	🚐 🚕 🚙 🚚 🚛
+driving	🏌 🏌‍♂ 🏌‍♀ 🚗
+dromedary	🐪
+drooling	🤤
+drooling face	🤤
+drop	🫳 ☔ 💧 🩸
+drop of blood	🩸
+droplet	💧 💦
+droplets	💦
+dropped	🫳
+drops	💦 ☔
+drought	🌵 🪾
+drove	🚖 🚘 🚦
+drugs	💊
+drum	🥁 🛢 🪘
+drumstick	🍗
+drumsticks	🥁
+drunk	🥴 🍹
+dry	🚱
+dua	🤲
+duck	🦆 🪿
+duckling	🦢
+duel	🤼 🤼‍♂ 🤼‍♀
+dumpling	🥟
+dung	💩
+dunno	😕 🤷 🤷‍♂ 🤷‍♀
+dupe	♟
+dusk	🌆 🌇
+dvd	📀 💿
+dying	🥵 🥀
+dynamite	🧨
+e-mail	📧 ✉ 📨 📩
+eagle	🦅
+ear	👂 🦻 🧏 🧏‍♂ 🧏‍♀ 👯 👯‍♂ 👯‍♀ 🌾 🌽
+ear of corn	🌽
+ear with hearing aid	🦻
+earbud	🎧
+ears	🙉 👂 👯 👯‍♂ 👯‍♀
+earth	🌍 🌎 🌏 🌐
+earthquake	🫨 🛘
+earthworm	🪱
+east	⇗ ⇘ ➡
+easy	🍳
+eat	😋 🍔 🍽 🍴 🥄
+edamame	🫛
+edge	📏
+education	🎒 🎓 📔 📕 📖 📗 📘 📙 📚
+eek	😰
+eet	⊥
+egg	🥚 🐣 🪺 🍳
+eggplant	🍆
+eggs	🪺
+eight	🕗 🕣 🎱
+eight o’clock	🕗
+eight-pointed	✴
+eight-pointed star	✴
+eight-spoked	✳
+eight-spoked asterisk	✳
+eight-thirty	🕣
+eighteen	🔞
+eighth	♪
+eighth note	♪
+eject	⏏
+eject button	⏏
+elderly	🧓 👴 👵
+electric	🚃 ⚡ 🔌 💡 🔦
+electric plug	🔌
+electrician	🧑‍🔧 👨‍🔧 👩‍🔧
+electricity	⚡ 🔌
+electronic	🪫
+elegant	💃 🕺 🌹
+element	∈ ∉ ∋
+element of	∈
+elephant	🐘
+elevator	🛗
+eleven	🕚 🕦
+eleven o’clock	🕚
+eleven-thirty	🕦
+elf	🧝 🧝‍♂ 🧝‍♀
+elk	🫎
+ellipsis	⋮ ⋯ ⋰ ⋱
+elves	🧝 🧝‍♂ 🧝‍♀
+email	✉ 📧 📨 📩 📤 📥
+embarrass	🫢 🫣
+embarrassed	🫠 😳 🥹 🙈
+emblem	🔱
+embrace	🫂
+embroidery	🪡
+emerge	🐦‍🔥
+emergency	🚑 🚨 🦺
+emoji	🤨
+emotion	💘 💝 💖 💗 💓 💞 💕 💟 💔 ❤ 🩷 💛
+empanada	🥟
+employed	👔
+empty	∅ 🪹 🫗 🫙
+empty nest	🪹
+empty set	∅
+enchantment	🧝 🧝‍♂ 🧝‍♀
+end	∎ 🔚
+end arrow	🔚
+end proof	∎
+energy	🪫
+engaged	💍
+engagement	💍 💎
+engine	🚂 🚒
+engineer	🧑‍🔬 👨‍🔬 👩‍🔬
+enraged	😡
+enraged face	😡
+ensnare	🪝
+entertainer	🧑‍🎤 👨‍🎤 👩‍🎤
+entertainment	🎠 🎆 🎣 🎯 🎮 🎲 🎭 🎨 📻
+entry	⛔ 🚫
+envelope	✉ 🧧 📨 📩
+envelope with arrow	📩
+epic	😜 😯 😱
+equal	≠ ≃ ≅ ≈ ≌ ≒ ≖ ≤ ≥ ≦ ≧ ⊆
+equality	≅ ≌ ≖ ≣ ⊇ 🟰
+equals	≤ ≥ 🟰
+equestrian	🐎
+equine	🐴
+equivalent	≣ ≳
+erosion	⊖
+eruption	🌋
+escargot	🐌
+euro	🪙 💶
+euro banknote	💶
+europe	🌍
+europe-africa	🌍
+european	🏤 🏰
+evening	🌆
+evergreen	🌲
+evergreen tree	🌲
+everyone	👥
+evidence	🧾
+evil	😈 👿 🙈 🙉 🙊 🖤 🦹 🦹‍♂ 🦹‍♀
+evil-eye	🧿
+evolution	🧬
+ew	🤮
+ewe	🐑
+exact	≡
+exasperation	🤦 🤦‍♂ 🤦‍♀
+exchange	💱
+excited	😅 🤩 🥳 👻 💖 💗 👏 🤸 🤸‍♂ 🤸‍♀ 🎉
+exclamation	❣ ❕ ❗
+exercise	🙆 🙆‍♂ 🙆‍♀
+exhalation	🫁
+exhale	😮‍💨
+exhaling	😮‍💨
+exhausted	😮‍💨 🫩
+exists	∃
+expendable	♟
+expensive	🫰
+experiment	🥼 🧪 🔬
+expert	🤓
+explode	🤯 💥
+exploding	🤯
+exploding head	🤯
+explosion	💣
+explosive	🧨
+expressionless	😐 😑 😶
+expressionless face	😑
+extinction	🦣 🦤
+extinguish	🧯
+extinguisher	🧯
+extra	🛸
+extraterrestrial	👽 👾 🔭
+eye	👁 😄 😁 😊 😍 😚 😙 😜 🤪 😝 🫣 😸
+eye in speech bubble	👁‍🗨
+eyebrow	🤨 🥸
+eyeglasses	👓
+eyeroll	🙄
+eyes	👀 😃 😄 😁 😆 😊 🤩 😚 😙 🤪 😝 🫢
+eyewear	👓 🕶
+face	😀 😃 😄 😁 😆 😅 🤣 😂 🙂 🙃 🫠 😉
+face blowing a kiss	😘
+face exhaling	😮‍💨
+face holding back tears	🥹
+face in clouds	😶‍🌫
+face savoring food	😋
+face screaming in fear	😱
+face vomiting	🤮
+face with bags under eyes	🫩
+face with crossed-out eyes	😵
+face with diagonal mouth	🫤
+face with hand over mouth	🤭
+face with head-bandage	🤕
+face with medical mask	😷
+face with monocle	🧐
+face with open eyes and hand over mouth	🫢
+face with open mouth	😮
+face with peeking eye	🫣
+face with raised eyebrow	🤨
+face with rolling eyes	🙄
+face with spiral eyes	😵‍💫
+face with steam from nose	😤
+face with symbols on mouth	🤬
+face with tears of joy	😂
+face with thermometer	🤒
+face with tongue	😛
+face without mouth	😶
+facepalm	🤦 🤦‍♂ 🤦‍♀
+facepalming	🤦 🤦‍♂ 🤦‍♀
+facing	📄
+factory	🏭 🧑‍🏭 👨‍🏭 👩‍🏭
+factory worker	🧑‍🏭
+fail	😞 😩 ⛔
+fairy	🧚 😇 😈 👿 💀 👹 👺 👻 👽 👾 🤴 👸
+fairytale	😇 😈 👿 💀 👹 👺 👻 👽 👾 🤴 👸 👼
+faithful	💯
+falafel	🧆 🥙
+fall	🍂
+fallen	🍂
+fallen leaf	🍂
+falling	🍁 🍂 🌠
+falsum	⊥
+family	👪 🧑‍🧑‍🧒 🧑‍🧑‍🧒‍🧒 🧑‍🧒 🧑‍🧒‍🧒 👑
+family: adult, adult, child	🧑‍🧑‍🧒
+family: adult, adult, child, child	🧑‍🧑‍🧒‍🧒
+family: adult, child	🧑‍🧒
+family: adult, child, child	🧑‍🧒‍🧒
+fan	🪭
+fancy	🧐 👗 👛 🎩
+fangs	🧛 🧛‍♂ 🧛‍♀
+fantasy	😇 😈 👿 👹 👺 👻 👽 👾 🤴 👸 👼 🎅
+farewell	🫂
+farm	🐴 🐎 🐮 🐂 🐄 🐷 🐖 🐽 🐑 🐐 🌽
+farmer	🧑‍🌾 👨‍🌾 👩‍🌾
+farming	🧺
+fart	💨
+fashion	👠
+fast	💨 🏃 🏃‍♂ 🏃‍♀ 🍔 🍟 👟 ⏩ ⏪ ⏫ ⏬
+fast down button	⏬
+fast reverse button	⏪
+fast up button	⏫
+fast-forward	⏩
+fast-forward button	⏩
+fateh	🪯
+father	👨‍🍼 🎅
+fatigued	🫩
+fatima	🪬
+favor	🙇 🙇‍♂ 🙇‍♀
+fax	📠
+fax machine	📠
+fear	😨 😱 🫦
+fearful	😨 😱
+fearful face	😨
+feather	🪶
+feed	👩‍🍼 👨‍🍼 🧑‍🍼 🍴
+feeding	🤱 👩‍🍼 👨‍🍼 🧑‍🍼
+feelings	🥹
+feels	😂 😍 😵 😢 😖 😓 😩 😫 😤 😡 😠
+feet	🦶 🐾 👞
+feline	🐈‍⬛
+female	🐑 ♀
+female sign	♀
+fencer	🤺
+fencing	🤺
+ferris	🎡
+ferris wheel	🎡
+ferry	⛴
+festival	🥮 🎎
+festive	💃 🕺 🪅
+fetch	💁 💁‍♂ 💁‍♀
+fever	🤧 🦟
+feverish	🥵
+field	🏑
+field hockey	🏑
+fife	🪈
+fight	🫯 🥷
+fight cloud	🫯
+fighter	🥷
+file	📁 📂 🗃 🗄
+file cabinet	🗄
+file folder	📁
+filing	🗄
+fill	▤ ▥ ▦ ▧ ▨ ▩ ◍
+filled	■ ▣ ▬ ▮ ▰ ▲ ▴ ▸ ► ▼ ▾ ◂
+filled circle	●
+filled diamond	◆
+filled down-pointing small triangle	▾
+filled down-pointing triangle	▼
+filled left-pointing pointer	◄
+filled left-pointing small triangle	◂
+filled lower left triangle	◣
+filled lower right triangle	◢
+filled parallelogram	▰
+filled rectangle	▬
+filled right-pointing pointer	►
+filled right-pointing small triangle	▸
+filled square	■
+filled square containing hollow circle	◙
+filled up-pointing small triangle	▴
+filled up-pointing triangle	▲
+filled upper left triangle	◤
+filled upper right triangle	◥
+filled vertical rectangle	▮
+filling	🥧
+film	🎥 🎞 📽 🎦
+film frames	🎞
+film projector	📽
+fine	😐 😑 😒
+finger	🖐 🖖 🤞 🫰 🤘 👈 👉 👆 🖕 👇 ☝ 🫵
+fingerprint	🫆
+fingers	🖐 🤌 🤏 🤞 🤟
+finish	🏁
+fire	🔥 ❤‍🔥 🧑‍🚒 👨‍🚒 👩‍🚒 🚒 🧨 🧯
+fire engine	🚒
+fire extinguisher	🧯
+firebird	🐦‍🔥
+firecracker	🧨
+firefighter	🧑‍🚒 👨‍🚒 👩‍🚒
+firetruck	🧑‍🚒 👨‍🚒 👩‍🚒
+fireworks	🎆 🎇 🧨
+first	🌓 🌛 🥇
+first quarter moon	🌓
+first quarter moon face	🌛
+fish	🐟 🐠 🐡 🦈 🍥 🎣 ♓
+fish cake with swirl	🍥
+fishes	🐟 🐠
+fisheye	◉
+fishing	🚣 🚣‍♂ 🚣‍♀ 🦦 🐟 🎣
+fishing pole	🎣
+fist	✊ 👊 🤛 🤜
+five	✋ 🫷 🫸 🙏 🕔 🕠
+five o’clock	🕔
+five-thirty	🕠
+fix	👷 👷‍♂ 👷‍♀
+fixed	✅
+flag	⛳ 📫 📪 📬 📭 🏁 🚩 🏴 🏳 🏳‍🌈 🏳‍⚧ 🏴‍☠
+flag in hole	⛳
+flags	🏁 🎌
+flair	💃 🕺
+flamboyant	🦩
+flame	🔥
+flamenco	💃 🕺
+flamingo	🦩
+flash	📸
+flashlight	🔦
+flat	♭ 🥿
+flat shoe	🥿
+flatbed	🛻
+flatbread	🫓 🥙
+flathead	🪛
+flats	🥿
+flautist	🪈
+flavor	🧂
+flavoring	🧄 🧅
+fleek	💯 👌
+fleur-de-lis	⚜
+flex	💪
+flexed	💪
+flexed biceps	💪
+flick	💁 💁‍♂ 💁‍♀
+flight	🪶
+flip	💁 💁‍♂ 💁‍♀ 🤸 🤸‍♂ 🤸‍♀ 🩴
+flipper	🐬
+flirt	😉 😘 😗 😚 😙 😏 🫦 🧑‍🤝‍🧑 👭 👫 👬 🪭
+flirting	🫦
+float	🛟
+floating	🫧
+flock	🪿
+floor	🤣
+flop	🩴
+floppy	💾
+floppy disk	💾
+flower	💐 🌸 💮 🪷 🌹 🥀 🌺 🌻 🌼 🌷 🪻 🎴
+flower playing cards	🎴
+flowing	⏳
+flu	🤧 💉
+fluctuate	🪀
+fluffy	🐩 🐑
+flushed	😳
+flushed face	😳
+flute	🪈
+flutter	🍃 🪭
+fluttering	🍃
+fly	🪰 🕊 🪽 ✈ 🪁 💸
+flying	🪽 ✈ 🛸 🥏
+flying disc	🥏
+flying saucer	🛸
+fm	📻
+fml	💩
+focus	😣
+fog	🌫 😶‍🌫 🌁
+foggy	🌁
+folded	🙏
+folded hands	🙏
+folder	📁 📂
+folding	🪭
+folding hand fan	🪭
+folklore	🧜 🧜‍♂ 🧜‍♀ 🧝 🧝‍♂ 🧝‍♀
+fondue	🫕
+food	😋 🦐 🦑 🥭 🍎 🫐 🥝 🍅 🫒 🥑 🥔 🥕
+foot	🦶 🦵 👞
+football	⚽ 🏈 🏉
+footprint	👣
+footprints	👣
+for	∀ 🔰 🈺
+for all	∀
+forbidden	🙈 🙉 🙊 🙅 🙅‍♂ 🙅‍♀ 🔕 ⛔ 🚫 🚳 🚭 🚯
+force	⊮ 🪠
+forensics	🫆
+forest	🫈 🌲 🌳
+forever	♾
+forgive	🙇 🙇‍♂ 🙇‍♀
+forgot	😮 😧 🙈
+fork	🍽 🍴
+fork and knife	🍴
+fork and knife with plate	🍽
+formal	🤵 🤵‍♂ 🤵‍♀ 🎩
+fortune	🥠 🔮 🪬 🔯
+fortune cookie	🥠
+forward	⏩
+fosho	👌
+fountain	⛲ 🖋
+fountain pen	🖋
+four	🍀 🕓 🕟
+four leaf clover	🍀
+four o’clock	🕓
+four-leaf	🍀
+four-thirty	🕟
+fowl	🪿
+fox	🦊
+frame	🖼 🪟
+framed	🖼
+framed picture	🖼
+frames	🎞
+frankfurter	🌭
+free	🆓 🈶 🈚
+free button	🆓
+freedom	⛓‍💥
+freestyle	🏊 🏊‍♂ 🏊‍♀
+freezing	🥶
+french	🥐 🥖 🍟
+french fries	🍟
+fresh	💈 🪟
+fried	🍤
+fried shrimp	🍤
+friend	👥
+friends	🧑‍🤝‍🧑 👭 👫 👬 👥
+friendship	🫂
+fries	🍟
+frog	🐸
+from	↤ ↥ ↦ ↧ ⇪ 😤
+front	🚪
+front-facing	🐥
+front-facing baby chick	🐥
+frostbite	🥶
+frown	😕 🙁 ☹ 😦 🙍 🙍‍♂ 🙍‍♀ 🙎 🙎‍♂ 🙎‍♀
+frowning	🙁 ☹ 😦 🙍 🙍‍♂ 🙍‍♀
+frowning face	☹
+frowning face with open mouth	😦
+fruit	🍇 🍈 🍉 🍊 🍋 🍋‍🟩 🍌 🍍 🥭 🍎 🍏 🍐
+frustrated	🫤 😖 😠 🙍 🙍‍♂ 🙍‍♀
+frustration	🫤
+fry	🍳
+frying	🍳
+fuel	⛽
+fuel pump	⛽
+fuelpump	⛽
+fuji	🗻
+full	😋 💯 🫃 🫄 🌕 🌝
+full moon	🌕
+full moon face	🌝
+fume	😤
+fuming	😤
+funeral	⚱
+funeral urn	⚱
+fungi	🍄‍🟫
+fungus	🍄 🍄‍🟫
+funny	🤣 😂 😜
+furious	😤
+fury	😤
+futbol	⚽
+future	🔮
+g2g	👋
+gaggle	🪿
+gains	💪
+gait	🚶 🚶‍♂ 🚶‍♀
+gamble	🎰
+gambling	🎰
+game	👾 🏐 🎳 🏏 🏑 🏒 🏓 🏸 🥌 🎯 🎱 🎮
+game die	🎲
+gamer	👾
+games	👾
+gander	🪿
+gang	🚲
+garbage	🗑
+garden	🐌 🐛 🐜 🐞 🫜 🏡 👒 🪏
+gardener	🧑‍🌾 👨‍🌾 👩‍🌾
+garlic	🧄
+garnish	🍋‍🟩
+gas	⛽
+gasoline	⛽
+gasp	🫢 😮‍💨
+gay	🌈 🏳‍🌈
+gear	⚙
+geek	🤓
+geese	🪿
+geez	😳
+gem	💎 🪎
+gem stone	💎
+gemini	♊
+genderqueer	🌈 🏳‍🌈
+gene	🧬
+genetics	🧬
+genie	🧞 🧞‍♂ 🧞‍♀
+geometric	🔴 🔵 ⚫ ⚪ ⬛ ⬜ ◼ ◻ ◾ ◽ ▪ ▫
+germs	😷
+gesture	🙈 🙉 🙊 🤌 🤟 🙌 🙏 🙍 🙍‍♂ 🙍‍♀ 🙅 🙅‍♂
+gesturing	🙆 🙆‍♂ 🙆‍♀ 🙅 🙅‍♂ 🙅‍♀
+gesundheit	🤧
+getting	💆 💆‍♂ 💆‍♀ 💇 💇‍♂ 💇‍♀
+ghost	👻
+giant	🫈
+gibbous	🌔 🌖
+gift	🧧 🎁
+gifted	🤓
+giggle	🤭
+giggling	🤭
+ginger	🦰 🫚
+ginger root	🫚
+giraffe	🦒
+girl	👧
+girls	👭
+given	∀
+glad	😊 🥲
+glass	🥛 🍷 🍸 🥂 🥃 🫗 🔍 🔎
+glass of milk	🥛
+glasses	👓 🥸 🤓 🥂 🕶
+glbt	🌈 🏳‍🌈
+glbtq	🌈 🏳‍🌈
+glitter	🪩
+glittery	🌟
+globe	🌍 🌎 🌏 🌐
+globe showing americas	🌎
+globe showing asia-australia	🌏
+globe showing europe-africa	🌍
+globe with meridians	🌐
+glory	🐦‍🔥
+glove	🥎 🥊
+gloves	🧤
+glow	🌟
+glowing	🌟
+glowing star	🌟
+go	💨
+goal	🥍 🥅
+goal net	🥅
+goat	🐐 ♑
+gobble	🦃
+goblin	👺
+goggles	🥽
+gold	🏅 🥇 🪙 💰 🪎
+golf	🏌 🏌‍♂ 🏌‍♀ ⛳ 🚩
+golfing	🏌 🏌‍♂ 🏌‍♀
+gondola	🚠 🚡
+gone	💨
+goo	👶
+good	🫡 😪 😴 💖 💤 👍 👎 👏 🦸 🦸‍♂ 🦸‍♀ 🛌
+goodbye	🫂
+goodnight	😴 🥱 💤 🛌
+goofy	🤪
+googly	👀
+goose	🪿
+gordita	🫓
+gorilla	🦍
+gossip	💁 💁‍♂ 💁‍♀
+got	👌
+gotcha	👌
+gotta	💨
+grade	🈴
+grade”	🈴
+graduate	🧑‍🎓 👨‍🎓 👩‍🎓
+graduation	🎓
+graduation cap	🎓
+grain	🌾 🍞
+grains	🌾
+gramps	👴
+grandchild	🧒
+granddaughter	👧
+grandfather	👴
+grandma	👵
+grandmother	👵
+grandpa	👴
+grandparent	🧓
+grandson	👦
+granny	👵
+grape	🍇
+grapes	🍇
+graph	💹 📈 📉 📊
+grapple	🤼 🤼‍♂ 🤼‍♀
+grasshopper	🦗
+grateful	🥲 🥹
+gratitude	🥹
+grave	🪦
+graveyard	🪦
+gray	🩶 🦳
+great	👏
+greater-than	≯ ≥ ≧ ≫ ≳ ⋙ ⪚
+greater-than equivalent	≳
+greater-than or equal	≥
+greater-than over equal	≧
+green	💚 🏌 🏌‍♂ 🏌‍♀ 🌳 🍏 🥬 🥗 📗 🔰 🟢 🟩
+green apple	🍏
+green book	📗
+green circle	🟢
+green heart	💚
+green salad	🥗
+green square	🟩
+greetings	👋
+grey	🩶
+grey heart	🩶
+grimace	😬 🙎 🙎‍♂ 🙎‍♀
+grimacing	😬
+grimacing face	😬
+grin	😀 😃 😄 😁 😸
+grinning	😀 😃 😄 😁 😆 😅 🤩 😬 😺 😸
+grinning cat	😺
+grinning cat with smiling eyes	😸
+grinning face	😀
+grinning face with big eyes	😃
+grinning face with smiling eyes	😄
+grinning face with sweat	😅
+grinning squinting face	😆
+grizzly	🐻
+groan	😮‍💨
+groom	🤵‍♂ 💇 💇‍♂ 💇‍♀ 🪮
+groove	💃 🕺
+gross	😝 🤢 🤮
+ground	⛱
+group	⋭
+grow	🪴
+growing	💗
+growing heart	💗
+growl	🐻
+growth	🌷 💹 📈
+gtg	👋
+gua	👲
+guanaco	🦙
+guapi	👲
+guard	💂 😦 💂‍♂ 💂‍♀
+guess	🤷 🤷‍♂ 🤷‍♀
+guide	🦮 🪬
+guide dog	🦮
+guitar	🎸
+gun	🔫
+gym	💪
+gymnastics	🤸 🤸‍♂ 🤸‍♀
+gyro	🥙
+gyōza	🥟
+habitat	🌳
+haha	😆 🤣 😂 🫠
+hahaha	😆
+hail	🚖
+hair	👱‍♂ 👱‍♀ 💇 💇‍♂ 💇‍♀ 🦰 🦱 🦳 🦲 🪮 👱
+hair pick	🪮
+haircut	💇 💇‍♂ 💇‍♀ 💈
+hairless	🦲
+hairy	🫈
+hairy creature	🫈
+hajj	🕋
+half	◐ ◑ ◒ ◓ ◖ ◗ ◠ ◡
+halloween	👻 🧛 🧛‍♂ 🧛‍♀ 🧟 🧟‍♂ 🧟‍♀ 🐈‍⬛ 🍫 🍬 🎃
+halmos	∎
+halo	😇
+halt	🫷 🫸
+hamburger	🍔
+hammer	🔨 ⛏ ⚒ 🛠
+hammer and pick	⚒
+hammer and wrench	🛠
+hamsa	🪬
+hamster	🐹
+hand	🤭 🫢 👋 🤚 🖐 ✋ 🖖 🫱 🫲 🫳 🫴 🫷
+hand with fingers splayed	🖐
+hand with index finger and thumb crossed	🫰
+handbag	👜 👛 👝
+handball	🤾 🤾‍♂ 🤾‍♀
+handgun	🔫
+handicap	♿
+handle	🤹 🤹‍♂ 🤹‍♀ 🍵
+hands	🤗 🖖 🙌 🫶 👐 🤲 👏 🙏 🧑‍🤝‍🧑 👭 👫 👬
+handshake	🤝 🫱 🫲
+handy	🪛
+hang	🤙
+hang-glide	🪂
+hanukkah	🕎
+happy	😀 😃 😄 😁 😆 🤣 😂 🙂 😇 ☺ 🥲 🥳
+hard	🦻
+hardhat	👷 👷‍♂ 👷‍♀
+harp	🪉
+harpoon	↼ ↽ ↾ ↿ ⇀ ⇁ ⇂ ⇃ ⇋ ⇌
+hashi	🥢
+hat	🤠 🥳 👷 👷‍♂ 👷‍♀ 👲 👒 🎩 🎓 🧢 ⛑
+hatchet	🪓
+hatching	🐣
+hatching chick	🐣
+hats	👒
+haunting	👻
+head	😶‍🌫 🙂‍↔ 🙂‍↕ 🤯 🧕 🗣
+head shaking horizontally	🙂‍↔
+head shaking vertically	🙂‍↕
+head-bandage	🤕
+headache	😣 😓 💆 💆‍♂ 💆‍♀
+headed	↞ ↟ ↠ ↡
+headphone	🎧
+headscarf	🧕
+headstone	🪦
+healing	☮
+health	🧑‍⚕ 👨‍⚕ 👩‍⚕ 🍎 🫚
+health worker	🧑‍⚕
+healthcare	🧑‍⚕ 👨‍⚕ 👩‍⚕
+healthier	❤‍🩹
+hear	🙉 👂 🧏 🧏‍♂ 🧏‍♀
+hear-no-evil	🙉
+hear-no-evil monkey	🙉
+hearing	👂 🦻
+heart	🥰 😘 😻 💌 💘 💝 💖 💗 💓 💞 💕 💟
+heart decoration	💟
+heart exclamation	❣
+heart hands	🫶
+heart on fire	❤‍🔥
+heart suit	♥
+heart with arrow	💘
+heart with ribbon	💝
+heart-eyes	😍 😻
+heartbeat	💓 🫀
+heartbreaker	😉
+heartbroken	💔
+hearth	💟
+heartpulse	💗
+hearts	🥰 😍 💞 💕 ♥
+heat	🫠 🥵 😳 🌞
+heavenly	🪽
+heavy	❣ 🪨 ➖ ➗ 🟰 💲 ⭕ ✔
+heavy dollar sign	💲
+heavy equals sign	🟰
+hedgehog	🦔
+heel	👠
+heels	👠
+hehe	🤣 😂 🙃
+helicopter	🚁
+hello	👋 🫂
+helmet	💂 💂‍♂ 💂‍♀ 🪖 ⛑
+help	🩼 🆘
+herb	🌿 🫚
+herd	🦬
+here	🙋 🙋‍♂ 🙋‍♀ 🈁
+hermitian	⊹
+hermitian conjugate matrix	⊹
+hero	🦸 🦸‍♂ 🦸‍♀
+heroine	🦸‍♀
+hey	👋
+hi	👋
+hibiscus	🌺
+hidden	🫥 🥷
+hide	🫣 🫥 🙈
+hiding	🫣
+high	✋ 🫷 🫸 🙏 ⚡ 🔊
+high voltage	⚡
+high-heeled	👠
+high-heeled shoe	👠
+high-speed	🚄 🚅
+high-speed train	🚄
+highway	🛣
+hijab	🧕
+hike	🚶 🚶‍♂ 🚶‍♀
+hiking	🥾
+hiking boot	🥾
+hilarious	🤣 😂
+hindu	🛕 🕉
+hindu temple	🛕
+hinduism	🪷
+hinny	🫏
+hippo	🦛
+hippopotamus	🦛
+hit	🎯
+hitched	💒
+hm	😕
+hmm	🤔 🤨
+hocho	🔪
+hockey	🏑 🏒
+hoist	🛗
+hold	🫱 🫲 🫴 🫷 🫸 🤌 🧑‍🤝‍🧑 👭 👫 👬
+holding	🥹 🧑‍🤝‍🧑 👭 👫 👬
+hole	🕳 ⛳ 🪏
+holi	🫟
+holiday	🎅 🤶 🧑‍🎄
+hollow	⇦ ⇧ ⇨ ⇩ ⇪ □ ▢ ▣ ▭ △ ▵ ▷
+hollow bullet	◦
+hollow circle	○
+hollow circle containing filled circle	◉
+hollow circle with upper right quadrant	◷
+hollow diamond	◇
+hollow diamond containing filled diamond	◈
+hollow down-pointing small triangle	▿
+hollow down-pointing triangle	▽
+hollow left-pointing pointer	◅
+hollow left-pointing small triangle	◃
+hollow left-pointing triangle	◁
+hollow rectangle	▭
+hollow red circle	⭕
+hollow right-pointing pointer	▻
+hollow right-pointing small triangle	▹
+hollow right-pointing triangle	▷
+hollow square	□
+hollow square containing filled square	▣
+hollow square upper right quadrant	◳
+hollow square with rounded corners	▢
+hollow up-pointing small triangle	▵
+hollow up-pointing triangle	△
+hollywood	🎥
+home	🪹 🛖 🏚 🏠 🏡 🔨 🔧 🔩
+homie	😏 👏 🔝
+honey	🐻 🦡 🐝 🍯
+honey pot	🍯
+honeybee	🐝
+honeypot	🍯
+honk	🪿
+hook	🪝
+hoop	🏀
+hooray	🥳 🙌 🎉
+horizontal	⋯ ▤ 🚥
+horizontal traffic light	🚥
+horizontally	🙂‍↔
+horn	🥳 📯
+horns	😈 👿 🤘 🐏
+horoscope	♈ ♉ ♊ ♋ ♌ ♍ ♎ ♏ ♐ ♑ ♒ ♓
+horrible	😝
+horror	🧟 🧟‍♂ 🧟‍♀
+horse	🐎 🏇 🐴 🎠
+horse face	🐴
+horse racing	🏇
+horses	🐴
+horseshoe	🧲
+hospital	🏥
+hot	🫠 🥵 😳 🌶 🌭 ☕ ♨ 🔥 🪭 💣
+hot beverage	☕
+hot dog	🌭
+hot face	🥵
+hot pepper	🌶
+hot springs	♨
+hotcake	🥞
+hotdog	🌭
+hotel	🏨 🛌 🏩 🛎 🛍 🛏 🛋
+hotspot	🛜
+hotsprings	♨
+hourglass	⌛ ⏳
+hourglass done	⌛
+hourglass not done	⏳
+hours	🏪 ⏳ ⏰
+house	🏠 🪴 🛖 🏘 🏚 🏡
+house with garden	🏡
+houses	🏘
+hrs	⏰
+hug	🤗 👐 🫂
+hugging	🤗 🫂
+huh	🤌
+human	👱
+hump	🐪 🐫
+hundred	💯
+hundred points	💯
+hungry	😋 😩 🍗 🍔 🍕 🍴
+hurl	🤾 🤾‍♂ 🤾‍♀
+hurricane	🌀
+hurry	🏃 🏃‍♂ 🏃‍♀
+hurt	🤕 🩼
+hushed	😯
+hushed face	😯
+hut	🛖
+hyacinth	🪻
+hygiene	🪥
+hypnotized	😵‍💫
+hóngbāo	🧧
+ice	🧊 🍦 🍧 🍨 🏒 ⛸
+ice cream	🍨
+ice hockey	🏒
+ice skate	⛸
+iceberg	🧊
+icecream	🍦
+icicles	🥶
+id	🪪 🆔
+id button	🆔
+idea	💭 💡
+identical	≡ 👯 👯‍♂ 👯‍♀
+identical to	≡
+identification	🪪
+identification card	🪪
+identity	🫆 🆔
+ideograph	🈷 🈶 🈯 🉐 🈹 🈚 🈲 🉑 🈸 🈴 🈳 🈺
+idk	🤷 🤷‍♂ 🤷‍♀
+ignorance	🤷 🤷‍♂ 🤷‍♀
+ill	🤒
+ily	🥰 😍 😘 😗 😚 😙 💘 💝 💖 💗 💓 💕
+image	≒
+immortal	🐦‍🔥
+imp	👿
+impressed	😳
+improvement	🔨 🔧 🔩
+improving	❤‍🩹
+in	≖ 😶‍🌫 😱 👁‍🗨 🤵 🤵‍♂ 🤵‍♀ 🧑‍🦼 👨‍🦼 👩‍🦼 🧑‍🦽 👨‍🦽
+inbox	📥
+inbox tray	📥
+incognito	🥸
+incoming	📨
+incoming envelope	📨
+increasing	💹 📈
+increment	∆
+indecisive	🧇
+index	🫰 👈 👉 👆 👇 ☝ 🫵 🗂 📇
+index pointing at the viewer	🫵
+index pointing up	☝
+indifference	🤷 🤷‍♂ 🤷‍♀
+indigo	🪻
+industrial	🧑‍🏭 👨‍🏭 👩‍🏭
+inequality	≮ ≠ ≯ ≤ ≥ ≦ ≧ ≪ ≫ ≳ ⋘ ⋙
+inequation	≠
+inexpressive	😑
+infant	👶 🍼
+infinity	♾ ∞
+infinity sign	∞
+inhalation	🫁
+injured	🩼
+injury	🤕 🩸
+ink	🔏 🫟
+innocent	😇
+input	🔠 🔡 🔢 🔣 🔤
+input latin letters	🔤
+input latin lowercase	🔡
+input latin uppercase	🔠
+input numbers	🔢
+input symbols	🔣
+insect	🦋 🐛 🐜 🐝 🪲 🐞 🦗 🪳 🕷 🦟 🪰
+instructor	🧑‍🏫 👨‍🏫 👩‍🏫
+instrument	🎷 🎺 🪊 🪗 🎸 🎹 🎻 🪘 🪇 🪈 🪉
+integral	∫ ∬ ∮
+intelligent	🤓 🧠
+intercardinal	↗ ↘ ↙ ↖
+interior	⨼
+interior product	⨼
+interlocking	🧩
+internet	🌐 🛜
+interrogation	🤌
+intersection	∩ ⋂ ⋒ 🚥 🚦
+intoxicated	🥴
+introvert	🫥
+invent	💭
+invention	💭
+inventor	🧑‍💻 👨‍💻 👩‍💻
+inverse	◘ ◙
+inverse bullet	◘
+invertebrate	🪼
+inverted	∾
+inverted lazy s	∾
+invisible	🫥
+invoice	🧾
+irish	☘ 🍀
+iron	🧇
+ironic	😼
+irritated	🙍 🙍‍♂ 🙍‍♀
+islam	🕌 🕋 ☪
+island	🏝
+isomorphism	≅
+i’m	💀
+jack	🎃
+jack-o-lantern	🎃
+jacked	💪
+jacket	🥼 🧥
+japan	🗾
+japanese	🍙 🍡 🏣 🏯 🎋 🎍 🎎 🎴 🔰 🈁 🈂 🈷
+japanese castle	🏯
+japanese dolls	🎎
+japanese post office	🏣
+japanese symbol for beginner	🔰
+japanese “acceptable” button	🉑
+japanese “application” button	🈸
+japanese “bargain” button	🉐
+japanese “discount” button	🈹
+japanese “free of charge” button	🈚
+japanese “here” button	🈁
+japanese “monthly amount” button	🈷
+japanese “no vacancy” button	🈵
+japanese “not free of charge” button	🈶
+japanese “open for business” button	🈺
+japanese “passing grade” button	🈴
+japanese “prohibited” button	🈲
+japanese “reserved” button	🈯
+japanese “service charge” button	🈂
+japanese “vacancy” button	🈳
+jar	🫙 🍯
+jazz	👐 🪊
+jealous	😐 😑 😒
+jeans	👖
+jeez	😳
+jel	😒
+jelly	😒 🪼
+jellyfish	🪼
+jeotgarak	🥢
+jet	✈
+jew	🕍 ✡
+jewel	💎
+jewels	🪎
+jewish	🕍 ✡ 🕎 🔯
+jiaozi	🥟
+jigsaw	🧩
+jinn	🧞 🧞‍♂ 🧞‍♀
+job	👏 🏢
+jockey	🏇
+joey	🦘
+join	⋈
+joke	😜
+joker	🃏
+jolly	🏴‍☠
+journey	🛄
+joy	🤣 😂 🥲 🥹 😹
+joystick	🕹
+judaism	🕍 ✡ 🕎 🔯
+judge	🧑‍⚖ 👨‍⚖ 👩‍⚖
+judo	🥋
+jug	🏺
+juggle	🤹 🤹‍♂ 🤹‍♀
+juggling	🤹 🤹‍♂ 🤹‍♀
+juice	🥤 🧃
+jump	🦘
+justice	🧑‍⚖ 👨‍⚖ 👩‍⚖ ⚖ ♎
+kaaba	🕋
+kale	🥬
+kangaroo	🦘
+karaoke	🎤
+karate	🥋
+katakana	🈁 🈂
+kebab	🥙 🍢
+keep	🤐 💯
+kerchief	🧕
+key	🔑 🍋‍🟩 🔐 🗝
+keyboard	⌨ 🎹
+keys	🔑
+khalsa	🪯
+khanda	🪯
+kick	🦵 🦶 🛴 👞 👟
+kick scooter	🛴
+kid	🧒 👦 👧
+kidding	😏
+kidney	🫘
+kimono	👘
+king	🤴 👑
+kiss	💏 😘 😗 😙 😽 💋 👄 🫦 💑
+kiss mark	💋
+kisses	😍 😚 😙 💝 💖 💗 💕
+kissing	😚 😙 😽 💋 👄 😗
+kissing cat	😽
+kissing face	😗
+kissing face with closed eyes	😚
+kissing face with smiling eyes	😙
+kitchen	🔪
+kitchen knife	🔪
+kite	🪁
+kitten	🐱 🐈
+kitty	🐱
+kiwi	🥝
+kiwi fruit	🥝
+knee	🦵
+kneel	🧎 🧎‍♂ 🧎‍♀
+kneeling	🧎 🧎‍♂ 🧎‍♀
+knees	🧎 🧎‍♂ 🧎‍♀
+knife	🍽 🍴 🔪 🗡
+knights	🐉 ⚜
+knit	🧶
+knobs	🎛
+knocked	😵
+knot	🪢
+know	🫴 🙋 🙋‍♂ 🙋‍♀
+knowledge	📖 📚
+knows	🤷 🤷‍♂ 🤷‍♀
+knuckle	👊
+koala	🐨
+koko	🈁
+ktx	🚄 🚅
+kuaizi	🥢
+lab	🥼 🔍 🔎 🧪 🧫 🔬
+lab coat	🥼
+label	🏷
+lacrosse	🥍
+ladder	🪜
+lady	👩 👵 🐞 👚 👜
+lady beetle	🐞
+ladybird	🐞
+ladybug	🐞
+lai	🧧
+lake	🚣 🚣‍♂ 🚣‍♀ 🚤
+lamb	🐑
+lambchop	🥩
+lamp	🧞 🧞‍♂ 🧞‍♀ 🪔 🛋
+landing	🛬
+landscape	🌆
+landslide	🛘
+lantern	🎃 🏮
+laptop	💻
+large	◯ 🤪 🦣 🦤 ⭕ ⬛ ⬜ 🔶 🔷 🌥
+large blue diamond	🔷
+large hollow circle	◯
+large orange diamond	🔶
+last	🌗 🌜 ⏮
+last quarter moon	🌗
+last quarter moon face	🌜
+last track button	⏮
+late	🫩 ⏰
+later	👋
+lather	🧼
+latin	✝ 🔠 🔡 🔤
+latin cross	✝
+laugh	😀 😄 😆 🤣 😂 😹
+laughing	😹 🤣
+launch	🚀
+laundry	🧺
+lavash	🫓
+lavatory	🚹 🚺 🚻 🚾
+lavender	🪻
+law	🧑‍⚖ 👨‍⚖ 👩‍⚖ 👮 👮‍♂ 👮‍♀
+lazy	∾ 🦥
+leaf	🌿 🍀 🍁 🍂 🍃 🔰
+leaf fluttering in wind	🍃
+leafless	🪾
+leafless tree	🪾
+leafy	🥬
+leafy green	🥬
+lecturer	🧑‍🏫 👨‍🏫 👩‍🏫
+ledger	📒
+leer	😏
+left	← ↭ ⇆ ⇔ ⇎ ▧ ▨ ◐ ◕ ◖ ◜ ◟
+left arrow	⬅
+left arrow curving right	↪
+left half filled circle	◖
+left luggage	🛅
+left right arrow stroke	↮
+left right double arrow	⇔
+left right double arrow stroke	⇎
+left right wave arrow	↭
+left speech bubble	🗨
+left-facing	🤛
+left-facing fist	🤛
+left-pointing	← ⇆ ◁ ◂ ◃ ◄ ◅ 🔍
+left-pointing arrow	←
+left-pointing over right-pointing arrows	⇆
+left-right	↔
+left-right arrow	↔
+leftward	🫲 🫷
+leftwards	↚ ↜ ↞ ↢ ↤ ↫ ↰ ↲ ↵ ↹ ↼ ↽
+leftwards arrow bar	⇤
+leftwards arrow from bar	↤
+leftwards arrow loop	↫
+leftwards arrow stroke	↚
+leftwards arrow tail	↢
+leftwards dashed arrow	⇠
+leftwards double arrow	⇐
+leftwards double arrow stroke	⇍
+leftwards hand	🫲
+leftwards harpoon barb downwards	↽
+leftwards harpoon barb upwards	↼
+leftwards harpoon over rightwards harpoon	⇋
+leftwards hollow arrow	⇦
+leftwards over rightwards arrow bars	↹
+leftwards paired arrows	⇇
+leftwards pushing hand	🫷
+leftwards squiggle arrow	⇜
+leftwards triple arrow	⇚
+leftwards two headed arrow	↞
+leftwards wave arrow	↜
+leg	🦵 🦿 🍗
+legged	🧘 🧘‍♂ 🧘‍♀
+legit	👌
+legs	🧘 🧘‍♂ 🧘‍♀
+legume	🫘 🫛
+lemon	🍋
+leo	♌ 🦁
+leopard	🐆
+lesbian	🌈 🏳‍🌈
+less-than	≮ ≤ ≦ ≪ ⋘ ⩽ ⪍
+less-than above similar equal	⪍
+less-than or equal	≤
+less-than over equal	≦
+less-than slanted equal	⩽
+letter	💌 ✉ 📧 📨 📩 📤 📥
+letters	🔠 🔡 🔤
+lettuce	🥬
+let’s	💃 🕺
+level	🎚
+level slider	🎚
+levitating	🕴
+lgbt	🌈 🏳‍🌈
+lgbtq	🌈 🏳‍🌈
+lgbtqia	🌈 🏳‍🌈
+liar	🤥
+liberty	🗽
+libra	♎ ⚖
+library	📖 📗 📘 📙 📚
+license	🪪
+lick	👅
+lie	🤥
+life	🪼 🛟 🧬
+lifesaver	🛟
+lift	🫴 🚠 🛗
+lifter	🏋 🏋‍♂ 🏋‍♀
+lifting	🏋 🏋‍♂ 🏋‍♀
+light	🩵 🪶 🚈 🚨 🚥 🚦 🧨 🕯 💡 🔦 🏮 🪔
+light blue heart	🩵
+light bulb	💡
+light rail	🚈
+lightning	⛈ 🌩 ⚡
+like	🩷 🩵 👍
+lilac	🪻
+limb	🦵
+lime	🍋‍🟩
+line	🫥
+link	🔗 🖇
+linked	🖇
+linked paperclips	🖇
+links	🔗
+lion	🦁 🦭 ♌
+lip	🫦
+lips	💋 👄
+lipstick	💄 👄 🫦
+liquid	🫠 🫗 🫟
+liquor	🥃
+list	📋
+listen	🙉 👂
+listening	👂
+lit	🔥
+litaf	🔥
+litter	🚮 🚯
+litter in bin sign	🚮
+litterbin	🚮
+littering	🚯
+little	🤏
+lives	☯
+lizard	🦎
+llama	🦙
+lmao	🤣 😂 💀
+loaf	🍞
+lob	🤾 🤾‍♂ 🤾‍♀
+lobster	🦞
+location	📍
+lock	🔒 🔓 🔏 🔐 🔑 🗝
+locked	🔒 🔏 🔐
+locked with key	🔐
+locked with pen	🔏
+locker	🛅
+locomotive	🚂
+log	🪵
+logic	∏ ∴ ∵ ⋁
+logical	∧ ⋁ ⩣
+logical and	∧
+logical or double underbar	⩣
+lol	😄 😆 🤣 😂 🫠 😹
+lollipop	🍭
+london	💂 💂‍♂ 💂‍♀
+lonely	💔
+long	↸ 🪘
+long drum	🪘
+look	👀
+looking	👀
+loop	↫ ↬ ➰ ➿
+loopy	😜
+loose	🤙
+loot	🪎
+lorry	🚛
+losing	😔 😞
+lost	😔
+lotion	🧴
+lotion bottle	🧴
+lotus	🪷 🧘 🧘‍♂ 🧘‍♀
+loud	🔊 📢
+loudly	😭
+loudly crying face	😭
+loudspeaker	📢
+love	🥰 😍 😘 😗 😙 😻 💌 💘 💓 💕 ❤‍🔥 ❤
+love hotel	🏩
+love letter	💌
+love-you	🤟
+love-you gesture	🤟
+lover	😘
+loving	💕
+low	🔈 🪫 🔅
+low battery	🪫
+lower	▧ ▨ ◒ ◞ ◟ ◡ ◢ ◣ ◿
+lower half circle	◡
+lower left quadrant circular arc	◟
+lower right quadrant circular arc	◞
+lower right triangle	◿
+lowercase	🔡
+lowered	📪 📭
+lozenge	◊
+luck	🫡 🤞 🧧
+lucky	🍀
+luge	🛷
+luggage	🧳 🛅
+lumber	🪵 🪚
+lunch	🍴
+lung	🫁
+lungs	🫁
+lupine	🪻
+lure	🪤
+lust	❤‍🔥
+luxurious	🧖 🧖‍♂ 🧖‍♀
+luxury	🚤
+lying	🤥
+lying face	🤥
+m	Ⓜ
+machine	🎰 📠
+mad	😖 😩 😤 😡 😠 🤬 💢 🗯 🧂 🍸
+maddening	😡 😠
+mage	🧙 🧙‍♂ 🧙‍♀
+maggot	🪰
+magic	🧙 🧙‍♂ 🧙‍♀ 🧝 🧝‍♂ 🧝‍♀ ✨ 🔮 🪄 🎩
+magic wand	🪄
+magical	🧝 🧝‍♂ 🧝‍♀
+magician	🪄
+magnet	🧲
+magnetic	🧭 🧲
+magnifying	🔍 🔎
+magnifying glass tilted left	🔍
+magnifying glass tilted right	🔎
+mahjong	🀄
+mahjong red dragon	🀄
+mai	🍹
+mail	💌 📧 📨 📩 📤 📥 📫 📪 📬 📭 📮
+mailbox	📫 📪 📬 📭 📮
+maize	🌽
+major	🔑
+makeup	💅 💄 🪞
+malaria	🦟
+male	🐏 ♂
+male sign	♂
+malt	🥤
+mammal	🫎 🫏
+mammoth	🦣
+man	👨 🧔‍♂ 👱‍♂ 👴 🙍‍♂ 🙎‍♂ 🙅‍♂ 🙆‍♂ 💁‍♂ 🙋‍♂ 🧏‍♂ 🙇‍♂
+man artist	👨‍🎨
+man astronaut	👨‍🚀
+man biking	🚴‍♂
+man bouncing ball	⛹‍♂
+man bowing	🙇‍♂
+man cartwheeling	🤸‍♂
+man climbing	🧗‍♂
+man construction worker	👷‍♂
+man cook	👨‍🍳
+man dancing	🕺
+man detective	🕵‍♂
+man elf	🧝‍♂
+man facepalming	🤦‍♂
+man factory worker	👨‍🏭
+man fairy	🧚‍♂
+man farmer	👨‍🌾
+man feeding baby	👨‍🍼
+man firefighter	👨‍🚒
+man frowning	🙍‍♂
+man genie	🧞‍♂
+man gesturing no	🙅‍♂
+man gesturing ok	🙆‍♂
+man getting haircut	💇‍♂
+man getting massage	💆‍♂
+man golfing	🏌‍♂
+man guard	💂‍♂
+man health worker	👨‍⚕
+man in lotus position	🧘‍♂
+man in manual wheelchair	👨‍🦽
+man in motorized wheelchair	👨‍🦼
+man in steamy room	🧖‍♂
+man in tuxedo	🤵‍♂
+man judge	👨‍⚖
+man juggling	🤹‍♂
+man kneeling	🧎‍♂
+man lifting weights	🏋‍♂
+man mage	🧙‍♂
+man mechanic	👨‍🔧
+man mountain biking	🚵‍♂
+man office worker	👨‍💼
+man pilot	👨‍✈
+man playing handball	🤾‍♂
+man playing water polo	🤽‍♂
+man police officer	👮‍♂
+man pouting	🙎‍♂
+man raising hand	🙋‍♂
+man rowing boat	🚣‍♂
+man running	🏃‍♂
+man scientist	👨‍🔬
+man shrugging	🤷‍♂
+man singer	👨‍🎤
+man standing	🧍‍♂
+man student	👨‍🎓
+man superhero	🦸‍♂
+man supervillain	🦹‍♂
+man surfing	🏄‍♂
+man swimming	🏊‍♂
+man teacher	👨‍🏫
+man technologist	👨‍💻
+man tipping hand	💁‍♂
+man vampire	🧛‍♂
+man walking	🚶‍♂
+man wearing turban	👳‍♂
+man with veil	👰‍♂
+man with white cane	👨‍🦯
+man zombie	🧟‍♂
+man: beard	🧔‍♂
+man: blond hair	👱‍♂
+manage	🤹 🤹‍♂ 🤹‍♀
+manager	🧑‍💼 👨‍💼 👩‍💼
+mane	🦁
+mango	🥭
+manicure	💅
+mantelpiece	🕰
+mantelpiece clock	🕰
+mantilla	🧕
+manual	🧑‍🦽 👨‍🦽 👩‍🦽 🦽
+manual wheelchair	🦽
+man’s	👞
+man’s shoe	👞
+mao	👲
+map	🗺 🗾 📍
+map of japan	🗾
+maple	🍁
+maple leaf	🍁
+maracas	🪇
+marathon	🏃 🏃‍♂ 🏃‍♀
+marching	🪈
+margarita	🍋‍🟩
+marine	🫍 🪼
+mark	❣ 💋 📑 🔖 🔛 ❓ ❔ ❕ ❗ ✅ ✔ ❌
+marker	📑
+market	💹
+married	💍
+marsupial	🐨 🦘
+martial	🥋
+martial arts uniform	🥋
+martini	🍸
+mary	🪬
+masjid	🕌
+mask	😷 👹 👺 🤿 🎭
+massage	💆 💆‍♂ 💆‍♀
+mate	🧉
+math	📏 📐 ➖ ➗ 🟰
+mathematician	🧑‍🔬 👨‍🔬 👩‍🔬
+mathematics	∅ ∑ ≮ ≯ ∟ ≃ ≅ ≌ ≖ ≣ ≦ ≧
+matrix	⊹
+matryoshka	🪆
+maybe	🤷 🤷‍♂ 🤷‍♀
+mayo	🪅
+maze	🌽
+ma’am	🫡
+md	💽
+me	🫴 🤙 🙋 🙋‍♂ 🙋‍♀
+mean	👺
+meat	🍖 🥩 🥓 🥧
+meat on bone	🍖
+meatball	🧆
+meatballs	🍝
+mechanic	🧑‍🔧 👨‍🔧 👩‍🔧 🧰
+mechanical	🦾 🦿
+mechanical arm	🦾
+mechanical leg	🦿
+medal	🎖 🏅 🥇 🥈 🥉
+media	📝
+medical	😷 🩻 ⚕
+medical symbol	⚕
+medicated	💊
+medicine	😷 🏥 💉 🩸 💊 🩺 ⚕
+medieval	👑
+meditate	🙇 🙇‍♂ 🙇‍♀
+meditation	🙇 🙇‍♂ 🙇‍♀ 🧘 🧘‍♂ 🧘‍♀
+medium	⭐ 🔉 ◼ ◻
+medium-small	◾ ◽
+meeting	🤝
+megaphone	📣
+meh	😐 😑 🫥 😕 🫤
+melon	🍈
+melt	🫠
+melted	🫕
+melting	🫠
+melting face	🫠
+member	∋
+membership	∈
+memo	📝
+memorial	🪦
+men	👯‍♂ 🤼‍♂ 👬 🍸
+men holding hands	👬
+men with bunny ears	👯‍♂
+men wrestling	🤼‍♂
+mending	❤‍🩹
+mending heart	❤‍🩹
+menorah	🕎
+menstruation	🩸
+men’s	🚹
+men’s room	🚹
+meow	🐈‍⬛
+mercy	🥺
+meridians	🌐
+mermaid	🧜‍♀
+merman	🧜‍♂
+merperson	🧜
+merry	🎅 🤶 🧑‍🎄
+merwoman	🧜‍♀
+mess	🫟
+message	💬
+metal	🪙
+metro	🚇
+mexican	🌮 🌯 🫔
+mic	🎙 🎤
+microbe	🦠
+microphone	🎤 🎙
+microscope	🔬
+middle	🖕
+middle finger	🖕
+midline	⋯
+midline horizontal ellipsis	⋯
+mild	🤨
+military	🎖 🪖
+military helmet	🪖
+military medal	🎖
+milk	🐮 🐄 🐐 🍼 🥛 🧋
+milky	🌌
+milky way	🌌
+million	💰 💸 💲
+millionaire	🚤
+mind	🤯
+mindblown	🤯
+minibus	🚐
+minidisk	💽
+mining	⛏
+minus	➖ − ⊖ ⊟
+minus sign	−
+minus-or-plus	∓
+miriam	🪬
+mirror	🪞 🪩
+mirror ball	🪩
+mischievous	👿
+miss	😘 😢
+moai	🗿
+mobile	📱 📲 📵 📶 📳 📴
+mobile phone	📱
+mobile phone off	📴
+mobile phone with arrow	📲
+mobility	🩼
+mode	📳
+moisturizer	🧴
+mojito	🍋‍🟩
+mollusk	🦑
+mom	🤱 👩‍🍼
+monarch	🫅
+money	🤑 🫰 🧧 💎 🪙 💰 🪎 💴 💵 💶 💷 💸
+money bag	💰
+money with wings	💸
+money-mouth	🤑
+money-mouth face	🤑
+moneybag	💰
+monitor	🖥
+monkey	🐒 🙈 🙉 🙊 🐵 🦧
+monkey face	🐵
+monocle	🧐
+monorail	🚝 🚈
+monster	💀 ☠ 💩 👹 👺 👻 👽 👾 🤖 🧌
+monthly	🈷
+moo	🐮 🐄
+moon	🥮 🌑 🌒 🌓 🌔 🌕 🌖 🌗 🌘 🌙 🌚 🌛
+moon cake	🥮
+moon viewing ceremony	🎑
+moose	🫎
+morning	💖 ☕ 🌄 🌅
+mortar	🧱
+mosque	🕌
+mosquito	🦟
+mother	🤱 👩‍🍼 🤶
+motor	🛵 🛥
+motor boat	🛥
+motor scooter	🛵
+motorboat	🛥
+motorcycle	🏍
+motorized	🧑‍🦼 👨‍🦼 👩‍🦼 🦼
+motorized wheelchair	🦼
+motorway	🛣
+mount	🗻
+mount fuji	🗻
+mountain	⛰ 🧗 🧗‍♂ 🧗‍♀ 🚵 🚵‍♂ 🚵‍♀ 🏔 🛘 🌋 🗻 🚞
+mountain cableway	🚠
+mountain railway	🚞
+mountains	🌄
+mouse	🐁 🐭 🖱 🪤
+mouse face	🐭
+mouse trap	🪤
+mousetrap	🪤
+moustache	🥸
+mouth	👄 😃 😄 😆 😅 🤑 🤭 🫢 🤐 😶 🥴 🫤
+mouthless	😶
+move	🏃 🏃‍♂ 🏃‍♀ 🚛
+movie	🍿 🎥 🎞 📽 🎬 🎦
+movie camera	🎥
+moyai	🗿
+mrs	🤶
+mrs.	🤶
+mrs. claus	🤶
+muah	😘 💗
+much	≪ ≫ ⋘ ⋙
+much greater-than	≫
+much less-than	≪
+mudslide	🛘
+mug	🍺
+mugs	🍻
+mule	🫏
+multiplication	✖ ❌ ❎
+multiply	✖ ❌ ❎
+multitask	🤹 🤹‍♂ 🤹‍♀
+munch	😱
+muscle	💪
+museum	🖼 🎨
+mushroom	🍄 🍄‍🟫
+music	♪ ♭ ♯ 🔊 🎼 🎵 🎶 🎙 🎚 🎛 🎤 🎷
+musical	🎼 🎵 🎶 🎹
+musical keyboard	🎹
+musical note	🎵
+musical notes	🎶
+musical score	🎼
+muslim	🕌 🕋 ☪
+mustache	🥸
+mute	😶 🔇 🔕
+muted	🔇
+muted speaker	🔇
+mwah	💏
+mx	🧑‍🎄
+mx claus	🧑‍🎄
+mysterious	👤
+mystery	🫆
+myth	🧚 🧚‍♂ 🧚‍♀ 🧝 🧝‍♂ 🧝‍♀ 🧞 🧞‍♂ 🧞‍♀
+mythology	🪽
+n-ary	∏ ∑ ⋁ ⋂ ⋃
+n-ary intersection	⋂
+n-ary logical or	⋁
+n-ary product	∏
+n-ary summation	∑
+n-ary union	⋃
+naan	🫓
+nabla	∇
+nail	💅
+nail polish	💅
+name	📛
+name badge	📛
+nanny	👩‍🍼 👨‍🍼 🧑‍🍼
+nap	😴 😫 🥱 🛌
+nasty	🤢
+national	🏞
+national park	🏞
+natural	⋈ 🫚
+natural join	⋈
+nature	🐌 🐝 🐞 🌵 🍄‍🟫 🌋 🗻 🌅 🌈 ⚡ 💧 🌊
+nauseated	🤢
+nauseated face	🤢
+navigation	🧭
+nazar	🧿
+nazar amulet	🧿
+neck	🧣
+necklace	📿
+necktie	👔
+nectarine	🍊
+needle	🧵 🪡 💉
+negative	📉 🧲
+neptune	🧜‍♂
+nerd	🤓
+nerd face	🤓
+nerves	😟
+nervous	😅 😟 😰 😓 💗 🫦
+nest	🪹 🪺
+nest with eggs	🪺
+nesting	🪹 🪺 🪆
+nesting dolls	🪆
+net	⛹ ⛹‍♂ ⛹‍♀ 🥅
+network	🛜
+neutral	😐
+neutral face	😐
+new	🗽 🌑 🌚 🆕
+new button	🆕
+new moon	🌑
+new moon face	🌚
+newborn	👶 👩‍🍼 👨‍🍼 🧑‍🍼 🐥 🍼
+news	📰 🗞
+newspaper	📰 🗞
+next	⏭
+next track button	⏭
+ng	🆖
+ng button	🆖
+nib	✒ 🔏
+nice	😀 😁 😛 👏
+night	😙 😪 😴 🥱 💖 💤 🛌 🌃 🌉 🌟 🌠
+night with stars	🌃
+nine	🕘 🕤
+nine o’clock	🕘
+nine-thirty	🕤
+ninja	🥷
+no	🙂‍↔ 🤯 😲 🙈 🙉 🙊 👎 🙅 🙅‍♂ 🙅‍♀ 🤦 🤦‍♂
+no bicycles	🚳
+no entry	⛔
+no littering	🚯
+no mobile phones	📵
+no one under eighteen	🔞
+no pedestrians	🚷
+no smoking	🚭
+noble	🫅
+nod	🙂‍↕
+non-drinking	🚱
+non-potable	🚱
+non-potable water	🚱
+noodle	🍜
+nooo	😩
+nope	👎
+normal	⋭
+north	↸ ⇖ ⇗ ⬆
+north east double arrow	⇗
+north west arrow long bar	↸
+north west double arrow	⇖
+northeast	↗
+northwest	↖
+nose	👃 🥸 😤 🐽 🚅
+noses	👃
+nosey	👃
+not	∉ ≮ ≠ ≯ ⊁ ⊮ ⋭ ⪺ 😑 😕 🥺 😥
+not an element	∉
+not equal	≠
+not greater-than	≯
+not less-than	≮
+note	♪ ♭ ♯ 🎼 🎵 🎶 💴 💵 💶 💷 💸 🗒
+notebook	📓 📔 📒
+notebook with decorative cover	📔
+notepad	🗒
+notes	🎶 📝 📋
+nothing	🫙
+notice	🪧
+novels	📖 📚
+numbers	🔢
+nuptials	💒
+nurse	🧑‍⚕ 👨‍⚕ 👩‍⚕
+nursing	🤱 👩‍🍼 👨‍🍼 🧑‍🍼
+nurturing	🪴
+nut	🥜 🔩
+nut and bolt	🔩
+nutty	😜
+ny	🗽
+nyc	🗽
+n항	∏ ∑ ⋁ ⋂ ⋃
+n항 곱	∏
+n항 교집합	⋂
+n항 논리합	⋁
+n항 총합	∑
+n항 합집합	⋃
+o	⭕ 🅾
+o button (blood type)	🅾
+o 버튼	🅾
+oar	🚣 🚣‍♂ 🚣‍♀
+oatmeal	🥣
+oberon	🧚‍♂
+ocean	🧜 🧜‍♂ 🧜‍♀ 🏄 🏄‍♂ 🏄‍♀ 🐳 🐋 🐬 🫍 🦭 🐙
+octagonal	🛑
+octoberfest	🍺
+octopus	🐙
+oden	🍢
+odor	👃
+of	∈ ⊂ 😂 💩 😹 🤚 🤘 🌾 🌽 🥩 🥘 🍲
+off	📴 ☑
+offer	🫴
+office	🧑‍💼 👨‍💼 👩‍💼 🏢 🏣 🏤 💻 💼
+office building	🏢
+office worker	🧑‍💼
+officer	👮 👮‍♂ 👮‍♀
+ogre	👹
+oh	😐 😑 🙀 🤦 🤦‍♂ 🤦‍♀
+oil	🛢 🪔
+oil drum	🛢
+ok	🫡 👌 🙆 🙆‍♂ 🙆‍♀ 🆗
+ok button	🆗
+ok hand	👌
+okay	👌 🆗
+oktoberfest	🍺
+old	🧓 👴 👵 🦳 📼 📇 🗝
+old key	🗝
+old man	👴
+old woman	👵
+older	🧓
+older person	🧓
+olive	🫒
+om	🕉
+omg	😝 🫢 😑 🫨 😵‍💫 😮 😯 😲 🙈 👀 🙆 🙆‍♂
+omw	👣 🔜
+on	🤣 🤬 ❤‍🔥 🍖 ⛱
+on!	🔛
+on! arrow	🔛
+once	🔂
+oncoming	👊 🚍 🚔 🚖 🚘
+oncoming automobile	🚘
+oncoming bus	🚍
+oncoming fist	👊
+oncoming police car	🚔
+oncoming taxi	🚖
+one	👁 🐪 🕐 🕜 🔞
+one o’clock	🕐
+one-piece	🩱 🩲
+one-piece swimsuit	🩱
+one-thirty	🕜
+onion	🧅
+oolong	🍵
+oops	🤭 🙊 🫗
+open	↺ ↻ 😃 😄 😆 😅 🤗 🫢 😮 😦 😰 😺
+open book	📖
+open file folder	📂
+open hands	👐
+open mailbox with lowered flag	📭
+open mailbox with raised flag	📬
+opening	🪟
+operator	∅ ∗ ∘ ∙ ∼ ≺ ≻ ⊁ ⊃ ⊙ ⊚ ⊛
+ophiuchus	⛎ 🐍
+optical	💽 💿 📀
+optical disk	💿
+or	≤ ≥ ⋁ ⩣ ⏯
+orange	🧡 🍊 📙 🟠 🟧 🔶 🔸
+orange book	📙
+orange circle	🟠
+orange heart	🧡
+orange square	🟧
+orangutan	🦧
+orca	🫍
+orchestra	🪈 🪉
+order	🦁
+organ	🫀 🫁
+orienteering	🧭
+original	⊶
+ornithology	🐔 🐓 🐤 🐥 🐦 🐧 🕊 🦅 🦆 🦢 🦉 🦤
+orthodox	☦
+orthodox cross	☦
+orthogonal	▦
+orthoptera	🦗
+ostentatious	🦚
+otter	🦦
+ouch	🤕 🪼
+out	😵
+outbox	📤
+outbox tray	📤
+outdoors	🌻 🥾
+outgoing	📩
+outlined	☺ ❔ ❕ 🔳
+outtie	👋
+over	↹ ⇄ ⇆ ⇋ ⇌ ≦ ≧ 🫢 👮 👮‍♂ 👮‍♀ 🍳
+overeat	🫃 🫄
+owl	🦉
+ox	🐂 ♉
+oyster	🦪 🥡
+o’clock	🕛 🕐 🕑 🕒 🕓 🕔 🕕 🕖 🕗 🕘 🕙 🕚
+p	🅿
+p button	🅿
+pace	🚶 🚶‍♂ 🚶‍♀
+package	📦
+packing	🧳 🛃 🛄
+pad	🗒 🗓
+paddle	🚣 🚣‍♂ 🚣‍♀ 🏓
+paella	🥘
+page	📃 📄
+page facing up	📄
+page with curl	📃
+pager	📟
+paid	🤑 💰
+pail	🥡 🪣
+pain	🥲
+paint	🫟
+paintbrush	🖌
+painter	🎨
+painting	🖼 🎨 🖌
+pair	👯 👯‍♂ 👯‍♀
+paired	⇇ ⇈ ⇉ ⇊
+palace	💂 💂‍♂ 💂‍♀
+palette	🧑‍🎨 👨‍🎨 👩‍🎨 🎨
+palm	🫳 🫴 🌴 🥥 🪬
+palm down hand	🫳
+palm tree	🌴
+palm up hand	🫴
+palms	🤲
+palms up together	🤲
+pamonha	🫔
+pamper	🧖 🧖‍♂ 🧖‍♀
+pan	🍳 🥘
+pancake	🥞
+pancakes	🥞
+panda	🐼
+panic	🫨 🫪
+panting	🥵
+pants	👖 🩳
+paper	🏮 📃 📜 📄 📰 🗞 ✂ 🗄 🧻
+paperclip	📎 🖇
+paperclips	🖇
+parachute	🪂
+parallel	∥
+parallelogram	▰
+parasail	🪂
+parasite	🪱
+parcel	📦
+parent	🧑‍🍼
+park	🏞 🛝 🎡 🎢
+parking	🅿
+parlor	💇 💇‍♂ 💇‍♀
+parrot	🦜
+partial	∂
+partial differential	∂
+party	😛 😜 🥳 👯 👯‍♂ 👯‍♀ 🍹 🎉 🎊 🪅 🪩 👒
+party popper	🎉
+partying	🥳 👯 👯‍♂ 👯‍♀
+partying face	🥳
+pass	⛔
+passenger	🛳 ⛴ 🚢
+passenger ship	🛳
+passing	🈴
+passport	🛂
+passport control	🛂
+password	🔑
+pasta	🍝
+pastry	🍥 🎂 🍰 🥧
+patience	🤌
+patrol	🚓
+pause	🫷 🫸 ⏯ ⏸
+pause button	⏸
+paw	🐾
+paw prints	🐾
+pawn	♟
+paws	🐾
+pay	💸 💳 💲
+paying	💰
+pc	💻
+pea	🫛
+pea pod	🫛
+peace	😌 ✌ 🧘 🧘‍♂ 🧘‍♀ 🕊 🪷 ☮
+peace symbol	☮
+peaceful	😇 ☮
+peach	🍑
+peacock	🦚
+peahen	🦚
+peanut	🥜
+peanuts	🥜
+pear	🍐
+pearl	🦪 🧋 🫧
+pearly	🦷
+pedestrian	🚶 🚶‍♂ 🚶‍♀ 🚸 🚷
+pedestrians	🚷
+peek	🫣
+peeking	🫣
+peep	🫣 👀
+pen	🖊 ✒ 🖋 🔏
+penalty	🟥 🟨
+pencil	✏ 📝
+penguin	🐧
+pensive	😔
+pensive face	😔
+people	👯 👯‍♂ 👯‍♀ 🤼 🧑‍🤝‍🧑 👥 🫂
+people holding hands	🧑‍🤝‍🧑
+people hugging	🫂
+people with bunny ears	👯
+people wrestling	🤼
+pepper	🌶 🫑
+pepperoni	🍕
+percussion	🪇
+perfect	💯
+performing	🎭
+performing arts	🎭
+persevere	😣
+persevering	😣
+persevering face	😣
+person	🧑 🥸 👱 🧔 🧓 🙍 🙎 🙅 🙆 💁 🙋 🧏
+person biking	🚴
+person bouncing ball	⛹
+person bowing	🙇
+person cartwheeling	🤸
+person climbing	🧗
+person facepalming	🤦
+person feeding baby	🧑‍🍼
+person fencing	🤺
+person frowning	🙍
+person gesturing no	🙅
+person gesturing ok	🙆
+person getting haircut	💇
+person getting massage	💆
+person golfing	🏌
+person in bed	🛌
+person in lotus position	🧘
+person in manual wheelchair	🧑‍🦽
+person in motorized wheelchair	🧑‍🦼
+person in steamy room	🧖
+person in suit levitating	🕴
+person in tuxedo	🤵
+person juggling	🤹
+person kneeling	🧎
+person lifting weights	🏋
+person mountain biking	🚵
+person playing handball	🤾
+person playing water polo	🤽
+person pouting	🙎
+person raising hand	🙋
+person rowing boat	🚣
+person running	🏃
+person shrugging	🤷
+person standing	🧍
+person surfing	🏄
+person swimming	🏊
+person taking bath	🛀
+person tipping hand	💁
+person walking	🚶
+person wearing turban	👳
+person with crown	🫅
+person with skullcap	👲
+person with veil	👰
+person with white cane	🧑‍🦯
+person: beard	🧔
+person: blond hair	👱
+personal	💻
+pest	🪳 🦟 🪰
+pester	🦡
+pet	🐶 🐕 🐱 🐈 🐹 🐰 🐇
+petri	🧫
+petri dish	🧫
+pga	🏌 🏌‍♂ 🏌‍♀
+pho	🍜
+phoenix	🐦‍🔥
+phone	🤳 📱 📲 ☎ 📞 📵 📶 📳 📴
+phones	📵
+photo	📷
+physicist	🧑‍🔬 👨‍🔬 👩‍🔬
+pi	👲
+piano	🎹
+piccolo	🪈
+pick	⛏ 🫳 🙋 🙋‍♂ 🙋‍♀ 🪮 ⚒
+pick-up	🛻
+picket	🪧
+pickle	🥒
+pickup	🛻
+pickup truck	🛻
+picnic	🧺
+picture	🖼
+pie	🥧
+piece	🧩
+pierogi	🥟
+pig	🐖 🐷 🐗 🐽
+pig face	🐷
+pig nose	🐽
+pile	💩
+pile of poo	💩
+pill	💊
+pills	💊
+pilot	🧑‍✈ 👨‍✈ 👩‍✈
+pin	📌 📍 🧷
+pina	🍍
+pinada	🪅
+pinata	🪅
+pinch	👌
+pinched	🤌
+pinched fingers	🤌
+pinching	🤏
+pinching hand	🤏
+pine	🌲 🎍
+pine decoration	🎍
+pineapple	🍍
+ping	🏓
+ping pong	🏓
+pingpong	🏓
+pink	🩷 🏳‍⚧
+pink heart	🩷
+pinocchio	🤥
+pint	🍺
+pipe	🪈
+pirate	🦜 🏴‍☠
+pirate flag	🏴‍☠
+pisces	♓ 🐟
+pissed	😒 🤬
+pistol	🔫
+pita	🫓
+pitch	🤾 🤾‍♂ 🤾‍♀
+pity	🙇 🙇‍♂ 🙇‍♀
+pixelated	👾
+pixie	🧚 🧚‍♂ 🧚‍♀
+pizza	🍕 🍄‍🟫
+piña	🥥
+piñata	🪅
+placard	🪧
+place	🥇 🥈 🥉 🛐
+place of worship	🛐
+plane	🧑‍✈ 👨‍✈ 👩‍✈ ✈ 🛩 🛫 🛬 🛄
+planet	🪐
+plankton	🪼
+plant	💐 🌸 🏵 🌹 🌺 🌻 🌼 🌷 🪻 🌱 🪴 🌴
+plaque	🪧
+plate	🍽
+play	🧙 🧙‍♂ 🧙‍♀ 🛝 ▶ ⏯
+play button	▶
+play or pause button	⏯
+player	⛹ ⛹‍♂ ⛹‍♀
+playful	🦦
+playground	🛝
+playground slide	🛝
+playing	🤽 🤽‍♂ 🤽‍♀ 🤾 🤾‍♂ 🤾‍♀ 🛝 🎴
+plaything	🧸
+pleading	🥺
+pleading face	🥺
+please	🥺 🥹 🙏
+plug	🔌
+plumage	🪶
+plumber	🧑‍🔧 👨‍🔧 👩‍🔧 🪠
+plunder	🏴‍☠
+plunger	🪠
+plus	➕ ⊕ ⊞ ⨧
+plus subscript two	⨧
+plus-minus	∓
+plush	🧸
+pod	🫛
+point	💯 👈 👉 👆 👇 ☝ 🪝
+pointed	🔺 🔻
+pointer	► ▻ ◄ ◅
+pointing	👈 👉 👆 👇 ☝ 🫵
+points	💯
+poke	🫵
+polar	🐻‍❄
+polar bear	🐻‍❄
+pole	💈 🎣
+police	👮 👮‍♂ 👮‍♀ 🚓 🚔 🚨
+police car	🚓
+police car light	🚨
+police officer	👮
+polish	💅
+polo	🤽 🤽‍♂ 🤽‍♀
+ponder	🤔
+pondering	🤔
+pong	🏓
+poo	💩
+poodle	🐩
+pool	🎱 👙
+pool 8 ball	🎱
+poop	💩 🪠
+pop	🍿 🧨
+popcorn	🍿
+popper	🎉
+popping	🍾 🧨
+pork	🐷 🐖
+porkchop	🥩
+porous	🧽
+porridge	🥣
+portobello	🍄‍🟫
+poseidon	🧜‍♂ 🔱
+position	🧘 🧘‍♂ 🧘‍♀
+positive	🧲
+post	🏣 🏤 📯 🚩
+post office	🏤
+postal	📯
+postal horn	📯
+postbox	📮 📫 📪 📬 📭
+pot	🪴 🍲 🫕 🍯 🫖 💰
+pot of food	🍲
+potable	🚰
+potable water	🚰
+potassium	🍌
+potato	🥔 🍠
+potsticker	🥟
+potted	🪴
+potted plant	🪴
+pouch	👝
+poultry	🍗
+poultry leg	🍗
+pound	👊 💷
+pound banknote	💷
+pounds	💷
+pour	🫗
+pouring	🫗
+pouring liquid	🫗
+pouting	😡 😾 🙎 🙎‍♂ 🙎‍♀
+pouting cat	😾
+power	🪫
+powerlifting	🏋 🏋‍♂ 🏋‍♀
+praise	🙌
+prawn	🍤
+pray	🤲 🙏 🛐
+prayed	👏
+prayer	🤲 📿
+prayer beads	📿
+precedes	≺ ⊰
+precedes under relation	⊰
+predator	🐯 🐅 🐆
+pregnant	👶 🤰 🫃 🫄
+pregnant man	🫃
+pregnant person	🫄
+pregnant woman	🤰
+present	🎁
+preserver	🛟
+press	💪
+pretty	🥺 🦚 🦋
+pretzel	🥨
+previous	⏮
+pride	🌈 🏳‍🌈
+prince	🤴
+princess	👸
+print	👣 🫆 🐾
+printer	🖨
+prints	🐾
+privacy	🔏
+private	🔒
+prize	🏆 🪎
+probing	🧑‍🦯 👨‍🦯 👩‍🦯 🦯
+product	∏ ⊗ ⨯ ⨼
+professor	🧑‍🏫 👨‍🏫 👩‍🏫
+prohibit	🙅 🙅‍♂ 🙅‍♀
+prohibited	🚫 🙈 🙉 🙊 🔕 ⛔ 🚳 🚭 🚯 🚱 🚷 📵
+projector	📽
+proof	∎ 🧾
+prophecy	🥠
+proportion	∷
+proportional	∝
+proportionality	∝ ∷
+prosthetic	🦾 🦿
+protect	🪬
+protection	🥽 🪬
+protest	🪧
+proud	🥲 🥹 🦚
+public	📢
+puck	🧚‍♂ 🏒
+pudding	🍮
+puke	🤮
+pulled	👮 👮‍♂ 👮‍♀
+pulsating	💓
+pulse	💗 💓 🫀
+pump	⛽
+pumpkin	🥧 🎃
+punch	✊ 👊
+punctuation	❣ ❓ ❔ ❕ ❗
+punk	🧷
+puppies	🐶
+puppy	🥺 🐶
+purity	🪷
+purple	😈 👿 💟 💜 🪻 🟣 🟪
+purple circle	🟣
+purple heart	💜
+purple square	🟪
+purse	👛 👜 👝
+push	🫷 🫸
+pushing	🫷 🫸
+pushpin	📌 📍
+putt	🏌 🏌‍♂ 🏌‍♀
+puzzle	🧩
+puzzle piece	🧩
+q.e.d.	∎
+qed	∎
+quadrant	◔ ◕ ◜ ◝ ◞ ◟ ◳ ◷
+quarter	🌓 🌗 🌛 🌜
+queen	👸 👑
+queer	🌈 🏳‍🌈
+quench	🧯
+question	🙋 🙋‍♂ 🙋‍♀ ❓ ❔
+quick	🏃 🏃‍♂ 🏃‍♀
+quiet	🫢 🤫 🤐 😶 🙊 🔇 🔕
+r	®
+rabbit	🐇 🐰
+rabbit face	🐰
+raccoon	🦝
+race	🏃 🏃‍♂ 🏃‍♀ 🏁
+racehorse	🏇 🐎
+racing	🏃 🏃‍♂ 🏃‍♀ 🏇 🐎 🏎 🏍 🏁
+racing car	🏎
+racquet	🎾 🏸
+rad	😎 👌
+radical	√
+radio	📻 🔘
+radio button	🔘
+radioactive	☢
+radish	🫜
+radix	√
+raft	🚣 🚣‍♂ 🚣‍♀
+rage	😡 😠
+rail	🚈
+railway	🚂 🚃 🚄 🚅 🚆 🚈 🚉 🚞 🛤 🚟
+railway car	🚃
+railway track	🛤
+rain	⛈ 🌦 🌧 🌈 🌂 ☂ ☔ ⛱
+rainbow	🌈 🏳‍🌈
+rainbow flag	🏳‍🌈
+raise	🙋 🙋‍♂ 🙋‍♀
+raised	🤨 🤚 🖐 ✋ ✊ 🙌 📫 📬
+raised back of hand	🤚
+raised fist	✊
+raised hand	✋
+raising	🙌 🙋 🙋‍♂ 🙋‍♀
+raising hands	🙌
+ram	🐏 ♈
+ramadan	🌙 ☪
+ramen	🍜
+ranch	🏠 🏡
+rancher	🧑‍🌾 👨‍🌾 👩‍🌾
+range	🏌 🏌‍♂ 🏌‍♀
+rat	🐀
+ratio	∶
+rattle	🪇
+raven	🐦‍⬛
+rawr	🦁
+rays	☀
+razor	🪒
+reach	🫱 🫲
+reading	📖 📗 📘 📙 📚
+ready	🛄
+real	🫀
+realization	🤭
+realize	💭
+rebirth	🐦‍🔥
+rebound	🪃
+rebuild	👷 👷‍♂ 👷‍♀
+receipt	🧾
+receive	📲 📨 📥
+receiver	📞
+record	🎥 ⏺
+record button	⏺
+recorder	🪈
+recovering	❤‍🩹
+recreational	🚙
+rectangle	▬ ▭ ▮
+recuperating	❤‍🩹
+recycle	♻
+recycling	♻
+recycling symbol	♻
+red	😡 ❤ 🫀 🦰 🌹 🍎 🍒 🥩 🧧 🀄 🏮 🧰
+red apple	🍎
+red circle	🔴
+red envelope	🧧
+red exclamation mark	❗
+red hair	🦰
+red heart	❤
+red paper lantern	🏮
+red question mark	❓
+red square	🟥
+red triangle pointed down	🔻
+red triangle pointed up	🔺
+red-faced	🥵
+redhead	🦰
+reef	🪸
+reflection	🪞
+reflector	🪞
+refresh	🔃 🔄
+refreshing	🍋‍🟩
+refuse	🫷 🫸
+regal	🫅
+registered	®
+regret	🙇 🙇‍♂ 🙇‍♀
+reincarnation	🐦‍🔥
+reinvent	🐦‍🔥
+relation	⊰ ⊱
+relationship	💑
+relax	🤌 💆 💆‍♂ 💆‍♀ 🧖 🧖‍♂ 🧖‍♀ 🧘 🧘‍♂ 🧘‍♀
+relaxed	☺ 😎
+relaxing	💆 💆‍♂ 💆‍♀
+relief	😮‍💨 😌
+relieved	🥲 😌 😥
+relieved face	😌
+religion	⛪ 🕌 🕍 ⛩ 🕋 📿 🛐 🕉 ✡ ☸ ☯ ✝
+reload	🔃
+reminder	🎗
+reminder ribbon	🎗
+remodel	👷 👷‍♂ 👷‍♀
+renewal	🐦‍🔥
+repair	👷 👷‍♂ 👷‍♀
+repairs	🔨
+repeat	🔁 🔂
+repeat button	🔁
+repeat single button	🔂
+repercussion	🪃
+reptile	🦎
+rescue	🛟 ⛑
+rescue worker’s helmet	⛑
+reserved	🈯
+resist	🥹
+resort	⛵
+respect	🫡
+respiration	🫁
+restaurant	🍞 🍳 🍝 🍢 🍥 🍦 🍧 🍨 🍬 🍭 🍶 🍷
+restriction	🔞
+restroom	🚻 🚹 🚺 🚾
+reverse	◀ ⏪
+reverse button	◀
+reversed	∽
+reversed tilde	∽
+revival	🐦‍🔥
+revive	🐦‍🔥
+revolver	🔫
+revolving	💞 🚨
+revolving hearts	💞
+rewind	⏪
+rewindershins	🔄
+rex	🦖
+rhinoceros	🦏
+rhombus	◊
+rhythm	🪘
+ribbon	🎀 💝 🎗
+rice	🌾 🍘 🍙 🍚 🍛
+rice ball	🍙
+rice cracker	🍘
+rich	🧐 🪙 💰 💶
+rickshaw	🛺
+ride	🚲
+riding	🏇 🚴 🚴‍♂ 🚴‍♀ 🚵 🚵‍♂ 🚵‍♀
+right	→ ↭ ⇆ ⇔ ⇎ ∟ ⊿ ⋰ ⋱ ▧ ▨ ◑
+right anger bubble	🗯
+right angle	∟
+right arrow	➡
+right arrow curving down	⤵
+right arrow curving left	↩
+right arrow curving up	⤴
+right half filled circle	◗
+right triangle	⊿
+right-angled	⊿
+right-facing	🤜
+right-facing fist	🤜
+right-pointing	→ ⇆ ▷ ▸ ▹ ► ▻ 🔎
+right-pointing arrow	→
+rightward	🫱 🫸
+rightwards	↛ ↝ ↠ ↣ ↦ ↬ ↱ ↳ ↴ ↹ ↾ ⇀
+rightwards arrow bar	⇥
+rightwards arrow corner downwards	↴
+rightwards arrow from bar	↦
+rightwards arrow loop	↬
+rightwards arrow over leftwards arrow	⇄
+rightwards arrow stroke	↛
+rightwards arrow tail	↣
+rightwards dashed arrow	⇢
+rightwards double arrow	⇒
+rightwards double arrow stroke	⇏
+rightwards hand	🫱
+rightwards harpoon barb downwards	⇁
+rightwards harpoon barb upwards	⇀
+rightwards harpoon over leftwards harpoon	⇌
+rightwards hollow arrow	⇨
+rightwards paired arrows	⇉
+rightwards pushing hand	🫸
+rightwards squiggle arrow	⇝
+rightwards triple arrow	⇛
+rightwards two headed arrow	↠
+rightwards wave arrow	↝
+ring	💍 ∘ ≖ ⊚ ○ ◯ 🤼 🤼‍♂ 🤼‍♀ 🛟
+ring buoy	🛟
+ring in equal	≖
+ring operator	∘
+ringed	🪐
+ringed planet	🪐
+ringlets	🦱
+rip	🪦
+ripe	🍎
+ripped	💪
+rise	🐦‍🔥 💹
+river	🚣 🚣‍♂ 🚣‍♀
+roach	🪳
+road	🛣
+roar	🦁
+roasted	🍠
+roasted sweet potato	🍠
+robot	🤖
+rock	🪨 👊 🧑‍🎤 👨‍🎤 👩‍🎤 🧗 🧗‍♂ 🧗‍♀ 🥌 🧷
+rock-on	🤘
+rocket	🚀 🧑‍🚀 👨‍🚀 👩‍🚀
+rockets	🚀
+rocks	🛘
+rockstar	🧑‍🎤 👨‍🎤 👩‍🎤
+rofl	😆 🤣 😂
+roflcopter	🚁
+roflmao	🤣 😂
+roger	🏴‍☠
+roll	🥐 🧻
+roll of paper	🧻
+rolled	🗞
+rolled-up	🗞
+rolled-up newspaper	🗞
+roller	🎢 🛼 🧳
+roller coaster	🎢
+roller skate	🛼
+rolling	🤣 🙄
+rolling on the floor laughing	🤣
+rolodex	📇
+romance	🥰 😍 💌 💘 💙 💋 💏 💑 💐 💒 💍 💎
+romantic	😍 😘 💚
+rook	🐦‍⬛
+room	🧖 🧖‍♂ 🧖‍♀ 🚹 🚺
+rooster	🐓
+root	√ 🫚 🫜
+root vegetable	🫜
+rope	🪢
+ropeway	🚡
+rose	🌹
+rosette	🏵
+rotting	🪰
+round	📍
+round pushpin	📍
+rounded	▢
+roundhouse	🛖
+router	🛜
+row	🚣 🚣‍♂ 🚣‍♀
+rowboat	🚣 🚣‍♂ 🚣‍♀
+rowing	🚣 🚣‍♂ 🚣‍♀
+royal	🫅 🤴 👸 👑
+royalty	🫅 🤴 👸 👑
+rub	🧞 🧞‍♂ 🧞‍♀
+rucksack	🎒
+ruckus	🫯
+rugby	🏉
+rugby football	🏉
+rule	📐
+ruler	📏 📐
+run	🏃 🏃‍♂ 🏃‍♀
+rung	🪜
+running	💨 🎽 👟 🏃 🏃‍♂ 🏃‍♀
+running shirt	🎽
+running shoe	👟
+rush	🏃 🏃‍♂ 🏃‍♀
+rushed	😰
+russia	🪆
+s	∾
+sa	🈂
+sacred	❤‍🔥
+sad	😔 😪 😕 😟 🙁 ☹ 🥺 🥹 😥 😢 😭 😖
+sad but relieved face	😥
+safari	🦁
+safety	🫆 🛟 🦺 🧷
+safety pin	🧷
+safety vest	🦺
+sagittarius	♐ 🏹
+sailboat	⛵
+sailing	⛵
+sake	🍶
+salad	🥬 🫜 🥗
+salon	💆 💆‍♂ 💆‍♀
+salsa	💃 🕺 🍋‍🟩
+salt	🧂
+salty	🧂
+salute	🫡 🖖
+saluting	🫡
+saluting face	🫡
+sand	⌛ ⏳
+sandal	🩴 👡
+sandals	🩴
+sandwich	🥪
+santa	🎅 🤶 🧑‍🎄
+santa claus	🎅
+sapling	🌱
+sarcasm	🫠 💁 💁‍♂ 💁‍♀
+sarcastic	🫠 🤌 💁 💁‍♂ 💁‍♀
+sari	🥻
+sash	🎽
+sasquatch	🫈
+sassy	💁 💁‍♂ 💁‍♀
+satchel	🎒
+satellite	🛰 📡
+satellite antenna	📡
+satisfied	😊
+saturn	🪐
+saturnine	🪐
+sauce	🫙
+saucer	🛸
+sauna	🧖 🧖‍♂ 🧖‍♀
+sauropod	🦕
+sausage	🌭
+save	🛟
+saver	🛟
+savor	😋
+savoring	😋
+saw	🪚
+sax	🎷
+saxophone	🎷
+scale	🧗 🧗‍♂ 🧗‍♀ ⚖
+scales	🧑‍⚖ 👨‍⚖ 👩‍⚖ ⚖ ♎
+scared	🫢 🫣 😦 😧 😨 😰 😱 😓 🙈
+scarf	🧣
+scary	😦 😧 👹 👻 🧛 🧛‍♂ 🧛‍♀ 🧟 🧟‍♂ 🧟‍♀
+scene	⏭ ⏮
+schmear	🥯
+scholar	🎓
+school	🏫 🚌 🎒 📼 📔 📚 📇
+science	🦠 🔍 🔎 🧪 🔬 🔭 📡
+scientist	🧑‍🔬 👨‍🔬 👩‍🔬 🥼
+scissors	✂
+scoop	🪏
+scooter	🛵 🛴
+score	💯 🎼
+scorpio	♏ 🦂
+scorpion	🦂 ♏
+scorpius	🦂 ♏
+scotch	🥃
+scowl	🙎 🙎‍♂ 🙎‍♀
+scream	😱
+screamer	😱
+screaming	😱
+screw	🪛
+screwdriver	🪛
+scroll	📜
+scuba	🤿 🥽
+sea	🧜 🧜‍♂ 🧜‍♀ 🦭 🐚 🪸 🪼 ⛵
+seafood	🦞 🍢
+seal	🦭
+search	🔍 🔎
+seat	💺 🪑
+second	🥈
+secret	🤭 🤐 😶 🙈 🙉 🙊 🥷
+secure	🔐
+security	🪪
+see	👀 🧧
+see-no-evil	🙈
+see-no-evil monkey	🙈
+seedling	🌱
+seeing	👀
+self-adjoint	⊹
+selfie	🤳 📷
+selling	🪝
+semi	🚛
+semicircle	↶ ↷
+send	📩
+sent	📨 📩 📤
+serenity	🧘 🧘‍♂ 🧘‍♀ 🪷
+serious	👔
+seriously	💁 💁‍♂ 💁‍♀
+serpent	🐍 ⛎
+serve	🍦
+service	🐕‍🦺 🈂
+service dog	🐕‍🦺
+set	∅ ∈ ∩ ∪ ≺ ≻ ⊁ ⊂ ⊃ ⊰ ⊱ ⋂
+settle	🏠 🏡
+seven	🕖 🕢
+seven o’clock	🕖
+seven-thirty	🕢
+sew	🪡
+sewing	🧵 🪡
+sewing needle	🪡
+sexy	😉 💋 🫦
+shade	😐 😏 🙄 😡 😠 😈 👿
+shades	😎
+shadow	👤
+shaka	🤙
+shake	🙂‍↔ 🫱 🫲 🤝 🪇
+shaker	🧂 🪇
+shaking	🫨 🙂‍↔ 🙂‍↕
+shaking face	🫨
+shallow	🥘
+shallow pan of food	🥘
+shampoo	🧴
+shamrock	☘
+shape	🧲
+shark	🦈
+sharp	♯ 🪒
+shave	💈 🪒
+shaved	🍧
+shaved ice	🍧
+shaven	🦲
+sheaf	🌾
+sheaf of rice	🌾
+shears	💇 💇‍♂ 💇‍♀
+shedding	🌳
+sheep	🐏 🐑
+shell	🐚
+shellfish	🦐
+shelter	🛖
+shh	🤫 🙉
+shield	🛡
+shiitake	🍄‍🟫
+shine	🌞
+shining	💫 🌟
+shinkansen	🚄 🚅
+shinto	⛩
+shinto shrine	⛩
+shiny	💍
+ship	🚢 ⚓ 🛳 🔱
+shipping	📦
+shirt	🎽 👔 👕 👚
+shock	🤭 🫢 🫨 🤦 🤦‍♂ 🤦‍♀
+shocked	🤯 😮 😲 🫪 😱
+shoe	🩴 👞 👟 🥾 🥿 👠 👡 👢
+shoes	👞 👟 👠 🩰 👢
+shoo	🫳
+shooting	💫 🌠
+shooting star	🌠
+shopping	👕 👖 👗 👚 👛 👜 🛍 👞 👟 👠 👢 🛒
+shopping bags	🛍
+shopping cart	🛒
+shortcake	🍰
+shorts	🩳
+shot	🥃 💉
+shovel	🪏
+shower	🚿
+showing	🌍 🌎 🌏
+shrimp	🦐 🍤
+shrine	⛩
+shroom	🍄‍🟫
+shrub	🪻
+shrug	🤷 🤷‍♂ 🤷‍♀
+shrugging	🤷 🤷‍♂ 🤷‍♀
+shuffle	🔀
+shuffle tracks button	🔀
+shush	🤫
+shushing	🤫
+shushing face	🤫
+shut	🤐
+shuttlecock	🏸
+shy	🫣 🪭
+sick	😷 🤒 🤢 🤮 🤧 😵 💉 💊
+side	🍳
+sigh	😮‍💨
+sign	− ∞ 🤘 🛑 🪧 🏧 🚮 ☢ ☣ ♀ ♂ ✖
+sign of the horns	🤘
+signal	🚥 🚦 📶
+sikh	🪯
+sikhism	🪯
+silence	😶
+silent	😶 🔇 🔕
+silhouette	🗣 👤 👥
+silly	👻 🪿
+silver	🩶 🥈 🪙 🪎
+similar	⪍
+simple	🏠 🏡
+sing	🎤
+singer	🧑‍🎤 👨‍🎤 👩‍🎤
+single	🔂
+sir	🫡
+siren	🧜 🧜‍♂ 🧜‍♀ 🚨
+sisters	👭
+sit	🪑
+six	🕕 🕡
+six o’clock	🕕
+six-pointed	🔯
+six-thirty	🕡
+skate	🛹 🛼 ⛸
+skateboard	🛹
+skater	🛹
+skates	🛼
+skating	⛸
+skeleton	🦴 🩻
+skeptic	🤨
+skeptical	🤨 🫤
+skepticism	🤨
+skewer	🍢 🍡
+ski	⛷ 🏂 🫕 🚠 🎿
+skier	⛷
+skill	🤹 🤹‍♂ 🤹‍♀
+skills	🥷
+skis	🎿
+skull	💀 ☠ 🩻
+skull and crossbones	☠
+skullcap	👲
+skunk	🦨
+sky	🩵
+skydive	🪂
+slanted	⩽
+slap	🫷 🫸
+slash	∕ ⊘ 🔕
+slate	🩶
+slay	😎 🏆
+sled	🛷
+sledge	🛷
+sleep	😪 😴 🥱 💤 🛌 🛏
+sleeping	😪 😴 💤
+sleeping face	😴
+sleepy	😪 🫩 😩 🥱 💤
+sleepy face	😪
+sleigh	🛷
+sleuth	🕵 🕵‍♂ 🕵‍♀
+slice	🍕 🍰 🥧
+slick	😏
+slide	😉 🛝 🪊 📐
+slider	🎚
+sliding	🛝
+slightly	🙂 🙁
+slightly frowning face	🙁
+slightly smiling face	🙂
+slip-on	🥿
+slipper	🥿
+slot	🎰
+slot machine	🎰
+sloth	🦥
+slots	🎰
+slow	🦥
+slug	🐌
+slurp	👅
+sly	😏 🥷 🦝
+small	▴ ▵ ▸ ▹ ▾ ▿ ◂ ◃ 🤪 🤏 🦐 🫘
+small airplane	🛩
+small blue diamond	🔹
+small orange diamond	🔸
+smart	🤓 🧠
+smartphone	🛜
+smell	👃 🐽
+smells	👃
+smelly	💩
+smh	😒 💩 🙈 🤦 🤦‍♂ 🤦‍♀
+smile	😀 😃 😄 😁 😆 😅 🙂 🙃 😊 😇 🥰 😍
+smiley	🥲 😮‍💨 😵‍💫
+smiling	😀 😃 😄 😁 😆 😅 🙂 😊 😇 🥰 ☺ 😙
+smiling cat with heart-eyes	😻
+smiling face	☺
+smiling face with halo	😇
+smiling face with heart-eyes	😍
+smiling face with hearts	🥰
+smiling face with horns	😈
+smiling face with open hands	🤗
+smiling face with smiling eyes	😊
+smiling face with sunglasses	😎
+smiling face with tear	🥲
+smirk	😏
+smirking	😏
+smirking face	😏
+smoke	😮‍💨 💨 🚫 🚭
+smoking	🚬 🚭
+smooch	😘 😗
+smooches	😗 😚
+sms	💬
+smug	😏
+snail	🐌
+snake	🐍 ⛎
+snap	🫰 📷
+snapdragon	🪻
+snare	🪤
+sneaker	👟
+sneeze	🤧 😫
+sneezing	🤧
+sneezing face	🤧
+snicker	😏
+snorkeling	🤿
+snout	🐽
+snow	⛷ 🏂 🏔 🌨 ❄ ☃ ⛄ 🎿 🛷 🪏
+snow-capped	🏔
+snow-capped mountain	🏔
+snowboard	🏂
+snowboarder	🏂
+snowflake	❄
+snowman	☃ ⛄
+snowman without snow	⛄
+soak	🧽
+soap	🧼 🫧
+soapdish	🧼
+soar	🪽 🪁
+sob	😭
+soccer	⚽
+soccer ball	⚽
+socks	🧦
+soda	🥤
+soft	🍦 🥤 🔈
+soft ice cream	🍦
+softball	🥎
+software	🧑‍💻 👨‍💻 👩‍💻
+soldier	🥷 🪖
+solid	🪨
+solidarity	✊
+somersault	🤸 🤸‍♂ 🤸‍♀
+son	👦
+soon	🔜
+soon arrow	🔜
+soothe	💆 💆‍♂ 💆‍♀
+sorcerer	🧙 🧙‍♂ 🧙‍♀
+sorceress	🧙 🧙‍♂ 🧙‍♀
+sorcery	🧙 🧙‍♂ 🧙‍♀
+sorry	😕 🙇 🙇‍♂ 🙇‍♀
+sort	🤏
+sos	🆘
+sos button	🆘
+soulmate	👯 👯‍♂ 👯‍♀
+sound	👂 🔇 🔈 🔉 🔊 📢 📣 🔔 🔕 🎵 🎶 🎤
+soup	🍲 🍜
+sour	🍋 🍋‍🟩
+south	⇘ ⇙ ⬇
+south east double arrow	⇘
+south west double arrow	⇙
+southeast	↘
+southwest	↙
+sow	🐖
+soybean	🫛
+spa	💆 💆‍♂ 💆‍♀ 🧖 🧖‍♂ 🧖‍♀
+space	👽 👾 🧑‍🚀 👨‍🚀 👩‍🚀 🛰 🚀 🌑 🌒 🌓 🌔 🌕
+spade	♠ 🪏
+spade suit	♠
+spaghetti	🍝
+spanner	🛠 🔧
+spark	🧨
+sparkle	❇ 💖 🌟 🎇 ✨
+sparkler	🎇
+sparkles	✨
+sparkling	💖 💍
+sparkling heart	💖
+speak	🙊 🗣
+speak-no-evil	🙊
+speak-no-evil monkey	🙊
+speaker	🔇 🔈 🔉 🔊
+speaker high volume	🔊
+speaker low volume	🔈
+speaker medium volume	🔉
+speaking	🗣
+speaking head	🗣
+special	🩷 🩵 🩶
+speculum	🪞
+speech	💬 👁‍🗨 🗨
+speech balloon	💬
+speechless	😶
+speed	🏃 🏃‍♂ 🏃‍♀ 🚄 🚅
+speedboat	🚤
+spell	🧙 🧙‍♂ 🧙‍♀
+spew	🤮
+spice	🫚
+spider	🕷 🕸
+spider web	🕸
+spill	🫗 🫟
+spin	🚲
+spinning	🚲
+spiny	🦔
+spiral	😵‍💫 🐚 🗒 🗓
+spiral calendar	🗓
+spiral notepad	🗒
+spiral shell	🐚
+spirit	😇
+splashing	💦
+splatter	🫟
+splayed	🖐
+split	🪓
+sponge	🧽
+spool	🧵
+spoon	🥄 🥣
+spore	🍄‍🟫
+sport	🏇 🏂 🏄 🏄‍♂ 🏄‍♀ 🏊 🏊‍♂ 🏊‍♀ 🚴 🚴‍♂ 🚴‍♀ 🚵
+sport utility vehicle	🚙
+sports	🏅 🥎 🥍
+sports medal	🏅
+sportutility	🚙
+spots	🦒
+spouting	🐳
+spouting whale	🐳
+spring	🐝 🌸 🪻
+springs	♨
+springtime	🌸
+sprinkles	🧁
+sprout	🌱 🍄‍🟫
+spy	🥸 🕵 🕵‍♂ 🕵‍♀
+square	√ ⊹ ■ □ ▢ ▣ ▤ ▥ ▦ ▧ ▨ ▩
+square diagonal crosshatch fill	▩
+square orthogonal crosshatch fill	▦
+square root	√
+square upper left lower right fill	▧
+square upper right lower left fill	▨
+square with horizontal fill	▤
+square with vertical fill	▥
+squared	⊞ ⊟
+squared minus	⊟
+squared plus	⊞
+squeeze	🪗
+squeezebox	🪗
+squid	🦑
+squiggle	⇜ ⇝
+squinting	😆 😝
+squinting face with tongue	😝
+squirrel	🐿
+squirt	💦
+stadium	🏟
+staff	⚕
+stain	🫟
+stand	🧍 🧍‍♂ 🧍‍♀
+standing	🧍 🧍‍♂ 🧍‍♀
+star	⭐ ∗ ⋆ 🤩 💫 🧑‍🎤 👨‍🎤 👩‍🎤 🌃 🌟 🌠 ✨
+star and crescent	☪
+star of david	✡
+star operator	⋆
+star-struck	🤩
+stare	🫣
+starry-eyed	🤩
+stars	💫 🌃 ⭐
+station	🚉 ⛽
+statue	🗽 🗿
+statue of liberty	🗽
+steak	🥩
+stealth	🙊 🥷
+steam	😤 🧖 🧖‍♂ 🧖‍♀ 🚂
+steambath	🧖 🧖‍♂ 🧖‍♀
+steaming	🍜 ☕ ♨
+steaming bowl	🍜
+steamy	🧖 🧖‍♂ 🧖‍♀
+stein	🍺
+step	🪜
+stethoscope	🩺
+stew	🍲
+stick	🍢 🍡 🏑 🏒 🥍 🩼
+stiletto	👠
+sting	🪼
+stinger	🪼
+stink	💩 🦨
+stinks	💩
+stinky	💩
+stitches	🪡
+stocking	🧦
+stomp	🦶
+stone	🪨 🥌 💎
+stoneface	🗿
+stop	🖐 ✋ 🫷 🫸 🚏 🚥 🚦 🛑 ⏹
+stop button	⏹
+stop sign	🛑
+stoplight	🚥 🚦
+stopwatch	⏱
+store	🫙 🏪 🏬
+straight	😐 😑 📏
+straight ruler	📏
+straightedge	📏
+strat	🎸
+straw	🥤 🧃
+strawberry	🍓
+streamer	🎏
+stress	😅 😟
+stressed	😅 😟 😧
+strictly	≣
+strictly equivalent	≣
+stride	🚶 🚶‍♂ 🚶‍♀
+strike	🎳
+string	🧵
+stringed	🪕
+stripe	🦓
+stroke	↚ ↛ ⇍ ⇏ ⇎ ⇞ ⇟ ∕ 🥵 ↮
+stroll	🚶 🚶‍♂ 🚶‍♀
+strong	💪 🦁
+stub	🎫
+stubborn	🫏
+stuck-out	😛 😜 😝
+student	🧑‍🎓 👨‍🎓 👩‍🎓
+studio	🎙
+studio microphone	🎙
+study	📚
+stuffed	🫄 🥙 🧸
+stuffed flatbread	🥙
+stuffy	🧐
+stunned	😯
+style	😎 💇 💇‍♂ 💇‍♀
+suave	😏
+subgroup	⋭
+subscript	⨧
+subset	⊂ ⊆
+subset equal	⊆
+subset of	⊂
+subtract	−
+subtraction-like	⊟
+suburban	🏠 🏡
+suburbia	🏠 🏡
+subway	🚇
+subzero	🥶
+succeed	⊁
+succeeds	≻ ⊱ ⪺
+succeeds above not almost equal	⪺
+succeeds under relation	⊱
+sucks	😔
+suction	🪠
+sudden	🤭
+sugar	🧁
+suit	🕴 ♠ ♥ ♦ ♣ 🩱 🩲 🩳 👙
+suitcase	🧳
+sulk	🙎 🙎‍♂ 🙎‍♀
+summation	∑
+summer	🍺 🚤
+summon	🧙 🧙‍♂ 🧙‍♀
+sun	☀ 🌻 🌄 🌅 🌆 🌇 🌞 ⛅ 🌤 🌥 🌦 ⛱
+sun behind cloud	⛅
+sun behind large cloud	🌥
+sun behind rain cloud	🌦
+sun behind small cloud	🌤
+sun with face	🌞
+sunflower	🌻
+sunglasses	🕶 😎
+sunny	🍳 ☀ 🌞
+sunrise	🌅 🌄
+sunrise over mountains	🌄
+sunscreen	🧴
+sunset	🌇 🌆
+sunshine	🌞
+super	🏈
+superhero	🦸 🦸‍♂ 🦸‍♀
+supernatural	🧛 🧛‍♂ 🧛‍♀
+superpower	🦸 🦸‍♂ 🦸‍♀ 🦹 🦹‍♂ 🦹‍♀
+superset	⊃ ⊇
+superset equal	⊇
+supervillain	🦹 🦹‍♂ 🦹‍♀
+surd	√
+sure	😕 👌
+surf	🏄 🏄‍♂ 🏄‍♀ 🌊
+surfer	🏄 🏄‍♂ 🏄‍♀ 🌊
+surfing	🏄 🏄‍♂ 🏄‍♀ 🌊
+surprise	🤭 🫢 🤨 🫨 😦 😧 🎁
+surprised	😟 😮 😯 🫪 😱 🙀
+sushi	🍣
+suspension	🚟
+suspension railway	🚟
+suspicious	😏
+sutures	🪡
+suv	🚙
+swag	😏 😎
+swan	🦢
+swearing	🤬
+sweat	😅 😰 😥 😓 💦 💧
+sweat droplets	💦
+sweating	🥵
+sweeping	🧹
+sweet	😛 🩷 👌 🍠 🍡 🍦 🍧 🍨 🍩 🍪 🎂 🍰
+swell	🏄 🏄‍♂ 🏄‍♀
+swerve	👐
+swim	🏊 🏊‍♂ 🏊‍♀ 🛟 👙
+swimmer	🏊 🏊‍♂ 🏊‍♀
+swimming	🏊 🏊‍♂ 🏊‍♀ 🤽 🤽‍♂ 🤽‍♀ 🥽
+swimsuit	🩱 🩲 🩳
+swirl	🍥
+sword	🤺
+swords	⚔
+symbol	💢 ♿ 🚼 ⚛ ☮ ⚧ ⚕ ♻ 🔰
+symbols	🤬 🔣
+symmetric	⊖
+sympathy	😮
+synagogue	🕍
+syringe	💉
+t	🦖
+t 렉스	🦖
+t-rex	🦖
+t-shirt	👕
+table	🏓
+tableware	🥄
+tabs	📑
+tache	🥸
+tack	⊥
+taco	🌮
+tada	🎉
+taekwondo	🥋
+tag	🏷
+tai	🍹
+tail	↢ ↣
+tailoring	🪡
+takeout	🥡
+takeout box	🥡
+taking	🛀
+tale	😇 😈 👿 💀 👹 👺 👻 👽 👾 🤴 👸 👼
+talisman	🧿
+talk	💬 🦜
+tamale	🫔
+tanabata	🎋
+tanabata tree	🎋
+tangerine	🍊
+tangled	🪢
+tango	💃 🕺
+tangy	🍋‍🟩
+tao	☯
+taoist	☯
+tape	📼
+target	◎ 🎯
+tash	🥸
+taste	😝 🧂
+tasty	😋
+taurus	♉ 🐂
+taxi	🚕 🚖
+tbt	📻 📷 📹
+tea	☕ 🫖 🍵 🧋
+teacher	🧑‍🏫 👨‍🏫 👩‍🏫
+teacup	🍵
+teacup without handle	🍵
+teal	🩵
+teapot	🫖
+tear	🤣 😂 🥲 😢 😭 😹 😿 💧
+tear-off	📆
+tear-off calendar	📆
+tears	🥹 😭 😹 😂
+tease	😉
+technologist	🧑‍💻 👨‍💻 👩‍💻
+teddy	🧸
+teddy bear	🧸
+tee	🏌 🏌‍♂ 🏌‍♀
+teeth	😀 😃 😁 🥶 🦷 🧛 🧛‍♂ 🧛‍♀ 🦫 🪥
+tegh	🪯
+telephone	☎ 📱 📲 📞 📵 📶 📳 📴
+telephone receiver	📞
+telescope	🔭
+television	📺
+tell	🫴
+teller	🏧
+temple	🛕 🕍
+tempura	🍤
+ten	🕙 🕥
+ten o’clock	🕙
+ten-thirty	🕥
+tennis	🎾 🏓 👟
+tension	💆 💆‍♂ 💆‍♀
+tensor	⊗
+tent	⛺ 🎪
+tentacles	🪼
+tequila	🍋‍🟩
+terrapin	🐢
+terrestrial	🛸
+test	🧪
+test tube	🧪
+text	💬
+thanks	🙏 🫂
+thanksgiving	🦃
+the	≒ 🤣 🤘 🫵
+theater	🎭
+theatre	🎭
+theme	🛝 🎡 🎢
+theory	⋭
+therapist	🧑‍⚕ 👨‍⚕ 👩‍⚕
+therapy	💆 💆‍♂ 💆‍♀
+there	∃
+there exists	∃
+therefore	∴
+thermometer	🌡 🤒
+thespian	🎭
+think	💭
+thinking	🤔
+thinking face	🤔
+third	🥉
+thirty	🕧 🕜 🕝 🕞 🕟 🕠 🕡 🕢 🕣 🕤 🕥 🕦
+this	☝
+thong	🩴
+thong sandal	🩴
+thongs	🩴
+thought	💭
+thought balloon	💭
+thoughts	💭
+thread	🧵 🪡
+three	👌 🤟 🕒 🕞
+three o’clock	🕒
+three-thirty	🕞
+throw	🤮 ⛹ ⛹‍♂ ⛹‍♀ 🤾 🤾‍♂ 🤾‍♀
+thumb	🫰 👍 👎
+thumbs	👎 👍
+thumbs down	👎
+thumbs up	👍
+thunder	⛈ ⚡
+thunderbolt	⚡
+thunderstorm	⛈
+thx	🙏
+tichel	🧕
+tick	✅ ☑ ✔
+ticket	🎫 🎟
+tickets	🎟
+tie	🪢 👔
+tiger	🐅 🐯
+tiger face	🐯
+tilde	∼ ∽
+tilde operator	∼
+tilted	🔍 🔎
+timber	🪵
+time	😥 ⌛ ⌚ ⏰ ⏱ 🕰 🕛 🕧 🕐 🕜 🕑 🕝
+timer	⌛ ⏳ ⏲
+timer clock	⏲
+times	⊗
+tip	↰ ↱ ↲ ↳
+tipping	💁 💁‍♂ 💁‍♀
+tipsy	🥴
+tire	🛞
+tired	😪 😴 🫩 😵 😩 😫 🥱 💤 🛌
+tired face	😫
+titania	🧚‍♀
+tmi	🙉
+to	≡
+toadstool	🍄
+toast	🍞
+toboggan	🛷
+together	🤲 💏 💑
+toilet	🚽 🪠 🧻 🚹 🚺 🚻 🚾
+toiletry	🪥
+tokyo	🗼
+tokyo tower	🗼
+tomato	🍅
+tomb	🪦
+tombstone	∎ 🪦
+tongue	👅 😛 😜 😝 🥵
+tool	🔪 🏺 ⚓ 🔥 🔫 🔮 🔍 🔎 🔦 ✂ 🔨 ⛏
+toolbox	🧰
+tooth	🦷 🍫 🍬
+toothbrush	🪥
+top	↶ ↷ 🎩 🔝
+top arrow	🔝
+top hat	🎩
+tophat	🎩
+toppings	🍄‍🟫
+torch	🔦
+tornado	🌪
+tortoise	🐢
+toss	🤾 🤾‍♂ 🤾‍♀
+total	☯
+totally	😲
+touched	🥲
+tough	🪨
+tournament	🤼 🤼‍♂ 🤼‍♀
+towels	🧻
+tower	🗼
+toy	🪀 🧸
+trace	🫆
+track	🛤 ⏭ ⏮
+trackball	🖲
+tracks	🔀
+tractor	🚜
+tradesperson	🧑‍🔧 👨‍🔧 👩‍🔧
+traffic	🚥 🚦 🚸 ⛔
+train	🚆 🚂 🚃 🚄 🚅 🚉 🛤
+trains	🚂
+tram	🚊 🚃 🚋 🚎
+tram car	🚋
+tramway	🚡
+trans	🌈 🏳‍🌈
+transform	🐦‍🔥
+transgender	🌈 ⚧ 🏳‍🌈 🏳‍⚧
+transgender flag	🏳‍⚧
+transgender symbol	⚧
+transparent	🪟
+transportation	🛻
+trap	🪤
+trash	🗑
+travel	🚂 🚃 🚅 🚇 🚤 🚢 ✈ 🚁 🚀 🧳 🗿 🛄
+tray	📤 📥
+treasure	🪙 🏴‍☠ 🪎
+treasure chest	🪎
+treat	🧁
+treatment	💆 💆‍♂ 💆‍♀
+tree	🌲 🌳 🌴 🪾 🎄 🎋
+trend	💹 📈 📉
+triangle	∆ ∇ ⊿ ▲ △ ▴ ▵ ▷ ▸ ▹ ▼ ▽
+triangular	📐 🚩
+triangular flag	🚩
+triangular ruler	📐
+triathlon	🏊 🏊‍♂ 🏊‍♀
+trident	🧜 🧜‍♂ 🧜‍♀ 🔱
+trident emblem	🔱
+trim	🪚
+trip	🚞 📷 🛄
+triple	⇚ ⇛ ≡
+triste	😢
+triton	🧜‍♂
+triumph	😤
+troll	🧌
+trolley	🚋 🚎 🛒
+trolleybus	🚎 🚃 🚊 🚋
+trolling	🧌
+trombone	🪊
+troops	🫡
+trophy	🏆
+tropical	🦩 🐠 🌴 🍋‍🟩 🍍 🥭 🍹
+tropical drink	🍹
+tropical fish	🐠
+tropics	🍹
+trouble	😵‍💫
+trousers	👖
+truck	🚒 🛻 🚚 🚛
+true	💯
+truffle	🍄‍🟫
+trumpet	🎺
+trunk	🪾
+truth	💯
+tshirt	👕
+ttfn	👋
+ttyl	👋 👊
+tub	🛀
+tube	🧪
+tuk	🛺
+tulip	🌷
+tumbler	🥃
+tumbler glass	🥃
+turban	👳 👳‍♂ 👳‍♀
+turd	💩
+turkey	🦃 🍗
+turn	🛞
+turnip	🫜
+turtle	🐢
+tusk	🦣
+tuxedo	🤵 🤵‍♂ 🤵‍♀
+tv	📺
+twelve	🕛 🕧
+twelve o’clock	🕛
+twelve-thirty	🕧
+twin	👯 👯‍♂ 👯‍♀
+twine	🪢
+twins	🧑‍🤝‍🧑 👭 👫 👬 ♊
+twinsies	👯 👯‍♂ 👯‍♀
+twist	🪢
+twisted	🥨
+twister	🌀
+two	↞ ↟ ↠ ↡ ⨧ 💕 🐫 🕑 🕝
+two hearts	💕
+two o’clock	🕑
+two-hump	🐫
+two-hump camel	🐫
+two-thirty	🕝
+type	🅰 🆎 🅱 🅾
+type)	🅰 🆎 🅱 🅾
+typhoon	🌀
+typing	💬
+tyrannosaurus	🦖
+u	🧲
+ufo	👽 👾 🛸
+ugh	😒 🙄 🤌
+ugly	🦢
+uh	😑
+uhh	😒
+ultimate	🥏
+um	😋
+umbrella	☂ 🏖 🌂 ☔ ⛱
+umbrella on ground	⛱
+umbrella with rain drops	☔
+umrah	🕋
+unamused	😐 😒
+unamused face	😒
+unbelievable	😮
+unbounded	♾
+uncomfortable	🫦
+undead	🧛 🧛‍♂ 🧛‍♀ 🧟 🧟‍♂ 🧟‍♀
+under	⊰ ⊱ 🐨 🫩 🔞
+underage	🔞
+underarm	🥎
+underbar	⩣
+undercover	👮 👮‍♂ 👮‍♀
+underwater	🫧
+underwear	🩲 🩳
+uneven	🥴
+unhappy	😐 😑 😒 😧 😢 😭 😞 😩 😤 😡 😠
+unicorn	🦄
+uniform	🥋
+unimpressed	😐 😑
+union	∪ ⋃
+universal	∀ ♾
+unlock	🔓 🔑
+unlocked	🔓
+unlucky	🐈‍⬛
+unreal	😮
+unsure	🫤
+unwind	🧖 🧖‍♂ 🧖‍♀
+up	↑ ↨ ⇅ ⊥ ⋰ ▲ 🤮 🫳 👆 ☝ 👍 🤲
+up arrow	⬆
+up down arrow with base	↨
+up right diagonal ellipsis	⋰
+up tack	⊥
+up!	🆙
+up! button	🆙
+up-down	↕
+up-down arrow	↕
+up-left	↖
+up-left arrow	↖
+up-pointing	↑ ⇅ ▲ △ ▴ ▵
+up-pointing and down-pointing arrows	⇅
+up-pointing arrow	↑
+up-right	↗
+up-right arrow	↗
+upper	▧ ▨ ◓ ◔ ◕ ◜ ◝ ◠ ◤ ◥ ◳ ◷
+upper half circle	◠
+upper left quadrant circular arc	◜
+upper right quadrant circular arc	◝
+uppercase	🔠
+upset	😡 😠 💢 🙍 🙍‍♂ 🙍‍♀ 🙎 🙎‍♂ 🙎‍♀ 🧂
+upside-down	🙃
+upside-down face	🙃
+upward	💹 📈
+upwards	↟ ↥ ↰ ↱ ↼ ↾ ↿ ⇀ ⇈ ⇑ ⇞ ⇡
+upwards arrow double stroke	⇞
+upwards arrow from bar	↥
+upwards arrow tip leftwards	↰
+upwards arrow tip rightwards	↱
+upwards button	🔼
+upwards dashed arrow	⇡
+upwards double arrow	⇑
+upwards harpoon barb leftwards	↿
+upwards harpoon barb rightwards	↾
+upwards hollow arrow	⇧
+upwards hollow arrow from bar	⇪
+upwards paired arrows	⇈
+upwards two headed arrow	↟
+urn	⚱
+utility	🚙
+u자	🧲
+v	✌ 🔰
+v 모양	🔰
+vacancy	🈳 🈵
+vacancy”	🈵
+vaccination	💉
+valentine	💌 💘 💝 🌹
+valuables	🪎
+vampire	🧛 🧛‍♂ 🧛‍♀ 🦇 ⚰
+van	🚐
+vat	🪣
+vcr	📼
+vector	⨯
+vector cross product	⨯
+vegetable	🍅 🍆 🥔 🥕 🫑 🥒 🥜 🫛 🍄‍🟫 🫜
+vegetarian	🍄‍🟫 🫜
+veggie	🫛 🍄‍🟫
+vehicle	🚝 🚌 🚐 🚑 🚕 🚗 🚘 🚙 🚚 🚛 🚜 🛞
+veil	👰 👰‍♂ 👰‍♀
+versus	🆚
+vertical	⋮ ▥ ▮ ◍ 🚦 🔃 ⏸
+vertical ellipsis	⋮
+vertical traffic light	🚦
+vertically	🙂‍↕
+very	⋘ ⋙
+very much greater-than	⋙
+very much less-than	⋘
+vest	🦺
+vhs	📼
+vibrate	🫨
+vibration	📳
+vibration mode	📳
+vice	🗜
+victory	✌ 🏆
+victory hand	✌
+vicuña	🦙
+video	🎮 🕹 📻 📽 📺 📷 📸 📹 📼
+video camera	📹
+video game	🎮
+videocassette	📼
+videogame	🕹
+view	🪟
+viewer	🫵
+viewing	🎑
+villain	🦹 🦹‍♂ 🦹‍♀
+violet	🪻
+violin	🎻
+virgo	♍ 👧
+virgule	∕
+virus	🦟 🦠
+vitamin	🍊 💊
+voip	📞
+volcano	🌋
+volleyball	🏐
+voltage	⚡
+volume	🔈 🔉 🔊
+vomit	🤢 🤮
+vomiting	🤮
+vs	🆚
+vs button	🆚
+vu	🔄
+vulcan	🖖
+vulcan salute	🖖
+vulnerable	🫪
+wacky	😜
+waffle	🧇
+wait	🫷 🫸
+waiting	⏳ ⏰
+walk	🚶 🚶‍♂ 🚶‍♀ 👣
+walking	🧟 🧟‍♂ 🧟‍♀ 🚶 🚶‍♂ 🚶‍♀
+wall	🧱
+wand	🪄
+waning	🌖 🌘
+waning crescent moon	🌘
+waning gibbous moon	🌖
+war	🥷 🪖
+ward	◉
+warning	⚠
+warrior	🪖
+waste	🗑
+wastebasket	🗑
+watch	⌚ 🙈
+water	💦 🤽 🤽‍♂ 🤽‍♀ 🐃 🫗 🥤 💧 🌊 🔫 🚿 🚰
+water buffalo	🐃
+water closet	🚾
+water pistol	🔫
+water wave	🌊
+watermelon	🍉
+waterpolo	🤽 🤽‍♂ 🤽‍♀
+wave	↜ ↝ ↭ 👋 🌊
+waves	🏄 🏄‍♂ 🏄‍♀
+waving	🏴 🏳 👋
+waving hand	👋
+wavy	🥴
+waxing	🌒 🌔
+waxing crescent moon	🌒
+waxing gibbous moon	🌔
+way	🤯 😲 🌌
+wc	🚹 🚺 🚻 🚾
+wealth	🪎
+wealthy	🧐
+weapon	🔪 🏺 🔫 🗡 ⚔ 🪃 🏹 🛡
+wearing	👳 👳‍♂ 👳‍♀
+weary	🫩 😩 🙀
+weary cat	🙀
+weary face	😩
+weather	🌡 ☀ 🌞 ☁ ⛅ 🌤 🌥 🌦 🌧 🌨 🌩 🌪
+web	🕸 🌐
+wedding	💒 🤵 🤵‍♂ 🤵‍♀ 👰 👰‍♂ 👰‍♀ 💍 💎
+wedge	∧ 🧀
+weekend	👕 👖
+weight	🏋 🏋‍♂ 🏋‍♀ ⚖
+weightlift	💪
+weightlifter	🏋 🏋‍♂ 🏋‍♀
+weights	🏋 🏋‍♂ 🏋‍♀
+weird	😒
+weirdo	😜
+welding	🥽
+well	❤‍🩹 👏
+west	↸ ⇖ ⇙ ⬅
+wet	💦
+whale	🐋 🐳 🫍
+what	🤨 😳 😦 😧 🤌
+whatever	😝 😐 😑 🫥 😒 🙄 😴 🫤 🥱 💅 💁 💁‍♂
+wheat	🍞
+wheel	🛞 🎡 ☸
+wheel of dharma	☸
+wheelchair	🧑‍🦼 👨‍🦼 👩‍🦼 🧑‍🦽 👨‍🦽 👩‍🦽 🦽 🦼 ♿
+wheelchair symbol	♿
+wheels	🛹
+where	🏠 🏡
+whew	😥
+whine	🙎 🙎‍♂ 🙎‍♀
+whirlwind	🌪
+whiskers	🧔 🧔‍♂ 🧔‍♀
+whiskey	🥃
+whisky	🥃
+whisper	😮‍💨
+whistle	😮‍💨
+white	💟 🤍 🦷 🧑‍🦯 👨‍🦯 👩‍🦯 🦳 🐻‍❄ 💮 ⭐ 🥼 🦯
+white cane	🦯
+white circle	⚪
+white exclamation mark	❕
+white flag	🏳
+white flower	💮
+white hair	🦳
+white heart	🤍
+white large square	⬜
+white medium square	◻
+white medium-small square	◽
+white question mark	❔
+white small square	▫
+white square button	🔳
+white-collar	🧑‍💼 👨‍💼 👩‍💼
+who	🤷 🤷‍♂ 🤷‍♀
+whoa	🫨 😵‍💫 😮 😯
+whoops	🤭
+why	🥺
+wi-fi	🛜
+wicked	🖤
+wifi	🛜
+wild	🥦
+wildcard	🃏
+wilted	🥀
+wilted flower	🥀
+win	😎 🌟 🏆 👑 💰 🏁
+wind	🍃 🌬 🎐
+wind chime	🎐
+wind face	🌬
+window	🪟
+wine	🍷
+wine glass	🍷
+wing	🪽
+wings	🧚 🧚‍♂ 🧚‍♀ 💸
+wink	😉 😜
+winking	😉 😜
+winking face	😉
+winking face with tongue	😜
+winks	😉
+winner	🏅
+winning	🏆
+winter	🪾
+wireless	🛜
+wise	🧓 👴 👵 🦉
+wisent	🦬
+wish	🤲
+wishbone	🦴
+wishes	🧞 🧞‍♂ 🧞‍♀
+witch	🧙 🧙‍♂ 🧙‍♀ 🪄 🧹
+with	↨ ▢ ▤ ▥ ◍ ◷ 😃 😄 😁 😅 😂 😊
+without	😶 🍵 ⛄
+witness	👁‍🗨
+wizard	🧙 🧙‍♂ 🧙‍♀ 🪄
+wlan	🛜
+woah	😵‍💫 😯 😱
+wolf	🐺
+woman	👩 🧔‍♀ 👱‍♀ 👵 🙍‍♀ 🙎‍♀ 🙅‍♀ 🙆‍♀ 💁‍♀ 🙋‍♀ 🧏‍♀ 🙇‍♀
+woman and man holding hands	👫
+woman artist	👩‍🎨
+woman astronaut	👩‍🚀
+woman biking	🚴‍♀
+woman bouncing ball	⛹‍♀
+woman bowing	🙇‍♀
+woman cartwheeling	🤸‍♀
+woman climbing	🧗‍♀
+woman construction worker	👷‍♀
+woman cook	👩‍🍳
+woman dancing	💃
+woman detective	🕵‍♀
+woman elf	🧝‍♀
+woman facepalming	🤦‍♀
+woman factory worker	👩‍🏭
+woman fairy	🧚‍♀
+woman farmer	👩‍🌾
+woman feeding baby	👩‍🍼
+woman firefighter	👩‍🚒
+woman frowning	🙍‍♀
+woman genie	🧞‍♀
+woman gesturing no	🙅‍♀
+woman gesturing ok	🙆‍♀
+woman getting haircut	💇‍♀
+woman getting massage	💆‍♀
+woman golfing	🏌‍♀
+woman guard	💂‍♀
+woman health worker	👩‍⚕
+woman in lotus position	🧘‍♀
+woman in manual wheelchair	👩‍🦽
+woman in motorized wheelchair	👩‍🦼
+woman in steamy room	🧖‍♀
+woman in tuxedo	🤵‍♀
+woman judge	👩‍⚖
+woman juggling	🤹‍♀
+woman kneeling	🧎‍♀
+woman lifting weights	🏋‍♀
+woman mage	🧙‍♀
+woman mechanic	👩‍🔧
+woman mountain biking	🚵‍♀
+woman office worker	👩‍💼
+woman pilot	👩‍✈
+woman playing handball	🤾‍♀
+woman playing water polo	🤽‍♀
+woman police officer	👮‍♀
+woman pouting	🙎‍♀
+woman raising hand	🙋‍♀
+woman rowing boat	🚣‍♀
+woman running	🏃‍♀
+woman scientist	👩‍🔬
+woman shrugging	🤷‍♀
+woman singer	👩‍🎤
+woman standing	🧍‍♀
+woman student	👩‍🎓
+woman superhero	🦸‍♀
+woman supervillain	🦹‍♀
+woman surfing	🏄‍♀
+woman swimming	🏊‍♀
+woman teacher	👩‍🏫
+woman technologist	👩‍💻
+woman tipping hand	💁‍♀
+woman vampire	🧛‍♀
+woman walking	🚶‍♀
+woman wearing turban	👳‍♀
+woman with headscarf	🧕
+woman with veil	👰‍♀
+woman with white cane	👩‍🦯
+woman zombie	🧟‍♀
+woman: beard	🧔‍♀
+woman: blond hair	👱‍♀
+woman’s	👚 👡 👢 👒
+woman’s boot	👢
+woman’s clothes	👚
+woman’s hat	👒
+woman’s sandal	👡
+women	👯‍♀ 🤼‍♀ 👭
+women holding hands	👭
+women with bunny ears	👯‍♀
+women wrestling	🤼‍♀
+women’s	🚺
+women’s room	🚺
+won	😤
+wonder	💭
+wondering	🤔
+wood	🪵 🪾 🪓
+woodwind	🪈
+woodwose	🫈
+woohoo	🎉 🎊
+wool	🐑 🦙
+wooly	🦣
+woozy	🥴 😵‍💫
+woozy face	🥴
+work	💦 👷 👷‍♂ 👷‍♀
+worker	🧑‍⚕ 👨‍⚕ 👩‍⚕ 🧑‍🏭 👨‍🏭 👩‍🏭 🧑‍💼 👨‍💼 👩‍💼 👷 👷‍♂ 👷‍♀
+worker’s	⛑
+workout	💦 🏋 🏋‍♂ 🏋‍♀
+world	🌍 🌎 🌏 🌐 🗺
+world map	🗺
+worldwide	🌐
+worm	🪱
+worried	😟 😨 🫦
+worried face	😟
+worry	😟 🫦
+worship	🛐
+wow	🤩 🫨 😮 😳 😦 😧
+wrap	🌯
+wrapped	🫔 🎁
+wrapped gift	🎁
+wrapper	🍬
+wrench	🔧 🛠
+wrestle	🫯 🤼 🤼‍♂ 🤼‍♀
+wrestling	🤼 🤼‍♂ 🤼‍♀
+write	✍
+writing	✍ 📔
+writing hand	✍
+wry	😼
+wtv	🫥 🫤
+x	✖ ❌ ❎
+x-ray	🩻
+xmas	🎅 🤶 🧑‍🎄
+xnor	⊙
+xoxo	😍 😘 😗 😚 💝 💖 💗 💕 💏
+xray	🩻
+yacht	⛵
+yang	☯
+yarn	🧶
+yawn	😴 🥱
+yawning	🥱
+yawning face	🥱
+yay	😃 👏
+yellow	💛 🚕 🚖 🔰 🟡 🟨
+yellow circle	🟡
+yellow heart	💛
+yellow square	🟨
+yen	💴 💹
+yen banknote	💴
+yes	🫡 🙂‍↕ 👍
+yeti	🫈
+yikes	😰 😓
+yin	☯
+yin yang	☯
+yinyang	☯
+yo	👋
+yo-yo	🪀
+yoga	🧘 🧘‍♂ 🧘‍♀
+yogi	🧘 🧘‍♂ 🧘‍♀
+yolo	😜 😝 💀 ⏳ 🎆
+york	🗽
+you	🥰 😘 😗 😮 👋 🤟 🫵 🫶 💑
+young	👶 🧒 👦 👧 🌱
+younger	🧒 👦 👧
+yum	😋 🍴
+yummy	😋 🍴
+yup	💯
+yurt	🛖
+yuèbǐng	🥮
+zany	🤪
+zany face	🤪
+zap	⚡
+zebra	🦓
+zen	😌 🧘 🧘‍♂ 🧘‍♀
+zero	📥
+zest	🍋‍🟩
+zigzag	↯
+zip	🤐 🤌
+zipper	🤐
+zipper-mouth	🤐
+zipper-mouth face	🤐
+zodiac	👧 🦁 🐂 🐏 🐐 🐍 🐟 🦀 🦂 🏺 🏹 ⚖
+zombie	🧟 🧟‍♂ 🧟‍♀
+zoo	🐅 🐆 🐃 🐏 🐊
+zoom	🏎
+zzz	💤 😴 🥱 🛌
+zōri	🩴
+×	✖ ❌ ❎
+÷	➗
+“acceptable”	🉑
+“application”	🈸
+“bargain”	🉐
+“discount”	🈹
+“free	🈚
+“here”	🈁
+“monthly	🈷
+“no	🈵
+“not	🈶
+“open	🈺
+“passing	🈴
+“prohibited”	🈲
+“reserved”	🈯
+“service	🈂
+“vacancy”	🈳
+−	➖
+♪	🔣
+✓	✅ ☑ ✔
+〒	🔣
+〒♪&%	🔣
+ㅇ	⭕
+ㅋㅋㅋ	😆 🤣
+ㅎㅎ	😄 😂
+ㅎㅎㅎ	😆 🤣
+満	🈵
+가	🫳 🫂 🉑
+가게	🏪 🏬
+가금	🪿
+가는	👣 🥀 🔜
+가는 중	👣 🔜
+가니쉬	🍋‍🟩
+가득	🈵
+가득넣은	🥙
+가득찬	😨 💖
+가든	👒
+가든 파티	👒
+가라데	🥋
+가라오케	🎤
+가락신	🩴
+가로	🚥 ⋯
+가로 신호등	🚥
+가로선과	▦
+가로선으로	▤
+가로선으로 채워진 정사각형	▤
+가로선이	↥ ↧ ↸ ⇞ ⇟ ⇪
+가로선이 있는 빈 위쪽 화살표	⇪
+가로선이 있는 아래쪽 화살표	↧
+가로선이 있는 위쪽 화살표	↥
+가리고	🤭 🫣 🙈
+가리키기	☝ 🫵 👈 👉 👆 👇
+가리키는	👈 👉 👆 👇 ☝ 🫵
+가리키다	🫵 🈯
+가리킬	🈯
+가리킬 지	🈯
+가린	🤭 🫢 🙈 🙉 🙊 ⛅
+가면	🎭 🥸 👹 👺
+가뭄	🌵
+가방	👜 👝 🛍 🎒 💰 💼 🛄 🧳
+가버림	💨
+가벼운	🪶
+가부좌	🧘 🧘‍♂ 🧘‍♀
+가부좌한	🧘 🧘‍♂ 🧘‍♀
+가부좌한 남자	🧘‍♂
+가부좌한 사람	🧘
+가부좌한 여자	🧘‍♀
+가수	🧑‍🎤 👨‍🎤 👩‍🎤
+가스	⛽
+가슴이	💔
+가슴이 아픈	💔
+가시	🦔
+가십	💁
+가운	🥼
+가운데	🖕
+가운데 손가락	🖕
+가위	✂ ✌ 💇‍♂ 💇‍♀
+가위와	💇
+가위와 빗	💇
+가을	🍂 🥮 🍃
+가을 낙엽	🍃
+가이드	🪬
+가재	🦞
+가족	👪 🧑‍🧑‍🧒 🧑‍🧑‍🧒‍🧒 🧑‍🧒 🧑‍🧒‍🧒
+가족: 성인, 성인, 아이	🧑‍🧑‍🧒
+가족: 성인, 성인, 아이, 아이	🧑‍🧑‍🧒‍🧒
+가족: 성인, 아이	🧑‍🧒
+가족: 성인, 아이, 아이	🧑‍🧒‍🧒
+가죽	🩴
+가죽 끈	🩴
+가지	🍆
+가지진	🫎
+가지진 뿔	🫎
+가진	⛹‍♂ ⛹‍♀
+각	∠ 📐
+각얼음	🧊
+간	🍧 🥴
+간 얼음	🍧
+간호사	🧑‍⚕ 👨‍⚕ 👩‍⚕
+갈고리	🪝
+갈기	🦁
+갈래	✳
+갈색	🤎 🟤 🟫 🍄‍🟫
+갈색 사각형	🟫
+갈색 양송이 버섯	🍄‍🟫
+갈색 원	🟤
+갈색 하트	🤎
+감고	😆 😝 😽
+감귤	🍊
+감기	😷 🤧 ⏩
+감동	🥲 😐
+감동 없는	😐
+감사	🥲 🥹 🙏
+감상	🎧
+감싼	🫔
+감은	😚 😙 🤕
+감은 눈	😚 😙
+감자	🥔
+감자튀김	🍟
+감정	🥹 😢 💝 💖 💗 💓 💞 💕 💔 ❤ 💛 💚
+감정없는	😑
+감탄	🫢 🥹
+갑각류	🦐
+갑자기	🤭
+갑자기 깨달은	🤭
+갓	🐣
+갓 태어난 병아리	🐣
+갓난아기	👶 🍼
+갓태어난	👩‍🍼 👨‍🍼 🧑‍🍼 🐥
+강	🚣 🚣‍♂ 🚣‍♀
+강도	📶
+강사	🧑‍🏫 👨‍🏫 👩‍🏫
+강아지	🐶 🐕 🐩 🥺
+강아지 눈	🥺
+강아지 얼굴	🐶
+강연자	🧑‍🏫 👨‍🏫 👩‍🏫
+강우	☔
+강한	☔
+강한 비	☔
+강함	💪
+갖고	⛹ ⛹‍♂ ⛹‍♀
+갖다	🤦 🤦‍♂ 🤦‍♀
+같은	🐈‍⬛ 🪿
+같음	≤ ≥ 🟰 ≃ ≅ ≈ ≌ ≦ ≧ ≳ ⊆ ⊇
+같음으로	⋭
+같이	🕺
+같이 춤춰요	🕺
+같지	≠ ≤ ≥ ⪺
+같지 않음	≠ ≤ ≥
+개	🐕 🦴 🐶 🐕‍🦺 🐩 💕 ⏩ ⏪
+개구리	🐸
+개구리 얼굴	🐸
+개띠	🐶
+개미	🐜
+개발자	🧑‍💻 👨‍💻 👩‍💻
+개성있는	😎
+개월	🈷
+개의	➿
+개인	💻
+개조	🔨 🔩
+갬블	🎰
+갱	🚲
+갱신	🐦‍🔥
+거기	👋
+거기 있어?	👋
+거꾸로	🙃
+거꾸로 된 얼굴	🙃
+거듭	√ 🈸
+거듭 신	🈸
+거듭제곱근	√
+거래	🤝
+거미	🕷 🕸
+거미줄	🕸
+거북	🐢
+거북이	🐢
+거울	🪞
+거위	🪿
+거의	≈ ⪺
+거의 같음	≈
+거의 같지 않음 위의 후속	⪺
+거인	🫈
+거절	🫷 🫸
+거짓말	🤥
+거짓말쟁이	🤥
+거짓말하는	🤥
+거짓말하는 얼굴	🤥
+거품	🫧 🧼
+걱정	😟 🫦
+걱정스러운	😨 🫦 😟
+걱정스러운 얼굴	😟
+걱정스러움	😟
+건	🎋
+건강	❤‍🩹 🍎 🫚 🥗
+건강관리	🧑‍⚕ 👨‍⚕ 👩‍⚕
+건널목	🚸
+건물	🏛 🏗 🏘 🏚 🏠 🏢 🏣 🏤 🏥 🏦 🏨 🏩
+건물 공사	🏗
+건반	🎹
+건배	🥂
+건배하는	🥂
+건배하는 샴페인 잔	🥂
+건설	👷 👷‍♂ 👷‍♀
+건설 노동자	👷
+건설 현장 남자 노동자	👷‍♂
+건설 현장 여자 노동자	👷‍♀
+건전지	🔋
+건축가	🧑‍💼 👨‍💼 👩‍💼
+건축물	🏛
+걷기	🚶 🚶‍♂ 🚶‍♀
+걷는	🚶 🚶‍♂ 🚶‍♀
+걷는 남자	🚶‍♂ 🚶
+걷는 사람	🚶 🚶‍♂ 🚶‍♀
+걷는 여자	🚶‍♀
+걸라는	🤙
+걸리게	🪝
+걸리게 하다	🪝
+걸린	🖼
+걸어가는	🚶 🚶‍♂ 🚶‍♀
+걸어가는 사람	🚶 🚶‍♂ 🚶‍♀
+걸음	👣
+검	🤺 ⚔
+검거	👮
+검색	🔍 🔎
+검색하기	🔍 🔎
+검은	🐈‍⬛ 🕳 🐦‍⬛ 🔲
+검은 고양이	🐈‍⬛
+검은 구멍	🕳
+검은 새	🐦‍⬛
+검은색	■ ▣ ▬ ▮ ▰ ▲ ▴ ▸ ► ▼ ▾ ◂
+검은색 깃발	🏴
+검은색 다이아몬드	◆
+검은색 다이아몬드를 포함하고 있는 흰색 다이아몬드	◈
+검은색 미디엄-스몰 사각형	◾
+검은색 사각형을 포함하고 있는 흰색 정사각형	▣
+검은색 삼각형	▲ ▼
+검은색 세로 직사각형	▮
+검은색 아래쪽 삼각형	▼
+검은색 원	⚫
+검은색 원을 포함하고 있는 흰색 원	◉
+검은색 위쪽 삼각형	▲
+검은색 작은 사각형	▪
+검은색 정사각형	■
+검은색 직사각형	▬
+검은색 큰 사각형	⬛
+검은색 펜촉	✒
+검은색 평행 사변형	▰
+검은색 하트	🖤
+검정	🖤 🐦‍⬛
+검정색	◼
+검정색 중간 사각형	◼
+검지	🤞 ☝ 🫵
+검지손가락	👈 👉 👆 👇
+검지와	🤞
+검지와 중지 크로스	🤞
+겁	🫦
+겁먹은	😦 😧 😓
+것	🛞
+게	🦀
+게으른	🦥
+게이	👬 🌈 🏳‍🌈
+게이머	👾
+게임	👾 🏐 🎳 🏏 🏑 🏒 🏓 🥌 🎯 🎱 🎮 🕹
+게임패드	🎮
+게자리	♋ 🦀
+겨울	🪾 ☃ ⛄
+격식	🤵 🤵‍♂ 🤵‍♀
+격식있는	👔
+격식차린	🎩
+격자	🏁
+격자 무늬	🏁
+격자 무늬 깃발	🏁
+격투	🫯
+견과류	🥜 🌰
+결별	💔
+결승선	🏁
+결승선 깃발	🏁
+결심	💭
+결투	🤼‍♂ 🤼‍♀
+결혼	💒 💍
+결혼식	💒 🤵 🤵‍♂ 🤵‍♀ 👰 👰‍♂ 👰‍♀ 💍 💎
+결혼한	💒
+경고	🚨 ⚠ ⚡
+경기	🏃 🏃‍♂ 🏃‍♀ 🤼 🤼‍♂ 🤼‍♀ 🏅 🏐 🏏 🏑 🏒 🥌
+경기에서	🎲
+경기에서 짐	🎲
+경기장	🏟
+경도	🌐
+경락	💆
+경례	🫡 🖖
+경례하는	🫡
+경례하는 얼굴	🫡
+경로	∮
+경로 적분	∮
+경마	🏇 🐎
+경보	🚨
+경비대	💂 💂‍♂ 💂‍♀
+경비대원	💂 💂‍♂ 💂‍♀
+경비행기	🛩
+경삼륜차	🛺
+경유	⛽
+경전철	🚈
+경주	🏍
+경주용	🏎
+경주용 자동차	🏎
+경찰	👮 👮‍♂ 👮‍♀ 🚓 🚔 🚨
+경찰관	👮 👮‍♂ 👮‍♀
+경찰복	👮‍♂ 👮‍♀
+경찰차	🚓 🚔 🚨
+경찰차 사이렌	🚨
+계단	🪜
+계란	🐣 🥚 🍳
+계란 프라이	🍳
+계산	🧮
+계산한	🤑
+고개	🥀
+고개를	🙂‍↔ 🙂‍↕
+고개를 끄덕이다	🙂‍↕
+고개를 흔들다	🙂‍↔
+고구마	🍠
+고글	🥽
+고급	👛
+고기	🍖 🍗 🥩 🥓 🥧
+고기 덩어리	🍖
+고깃덩이	🥩
+고깔모자	🥳
+고드름	🥶
+고래	🐋 🐳 🫍
+고려해서	🤔
+고르디타	🫓
+고리	➰ 🪝 ≖ ➿
+고리가	🪐
+고리가 있는 행성	🪐
+고릴라	🦍
+고마워	🙏 🫂
+고민이	😧
+고민이 많은	😧
+고백	💌
+고소하다는	😼
+고소하다는 웃음 짓는 고양이	😼
+고속	🚄 🚅
+고속도로	🛣
+고속상승	⏫
+고속상승 버튼	⏫
+고속열차	🚄
+고속철	🚅
+고수머리	🦱
+고스톱	🎴
+고스트	👻
+고슴도치	🦔
+고압	⚡
+고압 경고	⚡
+고압 주의	⚡
+고약한	🦨
+고양이	🐈 😺 😸 😹 😻 😼 😽 🙀 😿 😾 🐱 🐈‍⬛
+고양이 같은	🐈‍⬛
+고양이 얼굴	🐱
+고양이과	🐅 🐆
+고인의	🪦
+고전	🏛
+고전 빌딩	🏛
+고전 양식의 건축물	🏛
+고정용	🧷
+고정용 핀	🧷
+고집불통	🫏
+고추	🌶 🫑
+고통	🥲 💔
+곡	🔂
+곡괭이	⛏ ⚒
+곡선	🪝
+곡선으로	↩ ↪
+곡식	🌾
+곡예	🤸
+곤돌라	🚠 🚡
+곤란	💦
+곤충	🦋 🐛 🐜 🐝 🪲 🦗 🪳 🕷
+곧	🔜
+곧 진행된다는 신호	🔜
+곧 진행된다는 표시	🔜
+곧 진행된다는 화살표	🔜
+골	🥍 🥅
+골대	🥅
+골드	🥇 🪙
+골치	🤦 🤦‍♂ 🤦‍♀
+골치 아파하는 남자	🤦‍♂
+골치 아파하는 사람	🤦
+골치 아파하는 여자	🤦‍♀
+골치아픔	💆
+골퍼	🏌 🏌‍♂
+골프	⛳ 🏌 🏌‍♂ 🏌‍♀ 🚩
+골프 선수	🏌 🏌‍♂
+골프 연습장	🏌 🏌‍♂
+골프선수	🏌‍♀
+골프치는	🏌 🏌‍♂ 🏌‍♀
+골프치는 남자	🏌‍♂
+골프치는 사람	🏌
+골프치는 여자	🏌‍♀
+골프티	🏌 🏌‍♂
+곰	🐻 🐻‍❄ 🍯 🧸
+곰 얼굴	🐻
+곰곰히	🤔
+곰돌이	🐻
+곰발바닥	🐾
+곰발자국	🐾
+곰인형	🧸
+곱	∏
+곱셈	✖ ❌ ❎
+곱셈기호	✖
+곱슬	➰
+곱슬곱슬한	➿
+곱슬머리	🦱
+곱하기	✖ ❌ ❎ ⊗
+곳	🏠 🏡 🛄
+공	🏌 🏌‍♂ 🏌‍♀ ⛹ ⛹‍♂ ⛹‍♀ 🤾‍♀ 🎊 ⚽ ⚾ 🥎 🏀
+공 가진 남자	⛹‍♂
+공 가진 여자	⛹‍♀
+공 튀기는 남자	⛹‍♂
+공 튀기는 사람	⛹
+공 튀기는 여자	⛹‍♀
+공구	🧰
+공구통	🧰
+공구함	🧰
+공기	🪟
+공놀이	🤾
+공룡	🦕 🦖
+공부	🏫 📚
+공부벌레	🤓
+공사	🏗 🚧 🚩
+공사 중	🚧
+공사 중 표시	🚧
+공상에	😶‍🌫
+공상에 잠긴 얼굴	😶‍🌫
+공업	🧑‍🏭 👨‍🏭 👩‍🏭
+공연	🎫 🎭
+공원	🏞
+공을	⛹ ⛹‍♂ ⛹‍♀
+공을 갖고 있는 남자	⛹‍♂
+공을 갖고 있는 사람	⛹
+공을 갖고 있는 여자	⛹‍♀
+공작	🦚
+공장	🏭 🧑‍🏭 👨‍🏭 👩‍🏭
+공장 남자 직원	👨‍🏭
+공장 여자 직원	👩‍🏭
+공장 직원	🧑‍🏭
+공주	👸
+공주님	👸
+공중	🚡
+공중부양	🕴
+공중에	🕴
+공중에 떠 있는 정장 입은 남자	🕴
+공중화장실	🚻 🚾
+공집합	∅
+공책	📓 📔 📒
+공평한	⚖
+공포	😨 😱 🧛 🧛‍♂ 🧛‍♀ 🧟 🧟‍♂ 🧟‍♀
+공포에	😨 😱
+공포에 가득찬 얼굴	😨
+공포에 절규하는 얼굴	😱
+공황	🫪
+과나코	🦙
+과녁	🎯
+과녁 명중	🎯
+과일	🍇 🍈 🍉 🍊 🍋 🍋‍🟩 🍌 🍍 🥭 🍎 🍏 🍐
+과자	🍘
+과피모	👲
+과학	🦠 🔍 🔎 🧪 🔬 🔭 📡 👨‍💻 👩‍💻
+과학자	🧑‍🔬 👨‍🔬 👩‍🔬 🥼
+관	⚰ 🈺
+관계에	⊰ ⊱
+관계에 따라 뒤에 옴	⊱
+관계에 따라 앞에 옴	⊰
+관람차	🎡
+관련	💹
+관리자	🧑‍💼 👨‍💼 👩‍💼
+관자놀이	💆‍♂ 💆‍♀
+관현악	🪉
+광대	🤡
+광대역	🛜
+광산	⛏
+광학	💽 💿 📀
+괭이	🐈
+괴로움	😧
+괴로워하는	😧
+괴로워하는 얼굴	😧
+괴물	💩 👹 👽 🧌 👾
+괴생명체	🫈
+괴짜	😜 🤪 🤓
+괴짜 얼굴	🤪
+교사	🧑‍🏫 👨‍🏫 👩‍🏫
+교수	🧑‍🏫 👨‍🏫 👩‍🏫
+교외	🏠 🏡
+교육	🎓 📕 📖 📗 📘 📙 📚
+교자	🥟
+교집합	∩ ⋂ ⋒
+교차	🤞 🔀 🎌
+교차된	⚔ 🎌
+교차된 검 두개	⚔
+교차된 깃발	🎌
+교차로	🚥 🚦
+교차하는	▦ ▩
+교차한	🫰
+교통	🚥 🚦 🚸 ⛔
+교통수단	🚂 🚃 🚈 🚝 🚌 🚐 🚑 🚕 🚗 🚘 🚙 🚚
+교통신호	🛑
+교환	💱
+교활한	😏
+교회	⛪ 👼 🔔 💒
+교회 결혼식	💒
+구경	👀
+구글리	👀
+구급	⛑
+구급차	🚑
+구기종목	🤾 🤾‍♂ 🤾‍♀ 🥅
+구더기	🪰
+구두	👞 👠
+구르기	🤣
+구르며	🤣
+구름	☁ 💨 💭 ⛅ ⛈ 🌤 🌥 🌦 🌧 🌨 🌩 🌪
+구름 뒤의 해	⛅
+구름에	⛅
+구름에 가린 해	⛅
+구멍	🕳 ⛳ 🪏
+구멍이	🧽
+구멍이 뽕뽕	🧽
+구명	🛟
+구명 기구	🛟
+구명 튜브	🛟
+구명부환	🛟
+구명조끼	🦺
+구부러진	⇜ ⇝ ➿
+구부러진 오른쪽 화살표	⇝
+구부러진 왼쪽 화살표	⇜
+구부린	💪 🦵 🧢
+구부린 다리	🦵
+구부린 모자	🧢
+구부린 팔	💪
+구불구불한	🥨
+구사일생	😥
+구속	👮 👮‍♂ 👮‍♀
+구슬	🔮 🧿
+구식	📼
+구역	🚬 🚸 🚭
+구역질을	🤢
+구역질을 하는 얼굴	🤢
+구운	🍠
+구조	🧑‍🚒 👨‍🚒 👩‍🚒 🛟 🆘
+구조 신호	🆘
+구조대원	⛑
+구조대원 헬멧	⛑
+구조원	🛟
+구토	🤢
+구하는	🥺
+구하다	🛟
+국	🍲
+국가	🎌
+국가 행사	🎌
+국기	🎌
+국립	🏞
+국립공원	🏞
+국수	🍜
+군대	🫡 🎖 🪖
+군모	🪖
+군용	🪖
+군용 헬멧	🪖
+군인	🥷 🪖
+군주	🫅
+굴	🦪
+굴리고	🙄
+굴리기	🙄
+굿	👍 🫡
+굿 럭	🫡
+굿바이	🫂
+굿밤	🛌
+궁수	🏹 ♐
+궁전	🏯 🏰 💂 💂‍♂ 💂‍♀
+권	📚
+권총	🔫
+권투	🥊
+권투 글러브	🥊
+귀	👂 🧏 👯‍♂ 🦻 👯 👯‍♀
+귀뚜라미	🦗
+귀를	🙉 👯 👯‍♂ 👯‍♀
+귀를 막고 있는 원숭이	🙉
+귀신	👻
+귀신얼굴	👻
+귀여움	💞 🩷
+귀족	🫅
+귀중품	🪎
+균류	🍄
+균사류	🍄‍🟫
+균형	🤹 🤹‍♂ ⚖
+귤	🍊
+그래프	💹 📈 📉 📊
+그러므로	∴
+그러므로 기호	∴
+그럴리	🤯
+그럴리 없어	🤯
+그루브	💃 🕺
+그룻	🍜
+그릇	🍲 🧼
+그릇과	🥣
+그릇과 숟가락	🥣
+그리기	🎨
+그리움	😢
+그린	💚 🏌 🏌‍♂ 🥗 🔰
+그림	🖼 🎨
+그림 그리기	🎨
+그림 액자	🖼
+그림자	👤 👥
+그만	🫷 🫸
+그만두다	🫳
+그만두라는	🫳
+그만두라는 손	🫳
+그물채	🥍
+그믐	🌑
+그믐달	🌜 🌑 🌘
+그믐달 하현	🌘
+극장	🎭 🎦
+근	√
+근사	≈
+근사값	≒
+근위병	💂 💂‍♂ 💂‍♀
+근육	💪
+글라스	🥛
+글래스	🍷 🥃
+글러브	🥊
+글로벌	🌍 🌎 🌏
+글로브	🥎
+글머리	∙ ◘ ◦
+글머리 기호 연산자	∙
+글썽이는	🥺
+글썽이는 눈	🥺
+글쎄	🤷 🤷‍♂ 🤷‍♀
+글쓰기	✍
+글을	✍
+글을 쓰고 있는 손	✍
+금	🪙 🪎 🈲
+금관	🪊
+금메달	🥇 🏅
+금발	👱 👱‍♂ 👱‍♀ 👵
+금발 남자	👱‍♂
+금발 여자	👱‍♀
+금발인	👱
+금발인 사람	👱
+금방	🔜
+금방 돌아옴	🔜
+금속	🪙
+금연	🚭
+금연 구역	🚭
+금연 구역 신호	🚭
+금연 신호	🚭
+금지	🚫 🙈 🙉 🙊 🙅 🔕 ⛔ 🚳 🚭 🚯 🚱 🚷
+금지된	🙈
+금하다	🈲
+금할	🈲
+금할 금	🈲
+급하강	⏬
+급하강 버튼	⏬
+급한	🏃 🏃‍♂ 🏃‍♀
+긍정	🙂‍↕
+긍지	🥲
+기계	🦾
+기계 팔	🦾
+기관	🦿
+기관차	🚂
+기구	✂ 🔬 🛟
+기념	🎈 🎊 🎑 🎗
+기념일	💝 💞 💕 💏 💑 💐
+기다려	🫷 🫸 🤌
+기다림	⏳
+기도	🙏 🤲 📿 🛐
+기도실	🛐
+기도하는	🙏
+기도하는 사람	🙏
+기도한	👏
+기독교	⛪ ✝ ☦
+기둥	💈
+기록	🧾 ⏺
+기름	🛢 🪔
+기름 램프	🪔
+기름통	🛢
+기린	🦒
+기모노	👘
+기발한	💡
+기발한 생각	💡
+기뻐하면서	😹
+기뻐하면서 우는 고양이	😹
+기쁨	😊 😹 👏 💖
+기쁨으로	💖
+기쁨으로 가득찬 마음	💖
+기쁨의	😂 🥹 😹
+기쁨의 눈물	🥹 😹
+기쁨의 눈물을 흘리는 고양이 얼굴	😹
+기쁨의 눈물을 흘리는 얼굴	😂
+기사	🐉 ⚜ 🧑‍🔧 👨‍🔧 👩‍🔧
+기생충	🪱
+기수	🏇
+기술	🥷 🧑‍💻 👨‍💻 👩‍💻
+기술 전문가	🧑‍💻 👨‍💻 👩‍💻
+기술자	👨‍🔧 👩‍🔧 🧑‍🔬 👨‍🔬 👩‍🔬
+기어	⚙
+기울어가는	🌖
+기울어진	⩽
+기울어진 등호이거나 보다 작음	⩽
+기원	🎋
+기원 쪽지	🎋
+기일	🪦
+기장	🧑‍✈ 👨‍✈ 👩‍✈
+기저귀	🚼
+기차	🚆 🚂 🚃 🚅 🚈 🚉 🚝 🚞
+기차 터널	🚞
+기차역	🚉
+기타	🎸
+기하학	🔴 🔵 ⚫ ⚪ ⬛ ⬜ ◼ ◻ ◾ ◽ ▪ ▫
+기하학 무늬	🔴 🔵 ⚫ ⚪ ⬛ ⬜ ◼ ◻ ◾ ◽ ▪ ▫
+기호	🔣 ∩ ∪ 💢 ♀ ♂ ∆ ∇ ∈ ∙ ∞ ∴
+기후변화	🪸
+긴	↸ 🪘
+긴 가로선이 있는 북서쪽 화살표	↸
+긴 북	🪘
+긴장	😅 💗 💆
+긴장한	😟 😰 😓
+길찾기	🧭 ⬆ ↗ ➡ ⬇ ↙ ⬅ ↖
+김	☕
+김밥	🍙
+김이	🍜
+김이 나는	🍜
+깃	🪶
+깃발	🎏 🏁 🚩 🏴 🏳 🏳‍🌈 🏳‍⚧ ⛳ 🎌 🏴‍☠
+깃발이	📫 📪 📬 📭
+깃발이 내려진 닫힌 우편함	📪
+깃발이 내려진 열린 우편함	📭
+깃발이 올려진 닫힌 우편함	📫
+깃발이 올려진 열린 우편함	📬
+깃털	🪶
+깊어지는	💗
+깊어지는 마음	💗
+깊어지는 사랑	💗
+까마귀	🐦‍⬛
+까먹은	😧
+까악	🐦‍⬛
+깎기	💇
+깜짝	🫢 🫨 😲
+깜짝 놀란 얼굴	😲 🫢
+깜짝 놀람	🫨
+깨끗한	🪥
+깨달은	🤭
+깨달음	💭
+깨무는	🫦
+깨물고	🫦
+깨진	💔
+깨진 하트	💔
+깬	🐣
+꺼내기	⏏
+꺼냄	⏏
+꺼냄 버튼	⏏
+꺼진	📴
+꺼짐	📴
+꺾는	↩ ↪ ⤴
+꺾어지는	↩ ↪ ⤴ ⤵
+꺾은	💁 💁‍♂ 💁‍♀
+꺾음	💁‍♂ 💁‍♀
+꺾인	🥀
+꺾인 고개	🥀
+껍질	🐚
+꼬기	🧘 🧘‍♂ 🧘‍♀
+꼬리	↢ ↣
+꼬리를	🔁 🔂
+꼬리를 무는 화살표	🔁
+꼬리를 무는 화살표와 숫자 1	🔂
+꼬마	👿
+꼬마 악마	👿
+꼬은	🥨
+꼬인	🪢
+꼬집	🤏
+꼬집기	👌
+꼬집는	🤌 🤏
+꼬집는 손	🤏
+꼬집는 손가락	🤌
+꼬치	🍢 🍡
+꼬투리	🫛
+꼭	🙏 ✊ 👭 👬
+꼭 잡은	👭 👬
+꼭 쥐고	✊
+꽂힌	💘 ⛱
+꽃	💐 🌸 💮 🪷 🏵 🌹 🥀 🌺 🌻 🌼 🌷 🪻
+꽃 도장	💮
+꽃 표시	💮
+꽃가루처	🎊
+꽃게	🦀
+꽃다발	💐
+꽃모양	🍥
+꽃모양 어묵	🍥
+꽃모양 오뎅	🍥
+꽃송이	🌼 🌸
+꽃이	🌸 🌼 🌷
+꽃이 피는	🌸 🌷
+꽃이 피다	🌼
+꽉진	👊
+꽝	💥
+꽥꽥	🪿
+꾸러미	📦
+꾹	😶
+꿀	🍯 🐻 🐝
+꿀꿀	🐽
+꿀꿀이	🐖
+꿀단지	🍯
+꿀벌	🐝
+꿀통	🍯
+꿇은	🧎 🧎‍♂ 🧎‍♀
+꿈	💭 🌒 🌜
+끄기	🔇 📵 📴
+끄덕끄덕	🙂‍↕
+끄덕이다	🙂‍↕
+끈	🪢 🩴
+끊어진	⛓‍💥
+끊어진 쇠사슬	⛓‍💥
+끔찍한	😝 🤢 😢 😞
+끝	∎
+끝났어	💅
+끝내기	🔚
+끝내기 화살표	🔚
+끝이	↰ ↱ ↲ ↳
+끝이 오른쪽을 향한 아래쪽 화살표	↳
+끝이 오른쪽을 향한 위쪽 화살표	↱
+끝이 왼쪽을 향한 아래쪽 화살표	↲
+끝이 왼쪽을 향한 위쪽 화살표	↰
+끼고	😎
+낀	😷 😎 🦻 🌁
+낄낄거리는	😏
+나	🙋 💀
+나 죽었어	💀
+나간	😜 🤪
+나누기	➗ 🈹 ∕ ⊘
+나누기 슬래시	∕
+나누기 표시	➗
+나누다	∣
+나눌	🈹
+나눌 할	🈹
+나눔	🈹
+나는	🍜
+나무	🌳 🌲 🌴 🌵 🍄 🪾 🌰 🪵 🎋 🪓 🌱
+나무 몸통	🪾
+나무늘보	🦥
+나뭇가지	🪹 🪺 🪾
+나뭇잎	🍃
+나블라	∇
+나블라 기호	∇
+나비	🦋
+나쁜	😐 😑
+나쁜것은	🙈 🙉 🙊
+나쁜것은 듣지도 말라	🙉
+나쁜것은 말하지도 말라	🙊
+나쁜것은 보지도 말라	🙈
+나쁜놈	🦹 🦹‍♂
+나사	🪛 🔩
+나선형	😵‍💫
+나선형 눈	😵‍💫
+나오는	🫗
+나이스	😁 👍
+나이제한	🔞
+나이프	🍽 🍴
+나이프가	🍽
+나자르	🧿
+나중에	👋 👊
+나중에 봐	👋
+나중에 얘기해	👊
+나침반	🧭
+나타내는	🤏
+나팔	🥳 📯
+낙담	😔
+낙담한	😅 😞 😔
+낙담한 얼굴	😔
+낙성	🌠
+낙엽	🍂 🌳 🍃
+낙엽수	🌳
+낙옆	🍁
+낙타	🐪 🐫
+낙하산	🪂
+낚시	🚣 🚣‍♂ 🦦 🐟 🎣
+낚싯대	🎣
+난	🫓 😵‍💫 ❤‍🔥 🧔 🧔‍♂ 🧔‍♀
+날	🛼 🙋
+날 선택해	🙋
+날개	🪽 🧚 🧚‍♂ 🧚‍♀ 🦋 💸
+날개 달린 돈	💸
+날개를	🐥
+날다	🕊 🪽
+날라오는	👊
+날라오는 주먹	👊
+날리기	🪁
+날리는	😘
+날림	💸
+날숨	😮‍💨
+날숨 쉬는 얼굴	😮‍💨
+날씨	🌁 🌡 ☀ 🌞 ☁ 🌤 🌥 🌦 🌧 🌨 🌩 🌪
+날아가는	💸
+날아가는 돈	💸
+날아오르다	🪽
+날짜	📅
+날카로운	🪒
+낡은	🏚
+낡은 주택 건물	🏚
+남교사	👨‍🏫
+남극	🐧
+남녀	👫 🎎
+남녀 인형	🎎
+남녀 커플	👫
+남동쪽	↘ ⇘
+남동쪽 이중 화살표	⇘
+남서쪽	↙ ⇙
+남서쪽 이중 화살표	⇙
+남성	👨 👱‍♂ 👴 👨‍🍼 🕺 🚹 ♂ 👬
+남성 기호	♂
+남성 커플	👬
+남성용	🚹 👞
+남성용 구두	👞
+남성용 신발	👞
+남은	⏳
+남자	👨 👱 🧔‍♂ 👱‍♂ 👴 🙅‍♂ 🧏‍♂ 🤦‍♂ 🤷‍♂ 👨‍⚕ 👨‍🎓 👨‍🏫
+남자 가수	👨‍🎤
+남자 경찰관	👮‍♂
+남자 과학자	👨‍🔬
+남자 근위병	💂‍♂
+남자 기술 전문가	👨‍💻
+남자 기장	👨‍✈
+남자 농부	👨‍🌾
+남자 댄서	🕺
+남자 마법사	🧙‍♂
+남자 뱀파이어	🧛‍♂
+남자 소방관	👨‍🚒
+남자 슈퍼 악당	🦹‍♂
+남자 아이	👦
+남자 엘프	🧝‍♂
+남자 역도 선수	🏋‍♂
+남자 요리사	👨‍🍳
+남자 요정	🧚‍♂
+남자 우주비행사	👨‍🚀
+남자 의료인	👨‍⚕
+남자 인어	🧜‍♂ 🧜
+남자 정비공	👨‍🔧
+남자 좀비	🧟‍♂
+남자 지니	🧞‍♂
+남자 탐정	🕵‍♂
+남자 판사	👨‍⚖
+남자 헤어컷	💇‍♂
+남자 화가	👨‍🎨
+남자 화장실	🚹
+남자 회사원	👨‍💼
+남자 히어로	🦸‍♂
+남자들	👯‍♂
+남자용	🚹
+남자친구	👨
+남쪽	⬇
+남학생	👨‍🎓
+납골	⚱
+납골 단지	⚱
+납작한	🥘
+납작한 냄비	🥘
+낫고	❤‍🩹
+낫고 있는 하트	❤‍🩹
+낮	🌞
+낮게	🔈
+낮은	🔅
+낮은 밝기	🔅
+낮음	🔅
+낮잠	😴 😫 🛌
+내기	👌 💰
+내니	👩‍🍼 🧑‍🍼
+내려가는	📉
+내려가는 그래프	📉
+내려간	📪 📭
+내려진	📭 📪
+내리기	🔽 ⏬
+내리기 버튼	🔽
+내리는	🫠 ⛄
+내리는 눈 없이 눈사람	⛄
+내린	👎
+내린 엄지	👎
+내림표	♭
+내민	😗 😛 😜 😝 🤲
+내민 두 손	🤲
+내부	💠
+내부곱	⨼
+내성적	🫥
+내쉬기	🫁
+내쉼	😮‍💨
+냄비	🫕 🫖 🥘
+냄새	💩 👃
+냄새가	💩 🦨
+냄새가 고약한	🦨
+냄새가 지독한	💩
+냄새나는	🦨
+냐옹이	🐈
+냠냠	😋
+너	🫵
+너구리	🦝
+너무	😂 🥺 🫰 🫃 🫄
+너무 많이 먹은	🫃 🫄
+너무 비싼	🫰
+너무 슬프지 않니	🥺
+너무 웃겨서 눈물	😂
+너무 웃기는	😂
+너클	👊
+너트	🔩
+넓은	👒
+넘기기	💁
+넙죽	🙇 🙇‍♂ 🙇‍♀
+넛츠	🥜
+네	🫡 🆗 🕓 🕟
+네 시	🕓
+네 시 반	🕟
+네모	🆑
+네모 안에 씨엘	🆑
+네비게이션	🧭
+네스트	🪹
+네스팅	🪆
+네스팅 인형	🪆
+네시	🕟
+네시 반	🕟
+네일	💅
+네일 아트	💅
+네일 케어	💅
+네잎클로버	🍀
+네트	🥅
+네트워크	🛜
+넥타이	👔
+노	🚣 🚣‍♂ 🚣‍♀
+노 젓기	🚣 🚣‍♂
+노 젓는 보트	🚣 🚣‍♂
+노굿	🆖
+노굿 신호	🆖
+노끈	🪢
+노동	👷 👷‍♂ 👷‍♀
+노동자	👨‍🏭 👷 👷‍♂ 👷‍♀
+노란	💛 🚕 🚖
+노란 택시	🚕 🚖
+노란 하트	💛
+노란색	💛 🔰 🟡 🟨
+노란색 사각형	🟨
+노란색 원	🟡
+노란색 초록색 이파리 모양	🔰
+노란색 하트	💛
+노래	🧑‍🎤 👨‍🎤 👩‍🎤 🎤 🎶 ⏮
+노래 음표	🎶
+노래방	🎤
+노새	🫏
+노을	🌆 🌇
+노인	🧓 👴 👵
+노젓기	🚣‍♀
+노젓는	🚣 🚣‍♂ 🚣‍♀
+노젓는 남자	🚣‍♂
+노젓는 배	🚣‍♀
+노젓는 사람	🚣
+노젓는 여자	🚣‍♀
+노트	📒 📔 📓 📝 🗒 📋
+노트북	💻
+노후	🏚
+녹는	🫠
+녹다	🫠 🫕
+녹색	🟢 🟩 💚 🥬 📗
+녹색 사각형	🟩
+녹색 원	🟢
+녹색 채소	🥬
+녹색 책	📗
+녹색 하트	💚
+녹아	🫠
+녹아 내리는 얼굴	🫠
+녹아내리는	🫠
+녹음	⏺
+녹음 버튼	⏺
+녹음/녹화	⏺
+녹음/녹화 버튼	⏺
+녹화	⏺
+녹화 버튼	⏺
+논리곱	∧
+논리합	⋁ ⩣
+논쟁	🫯
+놀기	🛝 🎴
+놀라움	😲
+놀란	😯 🫢 😲
+놀란 얼굴	😲
+놀람	🫢 😟 😮 🫪 😦 😧 🙀 🎁 🫨
+놀림	😉
+놀이	🛝
+놀이공원	🎠 🛝 🎡 🎢
+놀이터	🛝
+놀잇감	🧸
+농구	🏀 ⛹ ⛹‍♂ ⛹‍♀
+농구 링	🏀
+농구공	⛹ ⛹‍♂ ⛹‍♀ 🏀
+농구선수	⛹ ⛹‍♂ ⛹‍♀
+농담	😜 😏
+농부	🧑‍🌾 👨‍🌾 👩‍🌾
+농사꾼	🧑‍🌾 👨‍🌾 👩‍🌾
+농작물	🌽
+농장	🐴 🐮 🐂 🐄 🐷 🐖 🐽 🐑 🐐 🌽 🧑‍🌾 👨‍🌾
+농장 주인	🧑‍🌾 👨‍🌾 👩‍🌾
+농장주인	👩‍🌾
+높게	🔊
+높은	🔆
+높은 밝기	🔆
+높은음자리	🎼
+높은음자리표	🎼
+높음	🔆
+뇌	🧠
+뇌룡	🦕
+뇌우	⛈
+누가	🤷‍♂ 🤷‍♀
+누가 알겠어	🤷‍♂ 🤷‍♀
+누운	∾ 🛌
+눈	👁 😄 😁 😊 🤪 😝 🙄 🫩 😻 😽 👁‍🗨 👀
+눈 감고 미소	😆
+눈 감고 뽀뽀하는 고양이	😽
+눈 감고 웃는 얼굴	😆
+눈 굴리기	🙄
+눈 덮인 산	🏔
+눈 하나	👁
+눈 한개	👁
+눈구름	🌨
+눈물	😂 🥲 😢 😭 😹 😿 💧 🥹
+눈물 흘리는 고양이	😿
+눈물 흘리며 웃는 얼굴	🥲
+눈물나게	🤣
+눈물나게 웃긴	🤣
+눈물을	😂 🥹 😹
+눈물을 참는 얼굴	🥹
+눈부시는	🌟
+눈부신	😎 🌞
+눈사람	☃ ⛄
+눈송이	❄
+눈썰매	🛷
+눈썹	😏 🥸
+눈썹을	🤨
+눈썹을 치켜올린 얼굴	🤨
+눈알	🙄 👀
+눈웃음	😁 😊 😄 😆
+눈웃음 지으며 웃는 얼굴	😊
+눈웃음 지으며 입 벌리고 웃는 얼굴	😆
+눈웃음 지으며 활짝 웃는 얼굴	😄
+눈웃음 짓는 얼굴	😆
+눈웃음 짓는 웃는 얼굴	😁
+눈웃음짓는	😆
+눈웃음짓는 얼굴	😆
+눈으로	😄 😁 😊 🤩 😙 😸 😻
+눈을	😃 😚 😝 🫢 🫣 🙄 😳 🙈 👧
+눈을 가리고 있는 원숭이	🙈
+눈을 감고 메롱하는 얼굴	😝
+눈을 감고 혀를 내민 얼굴	😝
+눈을 감은 채로 키스하는 얼굴	😚
+눈을 굴리고 있는 얼굴	🙄
+눈을 뜨고 손으로 입을 가린 얼굴	🫢
+눈을 반짝이는	👧
+눈을 크게 뜨고 웃는 얼굴	😃
+눈을 크게 뜬 얼굴	😳
+눈이	💍
+눈이 부신	💍
+뉴	🆕
+뉴 버튼	🆕
+뉴 신호	🆕
+뉴문	🌑 🌚
+뉴스	📰 🗞
+뉴욕	🗽
+느낌	😍 😓 😫 😤 😡 😠 ❕
+느낌표	❣ ❕ ❗
+느린	🦥
+늑대	🐺
+늑대 얼굴	🐺
+늙은	👴 👵
+늦은	🫩 ⏰
+니트	🧶
+닌자	🥷
+다	⌛
+다가오는	🚍 🚘 🚔 🚖
+다가오는 경찰차	🚔
+다가오는 택시	🚖
+다나바타	🎋
+다나바타 나무	🎋
+다듬기	💅
+다람쥐	🐿
+다르마	☸
+다리	🦵 🍗 🌉 🦿 🧘 🧘‍♂ 🧘‍♀
+다리 꼬기	🧘 🧘‍♂ 🧘‍♀
+다리 한쪽	🦵
+다문	🤐
+다비드	✡
+다비드별	✡
+다섯	✋ 🕔 🕠
+다섯 시	🕔
+다섯 시 반	🕠
+다운	🔽
+다운 버튼	🔽
+다윗	✡
+다윗의	✡
+다윗의 별	✡
+다음	⏭
+다음 장면	⏭
+다음 트랙	⏭
+다음 트랙 버튼	⏭
+다이너마이트	🧨
+다이빙	🦪 🤿 🥽
+다이빙 마스크	🤿
+다이아몬드	♦ 💍 💎 ◆ ◇ ◈ ◊ 💠
+다이아몬드 모양	◊ 💠
+다이아몬드 무늬	♦
+다이아몬드를	◈
+다이어트	🍎
+다채로운	🎨
+다치다	🩼
+다친	🩼
+다침	🩼
+다크서클	🫩
+다크서클이	🫩
+다크서클이 있는 얼굴	🫩
+다툼	🫯
+다트	🎯
+다함께	💃
+다함께 춤춰요	💃
+단	🍫 🍬
+단 음식을 좋아함	🍫 🍬
+단검	🗡
+단계	🪜
+단단한	🪨
+단도	🗡
+단봉	🐪
+단봉 낙타	🐪
+단서	🫆 🗝
+단안경을	🧐
+단안경을 쓴 얼굴	🧐
+단지	🍯 🏺 ⚱
+단짝	👯 👯‍♀
+단풍잎	🍁 🍂
+단화	🥿
+닫힌	📫 📪
+달	🌑 🌒 🌓 🌔 🌕 🌖 🌗 🌘 🌙 🌚 🌛 🌜
+달 월	🈷
+달가닥	🪇
+달가닥 소리	🪇
+달걀	🥚
+달과	🌉
+달과 다리	🌉
+달님	🌚 🌛 🌜 🌝
+달러	💵 🪙 💰 💸 💲
+달러화	💵 💲
+달려나감	💨
+달력	📅 📆 🗓
+달리기	💨 🏃 🏃‍♂ 🏃‍♀ 👟
+달린	😈 👿 💝 💸
+달맞이	🎑
+달맞이 행사	🎑
+달아오른	😳
+달아오른 얼굴	😳
+달위에	🌚
+달위에 얼굴	🌚
+달콤	😛 😰 🍦 🍨 🍩 🍪 🎂 🍰 🍫 🍬 🍭 🍮
+달콤한	🍠
+달팽이	🐌 🐚
+달팽이 껍질	🐚
+달팽이집	🐚
+닭	🐔
+닭고기	🍗
+닭다리	🍗
+담배	😮‍💨 🚬 🚭
+담벼락	🧱
+답	🟰
+당고	🍡
+당구	🎱
+당구공	🎱
+당근	🥕 👌 👍
+당나귀	🫏
+당신	🫵
+당혹한	😖
+당혹한 얼굴	😖
+당혹함	😖
+당황	🫢 🫣 🥹 💦 🤦 🤦‍♂ 🤦‍♀ 🧂
+당황스러워	😳
+당황한	🫠 😅 😖
+당황한 얼굴	😖
+당황해서	😅
+닻	⚓ 🔱
+닿다	🫱
+대	🆚
+대각선으로	▧ ▨ ▩
+대거	🗡
+대관람차	🎡
+대기	⏰
+대나무	🐼 🎍
+대단한	👏
+대단해	😛 👏
+대략	≅
+대략 같음	≅
+대마법사	🧙 🧙‍♂ 🧙‍♀
+대만	🧋
+대머리	🦲 👴
+대문자	🔠
+대문자 입력	🔠
+대성통곡	😭
+대양	🪸
+대항	🆚
+대화	💬
+대화창	💬
+댄서	🧑‍🩰 💃 🕺 👯 👯‍♂ 👯‍♀
+댄스	💃 🕺 🪩 🪇
+댄싱	💃 🕺
+댐	🦫 🤦 🤦‍♂ 🤦‍♀
+더	⋘ ⋙
+더블	👯 👯‍♀ ⏫ ⏬ ⏸ ➿
+더블유씨	🚾
+더비	🐎
+더운	🫠 🥵 🪭
+더운 얼굴	🥵
+더움	☀
+더워	🥵
+더워 죽는	🥵
+더위	🥵
+더위 먹은	🥵
+더하기	➕ ∓ ⊕ ⊞ ⨧
+더하기 표시	➕
+덕	🪯
+던지기	🤾 🤾‍♀
+덤덤한	😐
+덤덤한 얼굴	😐
+덤플링	🥟
+덩어리	🧀 🍖
+덫	🪤
+덮인	🏔
+데	🪅
+데굴데굴	🤣
+데님	👖
+데드	🧟 🧟‍♂ 🧟‍♀
+데드리프트	🏋 🏋‍♂
+데모	🪧
+데스크	💁
+데스크 안내원	💁
+데스크벨	🛎
+데스크톱	🖥
+데스크톱 컴퓨터	🖥
+데이	🧖 🧖‍♂ 🧖‍♀
+데이 스파	🧖 🧖‍♂ 🧖‍♀
+데이터	📈 📉 📊
+데이트	😗 😚 😙 💘 👭 👫 👬 💏 💐 💄
+데자부	🔄
+데킬라	🍋‍🟩
+도교	☯
+도구	🔪 🏺 ⚓ 🔥 🔮 🔍 🔎 🔦 ✂ 🔨 🛠 🪚
+도깨비	👹 👺
+도깨비 가면	👹
+도깨비 얼굴	👹
+도끼	🪓
+도넛	🍩
+도도새	🦤
+도로	🛣
+도리도리	🙂‍↔
+도마뱀	🦎
+도박	🎰 🎴
+도보	🚶‍♂ 🚶‍♀
+도복	🥋
+도서	📕
+도서관	📖 📗 📘 📙 📚
+도시	🏙 🌆
+도시 야경	🌆
+도시 전경	🏙
+도시락	🍱
+도시에	🌇
+도시에 해가 짐	🌇
+도어	🚪
+도와드릴게요	🙋
+도움	💁 ⛑ 🩼
+도장	💮
+도착	🚆 🚈 🛬 🛄
+도착하는	🛬
+도착하는 중	🛬
+도쿄	🗼
+도쿄 타워	🗼
+독감	🤧 💉
+독감 주사	💉
+독버섯	🍄
+독서	📖 📗 📙 📚
+독수리	🦅
+독일	🍺
+돈	🤑 👌 🫰 🧧 💎 🪙 🪎 💴 💵 💷 💸 💳
+돈 날림	💸
+돈 모양의 입이 있는 얼굴	🤑
+돈 봉투	🧧
+돈가방	💰
+돈을	🤑
+돈주머니	💰
+돋다	🌱
+돋보기	🔎 🔍
+돌	👊 🛘 🪨 🥌
+돌고래	🐬
+돌돌	🗞
+돌돌 말린 신문	🗞
+돌아다니기	🚶 🚶‍♂ 🚶‍♀
+돌아옴	🔜
+동그라미	⏺ ⭕ Ⓜ 🟠 🟡 🟢 🟣 ⚫ ⚪ © ®
+동그라미 c	©
+동그라미 r	®
+동그랗게	➰
+동그랗게 말린 고리	➰
+동등	🟰
+동메달	🥉
+동물	😺 😸 😹 😻 😼 😽 🙀 😿 😾 🙈 🙉 🐵
+동물 발자국	🐾
+동물원	🐅 🐆 🐃 🐏 🐊
+동상	🥶 🗽 🗿
+동성	👭 👬
+동성 연인	👭 👬
+동성 커플	👭 👬
+동심원	◎
+동영상	📷 📹
+동영상 촬영	📹
+동의	💯 👊
+동일	≡
+동작	🙅
+동전	🪙 👛
+동쪽	➡
+동치	≣
+동화	😇 😈 👿 💀 👹 👺 👻 👽 👸 👼 🧚 🧚‍♂
+돛단배	⛵
+돼	🙅 🙅‍♂ 🙅‍♀
+돼지	🐖 🐷 🐗
+돼지 얼굴	🐷
+돼지고기	🐷 🐖 🥓
+돼지띠	🐷
+돼지코	🐽
+됐어	😒
+되감기	🔄 ⏪
+되감기 버튼	⏪
+되돌리기	◀
+되돌리기 버튼	◀
+된	🙃 🫥 ⌛
+된다는	🙅 🙅‍♂ 🙅‍♀
+두	⪚ 💕 🙌 👐 🤲 🙏 👯‍♂ 🤼‍♂ 🤼‍♀ 🧑‍🤝‍🧑 👭 👬
+두 개	⏩ ⏪
+두 개의 고리	➿
+두 개의 구부러진 고리	➿
+두 개의 루프	➿
+두 남자	👯‍♂
+두 손 모아 기도하는 사람	🙏
+두 손 펼치기	👐
+두 손을 든 사람	🙌
+두 시	🕑
+두 시 반	🕝
+두 줄 등호이거나 보다 큼	⪚
+두개	🤲 ⚔
+두근거리는	💓
+두근거리는 마음	💓
+두근거리는 하트	💓
+두근거림	💖
+두근두근	💓
+두꺼운	➕
+두꺼운 더하기 표시	➕
+두려운	😱
+두려움	😨
+두려워하는	😨
+두려워하는 얼굴	😨
+두루마리	🧻 📜
+두른	🧕 🧣
+두통	😣 💆 💆‍♂ 💆‍♀
+둘다	☯
+둥근	▢ 📍
+둥근 머리 압정	📍
+둥근 머리 핀	📍
+둥둥	🫧
+둥지	🪹 🪺
+뒤로	🔙
+뒤에	≻ ⊁ ⊱
+뒤에 오지 않음	⊁
+뒤에 옴	≻
+뒤의	⛅ 🌤 🌥 🌦
+뒤집힘	🙃
+뒷문	🚪
+드라이버	🪛
+드라큘라	🧛 🧛‍♂ 🧛‍♀
+드래곤	🐲 🐉
+드럼	🥁 🛢 🪘
+드레스	👗 🥻 👛 👜 👝 👠
+드리블	⛹ ⛹‍♂ ⛹‍♀
+드링크	🍹 🥤
+득	🉐
+득점	💯
+든	✊ 🙌 🙋 🙋‍♂ 🙋‍♀ 🧑‍🦯 👨‍🦯 👩‍🦯
+듣기	🙉 👂
+듣지도	🙉
+들고	🙋
+들다	🫴
+들소	🦬
+들어	🪺
+들어보이기	🤚
+들어오지	⛔ 🚫
+들어오지 마시오	⛔ 🚫
+들어있는	Ⓜ
+들이마시기	🫁
+들통	🪣
+듯한	🫃 🫄
+등	🎃 🏮 🛋
+등록상표	®
+등반	🧗 🧗‍♂ 🧗‍♀
+등반가	🧗 🧗‍♂ 🧗‍♀
+등산	🧗 🧗‍♂ 🧗‍♀ 🥾
+등산가	🧗 🧗‍♂ 🧗‍♀
+등산화	🥾
+등호	≡ ≖ 🟰
+등호 기호	🟰
+등호 안의 고리	≖
+등호이거나	⩽ ⪚
+디바	💁 💁‍♀
+디비디	📀 💿
+디스켓	💾
+디스코	🪩
+디스크	🥏 💽 💾 💿
+디야	🪔
+디오니소스	🍇
+디저트	🍡 🍦 🍨 🍩 🎂 🍰 🧁 🍬 🍮
+디플로도쿠스	🦕
+따가워	🪼
+따뜻하게	🧣 🧥
+따뜻하게 두른	🧣
+따뜻하게 입은	🧥
+따라	⊰ ⊱
+따봉	👍
+딱딱	🫰
+딱정벌레	🪲 🐞
+딸	👧
+딸기	🍓
+딸들	👭
+땀	💦 😅 💧 🥵 😰
+땀 흘리는	🥵
+땀 흘리며 불안해하는 얼굴	😰
+땀 흘리며 웃는 얼굴	😅
+땀흘리는	😓
+땅에	⛱
+땅에 꽂힌 파라솔	⛱
+땅콩	🥜
+떠	🕴
+떠는	🥶
+떠먹는	🍨
+떠먹는 아이스크림	🍨
+떠오르는	🌄
+떡	🍡
+떡꼬치	🍡
+떨고	🫨
+떨고 있음	🫨
+떨리는	💓
+떨리는 마음	💓
+떨림	🪇
+떨어뜨리다	🫳
+떨어지는	🍂 🌠 🍃 ⏳ ☔
+떼	🦬
+떼까마귀	🐦‍⬛
+뗏목	🚣 🚣‍♂
+또는	⏯
+똑똑	👋
+똥	💩 🪠
+똥덩어리	💩
+똥무더기	💩
+뚜껑	🤯
+뚜껑 열린 머리	🤯
+뚫어뻥	🪠
+뛰기	🏃 🏃‍♂ 🏃‍♀
+뛰는	🏃 🏃‍♂ 🏃‍♀
+뛰는 남자	🏃‍♂
+뛰는 사람	🏃
+뛰는 여자	🏃‍♀
+뜨개질	🧵 🧶
+뜨거운	🫠 🔥 💣 ☕
+뜨거운 음료	☕
+뜨거움	☕ ♨
+뜨고	😃 🫢
+뜨다	🪏
+뜬	😳
+뜯어내는	📆
+뜯어진	📆
+뜯어진 달력	📆
+뜸	🌄 🌅
+띠용	💫
+라디오	📻 🔘
+라디오 버튼	🔘
+라마	🦙
+라마단	🌙 ☪
+라면	🍜
+라바쉬	🫓
+라벤더	🪻
+라벨	🏷
+라우터	🛜
+라이드	🚲
+라이딩	🚴 🚴‍♂ 🚴‍♀ 🚵 🚵‍♂
+라이센스	🪪
+라일락	🪻
+라임	🍋‍🟩
+라지	⬛ ⬜ 🔶 🔷
+라지 블루 마름모	🔷
+라지 오렌지 마름모	🔶
+라켓	🎾 🏸
+라쿤	🦝
+라크로스	🥍
+라틴	🔡 🔤 ✝
+라틴 십자가	✝
+라틴어	🔤
+라틴어 알파벳	🔤
+라틴어 알파벳 입력	🔤
+락	👨‍🎤 👩‍🎤 🔒 🔓 🤘
+락 음악	🤘
+락스타	👨‍🎤 👩‍🎤
+랍스터	🦞
+랜덤	🔀
+랜덤 재생	🔀
+랜딩	🛬
+랜딩 중	🛬
+램프	🪔 🛋 🧞 🧞‍♂ 🧞‍♀
+램프 문지르기	🧞 🧞‍♂ 🧞‍♀
+랩	🌯
+랩탑	💻
+러닝	🎽 👟
+러닝 셔츠	🎽
+러닝화	👟
+러브	🫶 🏩
+러브 호텔	🏩
+러브레터	💌
+러시아	🪆
+럭	🫡
+럭비	🏉
+럭비공	🏉
+럭셔리	🧖 🧖‍♂ 🧖‍♀ 🚤
+런닝	🏃 🏃‍♂ 🏃‍♀
+런던	💂 💂‍♂ 💂‍♀
+레드	🔺 🔴
+레드 서클	🔴
+레몬	🍋
+레버	🎛
+레벨	🎚
+레벨 슬라이더	🎚
+레스토랑	🍞 🍳 🍝 🍢 🍥 🍦 🍧 🍨 🍬 🍭 🍶 🍴
+레슬러	🤼 🤼‍♂ 🤼‍♀
+레슬링	🤼 🤼‍♂ 🤼‍♀
+레슬링 선수	🤼
+레슬링하는	🤼 🤼‍♂ 🤼‍♀
+레슬링하는 남자	🤼‍♂
+레슬링하는 두 남자	🤼‍♂
+레슬링하는 두 여자	🤼‍♀
+레슬링하는 사람	🤼
+레슬링하는 여자	🤼‍♀
+레오	🦁
+레오파드	🐆
+레이스	🐎
+레이싱	🏇 🐎 🏎 🏍 🏁
+레이싱카	🏎
+레인보우	🌈
+레일	🚃
+레즈비언	🌈 🏳‍🌈 👭
+레크리에이션	🚙
+렉스	🦖
+렌치	🔧 🛠
+로맨스	💌 💘 💙 💋 💏 💑 💐 💒 💍 💎
+로맨틱	😍 😘 💚
+로봇	🤖
+로봇 얼굴	🤖
+로션	🧴
+로션통	🧴
+로열	🫅 🤴
+로열티	🫅
+로제트	🏵
+로케트	🚀
+로켓	🚀 🧑‍🚀 👨‍🚀 👩‍🚀
+로플콥터	🚁
+록	🧑‍🎤
+록스타	🧑‍🎤
+롤	🥐
+롤러	🎢 🛼
+롤러스케이트	🛼
+롤러코스터	🎢
+롤리팝	🍭
+루어	🪤
+루프	➰ ↫ ↬ ➿
+루핀	🪻
+리듬	🪘
+리모델링	👷 👷‍♂ 👷‍♀
+리본	🎀 💝 🎗
+리본 달린 하트	💝
+리볼버	🔫
+리스닝	👂
+리코더	🪈
+리톱스	🗿
+리프트	🫴 🚠
+리프팅	🏋 🏋‍♂
+릴랙스	🤌
+립스틱	💄 👄 🫦
+링	🤼 💍 🏀
+링크	🔗
+링크 표시	🔗
+마	🤐
+마가리타	🍋‍🟩
+마그넷	🧲
+마녀	🧙 🧙‍♀ 🪄 🧹
+마늘	🧄
+마라카스	🪇
+마라토너	🏃
+마라톤	🏃 🏃‍♂ 🏃‍♀
+마라톤 선수	🏃
+마른	🚱
+마름모	◊ 🔶 🔷 🔸 🔹 💠
+마름모꼴	◊ 💠
+마리아	🪬
+마법	🧙 🧙‍♂ 🧙‍♀ 🧝 🧝‍♂ 🧝‍♀
+마법사	🧙 🧙‍♂ 🧙‍♀ 🪄
+마사지	💆 💆‍♂ 💆‍♀
+마사지 받는 남자	💆‍♂
+마사지 받는 사람	💆
+마사지 받는 여자	💆‍♀
+마사지를	💆
+마사지를 받는 사람	💆
+마술	✨ 🔮 🪄 🎩
+마술 지팡이	🪄
+마술사	🧙 🧙‍♂ 🧙‍♀ 🪄 🎩
+마술사 모자	🎩
+마스크	😷 🎭 🤿
+마스크 낀 얼굴	😷
+마시는	🍼
+마시오	⛔ 🚫 🚱
+마시지	🚱
+마시지 마시오	🚱
+마실	🚱
+마실 수 없는	🚱
+마실 수 없는 물	🚱
+마요	🪅
+마우스	🐁 🖱 🖲
+마음	❤‍🔥 ❤ 💖 💗 💓
+마음이	🏠 🏡
+마음이 머무는 곳	🏠 🏡
+마이너스	➖
+마이크	🎤 🧑‍🎤 👨‍🎤 👩‍🎤 🎙
+마이크로폰	🎙
+마작	🀄
+마작 기호	🀄
+마작 빨간 용	🀄
+마장마술	🐴
+마커	📑
+마크	🔖
+마테차	🧉
+마트료시카	🪆
+마티니	🍸
+막고	🙉 🙊
+막대	📊 🩼 📶 🍭
+막대 그래프	📊
+막대 사탕	🍭
+막대가	↤ ↦ ↹
+막대그래프	📊
+만	🈵
+만년필	🖋
+만두	🥟
+만들다	📲
+만세	🙌
+만세 하고 있는 사람	🙌
+만월	🌕
+만점	💯
+만족	😆 😊
+만티야	🧕
+만화	💩 💥 💦 💨 💬 💭 💤 💧 💣
+많거나	≳
+많거나 같음	≳
+많은	😧
+많이	🫃 🫄
+말	🐎 💬 🗨 🏇 🐴 ♟
+말 얼굴	🐴
+말고	😥
+말과	🏇
+말과 기수	🏇
+말굽	🧲
+말굽 자석	🧲
+말도	😳
+말도 안돼	😳
+말띠	🐴
+말라	🙈 🙉 🙊
+말라리아	🦟
+말린	📃 🗞 ➰
+말이	😶
+말이 없는	😶
+말풍선	💬 👁‍🗨 🗨 🗯
+말풍선 속 눈	👁‍🗨
+말하고	🗣
+말하고 있는 옆얼굴	🗣
+말하는	🗣 🦜
+말하는 새	🦜
+말하다	🙊
+말하지	🤐
+말하지 마	🤐
+말하지도	🙊
+말함	🗣
+말해	🫴
+말해 줘	🫴
+맑은	🪟
+맑은 공기	🪟
+맑음	☀
+맘모스	🦣
+맙소사	😝 😮 😯 🙀 🙈 👀 🙆 🙆‍♂ 🤦 🤦‍♂ 🤦‍♀
+맛	😝 🧅 🧂
+맛이	🥴
+맛이 간	🥴
+맛있는	😋
+맛있는 음식을 음미하는 얼굴	😋
+맛있어	😋
+맛있어하는	😋
+맛있어하는 얼굴	😋
+맛있음	🍴
+망고	🥭
+망연자실한	😯
+망원경	🔭
+망치	🔨 ⛏ ⚒ 🛠
+망치와	⚒ 🛠
+망치와 곡괭이	⚒
+망치와 렌치	🛠
+맞음	🉑
+매~	🐑
+매끈	💆
+매니저	🧑‍💼 👨‍💼 👩‍💼
+매니큐어	💅
+매달기	🎋
+매달린	🚟
+매달린 케이블카	🚟
+매드	🍸
+매드 맨	🍸
+매듭	🪢
+매력적인	💁 💁‍♂ 💁‍♀
+매료됨	🫣
+매머드	🦣
+매운	🌶
+매직	✨
+맥박	💗 💓 🫀
+맥주	🍻 🫚 🍺
+맥주잔	🍺 🍻
+맥주컵	🍺
+맨	🍸 🔝
+맨 위 화살표	🔝
+맨머리	🦲
+맨발	👣
+맹공격	👊
+머니	🫰
+머리	🗣 🦳 🤯 💁 🧕 💇 🦰 🦲 🪮 📍
+머리 깎기	💇
+머리 넘기기	💁
+머리 빗	🪮
+머리 손질	💇
+머리 스카프	🧕
+머리 정돈	💇
+머리 폭발	🤯
+머리가	🧠 👴
+머리가 빠지는	👴
+머리가 좋은	🧠
+머리아픈	😣
+머리에	🤕 😈 👿 🧕
+머리에 붕대를 감은 얼굴	🤕
+머리에 뿔이 달린 웃는 얼굴	😈
+머리에 뿔이 달린 화난 얼굴	👿
+머리에 스카프를 두른 여자	🧕
+머리카락	💇 💇‍♂ 💇‍♀
+머리카락 자르는 남자	💇‍♂
+머리카락 자르는 여자	💇‍♀
+머리카락 자름	💇
+머리카락으로	💁
+머리카락으로 장난치는	💁
+머리카락을	💇
+머리카락을 자르는 사람	💇
+머무는	🏠 🏡
+머신	🎰
+먹기	🥄
+먹다	🍴
+먹먹한	😯
+먹은	🥵 🫃 🫄
+멀미	🤮
+멀티태스크	🤹 🤹‍♂
+멀티태스킹	🤹 🤹‍♂
+멈춤	🛑
+멈춤 표시	🛑
+멋부리는	😏
+멋진	💁 💁‍♂ 💁‍♀
+멋짐	😎
+멍	😶‍🌫
+멍멍이	🐕 🐩
+멍청한	😶‍🌫
+멍청한 얼굴	😶‍🌫
+멍함	😶‍🌫
+메가폰	📣 📢
+메노라	🕎
+메달	🎖 🏅 🥇 🥈 🥉
+메디컬	🏥
+메뚜기	🦗
+메뚜기류	🦗
+메롱	👅
+메롱하는	😛 😜 😝
+메롱하는 얼굴	😛
+메리	🧑‍🎄
+메리 크리스마스	🧑‍🎄
+메마른	🪾
+메모	📝
+메모장	📝
+메모지	📝
+메스꺼운	🤢
+메시	⚽
+메시지	💬
+메신저	⚡ ⛎
+메이크업	💅 🪞
+메이플	🍁
+메일	📤 📥
+메일 수신	📥
+메일 전송	📤
+메트로	🚇
+멕시칸	🌮 🌯 🫔
+멕시코	🪅 🌮 🌯
+멕시코 요리	🌮 🌯
+멜론	🍈
+멧돼지	🐗
+면	🍜 🍝
+면도	💈 🪒
+면도기	🪒
+면도칼	🪒
+면바지	👖
+면사포	👰 👰‍♂ 👰‍♀
+면사포를	👰 👰‍♂ 👰‍♀
+면사포를 쓴 남자	👰‍♂
+면사포를 쓴 사람	👰
+면사포를 쓴 신부	👰
+면사포를 쓴 여자	👰‍♀
+면이	◕
+멸종	🦣 🦤
+명복을	🪦
+명상	🧘 🧘‍♂ 🧘‍♀
+명의	🧑‍🤝‍🧑 👭 👬
+명절	🥮
+명중	🎯
+명찰	📛
+명함	📇
+모기	🦟
+모노레일	🚝 🚈
+모니터	🖥
+모두	👫 👬 ≌ ☯
+모두 같음	≌
+모두 아닌	☯
+모드	📳
+모든	∀ ◕
+모래	⌛ ⏳
+모래가	⏳
+모래가 떨어지는 모래시계	⏳
+모래시계	⌛ ⏳
+모르겠어	😕
+모르겠음	🤷‍♂ 🤷‍♀ 🤷
+모르타르	🧱
+모리셔스	🦤
+모바일	📲 📳
+모바일폰	📱 📲 📵 📴
+모범생	🤓
+모범생 얼굴	🤓
+모서리가	↴ ↵ ▢ 📄
+모서리가 둥근 흰색 정사각형	▢
+모서리가 아래쪽으로 향하는 오른쪽 화살표	↴
+모서리가 왼쪽으로 향하는 아래쪽 화살표	↵
+모스크	🕌
+모아	🙏
+모아서	👐
+모아이	🗿
+모아이상	🗿
+모양	↜ ↝ ↭ ⇠ ⇡ ⇢ ⇣ ◊ ❣ 🖖 🤘 🤙
+모양의	🤩 🤑
+모유	🤱
+모유 수유	🤱
+모이스처라이저	🧴
+모자	🤠 🥳 👷 👷‍♂ 👷‍♀ 👲 🧑‍🎄 👒 🎓 ⛑ 🎩 🧢
+모자를	👲
+모터	🛵
+모터보트	🛥
+모터사이클	🏍
+모텔	🏩
+모히토	🍋‍🟩
+목걸이	📿
+목격자	👁‍🗨
+목공	🪚
+목공 톱	🪚
+목관악기	🪈
+목도리	🧣
+목마	🎠
+목발	🩼
+목수	🪚
+목욕	🧖 🧖‍♂ 🧖‍♀ 🛀 🛁 🧼
+목욕탕	♨
+목욕하는	🛀
+목욕하는 사람	🛀
+목재	🪵 🪾 🪚
+목표	🎯
+몬스터	☠ 💩 👹 👺 👽 👾 🤖 🧌
+몰라	😕 🫴 🤷‍♂ 🤷‍♀
+몰래	🫣 🥷
+몰래 보는	🫣
+몰래 하기	🥷
+몸	💀 💪 👂 👃 👀 👁 👅 👄
+몸조심하세요	🤧
+몸통	🪾
+못난	🦢
+못난 아기 오리	🦢
+못마땅한	🤨
+몽상	💭
+뫼비우스	♾
+묘기	🤹 🤹‍♂
+묘비	🪦
+묘석	🪦
+묘지	🪦
+무	🫜 🈚
+무거운	🪨
+무공	🎖
+무공 훈장	🎖
+무관심	🤷 🤷‍♂ 🤷‍♀
+무궁화	🌺
+무기	🔪 🏺 🔫 🗡 ⚔ 🪃 🏹 🛡
+무는	🔁 🔂
+무늬	⬛ ⬜ ◼ ◻ ◾ ◽ ▪ ▫ ♦ ♣ 🔴 🔵
+무당벌레	🐞
+무덤	🪦
+무릎	🦵
+무릎을	🧎 🧎‍♂ 🧎‍♀
+무릎을 꿇은	🧎 🧎‍♂ 🧎‍♀
+무릎을 꿇은 남자	🧎‍♂
+무릎을 꿇은 사람	🧎
+무릎을 꿇은 여자	🧎‍♀
+무리	🪿
+무비	📽
+무서운	🫣 😦 😧 😱 👹 🙈
+무선	🛜
+무술	🥋
+무스	🫎
+무슨	🤷
+무슨 상관이야	🤷
+무슬림	👳 👳‍♂ 👳‍♀ 🕌 🕋 ☪
+무시	🤷
+무식	🤷 🤷‍♂ 🤷‍♀
+무신론자	⚛
+무아	💗
+무엇이든	🙄 🤷‍♂ 🤷‍♀
+무용수	🧑‍🩰
+무음	🔇
+무지	🤷 🤷‍♂ 🤷‍♀
+무지개	🌈 🏳‍🌈
+무지개 깃발	🏳‍🌈
+무척추동물	🪼
+무표정한	😐 😑
+무표정한 얼굴	😑
+무한	♾
+무한대	∞
+무한대 기호	∞
+묵	✊
+묵주	📿
+묵주 목걸이	📿
+문	🚪
+문서	📜 📃 📄 🪪
+문어	🐙
+문자	💬 🔡 🔤 🈚 🈲 🈴
+문장	⚜ ❣ ❓ ❔ ❕ ❗
+문장 부포	❗
+문장 부호	❣ ❓ ❔ ❕
+문지르기	🧞 🧞‍♂ 🧞‍♀
+묻다	🪏
+물	💦 🫗 🥤 🚿 🚰 🚱 ♒ 🐳 🫧
+물 뿜는 고래	🐳
+물 속	🫧
+물개	🦭
+물결	🌊 ↜ ↝ ↭
+물결 모양 오른쪽 화살표	↝
+물결 모양 왼쪽 오른쪽 화살표	↭
+물결 모양 왼쪽 화살표	↜
+물결표	∼
+물결표 연산자	∼
+물결표시	🌫
+물고	🤑 🤒
+물고기	🐟 🐠 🐡 🦈 🎣 ♓ 🦦 🎏
+물고기 깃발	🎏
+물고기 모양 깃발	🎏
+물고기 사냥	🦦
+물고기 장식	🎏
+물고기자리	♓ 🐟
+물기	🦟
+물러나	🫳
+물리학자	🧑‍🔬 👨‍🔬 👩‍🔬
+물방울	💧 ☔
+물병	♒
+물병자리	♒ 🏺
+물소	🐃 🦬
+물안경	🥽
+물에	🫧
+물에 둥둥	🫧
+물음	❓ ❔
+물음표	❓ ❔ ❕
+물총	🔫
+뭉치	🍙 🗞
+뭉크	😱
+뭐	😳 😦 🤌
+뭐든지	😑 💁
+뭐라구	😲
+미국	🏈 💵 💲
+미국 달러	💲
+미국 돈	💵 💲
+미국 화폐	💵 💲
+미국이	🌎
+미국이 보이는 지구	🌎
+미끄러지다	🛝
+미끄럼틀	🛝
+미끼	🪤
+미니	💽
+미니 디스크	💽
+미니버스	🚐
+미대륙	🌎
+미대륙이	🌎
+미대륙이 보이는 지구	🌎
+미디어	📝
+미디엄	🔉 ⭐ ◼ ◻
+미디엄-스몰	◾ ◽
+미러볼	🪩
+미로	🌽
+미리암	🪬
+미만	≤
+미묘한	🙄
+미분연산자	∇
+미사	📿
+미생물	🦠 🧫
+미성년자	🔞
+미소	😀 😃 😄 😁 😅 🙂 🙃 😊 😇 ☺ 🥲 😋
+미소 짓는 눈으로 살짝 웃는 얼굴	😊
+미소 짓는 눈으로 웃는 얼굴	😁
+미소 짓는 눈으로 키스하는 얼굴	😙
+미소 짓는 눈으로 활짝 웃는 고양이 얼굴	😸
+미소 짓는 눈으로 활짝 웃는 얼굴	😄
+미소짓는	🤩 😻
+미술	👨‍🎨 👩‍🎨 🎨
+미술도구	🧑‍🎨 👨‍🎨 👩‍🎨
+미스터리	🫆
+미스테리한	👤
+미식	🏈
+미식축구	🏈
+미식축구공	🏈
+미용	💇 💇‍♂ 💇‍♀
+미용실	💇 💇‍♂ 💇‍♀
+미주	🌎
+미트볼	🧆 🍝
+미팅	🤝
+민들레	🌼
+민망함	😖
+민머리	🦲
+민소매	🎽
+민소매 상의	🎽
+민속	🧜 🧜‍♂ 🧜‍♀
+믿기지	🫢
+믿기지 않음	🫢
+믿을	🤨 😮
+믿을 수 없는	🤨 😮
+밀감	🍊
+밀전병에	🥙
+밀전병에 싼 요리	🥙
+밀치기	🫷 🫸
+밀치는	🫷 🫸
+밀크	🥛
+밑면이	↨
+밑면이 있는 위쪽 아래쪽 화살표	↨
+밑줄이	⩣
+바	🍫 🍶 🍾 🍷 🍹 🍺 🍻 🏮
+바가지	💀
+바게트	🥖
+바구니	🧺
+바나나	🍌 🐵
+바느질	🧵 🪡
+바늘	🪡 🧵 💉
+바니걸	👯 👯‍♀
+바다	🏄 🏄‍♂ 🐳 🐋 🐬 🫍 🦭 🐙 🪸 🪼 🚢 🌊
+바다 생물	🧜 🧜‍♂ 🧜‍♀
+바다사자	🦭
+바다생물	🦈 🦐
+바닥을	🤣
+바닥을 구르며 웃는 얼굴	🤣
+바닷가재	🦞
+바람	😏 👫 🍃 🌬
+바람 부는	🌬
+바람에	🍃
+바람에 떨어지는 잎	🍃
+바람에 흔들리는 나뭇잎	🍃
+바람피는	🫦
+바로	⏮
+바로 전 트랙	⏮
+바벨	🏋 🏋‍♂
+바보	👌 🪿
+바보 같은	🪿
+바부슈카	🪆
+바위	🪨 ✊
+바이	👋
+바이러스	🦟 🦠
+바이섹슈얼	🏳‍🌈
+바이스	🗜
+바이슨	🦬
+바이오하자드	☣
+바이오해저드	☣
+바이올린	🎻
+바이커	🚴‍♀
+바이크	🚴 🚴‍♂ 🚵 🚵‍♂ 🚲 🚳
+바이크 갱	🚲
+바이킹	🚴‍♀
+바지	👖
+바퀴	🛹 🛞 ☸
+바퀴벌레	🪳
+바트	🚈 🚉 🚊
+박	🎊
+박 터트리기	🎊
+박물관	🖼 🎨
+박수	👏
+박수 치기	👏
+박수치는	👏
+박수치는 손	👏
+박스	🎁 🪗 📦
+박자	🪘
+박쥐	🦇
+박테리아	🦠 🧫
+반	🕧 🕜 🕝 🕞 🕟 🕠 🕡 🕢 🕣 🕤 🕥 🕦
+반가워하는	🤗
+반가워하는 얼굴	🤗
+반다나	🧕
+반달	🌓 🌗 🌜
+반대	◀
+반대로	◀
+반대로 버튼	◀
+반대방향	🔄
+반동	🪃
+반바지	🩳
+반복	🔁 🔂
+반복 버튼	🔁
+반사	🪞
+반사경	🪞
+반사체	🪞
+반시계	🔄
+반시계 방향	🔄
+반시계 방향 화살표	🔄
+반시계 방향 화살표 버튼	🔄
+반원	↶ ↷ ◖ ◗ ◠ ◡
+반전	◘
+반전 글머리 기호	◘
+반지	💍
+반짝	❇
+반짝거리는	🌟
+반짝거림	✨
+반짝반짝	💫 🌟 ✨ 🪩
+반짝이는	🤩 👧 🌟
+반짝이는 눈으로 미소짓는	🤩
+반짝이는 별	🌟
+반짝이다	🌟
+반짝임	❇ 🌟
+반창고	🩹
+반한	🥰 🤩
+반한 얼굴	🤩
+받기	📥
+받는	💆 💆‍♂ 💆‍♀
+받은	📨 📥
+받은 편지	📨
+받은 편지함	📥
+받은편지함	📥
+발	🦶 👣 🐾 👞
+발 한쪽	🦶
+발견	🔭 📡
+발구르기	🦶
+발그레	😊 😚
+발랄함	😀
+발레	🧑‍🩰 🩰 🥿
+발레 무용수	🧑‍🩰
+발레 슈즈	🩰 🥿
+발레타인	🌹
+발렌타인	💌 💘 💝
+발렌타인 초콜렛 상자	💝
+발리우드	🎥
+발명	💭
+발명가	🧑‍💻 👨‍💻 👩‍💻
+발목	🦶
+발바닥	👣
+발사	🚀
+발송	📩
+발자국	👣 🐾
+발차기	👞 👟
+발판	🪜
+발판 사다리	🪜
+밝기	🔅 🔆
+밝기 낮음	🔅
+밝기 높음	🔆
+밝기 버튼	🔆
+밝기 조절	🔅
+밝기 조절 버튼	🔅
+밝은	😎 🌞 🔆 🩵
+밝은 파란색	🩵
+밝은 파란색 하트	🩵
+밝음	🌝 🔆
+밝음 표시	🔆
+밤	🌰 💤 🌃 🌉 🌟 🌠 💖
+밤의	🌉
+밤의 다리	🌉
+밤하늘	🌃
+밤하늘 별	🌃
+밤하늘을	🌉
+밤하늘을 배경으로 하는 다리	🌉
+밥	🍚 🍱 🍘 🍙
+밥공기	🍚
+밧줄	🪢
+방긋	🌞
+방사능	☢
+방사선	☢
+방송	📡
+방식	📇
+방울	🫟
+방전	🪫
+방패	🛡
+방향	▧ ▨ △ ▴ ▵ ▷ ▸ ▹ ► ▻ ▽ ▾
+방향)	↷ ↻
+배	🍐 🫃 🫄 🚣‍♀ ⚓ ⛵ 🛶 🛳 🚢 🔱
+배가	🫃 🫄
+배가 터질 듯한	🫃 🫄
+배경으로	🌉
+배고픈	😋 😩
+배고픔	🍗 🍔 🍕 🍴
+배관공	🧑‍🔧 👨‍🔧 👩‍🔧 🪠
+배구	🏐
+배구공	🏐
+배낭	🎒
+배너	🎋
+배달	🚚 🥡
+배드민턴	🏸
+배드민턴채	🏸
+배럴	🍯
+배부른	😋
+배송	🚚 📦
+배우	👨‍🎤 👩‍🎤 🎭
+배지	📛
+배터리	🔋 🪫
+배터리 부족	🪫
+배터리 없음	🪫
+배터리 충전	🔋
+배트	🏏
+배트맨	🦸
+백	👜 👝
+백곰	🐻‍❄
+백만	💸
+백만장자	💲
+백발	🦳
+백신	💉
+백점	💯
+백조	🦢
+백합	⚜
+백합 문장	⚜
+백화점	🏬
+밴	🚐
+밴드	🪈 🩹
+밴조	🪕
+뱀	🐍 ⛎
+뱀주인자리	⛎ 🐍
+뱀파이어	🧛 🧛‍♂ 🧛‍♀ 🦇 ⚰
+뱅크	🏦
+버거	🥬 🍔
+버니	🐰 🐇
+버디	🏌 🏌‍♂ 🏸
+버리토	🌯
+버블	🗯 💭 🧋 🫧
+버블티	🧋
+버섯	🍄 🍄‍🟫
+버스	🚌 🚋 🚍 🚎 🚐 🚏
+버스 정류장	🚏
+버킷	🪣
+버킹엄	💂 💂‍♂ 💂‍♀
+버킹엄 궁전	💂 💂‍♂ 💂‍♀
+버터	🧈
+버터컵	🌼
+버튼	🅰 🆎 🅱 🆒 🆓 🆔 🆖 🆗 🅿 🆘 🆙 🆚
+버팔로	🐃
+번개	⛈ 🌩 ⚡
+번개가	⛈
+번개가 치는 비구름	⛈
+번개구름	🌩
+번쩍	🎇
+벌	🐝
+벌꿀오소리	🦡
+벌레	🐛 🐜 🪲 🐞 🦗 🪳 🕷 🦟 🪱
+벌리고	😃 😄 😆 😦
+벌린	😆 😅 😦 😺 👐
+벌칸식	🖖
+벌칸식 인사	🖖
+벌컨	🖖
+벌컨 인사	🖖
+범고래	🫍
+범블비	🐝
+범생이	🤓
+범선	⛵
+범죄	🫆
+범죄자	🦹 🦹‍♂ 🦹‍♀
+법	👮‍♂ 👮‍♀
+법률	👮 👮‍♂ 👮‍♀
+법조인	🧑‍⚖ 👨‍⚖ 👩‍⚖
+벗겨진	🦲
+벗겨진 머리	🦲
+벚꽃	🌸
+벚꽃놀이	🌸
+베리	🍓 🫐
+베스트프렌드	👯 👯‍♀ 👭 👥
+베어	🧸
+베이글	🥯
+베이커리	🥯 🧁
+베이컨	🥓 🐷 🐖
+베일	👰‍♂ 👰‍♀
+베일을	👰‍♂ 👰‍♀
+베일을 쓴 남자	👰‍♂
+베일을 쓴 여자	👰‍♀
+베트남	🪷
+베프	👯 👯‍♀
+벡터의	⨯
+벡터의 외적	⨯
+벤또	🍱
+벤치프레스	💪
+벨	🛎 🔔 🔕
+벨몬트	🐎
+벨몬트 스테이크	🐎
+벼	🌾
+벼락	⚡
+벼슬	🈺
+벼슬 관	🈺
+벼이삭	🌾 🎑
+벽	🧱
+벽걸이	🗓
+벽걸이 달력	🗓
+벽난로	🕰
+벽난로 선반 시계	🕰
+벽돌	🧱
+변기	🚽 🪠
+변장	🥸
+변장한	🥸
+변장한 얼굴	🥸
+변화	🐦‍🔥
+별	⭐ 💫 🌃 🌟 🌠 ✨ ✡ ☪ 🔯 ♈ ♉ ♊
+별 눈	🤩
+별 모양의 눈	🤩
+별 연산자	⋆
+별과	🌉
+별과 다리	🌉
+별똥별	🌠 💫
+별로	🫤
+별자리	👬 🐂 🐏 🐐 🐍 🐟 🦀 🦂 🏺 🏹 ⚖ ♈
+별점	♈ ♉ ♊ ♋ ♌ ♍ ♎ ♏ ♓
+별표	✳ ∗ ⊛
+별표 연산자	∗
+병	🤒 🍼 🍶 🍾 🫙
+병과	🍶
+병과 술잔	🍶
+병균	😷 🦟
+병아리	🐤 🐣 🐥
+병아리콩	🧆
+병원	🏥 💉
+보	✋
+보관	🫙 🗄
+보관소	🛅
+보관함	🛅
+보기	👀
+보내기	📤
+보내는	😘
+보낸	📩 📤
+보낸 이메일	📩
+보낸 편지	📩
+보낸 편지함	📤
+보낸편지함	📤
+보냄	📩
+보는	🫣 🫵
+보는 사람을 가리키는 검지	🫵
+보닛	🪻
+보다	🙈 ⩽ ⪍ ⪚
+보도	🚸
+보드	🛹
+보디빌더	💪 🏋 🏋‍♂
+보라색	🪻 🟣 🟪 💟 💜
+보라색 사각형	🟪
+보라색 원	🟣
+보라색 하트	💜 💟
+보려는	🙈
+보름달	🌕 🌝
+보모	👩‍🍼 🧑‍🍼
+보물	🪙 🪎 🗝
+보물 상자	🪎
+보물 열쇠	🗝
+보물섬	🏴‍☠
+보바	🧋
+보석	💎 🪎
+보수	👷 👷‍♂ 👷‍♀
+보스	😏
+보안	🔐 🪪
+보이는	🌍 🌎 🌏
+보이지	🫥
+보이지 않음	🫥
+보자기	✋
+보조	🐕‍🦺 🩼
+보조견	🐕‍🦺
+보지도	🙈
+보청기를	🦻
+보청기를 낀 귀	🦻
+보트	🚣 🚣‍♂ 🚣‍♀ 🛶 🚤 ⛴ 🛥
+보행자	🚶 🚶‍♂ 🚶‍♀ 🚷
+보행자 금지	🚷
+보행자 통행 금지	🚷
+보행자용	🚶
+보호	🛡 🪬 🥽 🚸
+복귀	◀
+복숭아	🍑
+복실복실한	🐩 🐑
+복싱	🥊
+복어	🐡
+복잡한	😥
+볼	🪩
+볼링	🎳
+볼링공	🎳
+볼링핀	🎳
+볼수	🙈
+볼수 없음	🙈
+볼케이노	🌋
+볼트	🔩
+볼트와	🔩
+볼트와 너트	🔩
+볼펜	🖊
+봄	🐝 🌸 🪻
+봉투	✉ 📨 📩 🧧
+봉합	🪡
+봐	👋
+부	🪎
+부끄러운	🫠 🫣 🪭
+부끄러워	🙈
+부낭	🛟
+부는	🌬
+부대	🪖
+부드러운	🔈
+부등	≠ ≤ ≥
+부러운	😐 😑 😒
+부르기	🚖
+부르는	🫴
+부르는 손	🫴
+부리	🐦‍⬛
+부리또	🌯 🥙
+부메랑	🪃
+부모	🧑‍🍼
+부분	⊂ ⊆
+부분 집합	⊂
+부분 집합 기호	⊂
+부분 집합이거나 같음	⊆
+부분군이거나	⋭
+부상	🤕
+부서진	⛓‍💥
+부신	💍
+부엉이	🦉
+부엌	🔪
+부엌 칼	🔪
+부은	🫪
+부자	🧐 🪙 💰 💶
+부적	🧿 🪬
+부정	🙂‍↔
+부족	🪫
+부종	🫩
+부채	🪭
+부츠	👢 🥾 🎿
+부케	💐
+부탁	🙇 🙇‍♂ 🙇‍♀
+부패	🪰
+부포	❗
+부푼	🫪 🫃 🫄
+부호	❕ ❗ ❣ ❓ ❔
+부활	🐦‍🔥
+북	🥁 🪘
+북극	🐻‍❄
+북극곰	🐻‍❄
+북동쪽	↗ ⇗
+북동쪽 이중 화살표	⇗
+북마크	🔖 📑
+북마크 탭	📑
+북서쪽	↖ ↸ ⇖
+북서쪽 이중 화살표	⇖
+북쪽	⬆
+북채	🥁
+분노	😤 😠 🙍 🙎 🤦 🤦‍♂ 🤦‍♀
+분류	🗂
+분리	🈹
+분리대	🚧
+분수	⛲
+분수대	⛲
+분재	🪴
+분홍색	🩷 🏳‍⚧
+분홍색 하트	🩷
+불	🔥 💲 ❤‍🔥
+불 난 하트	❤‍🔥
+불교	🪷 ☸
+불교신자	☸
+불길한	🐈‍⬛
+불꽃	🎇 🔥 🧨 🎆
+불꽃 축제	🎆 🎇
+불꽃놀이	🎆 🧨
+불만	🙎‍♂ 🙎‍♀
+불사	🐦‍🔥
+불사조	🐦‍🔥
+불새	🐦‍🔥
+불신	🤨 🤦
+불안	🫪 🫦
+불안해하는	😰
+불쾌한	😦
+불타는	❤‍🔥
+불타는 사랑	❤‍🔥
+불행	😑 😒 😧 😢 😭 😞 😩 😤 😠 🐈‍⬛
+불행한	😡
+불황	📉
+붉은살	🥩
+붉은살 고기	🥩
+붉힌	😳
+붉힌열이	😳
+붉힌열이 오른	😳
+붉힘	😳
+붓	🖌
+붓다	🫗
+붕대	🤕
+붕대를	🤕
+뷰티	💇 💇‍♂ 💇‍♀ 🪷
+브라스	🪊
+브라운	👞 🥾
+브라운 신발	🥾
+브라키오사우루스	🦕
+브러쉬	🖌
+브러시	🪥
+브로콜리	🥦
+브론즈	🥉
+브론토사우루스	🦕
+브이	✌
+브이 표시	✌
+브이에스	🆚
+브이하는	✌
+브이하는 손	✌
+블라우스	👚
+블랙	🖤 ⚫ ⬛ ◼ ◾ ▪
+블랙 라지 사각형	⬛
+블랙 미디엄 사각형	◼
+블랙 미디엄-스몰 사각형	◾
+블랙 서클	⚫
+블랙 스몰 사각형	▪
+블레이드	🛼
+블루	👖 🔵 🪻 🔷 🔹
+블루 보닛	🪻
+블루 서클	🔵
+블루레이	💿 📀
+블루베리	🫐
+블링블링	✨
+비	⛈ 🌦 🌧 🌂 ☂ ☔ ⛱
+비건	🍄‍🟫
+비구름	🌧 ⛈ 🌦
+비구름 뒤의 태양	🌦
+비꼬는	💁 💁‍♂ 💁‍♀
+비꼼	💁
+비난	😨 😞 😠
+비누	🧼 🫧
+비누 거품	🧼
+비누 그릇	🧼
+비누통	🧼
+비둘기	🕊
+비디오	📻 📽 📺 📷 📸 📹 📼 🎮 🕹
+비디오 게임	🎮 🕹
+비디오카세트	📼
+비디오테이프	📼
+비뚤거리는	🥴
+비뚤거리는 입	🥴
+비례	∷
+비례함	∝
+비명	😱
+비밀	🤭 🤐 😶 🙈 🙉 🙊 🥷
+비밀 지켜	🤐
+비버	🦫
+비상	🚨
+비석	🪦
+비스크	🦞
+비싼	🫰
+비어	🫗 🫙
+비어 있는	🫗 🫙
+비어있음	🈳
+비용	😲 😫
+비웃는	🫠
+비율	∶
+비즈니스	👨‍💼 👩‍💼 🕴
+비즈니스맨	👨‍💼 👩‍💼
+비질	🧹
+비치	🩴
+비치 샌들	🩴
+비치는	😇
+비큐나	🦙
+비키니	👙
+비타민	💊 🍊
+비타민 c	🍊
+비트	🫜
+비틀	🪲
+비행	🧑‍✈ 👨‍✈ 👩‍✈ 🪶 🪽 ✈
+비행기	✈ 🛩 🛫 🛬 🛄
+비행기 이륙	🛫
+비행기 착륙	🛬
+비행접시	🛸
+비형	🅱
+빅토리	✌
+빅풋	🫈
+빈	🫘 🫙 ⇦ ⇧ ⇨ ⇩ ⇪ ○ ◦ ◯ ◳ ◷
+빈 글머리 기호	◦
+빈 둥지	🪹
+빈 아래쪽 화살표	⇩
+빈 오른쪽 화살표	⇨
+빈 왼쪽 화살표	⇦
+빈 원	○ ◯
+빈 위쪽 화살표	⇧
+빈방없음	🈵
+빈정대는	🤌
+빈정댐	💁
+빌	🈳
+빌 공	🈳
+빌기	🎋
+빌께	🙏
+빌딩	🏢 🏠 🏤 🏥 🏦 🏨 🏩 🏪 🏫 🏬 🏭 🏯
+빌런	🦹 🦹‍♂ 🦹‍♀
+빌어	🫡
+빕니다	🪦
+빗	🪮 💇
+빗방울이	☔
+빗방울이 떨어지는 우산	☔
+빗방울이 있는 우산	☔
+빗자루	🧹
+빙글빙글	💞
+빙산	🧊
+빛	🚦 🧨 🕯 💡 🔦 🏮 🔆
+빛나는	🌟 💍 💖
+빛나는 하트	💖
+빠른	💨 👟
+빠몽야	🫔
+빠에야	🥘
+빠지는	👴
+빠진	🥰 😻 👬
+빤히	🫣
+빤히 쳐다보기	🫣
+빨간	🫀 🍎 🦰 🌶 🧱 🧧 🀄 🔴
+빨간 고추	🌶
+빨간 머리	🦰
+빨간 벽돌	🧱
+빨간 봉투	🧧
+빨간 사과	🍎
+빨간 원	🔴
+빨간색	🀄 🔴 🟥 🔺 🔻 ❤ ❓ ❗ ⭕
+빨간색 느낌표	❗
+빨간색 물음표	❓
+빨간색 사각형	🟥
+빨간색 아래쪽 삼각형	🔻
+빨간색 위쪽 삼각형	🔺
+빨간색 정답 동그라미	⭕
+빨간색 하트	❤
+빨강	🔴 🔺 🔻
+빨개진	🥵
+빨대와	🥤
+빨대와 컵	🥤
+빨래바구니	🧺
+빨리	🏃 🏃‍♂ 🏃‍♀ ⏩ ⏪ ⏫ ⏬
+빨리 감기	⏩
+빨리 감기 버튼	⏩
+빨리 내리기 버튼	⏬
+빨리 되감기 버튼	⏪
+빨리 올리기 버튼	⏫
+빨아들이기	🪠
+빵	🍞 🥐 🥖 🫓 🥯 🥪 🤣
+빵 터짐	🤣
+빼기	➖ − ∓ ⊖ ⊟
+빼기 더하기	∓
+빼기 표시	− ➖
+빼다	−
+뻗다	🫱 🫲
+뼈	☠ 🦴 🍖 🍗 🩻
+뼈다귀	🦴 ☠
+뽀뽀	😍 😘 😗 😚 😙 😽 💖 💗 💕 💋 🫦
+뽀뽀하는	😙 😽
+뽐내는	🦚
+뽕뽕	🧽
+뾰로통	🙎‍♂ 🙎‍♀
+뾰로통한	🙎 😡 😾 🙎‍♂ 🙎‍♀
+뾰로통한 고양이 얼굴	😾
+뾰로통한 남자	🙎‍♂
+뾰로통한 사람	🙎
+뾰로통한 얼굴	😡
+뾰로통한 여자	🙎‍♀
+뾰로통함	😡
+뾰족뾰족	🦔
+뾰족하게	🚅
+뿅뿅	💖 😍
+뿌루퉁	🙎‍♂ 🙎‍♀
+뿌리	🫚 🫜
+뿌리채소	🫜
+뿔	😈 🤘 🫎
+뿔 모양 손짓	🤘
+뿔이	😈 👿
+뿜는	🐳
+삐삐	📟
+삐용삐용	🚨
+삐질삐질	💦
+사	🈂
+사각	🔳 🔲
+사각형	⏹ 🟥 🟧 🟨 🟩 🟦 🟪 🟫 ⬛ ⬜ ◼ ◻
+사각형 안의 더하기	⊞
+사각형 안의 빼기	⊟
+사각형을	▣
+사고	🫗
+사과	🙇 🙇‍♂ 🙇‍♀ 🍎 🍏
+사과하는	🙇 🙇‍♂ 🙇‍♀
+사냥	🦦
+사다리	🪜
+사라짐	🫥
+사람	🧑 🥸 👱 🧔 🙍 🥷 👷 👰 👩‍🍼 🧑‍🍼 🧑‍🎄 🦹
+사람 그림자	👤
+사람들	👥 👪 👯
+사람들 그림자	👥
+사람을	🫵
+사랑	😍 😘 😗 😙 😻 💘 💝 💖 💗 💓 💞 💕
+사랑 고백	💌
+사랑 제스처	🤟
+사랑스러운	🐶
+사랑스러움	😘 💘 💞
+사랑에	🥰 😻 👬
+사랑에 빠진	🥰 👬
+사랑에 빠진 고양이	😻
+사랑에 빠진 얼굴	🥰
+사랑을	🤟
+사랑을 표시하는 손	🤟
+사랑의	💖
+사랑의 기쁨	💖
+사랑하는	🥰 💕 👫 😘
+사랑하는 사람	😘
+사랑해	🥰 😍 😗 😚 💘 💝 💖 💗 💓 💕 🩷 💛
+사리	🥻
+사막	🏜 🐪 🌵 🏝
+사막 섬	🏝
+사무실	👩‍💼 🏢 💻 💼
+사무직	🧑‍💼 👨‍💼
+사발	🥣
+사변형	▰
+사분면	◜ ◝ ◞ ◟
+사분면을	◕
+사분면이	◔ ◳ ◷
+사생활	🔏
+사선	⋰ ⋱
+사선이	↚ ↛ ⇍ ⇏ ⇎ ↮
+사선이 있는 오른쪽 이중 화살표	⇏
+사선이 있는 오른쪽 화살표	↛
+사선이 있는 왼쪽 오른쪽 화살표	↮
+사선이 있는 왼쪽 이중 화살표	⇍
+사선이 있는 왼쪽 화살표	↚
+사선이 있는 왼쪽/오른쪽 이중 화살표	⇎
+사수	♐
+사수자리	♐ 🏹
+사스콰치	🫈
+사슬	⛓‍💥 ⛓
+사슴	🦌
+사악한	🖤
+사업	👩‍💼
+사용금지	📵
+사우나	🧖 🧖‍♂ 🧖‍♀ ♨
+사우나 하는 남자	🧖‍♂
+사우나 하는 사람	🧖
+사우나 하는 여자	🧖‍♀
+사원	🕌 🛕 🕍 🛐
+사이	≬
+사이렌	🚨
+사이클	🚴 🚴‍♂
+사이클론	🌀
+사이클리스트	🚴 🚴‍♂ 🚴‍♀ 🚵 🚵‍♂ 🚵‍♀
+사이클링	🚵‍♀ 🚲
+사인	🪧
+사자	🦁 ♌
+사자 얼굴	🦁
+사자자리	♌ 🦁
+사적인	🔒
+사진	🤳 📷 🖼
+사진 촬영	📷
+사커	⚽
+사케	🍶
+사탕	🍬 🍭 🪅
+사태	🛘
+사파리	🦁
+사회자	🎙
+사회자 마이크	🎙
+삭	🌑 🌚
+산	⛰ 🧗 🧗‍♂ 🧗‍♀ 🚵 🚵‍♂ 🚵‍♀ 🏔 🛘 🌋 🗻 🌄
+산 정상	⛰
+산사태	🛘
+산악	🚵 🚵‍♂ 🚵‍♀ 🚞 🚠 🚡
+산악 자전거	🚵‍♂ 🚵‍♀
+산악 자전거 주행	🚵
+산악 자전거 타는 남자	🚵‍♂
+산악 자전거 타는 사람	🚵
+산악 자전거 타는 여자	🚵‍♀
+산악 철도	🚞
+산악 케이블카	🚠 🚡
+산업	👨‍🏭 👩‍🏭
+산에	🌄
+산에 해가 뜸	🌄
+산에서	🌄
+산에서 떠오르는 해	🌄
+산책	🚶 🚶‍♂ 🚶‍♀
+산타	🧑‍🎄 🎅 🤶
+산타 할아버지	🎅
+산타클로스	🎅 🤶 🧑‍🎄
+산타할머니	🤶
+산터널	🚞
+산호	🪸
+산호초	🪸
+살롱	💆 💆‍♂ 💆‍♀
+살사	💃 🕺 🍋‍🟩
+살짝	🙂 😊 🙁
+살짝 미소 짓는 얼굴	🙂
+살짝 찡그린 얼굴	🙁
+삶	☯
+삶은	🍠
+삶은 고구마	🍠
+삼가	🪦
+삼가 고인의 명복을 빕니다	🪦
+삼각	🍙 🩲
+삼각 김밥	🍙
+삼각 수영복	🩲
+삼각자	📐
+삼각형	▲ ▼ 📐 ▶ ⏭ ⏯ ◀ ⏮ 🔼 🔽 🔺 🔻
+삼등	🥉
+삼십	🕜
+삼중	⇚ ⇛
+삼지창	🔱 🧜 🧜‍♂ 🧜‍♀
+삽	🪏
+상	🎖 🏆 🪎
+상관없어	🤷
+상관이야	🤷
+상기된	😳
+상기된 얼굴	😳
+상단	🔝
+상대방	🫵
+상등	≡
+상록수	🌲
+상반신	👤 👥
+상승	🪽 🐦‍🔥 🪜 📈
+상승 그래프	📈
+상승하는	💹 📈
+상승하는 그래프	📈
+상실	😔 😞
+상아	🦣
+상어	🦈
+상위	⊃ ⊇
+상위 집합	⊃
+상위 집합이거나 같음	⊇
+상의	🎽
+상자	🍱 🧃 🗳 🗃 💝 🥡 🪎 📦 ❎
+상자 안 엑스 표시	❎
+상점	🏬
+상징	🔱 ☮
+상처	🤕
+상처난	🤕
+상체	👤 👥
+상체 그림자	👥
+상추	🥬
+상큼	🍋‍🟩
+상태	🈳
+상품	🪎
+상하향	↕
+상하향 화살표	↕
+상향	📈 ⬆
+상향 화살표	⬆
+상현	🌒 🌓 🌜
+상현 반달	🌓
+상현달	🌔 🌒
+새	🐦 🦃 🐓 🐧 🕊 🦅 🦆 🦉 🦤 🪶 🪽 🐦‍⬛
+새끼	🐣 🪢 🐱 🐈 🐑 🦘 🦢
+새끼 고양이	🐱 🐈
+새끼 백조	🦢
+새끼 양	🐑
+새끼 캥거루	🦘
+새둥우리	🪹 🪺
+새둥지	🪺
+새로고침	🔃
+새로고침 표시	🔃
+새로운	🆕
+새로운 소식	🆕
+새로운 신호	🆕
+새롭다	🆕
+새빨간	😡
+새싹	🌱
+새우	🦐 🍤
+새우튀김	🍤
+새파랗게	🥶 😰
+새파랗게 질린	🥶 😰
+색소폰	🎷
+색인	👈 👉 👆 👇 ☝ 🗂 📇
+색종이	🎊
+색종이 꽃가루처	🎊
+샌님	🤓
+샌달	🩴
+샌드위치	🥪
+샌들	👡 🩴
+샐러드	🥬 🫜 🥗
+샐러리맨	👩‍💼 👔
+샐쭉	🙎
+생각	💭 🤔 💡
+생각 중	🤔
+생각 풍선	💭
+생각에	🤔 😶‍🌫
+생각에 잠긴 얼굴	🤔
+생각하는	🤔
+생각하는 얼굴	🤔
+생강	🫚
+생강 뿌리	🫚
+생긴	🚅
+생리	🩸
+생명체	👹 👾 🛸
+생물	🐙 🧬 🧜 🧜‍♂ 🧜‍♀
+생물학	🧫 🧬
+생물학자	🧑‍🔬 👨‍🔬 👩‍🔬 🧫 🧬
+생물학적	☣
+생물학적 위험	☣
+생선	🐟 🍥
+생일	🥳 💐 🎂 🎈 🎉
+생일 케이크	🎂
+생일축하	🎂
+생일케이크	🎂
+생쥐	🐁 🐀
+샤머록	☘
+샤베트	🍧
+샤베트 아이스크림	🍧
+샤워	🚿 🛁
+샴페인	🥂
+샴푸	🧴
+샵	♯
+샷	🥃
+서	🧍 🧍‍♂ 🧍‍♀
+서 있는	🧍 🧍‍♂ 🧍‍♀
+서 있는 남자	🧍‍♂
+서 있는 사람	🧍
+서 있는 여자	🧍‍♀
+서두르는	🏃 🏃‍♂ 🏃‍♀
+서두른	😰
+서랍장	🗄
+서로	▦ ▩
+서로 교차하는 가로선과 세로선으로 채워진 정사각형	▦
+서로 교차하는 대각선으로 채워진 정사각형	▩
+서류	💼
+서류 가방	💼
+서머에일	🍺
+서비스	🐕‍🦺 🛅
+서쪽	⬅
+서커스	🎪
+서클	🔴 🔵 ⚫ ⚪
+서퍼	🏄 🏄‍♂ 🏄‍♀ 🌊
+서프라이즈	🫢
+서핑	🏄 🏄‍♂ 🏄‍♀ 🌊
+서핑보드	🏄‍♂ 🏄‍♀
+서핑하는	🏄 🏄‍♂ 🏄‍♀ 🌊
+서핑하는 남자	🏄‍♂
+서핑하는 사람	🏄 🏄‍♀ 🌊
+서핑하는 여자	🏄‍♀
+석상	🗿
+선글라스	🕶 😎
+선글라스 끼고 웃는 얼굴	😎
+선글라스 낀 얼굴	😎
+선로	🛤
+선물	🎁 🧧 💝
+선물 상자	💝
+선박	🚢 🚤 🛳
+선반	🕰
+선생님	🧑‍🏫 👨‍🏫 👩‍🏫
+선셋	🌆
+선수	🤺 🚴‍♀ 🤾 🏃 🏌 🏌‍♂ 🏊 🏊‍♂ ⛹ ⛹‍♂ ⛹‍♀ 🏋
+선술집	🏮
+선인장	🌵 🏜
+선크림	🧴
+선택해	🙋
+설렘	💖
+설산	🏔
+설인	🫈
+설탕	🧁
+섬	🏝
+섬머솔트	🤸 🤸‍♂ 🤸‍♀
+섭취	🚱
+섭취 금지	🚱
+성	🏯 🏰
+성가심	🙍
+성당	💒
+성당 결혼식	💒
+성별	🧑 🧓
+성별 없음	🧑 🧓
+성소수자	👭 👬 🏳‍🌈
+성인	🧑 👨 👩 🧓 👴 👵 🧑‍🧑‍🧒 🧑‍🧑‍🧒‍🧒 🧑‍🧒 🧑‍🧒‍🧒
+성인용	🔞
+성장	💹 📈
+성중립적인	🧒 🧓
+세	🕒 🕞
+세 시	🕒
+세 시 반	🕞
+세개	🤟
+세계	🌍 🌎 🌏 🌐 🗺
+세계 지도	🗺
+세관	🛃
+세균	😷
+세로	🚦 ↤ ↦ ↹ ⋮ ▮
+세로 막대가 있는 오른쪽 화살표	↦
+세로 막대가 있는 오른쪽 화살표 위에 세로 막대가 있는 왼쪽 화살표	↹
+세로 막대가 있는 왼쪽 화살표	↤
+세로 신호등	🚦
+세로 줄임표	⋮
+세로선으로	▥ ▦ ◍
+세로선으로 채워진 원	◍
+세로선으로 채워진 정사각형	▥
+세로선이	⇤ ⇥
+세로선이 있는 오른쪽 화살표	⇥
+세로선이 있는 왼쪽 화살표	⇤
+세모	🚩
+세모 깃발	🚩
+세미	🚛
+세뱃돈	🧧
+세상에	🤦 🤦‍♂ 🤦‍♀
+세시	🕞
+세시 반	🕞
+세이렌	🧜 🧜‍♂ 🧜‍♀
+세일링	⛵
+세잎	☘
+세잎클로버	☘
+섹시	😉 💋 🫦
+센	💪 🦁
+셀카	🤳 📷
+셀폰	📱 📵 📶 📳 📴
+셀피	🤳
+셋	👌
+셔츠	🎽 👔 👚
+셔틀콕	🏸
+셰익스피어	🎭
+셰프	🧑‍🍳 👨‍🍳 👩‍🍳
+소	🐂 🐮 🐃 🐄
+소 얼굴	🐮
+소금	🧂
+소나무	🌲 🎍
+소녀	👧
+소년	👦
+소다	🥤
+소동	🫯
+소띠	🐮
+소라	🐚
+소라고둥	🐚
+소란	🫯
+소리	👂 🔇 🔈 🔉 🔊 📣 🔔 🔕 🎵 🎶 🎤 🎧
+소리 끄기	🔇
+소리 없는	🔇
+소리 없음	🔇 🔕
+소리 있음	🔈
+소리 작게	🔉
+소리 작음	🔉
+소리 줄이기	🔉
+소리 지르는 얼굴	😱
+소리 큼	🔊
+소리 키우기	🔊
+소모품	♟
+소문자	🔡
+소방관	🧑‍🚒 👨‍🚒 👩‍🚒
+소방차	🚒 🧑‍🚒 👨‍🚒 👩‍🚒
+소설	📖 📚
+소세지	🌭
+소스	🫙
+소시지	🌭
+소식	📰 🆕
+소식지	📰
+소용돌이	🌪 🌀
+소울메이트	👯 👯‍♀
+소원	🤲 🧞 🧞‍♂ 🧞‍♀ 🎋
+소원 빌기	🎋
+소원 쪽지	🎋
+소원 쪽지 매달기	🎋
+소원을	🎋
+소원을 건 나무	🎋
+소통	📲 📰 📫 📝
+소파	🛋
+소파와	🛋
+소파와 등	🛋
+소파와 전등	🛋
+소포	📦
+소포 박스	📦
+소포 상자	📦
+소풍	🧺
+소프트	🍦 🥤
+소프트 드링크	🥤
+소프트 아이스크림	🍦
+소프트볼	🥎
+소프트웨어	🧑‍💻 👨‍💻 👩‍💻
+소형	🚐
+소형 버스	🚐
+소형비행기	🛩
+소화	🧯
+소화기	🧯
+소환	🧙 🧙‍♂ 🧙‍♀
+속	😶‍🌫 🤢 👁‍🗨 🫧
+속 울렁거림	🤢
+속도	🏃 🏃‍♂ 🏃‍♀
+속삭임	😮‍💨
+손	🤗 🖐 🖖 🫱 🫲 🫳 👌 🤌 ✌ 🤞 🫰 🤟
+손 꺾음	💁‍♂ 💁‍♀
+손 모양	🖖 🤘
+손 하트	🫶
+손가락	🖐 🖖 🤌 🤏 🤞 🤘 🤙 👈 👉 👆 🖕 ☝
+손가락 세개	🤟
+손가락 아래로	👇
+손가락 오른쪽으로	👉
+손가락 왼쪽으로	👈
+손가락 위로	👆
+손가락 하트	🫰
+손가락으로	👈 👉 👆 👇
+손가락으로 아래를 가리키기	👇
+손가락으로 오른쪽 가리키기	👉
+손가락으로 왼쪽 가리키기	👈
+손가락으로 위를 가리키기	👆
+손가락질	👆
+손도끼	🪓
+손동작	🤌 🙅‍♂ 🙅‍♀ 🙆‍♂ 🙆‍♀
+손들기	🙋 🙋‍♂ 🙋‍♀
+손들어	✋ 🙋
+손등	🤚 👉 👆 🫱 👈 👇
+손모양	🤙
+손목	⌚
+손목 시계	⌚
+손바닥	✋ 🤚 🖐 💁‍♂ 💁‍♀ 🤦 🤦‍♂ 🤦‍♀ 🪬 🫲 🤲 💁
+손바닥 꺾은 남자	💁‍♂
+손바닥 꺾은 사람	💁
+손바닥 꺾은 여자	💁‍♀
+손바닥을	🫳 🫴 💁‍♂ 🤦 🤦‍♂ 🤦‍♀
+손바닥을 아래로 향한 손	🫳
+손바닥을 위로 향한 손	🫴
+손뼉	👏
+손뼉 치기	👏
+손으로	🤭 🫢 🙈 🙉 🙊
+손으로 귀를 가린 원숭이	🙉
+손으로 눈을 가린 원숭이	🙈
+손으로 입을 가린 얼굴	🤭
+손으로 입을 가린 원숭이	🙊
+손을	🙌 💁 🙋 🧑‍🤝‍🧑 👭 👫 👬
+손을 든 사람	🙋
+손을 잡고	🧑‍🤝‍🧑
+손을 잡고 있는 게이 커플	👬
+손을 잡고 있는 남녀	👫
+손을 잡고 있는 두 명의 남자	👬
+손을 잡고 있는 두 명의 사람	🧑‍🤝‍🧑
+손을 잡고 있는 두 명의 여자	👭
+손을 잡고 있는 레즈비언 커플	👭
+손을 젖히고 있는 사람	💁
+손잡이	🎛 🍵
+손잡이 없는 찻잔	🍵
+손전등	🔦
+손질	💇
+손짓	🤘
+손톱	💅
+손톱 정리	💅
+손해	💸
+솔	🪥
+솜인형	🧸
+송곳니	🧛 🧛‍♂ 🧛‍♀
+송충이	🐛
+쇠사슬	⛓ ⛓‍💥
+쇼킹	🫢
+쇼트케이크	🍰
+쇼핑	👕 👖 👗 👚 👛 👜 🛍 👞 👟 👠 👢 🛒
+쇼핑가방	🛍
+쇼핑백	🛍
+쇼핑카트	🛒
+수	🤨 😮 🚱
+수가	🤦 🤦‍♂ 🤦‍♀
+수갑	⛓‍💥
+수건	🧻
+수구	🤽 🤽‍♂ 🤽‍♀
+수구하는	🤽 🤽‍♂ 🤽‍♀
+수구하는 남자	🤽‍♂
+수구하는 사람	🤽
+수구하는 여자	🤽‍♀
+수달	🦦
+수동	🧑‍🦽 👨‍🦽 👩‍🦽 🦽
+수동 휠체어	🦽 🧑‍🦽
+수동 휠체어를 탄 남자	👨‍🦽
+수동 휠체어를 탄 사람	🧑‍🦽
+수동 휠체어를 탄 여자	👩‍🦽
+수레바퀴	☸
+수리	👷 👷‍♂ 👷‍♀ 🏚 🏠 🏡 🔨 🔧 🔩
+수리공	👨‍🔧 👩‍🔧
+수면	💤
+수목	🪵
+수박	🍉
+수사	👮
+수상	🤽
+수상 스포츠	🤽
+수상스포츠	🏄‍♂ 🏄‍♀ 🤽‍♂ 🤽‍♀
+수속	🛂
+수신	📲 📥
+수신된	📨
+수신된 이메일	📨
+수신된 편지	📨
+수심	😔
+수심 어린 얼굴	😔
+수심에	😔
+수심에 찬 얼굴	😔
+수염	🥸 🧔 🧔‍♂ 🧔‍♀
+수염 난 남자	🧔‍♂
+수염 난 사람	🧔
+수염 난 여자	🧔‍♀
+수영	🏊 🏊‍♂ 🏊‍♀ 🤽‍♂ 🤽‍♀ 🛟 🥽 👙
+수영 선수	🏊 🏊‍♂
+수영 안경	🥽
+수영복	🤽‍♂ 🤽‍♀ 🩱 🩲 🩳 👙
+수영선수	🏊‍♀
+수영장	🏊 🏊‍♂ 🏊‍♀ 👙
+수영하기	🏊 🏊‍♂
+수영하는	🏊 🏊‍♂ 🏊‍♀
+수영하는 남자	🏊‍♂ 🏊
+수영하는 사람	🏊 🏊‍♀
+수영하는 여자	🏊‍♀
+수유	🤱 👩‍🍼 👨‍🍼 🧑‍🍼
+수유 중인 남자	👨‍🍼
+수유 중인 사람	🧑‍🍼
+수유 중인 여자	👩‍🍼
+수유실	🚼
+수저	🥄
+수정	🔮
+수정 구슬	🔮
+수직	🚦
+수첩	🗒
+수컷	🦚
+수컷 공작	🦚
+수탉	🐓
+수평	🚥
+수프	🍲 🍜
+수하물	🛄 🛅
+수하물 보관소	🛅
+수하물 찾는 곳	🛄
+수학	📏 📐 ➕ ➖ ➗
+수학자	🧑‍🔬 👨‍🔬 👩‍🔬
+수화기	📞
+숙녀	👧 👚
+숙박	🏨
+순경	👮‍♂ 👮‍♀
+순무	🫜
+순수	🪷
+순수한	😇
+숟가락	🥄 🥣
+술	🍶 🍾 🍷 🍸 🍹 🍺 🍻 🥂
+술잔	🍶
+술집	🍺
+숨	🫁
+숨기	🫥
+숨은	🫣 🫥 🥷
+숨죽인	😯
+숨죽인 얼굴	😯
+숨죽임	😯
+숫양	🐏 ♈
+숫자	🔢 🔂
+숲	🫈 🌳
+쉐프	🔪
+쉬는	😮‍💨
+쉬는시간	🔔
+쉿	🤫 🙉
+쉿 하는 얼굴	🤫
+슈미어	🥯
+슈즈	🥿 🩰
+슈팅스타	💫
+슈퍼	🦹 🦹‍♂ 🦹‍♀
+슈퍼 악당	🦹
+슈퍼맨	🦸
+슈퍼볼	🏈
+슈퍼파워	🦸 🦹
+슈퍼히어로	🦸
+슝	💨
+스냅	📷
+스냅드래곤	🪻
+스노보더	🏂
+스노보드	🏂
+스노보드 타는 사람	🏂
+스노우맨	⛄
+스노클링	🤿
+스니커즈	👟
+스마일	😀 😃 😄 😁 😅 😂 🙂 😊 😇 🥰 😍 ☺
+스마트	🤓
+스마트폰	🛜
+스모그	🌁
+스몰	▪ ▫ 🔹
+스몰 블루 마름모	🔹
+스시	🍣
+스웩	😎
+스위스	🫕
+스윙	🏌‍♂ 🏌‍♀
+스카이다이빙	🪂
+스카치	🥃
+스카프	🧣 🧕
+스카프를	🧕
+스카프를 두른 여자	🧕
+스컬	🩻
+스컹크	🦨
+스케이트	🛹 🛼 ⛸
+스케이트 타는 사람	🛹
+스케이트보드	🛹
+스켈레톤	🦴 🩻
+스콜피온	🦂 ♏
+스쿠버	🤿
+스쿠터	🛵 🛴
+스쿨	🏫
+스퀴즈	🪗
+스퀴즈 박스	🪗
+스크롤	📜
+스키	🎿 ⛷ 🏂 🫕 🚠
+스키 리프트	🚠
+스키 부츠	🎿
+스키 타는 사람	⛷
+스키타는	⛷
+스키타는 사람	⛷
+스킨스쿠버	🤿
+스타	🧑‍🎤 👨‍🎤 👩‍🎤
+스타디움	🏟
+스타일	😎 💇 💇‍♂ 💇‍♀
+스타킹	🧦
+스타트렉	🖖
+스테이크	🥩 🐎
+스톤	🪨 🥌
+스톱	🖐
+스톱워치	⏱
+스튜	🍲
+스튜디오	🎙
+스튜디오 마이크	🎙
+스트라디바리우스	🎻
+스트라이크	🎳
+스트라토	🎸
+스트라토캐스터	🎸
+스트레스	😅 😟 😧
+스틱	🏑 🏒 🥍
+스틸레토	👠
+스파	💆 🧖 🧖‍♂ 🧖‍♀
+스파게티	🍝
+스파이	🥸 🕵 🕵‍♂ 🕵‍♀
+스파이더	🕷
+스팍	🖖
+스패너	🛠 🔧
+스펀지	🧽
+스페이드	♠
+스페이드 모양	♠
+스포츠	🤺 🏇 🏂 🏄 🏄‍♂ 🏄‍♀ 🏊 🏊‍♂ 🚴 🚴‍♂ 🚴‍♀ 🚵
+스포츠 메달	🏅
+스푼	🥄
+스푼과	🥣
+스푼과 사발	🥣
+스프링	🗒 🗓
+스프링 노트	🗒
+스프링 달력	🗓
+스프링클	🧁
+스피닝	🚲
+스피커	🔈 🔇 🔉 🔊
+스피커 미디엄 소리	🔉
+스피커 소리 낮게	🔈
+스피커 소리 작게	🔉
+스피커 소리 크게	🔊
+스핀	🚲
+스핀 클래스	🚲
+슬라이더	🎚
+슬라이드	🛝 🪊
+슬라이딩	🛝
+슬래시	∕ ⊘
+슬러그	🐌
+슬레이트	🎬
+슬레이트색	🩶
+슬롯	🎰
+슬롯 머신	🎰
+슬립온	🥿
+슬퍼	😕
+슬프지	🥺
+슬픈	😔 😪 😥 😿 🪊
+슬픔	😟 🙁 ☹ 🥹 😭 😖 😞 😓 😫 💔
+승강	🛗
+승강 장치	🛗
+승강기	🛗
+승객	🛳 ⛴ 🚢
+승리	✌ 🌟 🏆 👑 💰 🪯
+승리감	😤
+승마	🏇 🐎
+승용차	🚗 🚘
+승자	🏅
+시	🕛 🕧 🕐 🕜 🕑 🕝 🕒 🕞 🕓 🕟 🕔 🕠
+시각장애	🧑‍🦯 👨‍🦯 👩‍🦯 🦮 🦯
+시각장애인	👨‍🦯 👩‍🦯 🦯
+시각장애인 지팡이	🦯
+시간	⌛ ⏳ ⌚ ⏰ ⏱ 🕰 🕧 🕐 🕜 🕑 🕝 🕒
+시간이	⌛ ⏳
+시간이 남은 모래시계	⏳
+시간이 다 된 모래시계	⌛
+시계	⌚ ⏰ ⏱ ⏲ 🕰 🕛 🕧 🕐 🕜 🕑 🕝 🕒
+시계 방향	🔃
+시계 방향 화살표	🔃
+시계방향	🔁 🔂
+시골집	🏠 🏡
+시나고그	🕍
+시네마	🎥 🎞 📽 🎦
+시든	🥀
+시든 꽃	🥀
+시들어	🥀
+시들어 가는	🥀
+시듦	🥀
+시디	💿 📀
+시력	👁
+시리얼	🥣
+시원한	🪭
+시위	🪧
+시장	💹
+시절	📷 📹
+시크교	🪯
+시크교 신자	🪯
+시큼한	🍋
+시트러스	🍋 🍋‍🟩
+시합	🤼‍♂ 🤼‍♀
+시험관	🧪
+식기	🥄
+식당	🍞 🍳 🍝 🍢 🍥 🍦 🍧 🍨 🍬 🍭 🍶 🍴
+식물	💐 🌸 🏵 🌹 🌺 🌻 🌼 🌷 🪻 🌱 🪴 🌵
+식빵	🍞
+식수대	🚰
+식은땀	😅 😰 😓
+식은땀 흘리는 얼굴	😓
+식칼	🔪
+식품	🦐 🦑 🥭 🍎 🥝 🍅 🥑 🥔 🥕 🥒 🥜 🍞
+신	⚕ 🈸
+신고	👮 👮‍♂ 👮‍♀
+신나는	🤩 🥳 🎉
+신남	🤘
+신랑	🤵‍♂
+신문	📰 🗞
+신문 뭉치	🗞
+신발	🩴 👞 👟 👠 👡 👢 🥾
+신부	👰 👰‍♀
+신분증	🪪
+신사	⛩
+신속	🏃
+신용카드	💳
+신원	🫆 🪪
+신자	🪯
+신장	🫘
+신체	👃 👀 👁 👅 👄
+신칸센	🚄 🚅
+신코	🪅
+신코 데 마요	🪅
+신토	⛩
+신토 신사	⛩
+신호	🚥 🛑 👌 🚦 🚬 🚭 🔜 📶 🆒 🆓 🆔 🆕
+신호 강도	📶
+신호등	🚥 🚦
+신화	🧚 🧚‍♂ 🧚‍♀ 🧝 🧝‍♂ 🧝‍♀ 🪽
+실	🧵 🪡
+실루엣	🗣 👤
+실망	🫤 😞 🙍 🙎
+실망감	😥
+실망하는	😥
+실망하는 얼굴	😥
+실망한	😔 😞
+실망한 얼굴	😞
+실망했지만	😥
+실망했지만 안도하는 얼굴	😥
+실뭉치	🧶
+실버	🥈
+실수한	😣
+실수한 후 얼굴	😣
+실크해트	🎩
+실타래	🧵
+실패	😞 😩 ⛔
+실험	👨‍🔬 👩‍🔬 🧪 🔬
+실험실	👨‍🔬 👩‍🔬 🥼 🧫
+실험실 가운	🥼
+싫어	🙅
+싫어요	👎
+심다	🪏
+심박수	🩺
+심볼	🔰
+심사	🛂
+심술궂은	👺
+심술쟁이	🦡
+심장	🫀 💓 💛 🩺
+심장박동	💗
+심장학	🫀
+심통	🙎‍♂ 🙎‍♀
+심해	🧜 🧜‍♂ 🧜‍♀
+십자가	⛪ ⛑ ✝ ☦
+십자가가	⛑
+싸움	🫯 🥷
+싸움 구름	🫯
+싸이클론	🌀
+싹이	🌱
+싹이 돋다	🌱
+싼	🥙
+쌀	🌾 🍘 🍚 🍛
+쌀 과자	🍘
+쌀국수	🍜
+쌍	⇇ ⇈ ⇉ ⇊
+쌍검	⚔
+쌍두	↞ ↟ ↠ ↡
+쌍둥이	👯 👯‍♀ 👬 ♊
+쌍둥이 자리	♊
+쌍봉	🐫
+쌍봉 낙타	🐫
+쌤통	😼
+쌩	🏎
+써니사이드업	🍳
+썩소	😼
+썩소 짓는 고양이	😼
+썰매	🛷
+쏘는	🪼
+쏘는 동물	🪼
+쏟다	🫗
+쏟아져	🫗
+쏟아져 나오는 액체	🫗
+쏠려	🤮
+쓰고	✍ 👳 👳‍♂ 👳‍♀ 👲 👯 👯‍♂ 👯‍♀
+쓰레기	🚮 🚯
+쓰레기 투기	🚯
+쓰레기 투기 금지	🚯
+쓰레기는	🚮
+쓰레기는 쓰레기통에	🚮
+쓰레기는 쓰레기통에 표시	🚮
+쓰레기통	🗑 🚮
+쓰레기통에	🚮
+쓴	🤠 🧐 🫅 👳 👳‍♂ 👳‍♀ 👲 👰 👰‍♂ 👰‍♀
+씨	©
+씨디	💿
+씨리얼	🥣
+씨엘	🆑
+씨엘 네모 안	🆑
+씨푸드	🍢
+씩씩거리는	😤
+씽꼬	🪅
+씽꼬 데 마요	🪅
+씽씽카	🛴
+아	🥹 💩
+아 짜증나	💩
+아기	👶 🤱 👩‍🍼 👨‍🍼 🧑‍🍼 👼 🐥 🍼 🚼 🐤 🦢
+아기 병아리	🐤
+아기 천사	👼
+아기 표시	🚼
+아니	😩 🙈
+아니요	🙂‍↔ 🙅
+아닌	☯
+아님	∉ 😬
+아님"	🈶
+아랍인	👳 👳‍♂ 👳‍♀
+아래	↓ 👇 📉 ⤵ 🔻 ⋱ ▧ ▨ ◞ ◟ ◢ ◣
+아래 첨자 2가 있는 더하기 기호	⨧
+아래 화살표	↓
+아래가	🔻
+아래가 좁은 빨간색 삼각형	🔻
+아래로	⏬ 🫳 👇
+아래를	👇
+아래를 가리키는 검지손가락	👇
+아래쪽	↓ ▼ 👇 ↡ ↧ ↨ ↯ ↲ ↳ ↵ ⇂ ⇃
+아래쪽 반원	◡
+아래쪽 방향 검은색 작은 삼각형	▾
+아래쪽 방향 흰색 삼각형	▽
+아래쪽 방향 흰색 작은 삼각형	▿
+아래쪽 빨간색 삼각형	🔻
+아래쪽 삼각형	🔽
+아래쪽 삼각형 버튼	🔽
+아래쪽 쌍두 화살표	↡
+아래쪽 이중 화살표	⇓
+아래쪽 절반이 채워진 원	◒
+아래쪽 지그재그 화살표	↯
+아래쪽 화살표	⬇ ⏬
+아래쪽 화살표 쌍	⇊
+아래쪽 화살표 오른쪽에 위쪽 화살표	⇵
+아래쪽에	↽ ⇁
+아래쪽에 화살촉이 있는 오른쪽 외날 화살표	⇁
+아래쪽에 화살촉이 있는 왼쪽 외날 화살표	↽
+아래쪽으로	↴ ⤵
+아래쪽으로 꺾어지는 우향 화살표	⤵
+아래쪽을	👇
+아래쪽을 가리키는 검지손가락	👇
+아래쪽을 가리키는 손등	👇
+아랫쪽	⏬
+아레파	🫓
+아름다움	🪷 🌹
+아마도	🤷 🤷‍♂ 🤷‍♀
+아메리카	🌎
+아메바	🦠
+아몬드	🌰
+아무거나	😝 💅
+아무것도	😬 🙈 🫙
+아무것도 아님	😬
+아무것도 안 보려는 원숭이	🙈
+아무것도 없는	🫙
+아무튼	🥱
+아버님	👨‍🍼
+아버지	👨‍🍼 🎅
+아보카도	🥑
+아보카드	🥑
+아빠	👨‍🍼 👪 🧢
+아빠 모자	🧢
+아빠다리	🧘 🧘‍♂ 🧘‍♀
+아슬아슬한	😓
+아시아	🌏
+아시아와	🌏
+아시아와 호주가 보이는 지구	🌏
+아야	🤕 🪼
+아이	🧒 👪 🧑‍🧑‍🧒 🧑‍🧑‍🧒‍🧒 🧑‍🧒 🧑‍🧒‍🧒 🫶 👦 👧
+아이 러브 유	🫶
+아이디	🆔 🪪
+아이디 신호	🆔
+아이디 표시	🆔
+아이디어	💡
+아이러니한	😼
+아이리쉬	☘ 🍀
+아이스	🍧 🍨 🏒 ⛸
+아이스 스케이트	⛸
+아이스 하키와 퍽	🏒
+아이스쿨라피우스	⚕
+아이스크림	🍨 🍦 🍧
+아이스크림 콘	🍦
+아이쿠	😓
+아침	💖 🥣 ☕ 🌄 🌅
+아침밥	🍴
+아침식사	🥯 🧇 🍳 🥣 🍴
+아코디언	🪗
+아트	💅
+아티스트	🧑‍🎨 👨‍🎨 👩‍🎨
+아파하는	🤦 🤦‍♂ 🤦‍♀
+아포칼립스	🧟 🧟‍♂ 🧟‍♀
+아프로	🦱 🪮
+아프리카	🌍
+아프리카가	🌍
+아픈	😷 🤒 🤕 🤢 🤮 🤧 💔
+아픔	🤒 😵 💉 💊 💔
+아하	💡
+아홉	🕘 🕤
+아홉 시	🕘
+아홉 시 반	🕤
+악	😑 🖤 🤌
+악기	📯 🎷 🎺 🪊 🪗 🎸 🎹 🎻 🪘 🪇 🪈 🪉
+악당	🦹 🦹‍♂ 🦹‍♀
+악마	😈 👿 🙈 🙉 🙊
+악마의	🧿
+악마의 눈	🧿
+악보	🎼
+악수	🤝 🫱 🫲
+악어	🐊
+악역	🦹 🦹‍♂ 🦹‍♀
+안	⊮ 🙈 🙅 🙅‍♂ 🙅‍♀ 🪾 ❎ 🆑
+안 돼	🙅 🙅‍♂ 🙅‍♀
+안 된다는 제스처를 하는 남자	🙅‍♂
+안 된다는 제스처를 하는 사람	🙅
+안 된다는 제스처를 하는 여자	🙅‍♀
+안개	🌫 🌁 😶‍🌫
+안개 낀	🌁
+안개 속 얼굴	😶‍🌫
+안경	👓 🥸 🤓 🕶 🥽
+안경류	😎 👓 🕶
+안구	🥽
+안구 보호 장비	🥽
+안내	🦮 🪬 💁
+안내 데스크	💁
+안내견	🦮
+안내원	💁
+안녕	👋 🖐 🫂
+안녕히	🥱 💤 🛌
+안녕히 주무세요	🥱 💤 🛌
+안도	🥲 😮‍💨 😌
+안도감	😥
+안도하는	😥
+안돼	😩 🙅‍♂ 😳
+안된다는	🙅 🙅‍♂
+안된다는 제스처를 하는 남자	🙅‍♂
+안된다는 제스처를 하는 사람	🙅
+안됨	🙅 🔕 🚫 🚳 🚭 🚷 📵 🔞
+안심한	😌
+안심한 얼굴	😌
+안아주기	🫂
+안에	🆑
+안으로	📃
+안으로 말린 문서	📃
+안의	≖ ⊕ ⊖ ⊗ ⊘ ⊙ ⊚ ⊛ ⊞ ⊟
+안전	🫆 🛟 🦺 🔐
+안전모	👷 👷‍♂ 👷‍♀
+안전요원	⛑
+안전조끼	🦺
+안테나	📡 📶
+안테나 신호	📶
+앉기	🪑
+않니	🥺
+않아	👎
+않은	📕
+않음	≮ ≠ ≯ ≤ ≥ ⊁ ⋭ ⪺ 🫢 🫥
+알	🪺 ®
+알겠어	👌 🤷‍♂ 🤷‍♀
+알람	🚨 ⏰
+알람 시계	⏰
+알려줘	🫴
+알림판	🪧
+알아요	🙋
+알았어	🫡 👌
+알약	💊
+알에서	🐣
+알에서 깬 병아리	🐣
+알이	🪺
+알이 들어 있는 둥지	🪺
+알통	💪
+알파	🦁
+알파벳	🔤
+알파카	🦙
+암벽	🧗 🧗‍♂ 🧗‍♀
+암벽 등반	🧗 🧗‍♂ 🧗‍♀
+암벽 등반가	🧗 🧗‍♂ 🧗‍♀
+암산	🧮
+암살자	🥷
+암석	🪨
+암양	🐑
+암초	🪸
+암탉	🐔
+암퇘지	🐖
+암트랙	🚄 🚅
+암포라	🏺
+압정	📌 📍 ⊥
+압축기	🗜
+앗	🤭
+앞문	🚪
+앞에	≺ ⊰ 🚅
+앞에 뾰족하게 생긴 고속 철도	🚅
+앞에 옴	≺
+앞으로	⏩
+애완동물	🐶 🐕 🐱 🐈 🐹 🐰 🐇
+애원	🙇 🙇‍♂ 🙇‍♀
+애원하는	🥺
+애원하는 얼굴	🥺
+애플파이	🥧
+액션	🎬
+액자	🖼
+액자에	🖼
+액자에 걸린 사진	🖼
+액체	🫟 🫗
+액체 방울	🫟
+앰뷸런스	🚑
+앵무새	🦜
+앵커	⚓
+야경	🌃 🌆
+야구	⚾
+야구공	⚾ 🥎
+야구모자	🧢
+야미	🍴
+야비함	🥷
+야수	💪
+야옹	🐈‍⬛
+야옹이	🐈
+야외	🌻 🥏
+야외 운동	🥏
+야유	👎
+야자수	🌴 🥥
+야채	🍈 🍅 🍆 🥜 🍄‍🟫 🥗
+야채샐러드	🥗
+야호	🎊
+약	😷 💊
+약간	😜
+약간 정신이 나간	😜
+약물	💊
+약오르는	🙍
+약탈자	🏴‍☠
+약혼	💍 💎
+양	🐑 ☯ ♈
+양궁	🎯
+양극	🧲
+양극 음극	🧲
+양념	🧅 🫙
+양념통	🧂
+양동이	🪣
+양말	🧦
+양배추	🥬 🥦
+양성애자	🌈 🏳‍🌈
+양손을	👐
+양손을 모아서 벌린 모양	👐
+양송이	🍄‍🟫
+양식의	🏛
+양을	🤏
+양자리	♈ 🐏
+양주잔	🥃
+양쪽	🔛
+양쪽 방향 화살표	🔛
+양초	🕯
+양파	🧅
+얘기해	👊
+어	😒
+어깨	🤷‍♂ 🤷‍♀ 🤷
+어깨 으쓱	🤷
+어깨를	🤷 🤷‍♂ 🤷‍♀
+어깨를 으쓱하는 남자	🤷‍♂
+어깨를 으쓱하는 사람	🤷
+어깨를 으쓱하는 여자	🤷‍♀
+어두운	🕶
+어두움	🔅
+어두움 표시	🔅
+어려운	☯
+어류	🦈
+어린	👶 🧒 😔 🌱
+어린 나무	🌱
+어린이	🧒 👶 👦 🚸
+어린이 구역	🚸
+어린이 보호 구역	🚸
+어린이 횡단보도	🚸
+어린잎	🌱
+어림없음	🙅
+어릿광대	🤡
+어릿광대 얼굴	🤡
+어머니	👩‍🍼
+어묵	🍥 🍢
+어묵꼬치	🍢
+어색한	😑
+어워드	🏅
+어이없는	👻
+어이없음	😲 😖
+어지러운	🥴 🌀 😵
+어지러운 얼굴	😵
+어지러움	💫 😵
+어지럼증	😵‍💫
+어질어질	💫
+어쨌든	😴 💁
+어쩌라고	🫥
+억만장자	🚤
+언더암	🥎
+언더웨어	🩲
+언데드	🧛 🧛‍♂ 🧛‍♀ 🧟 🧟‍♂ 🧟‍♀
+언짢은	🙍 🙍‍♂ 🙍‍♀
+언짢은 남자	🙍‍♂
+언짢은 여자	🙍‍♀
+얻을	🉐
+얻을 득	🉐
+얼굴	😀 😃 😄 😁 😆 😅 🤣 😂 🙂 🙃 😉 😊
+얼굴 붉힘	😳
+얼굴 옆에 손바닥을 위로 향한 남자	💁‍♂
+얼굴에	🤦 🤦‍♂ 🤦‍♀
+얼굴에 손바닥을 갖다 댐	🤦 🤦‍♂ 🤦‍♀
+얼굴이	🌚 🌛 🌜 🌝 🌞 🌬
+얼굴이 있는 그믐달	🌜
+얼굴이 있는 바람	🌬
+얼굴이 있는 보름달	🌝
+얼굴이 있는 삭	🌚
+얼굴이 있는 상현 반달	🌜
+얼굴이 있는 초승달	🌛
+얼굴이 있는 해	🌞
+얼룩	🦒 🫟
+얼룩다람쥐	🐿
+얼룩말	🦓
+얼빠짐	😣
+얼어붙은	🥶
+얼음	🧊 🍧
+엄마	👩‍🍼 🤶 👪
+엄지	👍 👎
+엄지 척	👍
+엄지와	🫰
+엄지와 중지를 교차한 손	🫰
+엄청난	😯
+업	🆙
+업!	🆙
+없는	🤨 😐 😑 😶 😕 😮 🪾 🍵 🫙 🔇 🚱
+없어	🤯
+없을	🈚
+없을 무	🈚
+없음	🈚 😶 🫤 🙈 🧑 🧓 🔇 🔕 🪫
+없이	⛄
+엇갈린	🔀 🎌
+엇갈린 일본 국기	🎌
+엇갈린 화살표	🔀
+엉덩이	🫏
+엉뚱한	🤪 😶‍🌫
+엉뚱한 생각에 잠긴 얼굴	😶‍🌫
+엉뚱한 얼굴	🤪
+엉엉	😭
+엉엉 우는 얼굴	😭
+엉킨	🪢
+엎드려	🙇 🙇‍♂ 🙇‍♀
+엎드려 사과하는 남자	🙇‍♂
+엎드려 사과하는 사람	🙇
+엎드려 사과하는 여자	🙇‍♀
+엎지르다	🫗
+에르미트	⊹
+에르미트 켤레 행렬	⊹
+에스	∾
+에스오에스	🆘
+에스오에스 신호	🆘
+에스카르고	🐌
+에이비형	🆎
+에이티엠	🏧
+에이형	🅰
+에일리언	👾 👽
+에취	🤧
+엑스	✖ ❌ ❎
+엑스 표시	❌ ❎
+엑스 표시 버튼	❎
+엑스레이	🩻
+엑스자	🙅‍♂ 🙅‍♀
+엑스표	❌
+엔	💴
+엔지	🆖
+엔지 신호	🆖
+엔지 표시	🆖
+엔지니어	🧑‍🔬 👨‍🔬 👩‍🔬
+엔진	🚂 🚒
+엔터테이너	🧑‍🎤 👨‍🎤 👩‍🎤
+엔터테인먼트	🎠 🎆 🎫 🎣 🎯 🎮 🎲 🎭 🎨 📻
+엔화	💴 💹
+엔화 관련 상승하는 그래프	💹
+엘레강스	💃
+엘리베이터	🛗
+엘크	🫎
+엘프	🧝 🧝‍♂ 🧝‍♀
+엠	Ⓜ
+엠디	💽
+엠블럼	🔱
+여객선	🛳
+여경	👮‍♀
+여교사	👩‍🏫
+여권	🛂
+여기요	🙋 🙋‍♂ 🙋‍♀
+여덟	🕗 🕣 ✳
+여덟 갈래 별표	✳
+여덟 시	🕗
+여덟 시 반	🕣
+여러	📚
+여름	🚤
+여배우	🎭
+여섯	🕕 🕡
+여섯 시	🕕
+여섯 시 반	🕡
+여성	👩 👱‍♀ 👵 🤰 🦸‍♀ 💃 👜 🚺 ♀ 👭
+여성 기호	♀
+여성 커플	👭
+여성복	👚
+여성용	🚺 👠 👡 👢 👒
+여성용 구두	👠
+여성용 모자	👒
+여성용 부츠	👢
+여성용 샌들	👡
+여성용 신발	👠 👡 👢
+여신상	🗽
+여왕	🫅 👸 👑
+여우	🦊
+여우 얼굴	🦊
+여자	👩 🧔‍♀ 👱‍♀ 👵 🧏‍♀ 🤦‍♀ 🤷‍♀ 👩‍⚕ 👩‍🎓 👩‍🏫 👩‍⚖ 👩‍🌾
+여자 가수	👩‍🎤
+여자 경찰관	👮‍♀
+여자 과학자	👩‍🔬
+여자 근위병	💂‍♀
+여자 기술 전문가	👩‍💻
+여자 기장	👩‍✈
+여자 농부	👩‍🌾
+여자 댄서	💃
+여자 마법사	🧙‍♀
+여자 뱀파이어	🧛‍♀
+여자 소방관	👩‍🚒
+여자 슈퍼 악당	🦹‍♀
+여자 아이	👧
+여자 엘프	🧝‍♀
+여자 역도 선수	🏋‍♀
+여자 요리사	👩‍🍳
+여자 요정	🧚‍♀
+여자 우주비행사	👩‍🚀
+여자 의료인	👩‍⚕
+여자 인어	🧜‍♀ 🧜
+여자 정비공	👩‍🔧
+여자 좀비	🧟‍♀
+여자 지니	🧞‍♀
+여자 탐정	🕵‍♀
+여자 판사	👩‍⚖
+여자 헤어컷	💇‍♀
+여자 화가	👩‍🎨
+여자 화장실	🚺
+여자 회사원	👩‍💼
+여자 히어로	🦸‍♀
+여자들	👯‍♀
+여자용	🚺
+여정	🛄
+여학생	👩‍🎓
+여행	🚂 🚃 🚅 🚇 🚤 🚢 ✈ 🚁 🚀 🧳 📷 🗿
+여행 준비	🛄
+여행용	🧳
+여행용 가방	🧳
+여형사	🕵‍♀
+역	🚉
+역겨운	😝 🤢
+역도	💪 🏋 🏋‍♂ 🏋‍♀
+역도 선수	🏋 🏋‍♂
+역도선수	🏋 🏋‍♂ 🏋‍♀
+역도하는	🏋 🏋‍♂
+역도하는 사람	🏋 🏋‍♂
+역물결표	∽
+역방향	∾
+역할극	🧙 🧙‍♂ 🧙‍♀
+연	🪁
+연결	🛜
+연결된	🖇
+연구실	🔍 🧪 🔬
+연구자	🧑‍🔬 👨‍🔬 👩‍🔬
+연기	💨
+연꽃	🪷
+연날리기	🪁
+연락선	⛴
+연료	⛽
+연산자	∗ ∙ ∼ ⊙ ⊚ ⊛ ⋅ ⋆
+연설	📢
+연습장	🏌 🏌‍♂
+연애	😗 😚 😙 💘 💕 💋 👭 👫 👬 💏 💑 💐
+연애 중	💑
+연애 편지	💌
+연예인	🧑‍🎤 👨‍🎤 👩‍🎤
+연인	💑 😘 😚 💕 👫 💏 👭 👬
+연장	🗜
+연주	🎷 🎺 🎸 🎹 🎻 🪉
+연체동물	🦑
+연필	✏ 📝 ✍
+연필 쥔 손	✍
+열	🤧 🦟 🕙 🕥
+열 시	🕙
+열 시 반	🕥
+열광하는	😜
+열기	🫠 🌞 📂
+열나는	🥵
+열대	🦩 🍋‍🟩 🌴 🥭 🍹
+열대 과일	🥭
+열대 나무	🌴
+열대 음료	🍹
+열대어	🐠
+열대지방	🐠 🌴 🍍 🍹
+열두	🕛 🕧
+열두 시	🕛 🕧
+열두 시 반	🕧
+열리는	🪾
+열린	📬 📭 ↺ ↻ 🤯 📂 🔓
+열린 원형 화살표(반시계방향)	↺
+열린 원형 화살표(시계 방향)	↻
+열린 자물쇠	🔓
+열린 파일 폴더	📂
+열린 폴더	📂
+열매	🥑
+열매가	🪾
+열매가 안 열리는	🪾
+열받은	😤 😡 😠 🤬
+열쇠	🔑 🔐 🗝
+열시	🕙
+열시 정각	🕙
+열차	🚟
+열한	🕚 🕦
+열한 시	🕚
+열한 시 반	🕦
+염려되는	😨
+염려스러운	😟
+염소	🐐 ♑
+염소자리	♑ 🐐
+영	🈺
+영광	🐦‍🔥
+영국	💷
+영국 돈	💷
+영국 화폐	💷
+영사기	📽
+영수증	🧾
+영어	🔠 🔡
+영어 대문자	🔠
+영어 소문자	🔡
+영웅	🦸
+영원	♾
+영원한	👥
+영원한 베스트프렌드	👥
+영향	🪃
+영화	🎦 🍿 🎥 🎞 📽 🎬
+영화 촬영	🎬
+영화 카메라	🎥
+영화 프레임	🎞
+영화 프로젝터	📽
+영화관	🎭 🎦
+옆돌기	🤸 🤸‍♂ 🤸‍♀
+옆돌기하는	🤸 🤸‍♂ 🤸‍♀
+옆돌기하는 남자	🤸‍♂
+옆돌기하는 사람	🤸
+옆돌기하는 여자	🤸‍♀
+옆얼굴	🗣
+옆에	💁‍♂
+옆으로	∾
+옆으로 누운 역방향 에스	∾
+예	🙂‍↕ 🆗
+예민한	🫦
+예민함	🫦
+예배	📿 🛐
+예배공간	🛐
+예배당	💒 ⛪
+예술	🎭 🖼 🎨
+예술가	👨‍🎨 👩‍🎨 🎨
+예술가 팔레트	🎨
+예술적인	🎨
+예스	👍
+예언	🥠 🔮
+예이	😃 👏
+옛날	📻 📇
+옛날 방식	📇
+옛날 회상	📻
+오	😐 😑 🥹 🙀
+오고	🚍 🚔 🚖 🚘
+오고 있는 경찰차	🚔
+오고 있는 버스	🚍
+오고 있는 승용차	🚘
+오고 있는 자동차	🚘
+오고 있는 택시	🚖
+오뎅	🍢 🍥
+오뎅꼬치	🍢
+오두막	🛖
+오랑우탄	🦧
+오래된	🗝
+오래된 열쇠	🗝
+오렌지	🍊 📙 🔶
+오렌지색	🧡 🟠 🟧 🔶 🔸 📙
+오렌지색 사각형	🟧
+오렌지색 원	🟠
+오렌지색 책	📙
+오렌지색 하트	🧡
+오르다	🪜
+오르락내리락	🪀
+오른	😳
+오른손	🫱
+오른쪽	→ 🫱 👉 🤜 ▶ ⏯ ↛ ↝ ↠ ↣ ↦ ↬
+오른쪽 모서리가 접힌 문서	📄
+오른쪽 반달	🌓
+오른쪽 방향	🫱 🫸
+오른쪽 방향 검은색 작은 삼각형	▸
+오른쪽 방향 검은색 포인터	►
+오른쪽 방향 흰색 삼각형	▷
+오른쪽 방향 흰색 작은 삼각형	▹
+오른쪽 방향 흰색 포인터	▻
+오른쪽 삼중 화살표	⇛
+오른쪽 쌍두 화살표	↠
+오른쪽 아래 검은색 직각삼각형	◢
+오른쪽 아래 사분면 원호	◞
+오른쪽 아래 사선 줄임표	⋱
+오른쪽 아래 직각삼각형	◿
+오른쪽 아래 화살표	↘
+오른쪽 외날 화살표 위에 왼쪽 외날 화살표	⇋
+오른쪽 위 검은색 직각삼각형	◥
+오른쪽 위 사분면 원호	◝
+오른쪽 위 사분면이 있는 빈 원	◷
+오른쪽 위 사분면이 있는 빈 정사각형	◳
+오른쪽 위 사분면이 채워진 원	◔
+오른쪽 위 사선 줄임표	⋰
+오른쪽 위 화살표	↗
+오른쪽 위에서 왼쪽 아래 방향 대각선으로 채워진 정사각형	▨
+오른쪽 이중 화살표	⇒
+오른쪽 절반이 채워진 반원	◗
+오른쪽 절반이 채워진 원	◑
+오른쪽 화살표	→ ➡
+오른쪽 화살표 꼬리	↣
+오른쪽 화살표 두 개	⏩
+오른쪽 화살표 루프	↬
+오른쪽 화살표 쌍	⇉
+오른쪽에	↾ ⇂ ⇵
+오른쪽에 화살촉이 있는 아래쪽 외날 화살표	⇂
+오른쪽에 화살촉이 있는 위쪽 외날 화살표	↾
+오른쪽에서	↩ ⤴
+오른쪽에서 왼쪽으로 꺾는 화살표	↩
+오른쪽에서 위로 꺾는 화살표	⤴
+오른쪽으로	🫱 🫸 👉 🔎 📈 ↪
+오른쪽으로 곡선으로 꺾어지는 화살표	↪
+오른쪽으로 꺾어지는 좌향 화살표	↪
+오른쪽으로 밀치는 손	🫸
+오른쪽으로 상승	📈
+오른쪽으로 향하는 손등	🫱
+오른쪽으로 향한 돋보기	🔎
+오른쪽을	↱ ↳ 👉 🤜
+오른쪽을 가리키는 검지손가락	👉
+오른쪽을 가리키는 손등	👉
+오른쪽을 향하는	🤜
+오른쪽을 향하는 주먹	🤜
+오른편	🤜
+오리	🦆 🪿 🦢
+오리엔티어링	🧭
+오마이갓	😝 🫢 😵‍💫 😮 😲 🙈 👀
+오소리	🦡
+오스트레일리아	🐨
+오이	🥒
+오지	⊁
+오징어	🦑
+오케스트라	🪈
+오케이	🆗 👍 🙆 🙆‍♂ 🙆‍♀ 👌
+오케이 신호	👌 🆗
+오케이 제스처를 하는 사람	🙆
+오케이라는	🙆 🙆‍♂ 🙆‍♀
+오케이라는 제스처를 하는 남자	🙆‍♂
+오케이라는 제스처를 하는 사람	🙆
+오케이라는 제스처를 하는 여자	🙆‍♀
+오케이를	👌
+오케이를 표시한 손	👌
+오토바이	🏍 🛵
+오트밀	🥣
+오피스	🏢
+오형	🅾
+옥수수	🌽
+옥수수 한 자루	🌽
+옥토버페스트	🍺
+온도	🌡
+온도계	🌡
+온천	♨
+올라간	🫤 📫 📬
+올려진	📫 📬
+올리기	🔼 ⏫
+올리기 버튼	🔼
+올리브	🫒
+올린	👍
+올린 엄지	👍
+올림표	♯
+올빼미	🦉
+옮음	🉑
+옳을	🉑
+옳을 가	🉑
+옴	🕉 ≺ ≻ ⊰ ⊱
+옷	🥼 👕 👗 🥻 👚 👛 👜 👝 👞
+옷핀	🧷
+와	😮 🫴
+와우	🤩 😦 😧
+와인	🍾 🍷
+와인글라스	🍷
+와인바	🍷
+와인병	🍾
+와인잔	🍷
+와일드카드	🃏
+와플	🧇
+완두콩	🫛
+완두콩 꼬투리	🫛
+완료	☑
+완료됨	✅
+완전	🤣
+완전 재미있는	🤣
+완화	💆‍♂ 💆‍♀
+왕	🫅 👑
+왕관	👑 🫅
+왕관을	🫅
+왕관을 쓴 사람	🫅
+왕눈이	👽 👀
+왕눈이 눈알	👀
+왕실	🫅
+왕자	🤴
+왕자님	🤴
+왕족	🫅 🤴 👑
+왜곡된	🫪
+왜곡된 얼굴	🫪
+왜냐하면	∵
+왜냐하면 기호	∵
+외계	👾
+외계 괴물	👾
+외계생명체	👽
+외계인	👽 👾 🛸 🔭 📡
+외날	↼ ↽ ↾ ↿ ⇀ ⇁ ⇂ ⇃ ⇋ ⇌
+외로움	💔
+외적	⨯
+왼손	🫲
+왼쪽	← 🫲 👈 🤛 ↚ ↜ ↞ ↢ ↤ ↫ ↭ ↹
+왼쪽 말풍선	🗨
+왼쪽 반달	🌗
+왼쪽 방향	🫲 🫷
+왼쪽 방향 검은색 작은 삼각형	◂
+왼쪽 방향 검은색 포인터	◄
+왼쪽 방향 흰색 삼각형	◁
+왼쪽 방향 흰색 작은 삼각형	◃
+왼쪽 방향 흰색 포인터	◅
+왼쪽 삼중 화살표	⇚
+왼쪽 쌍두 화살표	↞
+왼쪽 아래 검은색 직각삼각형	◣
+왼쪽 아래 사분면 원호	◟
+왼쪽 아래 화살표	↙
+왼쪽 외날 화살표 위에 오른쪽 외날 화살표	⇌
+왼쪽 위 검은색 직각삼각형	◤
+왼쪽 위 사분면 원호	◜
+왼쪽 위 사분면을 제외한 모든 면이 채워진 원	◕
+왼쪽 위 화살표	↖
+왼쪽 위에서 오른쪽 아래 방향 대각선으로 채워진 정사각형	▧
+왼쪽 이중 화살표	⇐
+왼쪽 절반이 채워진 반원	◖
+왼쪽 절반이 채워진 원	◐
+왼쪽 화살표	← ⬅ 🔙
+왼쪽 화살표 꼬리	↢
+왼쪽 화살표 두 개	⏪
+왼쪽 화살표 루프	↫
+왼쪽 화살표 쌍	⇇
+왼쪽 화살표 위에 오른쪽 화살표	⇄
+왼쪽/오른쪽	⇔ ⇎
+왼쪽/오른쪽 이중 화살표	⇔
+왼쪽에	↿ ⇃ 📲
+왼쪽에 화살촉이 있는 아래쪽 외날 화살표	⇃
+왼쪽에 화살촉이 있는 위쪽 외날 화살표	↿
+왼쪽에 화살표가 있는 휴대전화	📲
+왼쪽에서	↪
+왼쪽에서 오른쪽으로 꺾는 화살표	↪
+왼쪽으로	↵ 🫲 🫷 👈 🔍 ↩
+왼쪽으로 곡선으로 꺾어지는 화살표	↩
+왼쪽으로 꺾어지는 우향 화살표	↩
+왼쪽으로 밀치는 손	🫷
+왼쪽으로 향하는 손바닥	🫲
+왼쪽으로 향한 돋보기	🔍
+왼쪽을	↰ ↲ 👈 🤛
+왼쪽을 가리키는 검지손가락	👈
+왼쪽을 가리키는 손등	👈
+왼쪽을 향하는 주먹	🤛
+왼편	🤛
+요가	🧘 🧘‍♂ 🧘‍♀
+요기	🧘 🧘‍♂ 🧘‍♀
+요동치는	🫨
+요동치는 얼굴	🫨
+요동침	🫨
+요리	🍳 🍽 🍴 🔪 🏺 🌮 🌯 🥙
+요리사	🧑‍🍳 👨‍🍳 👩‍🍳
+요리용	🔪
+요리용 칼	🔪
+요법	💆
+요요	🪀
+요정	🧚 🧚‍♂ 🧚‍♀ 🧝 🧝‍♂ 🧝‍♀
+요정이야기	💀
+요청	🙏
+요트	⛵
+욕	🤬
+욕설	🖕
+욕실	🪥
+욕심	🤑
+욕조	🛁 🛀
+욕하는	🤬
+욕하는 얼굴	🤬
+욜로	😜 😝 💀 ⏳ 🎆
+용	🐉 🐲 🀄
+용 얼굴	🐲
+용기	🫙
+용띠	🐲
+용서	🙇 🙇‍♂ 🙇‍♀
+용접	🥽
+용지가	🗳
+우는	😩 😢 😭 😹
+우는 얼굴	😢
+우롱	🍵
+우리기	🫖
+우버	🚖
+우산	☂ 🏖 🌂 ☔ ⛱
+우상향	↗
+우상향 화살표	↗
+우승	🏆
+우아한	🕺 🌹
+우와	😵‍💫
+우울	🫥
+우울한	🫥
+우유	🐮 🐄 🐐 🍼 🥛 🧋
+우유 한잔	🥛
+우유부단한	🧇
+우정	👭 🫂
+우주	👾 🧑‍🚀 👨‍🚀 👩‍🚀 🛰 🚀 🌑 🌒 🌓 🌔 🌕 🌖
+우주 생명체	🛸
+우주 침략자	👾
+우주비행사	🧑‍🚀 👨‍🚀 👩‍🚀
+우주생명체	👾
+우주인	👨‍🚀 👩‍🚀
+우체국	🏤 🏣 📮 🚩
+우체통	📪 📮
+우측	→ 🫱
+우측 방향	🫱
+우편	📯 📧
+우편함	📮 📫 📪 📬 📭
+우하향	↘
+우하향 화살표	↘
+우향	➡ ↩ ⤴ ⤵
+우향 화살표	➡
+우회전	↪ ⤵
+우후	🎉
+운	🪬 🔯
+운동	💦 🙆 🏂 🏊 🏊‍♂ 🏋 🏋‍♂ 🛼 🏀 🏈 🏉 🎾
+운동 선수	⛹ ⛹‍♂ ⛹‍♀ 🤾‍♀
+운동복	🎽
+운동복 상의	🎽
+운동선수	🤾
+운동화	👟
+운세	🔮
+운송	🚚
+운송 차량	🚚
+운송 트럭	🚚
+운송수단	🛻
+운전	🚐 🚕 🚖 🚗 🚘 🚙 🚚 🚛 🚦
+울	🐑 🦙
+울고	😿
+울고 있는 고양이	😿
+울고 있는 고양이 얼굴	😿
+울렁거림	😟 🤢
+울면서	😂
+울면서 웃음	😂
+울상	🙎
+울음	🥹 😢 😭
+울컥	💢
+움라	🕋
+웁스	🤭 🙊 🫗
+웃겨	💀
+웃겨서	😂
+웃고	😃 😅
+웃고 있는	😃
+웃고 있지만 당황한 얼굴	😅
+웃고 있지만 당황해서 땀 흘리는 얼굴	😅
+웃기는	😂
+웃긴	🤣
+웃는	😀 😃 😄 😁 😆 😅 🤣 😊 😇 🥰 ☺ 🥲
+웃는 얼굴	☺ 😊 😇 😏 😈
+웃는 얼굴 천사	😇
+웃으면서	😙
+웃으면서 뽀뽀하는 얼굴	😙
+웃음	😀 😄 😆 🤣 😂 ☺ 😹 😼
+웃음 짓는 얼굴	☺
+웃음기없는	😐
+웃장	🚪
+워킹	🚶‍♂ 🚶‍♀ 🧟 🧟‍♂ 🧟‍♀
+워킹 데드	🧟 🧟‍♂ 🧟‍♀
+워터폴로	🤽 🤽‍♂ 🤽‍♀
+원	○ ● ◯ 🛞 ⏺ ⭕ Ⓜ 🔴 🟠 🟡 🟢 🔵
+원 안의 곱하기	⊗
+원 안의 나누기 슬래시	⊘
+원 안의 더하기	⊕
+원 안의 별표 연산자	⊛
+원 안의 빼기	⊖
+원 안의 점 연산자	⊙
+원 안의 환 연산자	⊚
+원글자	Ⓜ
+원글자 엠	Ⓜ
+원반	🥏
+원본	⊶
+원샷	🍻
+원석	💎
+원소	∈
+원소 포함	∈
+원소 포함 기호	∈
+원소가	∉
+원소가 아님	∉
+원소로	∋
+원소로 포함	∋
+원숭이	🐒 🙈 🙉 🙊 🐵 🦧
+원숭이 얼굴	🐵
+원숭이띠	🐵
+원실	🛖
+원에	Ⓜ
+원에 들어있는 m	Ⓜ
+원을	◉ ◙
+원자	⚛
+원자 기호	⚛
+원장	📒
+원피스	👗 🩱
+원피스 수영복	🩱
+원형	↺ ↻
+원호	◜ ◝ ◞ ◟
+월	🈷
+월귤나무	🫐
+월드	🌏
+월드와이드	🌐
+월병	🥮
+웨이트	🏋 🏋‍♂
+웨이트 트레이닝	🏋 🏋‍♂
+웹	🕸 🌐
+위	↑ 👆 ⋰ ◔ ◕ ◜ ◝ ◤ ◥ ◳ ◷ ↗
+위 화살표	↑
+위가	🔺
+위가 좁은 빨간색 삼각형	🔺
+위도	🌐
+위로	⏫ 🫴 👆 🤲 💁‍♂ ⤴ 🔝 🆙
+위로 버튼	🆙
+위로 향한 손바닥 두개	🤲
+위로 화살표	🔝
+위를	👆
+위를 가리키는 검지손가락	👆
+위생	🪥
+위성	📡
+위성 방송	📡
+위성 안테나	📡
+위스키	🥃
+위시본	🦴
+위아래	⇅ 🙃 ↕
+위아래 방향 화살표	↕
+위아래 화살표	⇅
+위에	↹ ⇄ ⇋ ⇌ ⪍
+위에서	▧ ▨
+위의	⪺
+위쪽	↑ ▲ 👆 ⬆ ⏫ ↟ ↥ ↨ ↰ ↱ ↶ ↷
+위쪽 반원	◠
+위쪽 반원 화살표(반시계방향)	↶
+위쪽 반원 화살표(시계 방향)	↷
+위쪽 방향 검은색 삼각형	▴
+위쪽 방향 흰색 삼각형	△
+위쪽 방향 흰색 작은 삼각형	▵
+위쪽 빨간색 삼각형	🔺
+위쪽 삼각형	🔼
+위쪽 삼각형 버튼	🔼
+위쪽 쌍두 화살표	↟
+위쪽 압정 표시	⊥
+위쪽 이중 화살표	⇑
+위쪽 절반이 채워진 원	◓
+위쪽 화살표	⬆ 🔝
+위쪽 화살표 쌍	⇈
+위쪽에	↼ ⇀
+위쪽에 화살촉이 있는 오른쪽 외날 화살표	⇀
+위쪽에 화살촉이 있는 왼쪽 외날 화살표	↼
+위쪽으로	🔝 🆙 ⤴
+위쪽으로 꺾어지는 우향 화살표	⤴
+위쪽을	👆 ☝
+위쪽을 가리키는 손	☝
+위쪽을 가리키는 손등	👆
+위치	🚩
+위치 표시	🚩
+위치 표시 깃발	🚩
+위험	🛘 ⚡ ☢ ☣
+위험한	💣
+윈도우	🪟
+윌버	🐷
+윙크	😉 😜
+윙크하는	😉
+윙크하는 얼굴	😉
+윙크하면서	😜
+윙크하면서 메롱하는 얼굴	😜
+윙크하면서 혀를 내민 얼굴	😜
+유	🫶 🈶
+유골함	⚱
+유니콘	🦄
+유니콘 얼굴	🦄
+유니폼	🥋
+유대교	🕍 ✡ 🕎 🔯
+유대목	🐨 🦘
+유대목 동물	🦘
+유대인	🕍 ✡ 🕎 🔯
+유도	🥋
+유럽	🌍 🏤 🏰 💶
+유럽 돈	💶
+유럽 성	🏰
+유럽 화폐	💶
+유럽과	🌍
+유럽과 아프리카가 보이는 지구	🌍
+유령	👻
+유로	💶 🪙
+유로화	💶
+유르트	🛖
+유리	🔍
+유리잔	🫗
+유모	👩‍🍼 🧑‍🍼
+유사하거나	⪍
+유사하거나 같음 위에 보다 작음	⪍
+유선전화	☎
+유성	🌠
+유아	👶
+유원지	🎠 🎡 🎢
+유인원	🦧
+유전	🧬
+유전학	🧬
+유제품	🧈
+유혹	😉
+육각	🔯
+육각 별	🔯
+육각형	🔯
+육각형 별	🔯
+육면체	🏢
+육상	👟
+으르렁거리는	🦁 🐻
+으쓱	🤷 🤷‍♂ 🤷‍♀
+으쓱하는	🤷 🤷‍♂ 🤷‍♀
+윽	🙄
+은	🪙 🪎
+은메달	🥈
+은발	🦳
+은색	🩶
+은하	🌌
+은하수	🌌
+은행	🏦 💰 💵 💶 💷 💸 💳 💹 🏧 💱
+음	😋 🤔 ☯
+음각	🅿
+음각 피	🅿
+음극	🧲
+음료	🍼 🥛 ☕ 🫖 🍵 🍶 🍾 🍷 🍸 🍹 🍺 🍻
+음료 팩	🧃
+음료수	🍹 🥛
+음메	🐮 🐄
+음미	😋
+음미하는	😋
+음소거	🔕 🔇
+음소거된	🔇
+음소거된 스피커	🔇
+음수대	🚰
+음식	😋 🦐 🦑 🥭 🍎 🫐 🥝 🍅 🫒 🥑 🥔 🥕
+음식 배달	🥡
+음식 한 그릇	🍲
+음식을	😋 🍫 🍬
+음악	♪ 🔊 🎼 🎵 🎶 🎙 🎚 🎛 🎤 🎷 🎺 🪊
+음악 감상	🎧
+음양	☯
+음주	🍷 🍺
+음표	🎵 ♪ 🎼 🎶
+음흉한	😏
+응	🫡
+응급	🦺
+응애응애	👶
+응원	📣
+의료	🧑‍⚕ 👨‍⚕ 👩‍⚕ 🩻
+의료인	🧑‍⚕ 👨‍⚕ 👩‍⚕
+의료진	🧑‍⚕ 👨‍⚕ 👩‍⚕
+의류	👣 👓 👔 👕 👖 👗 👘 👙 👚 👛 👜 👝
+의문	🫤 ❓ ❔
+의복	🥻
+의사	😷 🧑‍⚕ 👨‍⚕ 👩‍⚕ 🏥 🥼 💉 💊 🩺 🩻
+의술의	⚕
+의술의 신	⚕
+의심	🤨 🫤 🤷‍♂ 🤷‍♀
+의심스러운	😏
+의심하는	🤨
+의심하는 얼굴	🤨
+의자	🪑 💺
+의학	😷 🏥 💉 🩸 💊 🩺 ⚕
+의학 기호	⚕
+이	🪥
+이거	☝
+이겼다	😤
+이동	🏃 🏃‍♂ 🏃‍♀ 🚛 🩼
+이동 보조	🩼
+이두박근	💪
+이득	🉐
+이등	🥈
+이따가	👋
+이따가 봐	👋
+이럴	🤦 🤦‍♂ 🤦‍♀
+이럴 수가	🤦 🤦‍♂ 🤦‍♀
+이륙	🛫
+이를	🥶
+이를 떠는	🥶
+이름	📛
+이름표	📛
+이리	🫴
+이리 와	🫴
+이마에	🤦‍♂ 🤦‍♀
+이마에 손	🤦‍♂ 🤦‍♀
+이메일	📧 ✉ 📨 📩 📤 📥
+이발	💇 💈
+이발사	💈
+이발소	💈 💇
+이발소 기둥	💈
+이발소 표시	💈
+이별	💔 🫂
+이별의	💔
+이별의 고통	💔
+이별의 아픔	💔
+이빨	🦷 🧛 🧛‍♂ 🧛‍♀ 🦫
+이쁜	🦋
+이삭	🌾
+이상	≥
+이상한	😜 😶 😒
+이상함	😬
+이슬람	🕌 🕋 ☪
+이어버드	🎧
+이어져	🖇
+이어져 있는 클립	🖇
+이어폰	🎧
+이완	💆
+이음	🔗
+이익	🉐
+이자카야	🏮
+이전	⏮
+이전 노래	⏮
+이전 장면	⏮
+이전 트랙	⏮
+이전 트랙 버튼	⏮
+이중	⇐ ⇍ ⇑ ⇒ ⇏ ⇓ ⇔ ⇎ ⇖ ⇗ ⇘ ⇙
+이중 가로선이 있는 아래쪽 화살표	⇟
+이중 가로선이 있는 위쪽 화살표	⇞
+이중 교집합	⋒
+이중 밑줄이 있는 논리합	⩣
+이중 적분	∬
+이탈리안	🍝
+이파리	🍁 🍂 🔰
+이하	≤ 🔞
+익살스러운	🤪
+익살스러운 얼굴	🤪
+인간	👱
+인공	🦾 🦿
+인공 기관	🦿
+인공 다리	🦿
+인공 팔	🦾
+인공위성	🛰
+인내	🤌
+인내하는	😣
+인내하는 얼굴	😣
+인덱스	👈 👉 👆 ☝ 🗂 📇
+인도	🪷
+인디고	🪻
+인사	🫡 🖐 🖖
+인상	💹
+인쇄기	🖨
+인어	🧜 🧜‍♂ 🧜‍♀
+인터넷	🌐 🛜 📞
+인터넷 전화	📞
+인형	🎎 🪆
+일	🏢
+일곱	🕖 🕢
+일곱 시	🕖
+일곱 시 반	🕢
+일등	🥇
+일몰	🌇 🌆
+일본	👹 👺 🍙 🍡 🗾 🏣 🏯 🎋 🎍 🎎 🎴 🏮
+일본 기모노	👘
+일본 돈	💴
+일본 성	🏯
+일본 신사	⛩
+일본 우체국	🏣
+일본 인형	🎎
+일본 장식	🎍
+일본 지도	🗾
+일본 초보운전 표시	🔰
+일본 초보운전자 심볼	🔰
+일본 화폐	💴
+일본식	🏮
+일본식 등	🏮
+일본식 선술집	🏮
+일본어	🈁 🈂 🈷 🈶 🈯 🉐 🈹 🈚 🈲 🉑 🈸 🈴
+일본어 "가능" 버튼	🉑
+일본어 "금지" 버튼	🈲
+일본어 "무료 아님" 버튼	🈶
+일본어 "무료" 버튼	🈚
+일본어 "봉사료" 버튼	🈂
+일본어 "비어 있음" 버튼	🈳
+일본어 "빈방없음" 버튼	🈵
+일본어 "신청" 버튼	🈸
+일본어 "여기" 버튼	🈁
+일본어 "영업 중" 버튼	🈺
+일본어 "예약" 버튼	🈯
+일본어 "월간" 버튼	🈷
+일본어 "할인" 버튼	🉐 🈹
+일본어 "합격" 버튼	🈴
+일시	⏯ ⏸
+일시 정지	⏯ ⏸
+일시 정지 버튼	⏸
+일식	🍣
+일자	🪛
+일정	📅 📆
+일출	🌅 🌄
+일치	≡
+임산부	🤰
+임신	👶 🤰 🫃 🫄
+임신부	🤰
+임신한	🫃 🫄
+임신한 남자	🫃
+임신한 사람	🫄
+입	👄 😃 😄 🤑 🤐 😦 😰 😺 😆 😶 🥴 🫦
+입 꾹	😶
+입 다문	🤐
+입 벌리고 미소	😆
+입 벌리고 불쾌한 얼굴	😦
+입 벌리고 웃는 눈웃음 얼굴	😄
+입 벌리고 웃는 얼굴	😃
+입 벌리고 찌푸린 얼굴	😦
+입 없음	😶
+입김	😮‍💨
+입다물어	🤌
+입력	🔡 🔢 🔣 🔠 🔤
+입벌리고	😺
+입벌리고 활짝 웃는 고양이	😺
+입벌린	😮
+입벌린 얼굴	😮
+입벌림	😮
+입술	💋 👄
+입술을	😗 🫦
+입술을 깨물고 있는 입	🫦
+입술을 내민 얼굴	😗
+입에	🤑
+입에 돈을 물고 있는 얼굴	🤑
+입은	🤵 🤵‍♂ 🤵‍♀ 🕴 🧥
+입을	🤭 🫢 🤐 🙊
+입을 가리고 웃는 얼굴	🤭
+입을 막고 있는 원숭이	🙊
+입이	🤑 😶 🫤
+입이 없는 얼굴	😶
+입이 한쪽으로 올라간 얼굴	🫤
+입장	🎟 🎫
+입장 티켓	🎟
+있는	↚ ↛ ↤ ↥ ↦ ↧ ↨ ↸ ↹ ↼ ↽ ↾
+있어?	👋
+있을	🈶
+있을 유	🈶
+있음	🈶 🫨 💤 🔈
+있음"	🈳
+있지만	😅
+잉어	🎏
+잉어 모양 깃발	🎏
+잉크	🔏 🫟
+잊어버린	😮
+잎	🌿 🍀 🍁 🍂 🍃 🔰
+잎사귀	🌿 🍁 🍂
+잎이	🪾
+잎이 없는	🪾
+잎이 없는 나무	🪾
+자	📏 📐
+자격증	🪪
+자고	😴 💤
+자고 있는 얼굴	😴
+자고 있음	💤
+자기부상	🚟
+자기부상 열차	🚟
+자는	😴 💤
+자는 시간	😴
+자는 얼굴	😴
+자는 중	💤
+자동차	🚗 🚕 🚘 🛻 🛞 🏎
+자동화	🏧
+자라다	🪴
+자랑	🥲
+자랑스러움	🥹
+자력	🧲
+자루	🌽
+자르기	✂ 🪚
+자르는	💇 💇‍♂ 💇‍♀
+자름	💇
+자리	💺 ♊
+자매	👭
+자물쇠	🔒 🔓 🔏 🔐 🗝
+자물쇠와	🔏 🔐
+자물쇠와 열쇠	🔐
+자물쇠와 펜	🔏
+자비	🥺
+자비를	🥺
+자비를 구하는	🥺
+자석	🧲 🧭
+자수	🪡
+자신	💯
+자신 있는	💯
+자연	🐌 🐝 🐞 🍄‍🟫 🌋 🗻 🌅 🌈 ⚡ 💧 🌊 ⋈
+자연 조인	⋈
+자오선	🌐
+자오선 지구	🌐
+자욱한	🌁
+자욱한 안개	🌁
+자유	🗽 ⛓‍💥 🆓
+자유 신호	🆓
+자유의	🗽
+자유의 여신상	🗽
+자유투	⛹ ⛹‍♂ ⛹‍♀
+자유형	🏊 🏊‍♂
+자전거	🚲 🚴 🚴‍♂ 🚴‍♀ 🚵 🚵‍♂ 🚵‍♀ 🚳 🔐
+자전거 금지	🚳
+자전거 선수	🚴 🚴‍♂
+자전거 자물쇠	🔐
+자전거 주행	🚴 🚴‍♂
+자전거 주행 금지	🚳
+자전거 타는 남자	🚴‍♂ 🚵‍♂
+자전거 타는 사람	🚴 🚵
+자전거 타는 여자	🚴‍♀
+자켓	🥼
+작거나	≦
+작거나 같음	≦
+작게	🔉
+작아지는	🌘
+작은	🦐 🫘 ▵ ▸ ▹ ▾ ▿ ◂ ◃ 🫙 🌤 ◾
+작은 검은색 사각형	▪
+작은 구름 뒤의 태양	🌤
+작은 병	🫙
+작은 주황색 마름모	🔸
+작은 파란색 마름모	🔹
+작은 흰색 사각형	▫
+작음	≪ ⋘ ⩽ ⪍ 🔉
+작지	≮
+작지 않음	≮
+작품	🖼
+잔	🍶 🥂
+잘	🥱 🤷 🛌 🫂
+잘 가	🫂
+잘 모르겠음	🤷
+잘 시간	🥱 🛌
+잘가	👋
+잘자	😴 🥱 💤 🛌
+잘했어	👏
+잠	😪 😴 🛌 🏨 🛏
+잠근	🤐
+잠금	🔒 🔐
+잠금풀림	🔓
+잠금해제	🔓 🔑
+잠긴	🤔 😶‍🌫
+잡고	🧑‍🤝‍🧑 👭 👫 👬
+잡기	🫴 🤾‍♀
+잡다	🫱
+잡은	👭 👬
+장갑	🧤
+장기	🫀 🫁
+장난감	🪀 🧸
+장난기	🦝
+장난기 있는	🦝
+장난꾸러기	🦦
+장난스러운	🤪
+장난스러운 눈	🤪
+장난치는	💁
+장년	🦳
+장례식	⚰ ⚱
+장면	⏭ ⏮
+장미	🏵
+장미 모양	🏵
+장미꽃	🌹
+장보기	🛒
+장부	📒
+장비	🔫 ⛏ ⚒ 🛠 🏹 🪚 🪛 🔭 🥽
+장식	🪴 🎍 💟 🎃 🎏
+장씩	📆
+장애	🩼 ♿
+장애가	🧏
+장애인	♿
+장치	🔬 🛗
+재	⚱
+재건축	👷 👷‍♂ 👷‍♀
+재난	🛘
+재능	💃 🕺
+재단	🪡
+재목	🪵
+재미없어	😒
+재미없어 하는 얼굴	😒
+재미있는	😜 🤣
+재봉	🪡
+재봉 바늘	🪡
+재생	🐦‍🔥 ▶ ⏯ 🔀 🔁 🔂
+재생 또는 일시 정지 버튼	⏯
+재생 버튼	▶
+재주넘기	🤸‍♂ 🤸‍♀
+재즈	🪊 👐
+재즈 핸드	👐
+재창조	🐦‍🔥
+재채기	🤧 😫
+재채기하는	🤧
+재채기하는 얼굴	🤧
+재킷	🧥
+재탄생	🐦‍🔥
+재활용	♻
+재활용 표시	♻
+잭	🎃
+잭오랜턴	🎃
+잽	⚡
+저	🙋
+저 알아요	🙋
+저글	🤹 🤹‍♂ 🤹‍♀
+저글링	🤹 🤹‍♂ 🤹‍♀
+저글링하는	🤹 🤹‍♂ 🤹‍♀
+저글링하는 남자	🤹‍♂
+저글링하는 사람	🤹
+저글링하는 여자	🤹‍♀
+저녁	🌆
+저녁식사	🐟 🍽 🍴
+저리	🫳
+저리 가	🫳
+저요	🙋 🙋‍♂ 🙋‍♀
+저울	🧑‍⚖ 👨‍⚖ 👩‍⚖ ⚖ ♎
+저작권	©
+저장	🫙
+적갈색	🦰
+적분	∫ ∬ ∮
+적용	⊮
+적용 안 함	⊮
+적은	🤏
+적은 양을 나타내는 손	🤏
+전	⏮
+전갈	🦂 ♏
+전갈자리	♏ 🦂
+전경	🏙
+전곡	🔁
+전곡 반복 재생	🔁
+전구	💡
+전기	🚃 ⚡ 🪫 🔌 💡 🔦 🧑‍🔧 👨‍🔧 👩‍🔧
+전기 기사	🧑‍🔧 👨‍🔧 👩‍🔧
+전기 플러그	🔌
+전동	🛵 🧑‍🦼 👨‍🦼 👩‍🦼 🦼
+전동 휠체어	🦼 🧑‍🦼
+전동 휠체어를 탄 남자	👨‍🦼
+전동 휠체어를 탄 사람	🧑‍🦼
+전동 휠체어를 탄 여자	👩‍🦼
+전등	🔦 🛋
+전력	⚡
+전리품	🪎
+전망	🪟
+전면	👊
+전문가	🤓 👨‍💻 👩‍💻 🧑‍💻
+전사	🪖
+전설	🧝 🧝‍♂ 🧝‍♀
+전송	📤
+전송된	📩
+전송된 이메일	📩
+전송된 편지	📩
+전압	⚡
+전원	🪫 📴
+전원 없음	🪫
+전원이	📴
+전원이 꺼진 휴대전화	📴
+전쟁	🥷 🪖
+전차	🚊 🚋
+전차 차량	🚋
+전철	🚃 🚇
+전철역	🚉
+전체	🈴
+전통	👲
+전통적인	☦
+전통적인 십자가	☦
+전투	🤼
+전투원	🥷
+전화	🤙 📱 ☎ 📞 📵 📶
+전화 사용금지	📵
+전화기	☎ 📞 📳 📴
+전화를	🤙
+전화를 걸라는 손 모양	🤙
+절	🙇 🙇‍♂ 🙇‍♀
+절규하는	😱 🙀
+절규하는 고양이 얼굴	🙀
+절대	🙅
+절대 안 돼	🙅
+절대적	≣
+절대적 동치	≣
+절레절레	😒
+절반이	◐ ◑ ◒ ◓ ◖ ◗
+절친	👭
+절하는	🙇 🙇‍♂ 🙇‍♀
+절하는 남자	🙇‍♂
+절하는 사람	🙇
+절하는 여자	🙇‍♀
+젊은	👦
+젊음	👧
+점	🦒 ⊙ ⋅
+점 연산자	⋅
+점근적으로	≃
+점근적으로 같음	≃
+점선	◌
+점선 테두리 원	◌
+점선으로	🫥
+점수	💯
+점심식사	🍴
+점이	🔯 💠
+점이 있는 육각 별	🔯
+점이 찍힌 다이아몬드 모양	💠
+점이 찍힌 마름모	💠
+점점	🌖 🌘
+점점 기울어가는	🌖
+점점 작아지는	🌘
+점프	🦘
+접근	♿
+접근성	🦾 🦿 🦻 🧏 🧑‍🦯 👨‍🦯 👩‍🦯 🧑‍🦼 👨‍🦼 👩‍🦼 🧑‍🦽 👨‍🦽
+접시	🍽 📡 🧫
+접시저울	⚖
+접이식	🪭
+접이식 손 부채	🪭
+접힌	🌂 📄
+접힌 우산	🌂
+젓가락	🥢 🍜 🥡
+젓기	🚣 🚣‍♂
+젓는	🚣 🚣‍♂
+정각	🕛 🕐 🕑 🕒 🕓 🕔 🕕 🕖 🕗 🕘 🕙 🕚
+정교회	☦
+정교회 십자가	☦
+정규	⋭
+정규 부분군이거나 같음으로 포함하지 않음	⋭
+정답	🟰 ⭕
+정돈	💇
+정령	🧞 🧞‍♂ 🧞‍♀
+정류	⚗
+정류장	🚏
+정리	💅
+정면을	🐥
+정면을 향해 날개를 편 병아리	🐥
+정보	💁 📰
+정비공	🧑‍🔧 👨‍🔧 👩‍🔧 🧰
+정사각형	■ □ ▢ ▣ ▤ ▥ ▦ ▧ ▨ ▩ ◙ ◳
+정상	⛰
+정색하는	😐
+정색하는 얼굴	😐
+정신이	😜 🤪 😕
+정신이 나간	🤪
+정신이 없는	😕
+정원	🐌 🐛 🐜 🫜 🏡 🪏
+정원사	👨‍🌾 👩‍🌾
+정원이	🏡
+정원이 있는 주택	🏡
+정원이 있는 집	🏡
+정의	🧑‍⚖ 👨‍⚖ 👩‍⚖ 🦸 🦸‍♂ 🦸‍♀ ⚖ ♎
+정장	🕴
+정좌	🧘 🧘‍♂ 🧘‍♀
+정중함	🙇 🙇‍♂ 🙇‍♀
+정지	🖐 ⏸ ⏹ 🚥 🚦 ⏯
+정지 버튼	⏹
+정지 신호	🚥 🚦
+정착	🏠 🏡
+정화	⚗
+젖먹이	🍼
+젖병	🍼
+젖소	🐄
+젖히고	💁
+젖힌	💁‍♂ 💁‍♀
+젖힌 손	💁‍♂ 💁‍♀
+제곱	√
+제곱근	√
+제과점	🍭
+제발	🥹 🙏
+제비꽃	🪻
+제스처	🙈 🙉 🙊 🙌 🙍 🙍‍♂ 🙍‍♀ 🙎 🙎‍♂ 🙎‍♀ 🙅 🙅‍♂
+제스처를	🙅 🙅‍♂ 🙅‍♀ 🙆 🙆‍♂ 🙆‍♀
+제스트	🍋‍🟩
+제안	🫴
+제외	🙅
+제외한	◕
+제트	✈
+젠더퀴어	🌈 🏳‍🌈
+젤리	🪼
+조각	🍕 🧩 🧀 🍰
+조각 케익	🍰
+조각케이크	🍰
+조각퍼즐	🧩
+조개껍데기	🐚
+조금	🤏
+조끼	🦺
+조류	🐓 🐣 🐤 🐦 🐧 🕊 🦅 🦆 🦢 🦉 🦚 🦜
+조류학	🐦
+조리	🩴
+조립	👩‍🏭
+조립공	🧑‍🏭 👨‍🏭 👩‍🏭
+조미료	🧄 🧂
+조소	💁
+조용	🤫
+조용한	😶 🙊 🔇 🔕
+조이스틱	🕹
+조인	⋈
+조작	🎛
+조작 레버	🎛
+조절	🔅
+조종대	🕹
+조커	🃏
+족쇄	⛓‍💥
+족적	👣
+존경	🫡
+존재	∃
+졸고	😴
+졸고 있는 얼굴	😴
+졸린	🫩 😩 😪
+졸린 얼굴	😪
+졸림	💤 😪
+졸업	👨‍🎓 👩‍🎓 🎓
+졸업 모자	🎓
+졸업생	🎓
+졸업식	🧑‍🎓 👨‍🎓 👩‍🎓 🎓
+좀비	🧟 🧟‍♂ 🧟‍♀
+좁은	🔺 🔻
+종	🔔 🎐
+종교	⛪ 🕌 🕍 ⛩ 🕋 📿 🛐 🕉 ✡ ☸ ☯ ✝
+종료	🔚
+종이	✂ 📎 🧻
+종이 수건	🧻
+종이 클립	📎
+종이 타월	🧻
+좋다	🆗
+좋아	😃 👌 👍 🙆‍♂ 🙆‍♀ 🆗
+좋아요	👍
+좋아함	🍫 🍬
+좋아해	🩷
+좋은	💖 🧠
+좋은 밤	💖
+좋지	👎
+좋지 않아	👎
+좌상향	↖
+좌상향 화살표	↖
+좌석	💺 🪑
+좌우	⇆ ↔
+좌우 방향 화살표	↔
+좌우 화살표	⇆
+좌우측	⇆
+좌우향	↔
+좌우향 화살표	↔
+좌절	🫥 😠 🙍
+좌절함	😖
+좌측	← 🫲
+좌측 방향	🫲
+좌하향	↙
+좌하향 화살표	↙
+좌향	⬅ ↪
+좌향 화살표	⬅
+좌회전	↩ ⤴
+주둥이	🐽
+주르륵	🤤
+주말	👕 👖
+주머니	💰
+주먹	✊ 👊 🤛 🤜
+주먹 전면	👊
+주먹밥	🍘
+주먹을	✊ 👊
+주먹을 꽉진	👊
+주먹을 든	✊
+주무세요	🥱 💤 🛌
+주문	🧙 🧙‍♂ 🧙‍♀
+주방용품	🥄
+주방장	🧑‍🍳 👨‍🍳 👩‍🍳
+주사	💉
+주사 바늘	💉
+주사기	💉
+주사위	🎲
+주스	🥤 🧃
+주억거리다	🙂‍↕
+주유소	⛽
+주의	⚠ ☢ ⚡
+주인	🧑‍🌾 👨‍🌾 👩‍🌾
+주차	🅿
+주차 표시	🅿
+주차장	🅿
+주택	🏘 🏚 🏠 🏡 🔨 🔧 🔩
+주택 개조	🔨 🔩
+주택 건물	🏘
+주택 수리	🏚 🏠 🏡 🔨 🔧 🔩
+주파수	📲
+주판	🧮
+주행	🚴 🚴‍♂ 🚵 🚳
+주황색	🔶 🔸 🧡 📙
+주황색 책	📙
+주황색 하트	🧡
+죽	🥣
+죽는	🥵
+죽었어	💀
+죽은	😔 ☠ 🪾 ⚰
+죽음	😐 😑 😵 💀 ☠ ⚰ 🪦 ⚱
+준비	🛄
+준우승	🥈
+줄	⪚
+줄무늬	🦓
+줄이기	🔉
+줄임표	⋮ ⋯ ⋰ ⋱
+줍다	🫳
+중	🤔 💤 💑 👣 🚧 🛬 🔜
+중"	🈺
+중각	◾
+중각 작은 검은색 사각형	◾
+중간	⋯ ◼ ◻ ◽
+중간 가로 줄임표	⋯
+중간 검은색 사각형	◼
+중간 작은 흰색 사각형	◽
+중간 흰색 사각형	◻
+중간크기	◼
+중간크기 검은색 사각형	◼
+중국	👲
+중국 전통 모자를 쓰고 있는 남자	👲
+중국 전통 모자를 쓴 남자	👲
+중단	⏹
+중요	🔑
+중요 열쇠	🔑
+중인	👩‍🍼 👨‍🍼 🧑‍🍼
+중지	🖕 🤞 ⏹
+중지를	🫰
+줘	🫴
+쥐	🐀 🐭 🐁
+쥐 얼굴	🐭
+쥐고	✊
+쥐덫	🪤
+쥐띠	🐭
+쥔	✍
+쥬스	🧃
+쥬스 팩	🧃
+즐거워하는	🙋
+즐거워하는 사람	🙋
+증기	🚂
+증류	⚗
+증류기	⚗
+증명	∎
+증명 끝	∎
+증분	∆
+증분 기호	∆
+증빙	🧾
+지	🈯
+지갑	👛 👜
+지겨워	💅
+지구	🌍 🌎 🌏 🌐
+지구본	🌍 🌎 🌏
+지그재그	↯
+지금	😥
+지금 말고	😥
+지난	📷 📹
+지난 시절	📷 📹
+지느러미	🐬
+지니	🧞 🧞‍♂ 🧞‍♀
+지도	🗺 🗾 📍
+지독한	💩
+지렁이	🪱
+지루한	😔 🫩 🪴
+지루함	😒 🥱
+지루해하는	😒
+지루해하는 얼굴	😒
+지르는	😱
+지문	🫆
+지불	💰 💳 💲
+지식	📖 📚
+지압	💆‍♂ 💆‍♀
+지으며	😄 😆 😊
+지저분하게	🫟
+지저분하게 튄	🫟
+지적인	🧠
+지진	🫨 🛘
+지친	😮‍💨 🫩 😩
+지친 얼굴	😩
+지침	😩
+지칭	🈯
+지켜	🤐
+지팡이	🪄 🦯 🩼
+지팡이를	🧑‍🦯 👨‍🦯 👩‍🦯
+지팡이를 든 남자	👨‍🦯
+지팡이를 든 남자 시각장애인	👨‍🦯
+지팡이를 든 사람	🧑‍🦯
+지팡이를 든 여자	👩‍🦯
+지팡이를 든 여자 시각장애인	👩‍🦯
+지퍼	🤐
+지퍼로	🤐
+지퍼로 입을 잠근 얼굴	🤐
+지폐	💴 💵 💶 💷 💸
+지프	🚙
+지프차	🚙
+지하철	🚇
+지하철역	🚉
+지휘봉	🪄
+직각	∟ 📏 ⊿
+직각 삼각형	⊿
+직각삼각형	◢ ◣ ◤ ◥ ◿
+직사각형	▬ ▭ ▮
+직선자	📏
+직소	🧩
+직소퍼즐	🧩
+직원	🧑‍🏭 👨‍🏭 👩‍🏭 ⚕
+직장인	👔
+직전	⏮
+직전 트랙	⏮
+진	👖
+진동	📳
+진동 모드	📳
+진동모드	📳
+진료	🧑‍⚕ 👨‍⚕ 👩‍⚕
+진리	☸
+진리의	☸
+진리의 수레바퀴	☸
+진실	💯
+진심	💁
+진입	⛔ 🚫
+진입 금지	⛔
+진입 금지 표시	⛔ 🚫
+진정	🤌
+진주	🦪 🫧
+진주같은	🦷
+진짜	💯 💀 🫀
+진짜 심장	🫀
+진짜 웃겨	💀
+진한	➖ ➗ 💲 ⭕ ✔
+진한 나누기 표시	➗
+진한 달러 표시	💲
+진한 빼기 표시	➖
+진한 체크 표시	✔
+진한 체크표시	✔
+진행된다는	🔜
+진화	🧬 🧯
+질린	🥶 😰
+질문	🤌 🙋 ❓ ❔
+질병	🪰
+질주	🏃 🏃‍♂ 🏃‍♀
+질투	😐 😒
+짐	🧳 🛄 🛅 🌇 🎲
+짐 찾는 곳	🛄
+짐싸기	🧳 🛃 🛄
+집	🏠 🪴 🪹 🛖 🏘 🏚 🏡
+집게발	🦞
+집다	🫳
+집사	🐈
+집중하는	😣
+집합	⊂ ⊃
+집합이거나	⊆ ⊇
+짓는	😄 😁 😆 🙂 😊 ☺ 😙 😸 😼
+징그러운	🪳
+징징거림	🙎
+짜증	🙍 🤦 🤦‍♂ 🤦‍♀
+짜증나	💩
+짜증난	😒
+짜증남	😖
+짝꿍	👯 👯‍♀
+짝짝이	🥴
+짝짝이 눈	🥴
+짠	🧂 🍻 🥂 🎉
+짠 하는 맥주잔	🍻
+쪼개기	🪓
+쪼옥	💋
+쪽	💋
+쪽지	🎋
+쫙	🖐
+쫙 편 손바닥	🖐
+찌	✌
+찌개	🥘 🍲
+찌르다	🫵
+찌푸린	😬 😦 🙍 🙍‍♂ 🙍‍♀
+찌푸린 남자	🙍‍♂
+찌푸린 사람	🙍 🙍‍♂ 🙍‍♀
+찌푸린 얼굴	😬 😦
+찌푸린 여자	🙍‍♀
+찌푸림	🙍‍♂ 🙍‍♀ 🙎
+찍힌	💠
+찐	🍠
+찐 고구마	🍠
+찔리다	😦
+찡그린	😕 🙁 ☹
+찡그린 얼굴	☹ 🙁
+찡그림	😬 🙁 ☹ 🙍‍♂ 🙍‍♀ 🙎
+차	🍵 ☕ 🫖 🧋 🧉 🚃 🚞 🚋 🚌 🚍 🚓 🚔
+차가운	🧊
+차단	🈲
+차량	🚗 🚜 🚃 🚋 🚚
+차려입은	👗
+차려입음	👖
+차트	💹 📉 📊
+착륙	🛬
+찬	😔
+찰	🈵
+찰 만	🈵
+참는	🥹
+참선	🧘 🧘‍♂ 🧘‍♀
+참아내는	😣
+참아내는 얼굴	😣
+찹	🥩
+찻잔	🍵
+찻주전자	🫖
+찻집	🍵
+창	🪟 🔱
+창문	🪟
+창틀	🪟
+찾는	🛄
+채로	😚
+채소	🍈 🍅 🍆 🥔 🥕 🫑 🥒 🫛 🫜 🥗 🥬
+채식	🍄‍🟫
+채식주의	🍄‍🟫 🫜
+채워진	▤ ▥ ▦ ▧ ▨ ▩ ◍ ● ◐ ◑ ◒ ◓
+채워진 원	●
+책	📕 📖 📗 📘 📙 📚
+책 여러 권	📚
+책가방	🎒
+책갈피	🔖
+챔스	🏆
+챔피언십	⛹ ⛹‍♂ ⛹‍♀
+챔피온	🏆
+챙	👒
+챙 넓은 모자	👒
+처녀	♍
+처녀자리	♍
+척	👍
+천도복숭아	🍊
+천문학	⭐
+천사	👼 🪽 😇
+천사같은	😇
+천사고리가	😇
+천사고리가 있는 얼굴	😇
+천상의	🪽
+천연	🫚
+천칭	♎
+천칭자리	♎ ⚖
+철도	🚃 🚄 🚅 🚆 🚉 🛤 🚟 🚞
+철도 선로	🛤
+철도 차량	🚃
+철월	🌔
+철인	🏊 🏊‍♂
+철인 3종 경기	🏊 🏊‍♂
+첨자	⨧
+청각	🧏
+청각 장애가 있는 사람	🧏
+청각장애	🦻 🧏 🧏‍♂ 🧏‍♀
+청각장애가	🧏‍♂ 🧏‍♀
+청각장애가 있는 남자	🧏‍♂
+청각장애가 있는 여자	🧏‍♀
+청각장애인	🧏
+청경채	🥬
+청구	🧾
+청력	🧏
+청록색	🩵
+청바지	👖
+청소	🧹 🫧 🧽
+청진기	🩺
+체리	🍒
+체스	♟
+체스 말	♟
+체스 폰	♟
+체온계	🤒
+체온계를	🤒
+체온계를 물고 있는 얼굴	🤒
+체인	⛓
+체조	🤸 🤸‍♂ 🤸‍♀
+체취	👃
+체크	✅ ☑ ✔ 🏁
+체크 무늬	🏁
+체크 무늬 깃발	🏁
+체크 표시	✔ ✅
+체크 표시 버튼	✅
+체크박스	☑
+체크상자	☑
+체크완료	☑
+체크인	🛫 🛄
+체크표시	✔
+체크표시된	☑
+체크표시된 투표란	☑
+쳐다보기	🫣
+초과	≥
+초능력	🦸 🦸‍♂ 🦸‍♀ 🦹 🦹‍♂ 🦹‍♀
+초록	🍏 ❎
+초록 사과	🍏
+초록 상자 안 엑스 표시	❎
+초록색	🍏 🔰 💚 📗
+초록색 책	📗
+초록색 하트	💚
+초밥	🍣
+초보	🔰
+초보운전	🔰
+초보운전자	🔰
+초보자	🔰
+초승달	🌙 🌑 🌘 ☪ 🥐 🌒 🌛
+초승달 모양 롤	🥐
+초승달 상현	🌒
+초승달과	☪
+초승달과 별	☪
+초식	🦕
+초식 공룡	🦕
+초인	🦸 🦹 🦹‍♂ 🦹‍♀
+초조함	🫦
+초집중	😣
+초코	🍫 🍩 🍪
+초코 도넛	🍩
+초코 쿠키	🍪
+초코바	🍫
+초코칩	🍪
+초코칩 쿠키	🍪
+초콜렛	🍫 💝 🍪
+초콜렛 칩	🍪
+초콜릿	🫕
+촉수	🪼
+촛대	🕎
+총	🔫
+총명	🤓
+총합	∑
+촬영	🎥 🎬 📷 📹
+최고	👍
+최고점	💯
+최신	👨‍💻 👩‍💻
+최신 과학 기술 전문가	👨‍💻 👩‍💻
+최악	👎
+추모	🎗
+추모 리본	🎗
+추세	💹 📈 📉
+추수감사절	🦃
+추운	🥶 😰
+추움	🌨
+추워하는	🥶
+추워하는 얼굴	🥶
+추위	🏔 ❄ ☃ ⛄ 💧 🧣
+추적	🫆
+추출	⏏
+축구	⚽ 🏈
+축구공	⚽
+축복	🙏 ⛪
+축제	💃 🕺 🥮 🎎 🎆 🎇
+축하	🥳 👏 🙌 🤶 🎂 🥂 🎄 🎆 🎇 🎈 🎉 🎊
+출발	🛫
+출입국	🛂
+출입국 심사	🛂
+춤	💃 🕺 🪩 🪭 🩰 🪇
+춤추는	💃 🕺 👯 👯‍♂ 👯‍♀
+춤추는 남자	🕺
+춤추는 여자	💃
+춤춰요	💃 🕺
+충격	🤭 🫢 🫨 🤯 😮 😲 🫪
+충격받은	🤯 😱
+충격적	😳
+충돌	💥 🫯
+충전	🔋
+취소	✖
+취한	🥴
+치과	🦷
+치과의사	😬 😷 🦷
+치기	👏
+치는	⛈
+치료	💆 💉
+치아	😀 😃 😁 🦷
+치유	❤‍🩹
+치즈	🧀 🍕 🫕 🪤
+치즈 덩어리	🧀
+치즈 조각	🧀
+치켜올린	🤨
+치킨	🐔 🍗
+칙칙폭폭	🚆
+친구	👨 👭 👫 👬
+친구들	👭 👬 👥
+친한	👭
+칠면조	🦃 🍗
+침	🤤 🪼
+침 흘리는 얼굴	🤤
+침대	🛏 😴 🛌
+침대에	🛌
+침대에 누운 사람	🛌
+침략자	👾
+침흘리기	🤤
+칩	🍪
+칫솔	🪥
+칭찬	🙌
+카	🛞
+카누	🛶 🚣 🚣‍♂
+카드	♠ ♦ 🃏 🎴 💳 🗂 📇 🗃 🪧 ♥ ♣
+카드 게임	♥ ♣
+카드 색인 파일	🗂
+카드 인덱스	📇
+카드 파일 상자	🗃
+카레	🍛
+카레라이스	🍛
+카레밥	🍛
+카메라	📷 🤳 🎥 📸 📹
+카바	🕋
+카부스	🚂
+카우걸	🤠
+카우보이	🤠
+카우보이 모자 쓴 얼굴	🤠
+카우치	🛋
+카지노	🎰
+카타카나	🈁 🈂
+카트	🛒
+카페	☕
+카페인	☕
+칵테일	🍸 🍋‍🟩
+칵테일글라스	🍸
+칵테일바	🍸
+칵테일잔	🍸
+칸다	🪯
+칸탈루프	🍈
+칼	🤺 🗡 🔪
+칼라	👕 👚
+칼사	🪯
+캐디	🏌 🏌‍♂
+캐비닛	🗄
+캐서롤	🥘
+캐주얼	👖
+캔	🥫
+캔들	🕯
+캔디	🍫 🍬 🍭 🪅
+캘린더	📅 📆 🗓
+캠코더	📹
+캠프	⛺
+캠핑	🏕 ⛺ 🥾
+캡	🧢
+캥거루	🦘
+커뮤니케이션	📢 📱 📞 📟 📠 📩 📦 📶 📳
+커스타드	🍮
+커스타드 푸딩	🍮
+커지는	💗
+커지는 마음	💗
+커지는 하트	💗
+커플	🧑‍🤝‍🧑 👫 👬 💏 💑 👭
+커피	☕
+컨트롤	🎛
+컨트롤 레버	🎛
+컨트롤러	🎮
+컬링	🥌
+컬링 스톤	🥌
+컴퓨터	🧑‍💻 👨‍💻 👩‍💻 💻 🖥 🖨 ⌨ 🖱 🖲 💽 💾 📀
+컴퓨터 마우스	🖱
+컵	🍵 🥤
+컵케이크	🧁
+케밥	🥙 🍢
+케어	💅
+케이블	🚠
+케이블카	🚡 🚟 🚠
+케이스	🛅
+케이크	🎂 🍰
+케이티엑스	🚄 🚅
+케익	🍰
+케일	🥬
+켄터키	🐎
+켄터키 더비	🐎
+켜짐	🔛
+켜짐!	🔛
+켤레	⊹
+코	👃 🥸 🐽
+코끼리	🐘
+코드	🪢
+코딩	🧑‍💻 👨‍💻 👩‍💻
+코딩하는	🧑‍💻 👨‍💻 👩‍💻
+코딩하는 사람	🧑‍💻 👨‍💻 👩‍💻
+코럴	🪸
+코르크	🍾
+코르크가	🍾
+코르크가 튀어나오고 있는 병	🍾
+코믹	💩 💥 💫 💦 💨 💤 💪 💧 💣 💠
+코바늘	🧶
+코뿔소	🦏
+코스메틱	💄
+코스터	🎢
+코스프레	🧛 🧛‍♂ 🧛‍♀
+코알라	🐨
+코인	🪙
+코주부	👺
+코주부 도깨비	👺
+코주부 도깨비 가면	👺
+코코	🈁
+코코넛	🥥
+코트	🧥
+콘	🌽 🍦
+콘 아이스크림	🍦
+콘서티나	🪗
+콘지	🥣
+콜라다	🍍 🥥
+콜라주	📌
+콤프레셔	🗜
+콥터	🚁
+콧수염	🥸
+콩	🫘 🫛
+콩가	🪘
+콩과	🫛
+콩류	🫘
+콩팥	🫘
+콸콸	🐳
+쾅	💥 👊 🎆 🎇
+쾌속정	🚤
+쿠키	🍪 🥠
+쿨	🆒
+쿨 신호	🆒
+쿨쿨	💤
+쿨쿨쿨	😴 🥱 🛌
+퀴어	👬 🏳‍🌈
+퀸	🫅
+큐피드	💘 🪉
+크거나	≧
+크거나 같음	≧
+크게	🔊 📢 😃 😳
+크고	⭕
+크고 진한 동그라미	⭕
+크라운	🫅 🏇 🐎
+크래인	🏗
+크래커	🍘
+크랩	🦀
+크레용	🖍
+크레파스	🖍
+크레페	🥞
+크로스	🤞
+크로커다일	🐊
+크루아상	🥐
+크루즈	🚣 🚣‍♂ 🚣‍♀
+크리스마스	🎅 🤶 🧑‍🎄 🎄 🎁 🌲
+크리스마스 트리	🎄 🌲
+크리스찬	⛪ ✝
+크리스천	☦
+크리켓	🏏
+크림	🍦 🍨
+크지	≯
+크지 않음	≯
+큭큭거리는	🤭
+큰	🦣 ◯ 🥺 🐅 🐆 🦤 🌥 🔴 🔵 ⬛ ⬜ 🔶
+큰 검은색 사각형	⬛
+큰 고양이과 동물	🐅 🐆
+큰 구름 뒤의 태양	🌥
+큰 눈	🥺
+큰 빈 원	◯
+큰 빨간 원	🔴
+큰 새	🦤
+큰 주황색 마름모	🔶
+큰 파란 원	🔵
+큰 파란색 마름모	🔷
+큰 흰색 사각형	⬜
+큰까마귀	🐦‍⬛
+큰절	🙇 🙇‍♂ 🙇‍♀
+클라이밍	🧗 🧗‍♂ 🧗‍♀
+클라이밍하는	🧗 🧗‍♂ 🧗‍♀
+클라이밍하는 남자	🧗‍♂
+클라이밍하는 사람	🧗
+클라이밍하는 여자	🧗‍♀
+클래스	🚲
+클래식한	🧐
+클래퍼보드	🎬
+클램프	🗜
+클러치	👝
+클러치 백	👝
+클럽	♣ 🍷 🍸 🍹
+클레이	🧱
+클렌징	🧼
+클로바	♣
+클로바 무늬	♣
+클로버	🍀
+클로스	🎅 🤶
+클리핑	📋
+클립	📎 📋 🖇
+클립보드	📋
+큼	≫ ⋙ ⪚ 🔊
+키보드	⌨
+키스	💏 😘 😗 😚 😙 😽 💝 💖 💗 💋 👄 🫦
+키스를	😘
+키스를 날리는 얼굴	😘
+키스를 보내는 얼굴	😘
+키스하는	😗 😚 😙 😽
+키스하는 고양이 얼굴	😽
+키스하는 얼굴	😗
+키우기	🔊
+키우다	🪴
+키위	🥝
+키티	🐱
+킥	🦵 🦶 🛴
+킥보드	🛴
+킹	🫅
+타기	🏄 🏄‍♂
+타는	⛷ 🏂 🚴 🚴‍♂ 🚴‍♀ 🚵 🚵‍♂ 🚵‍♀ 🛹
+타말레	🫔
+타악기	🪇
+타워	🗼
+타월	🧻
+타이	👔
+타이거	🐅
+타이머	⌛ ⏳ ⏲
+타이머 시계	⏲
+타이어	🛞
+타이완	🧋
+타이타닉	🚢
+타코	🌮 🌯
+탁구	🏓
+탁구공	🏓
+탁구채	🏓
+탄	🧑‍🦼 👨‍🦼 👩‍🦼 🧑‍🦽 👨‍🦽 👩‍🦽
+탄식	🙎
+탈	🛞
+탈 것	🛞
+탈리스만	🧿
+탐욕	🤑
+탐정	🕵 🕵‍♂ 🕵‍♀ 🫆
+탑	🗼
+탑햇	🎩
+탕	🍲
+태권도	🥋
+태양	☀ 🏜 🌤 🌥 🌦
+태어난	🍼 🐣
+태풍	🌀 🌪
+태풍의	🌀
+태풍의 눈	🌀
+택	🏷
+택배	📦
+택시	🚕 🚖
+택시 부르기	🚖
+탭	📑
+탱고	💃 🕺
+터널	🚞
+터번	👳 👳‍♂ 👳‍♀
+터번 쓴 남자	👳‍♂
+터번 쓴 사람	👳
+터번 쓴 여자	👳‍♀
+터번을	👳 👳‍♂ 👳‍♀
+터번을 쓰고 있는 남자	👳‍♂
+터번을 쓰고 있는 사람	👳
+터번을 쓰고 있는 여자	👳‍♀
+터보건	🛷
+터질	🫃 🫄
+터짐	🤣
+터키	🦃
+터트리고	📸
+터트리기	🎊
+터트린	📸
+턱	🤔
+턱시도	🤵 🤵‍♂ 🤵‍♀
+턱시도를	🤵 🤵‍♂ 🤵‍♀
+턱시도를 입은 남자	🤵‍♂
+턱시도를 입은 사람	🤵
+턱시도를 입은 여자	🤵‍♀
+털	🫈
+털복숭이	🫈 🦣
+털복숭이 맘모스	🦣
+털북숭이	🦣
+텀블러	🥃
+텅	📥 🈳
+텅 빈 받은 편지함	📥
+텅 빈 상태	🈳
+테그	🪯
+테니스	🎾
+테두리	🔳 ◌
+테두리가	🫥 🔳 🔲
+테두리가 검은 사각 버튼	🔲
+테두리가 점선으로 된 얼굴	🫥
+테두리가 하얀 사각 버튼	🔳
+테디	🧸
+테디 베어	🧸
+테라피	💆
+테라피스트	🧑‍⚕ 👨‍⚕ 👩‍⚕
+테이블웨어	🥄
+테이크아웃	🥡
+테이크아웃 상자	🥡
+테이프	📼
+텐트	⛺ 🏕 🎪
+텔레비전	📺
+토	🤮
+토깽이	🐇
+토끼	🐇 👯‍♂ 🐰 👯 👯‍♀
+토끼 귀	👯 👯‍♀
+토끼 귀를 쓰고 춤추는 남자들	👯‍♂
+토끼 귀를 쓰고 춤추는 사람들	👯
+토끼 귀를 쓰고 춤추는 여자들	👯‍♀
+토끼 얼굴	🐰
+토끼띠	🐰
+토끼풀	☘
+토네이도	🌪
+토라진	😾
+토라짐	😾
+토마토	🍅
+토성	🪐
+토스트	🍞
+토핑	🍄‍🟫
+토하기	🤢
+토하는	🤮
+토하는 얼굴	🤮
+톱	🪚
+톱니바퀴	⚙
+톱질	🪚
+통	🪣
+통기타	🎸
+통나무	🪵
+통조림	🥫
+통행	🚷
+통화	📲
+투구	🤾 🤾‍♀
+투기	🚯
+투명한	🪟
+투표	🗳 ☑
+투표 용지가 있는 투표 상자	🗳
+투표란	☑
+투표상자	🗳
+투표용지	☑
+툭툭	🛺
+튀기는	⛹ ⛹‍♂ ⛹‍♀
+튀김	🍤 🫟
+튀다	🧨
+튀어나오고	🍾
+튀어오르는	🍾
+튀어오른	🫟
+튀어오른 액체	🫟
+튄	🫟
+튜브	🛟
+튤립	🌷
+트라이애슬론	🏊 🏊‍♂
+트랙	🔀 ⏭ ⏮
+트랙 랜덤 재생	🔀
+트랙볼	🖲
+트랙터	🚜
+트랜스	🌈
+트랜스젠더	🌈 ⚧ 🏳‍🌈 🏳‍⚧
+트랜스젠더 기호	⚧
+트랜스젠더 깃발	🏳‍⚧
+트램	🚊 🚃 🚎 🚋
+트램 차량	🚋
+트러플	🍄‍🟫
+트럭	🚒 🛻 🚚 🚛
+트럼펫	🎺
+트레이닝	🏋 🏋‍♂
+트레인	🚂
+트레일러	🚛
+트레일러 트럭	🚛
+트렌드	💹 📈 📉
+트로피	🏆
+트롤	🧌
+트롤리	🚋 🚎
+트롤리 버스	🚎
+트롤리버스	🚃 🚊 🚋
+트롤링	🧌
+트롬본	🪊
+트리	🌲 🎄
+트리트먼트	💆
+트리플	🏇 🐎
+트리플 크라운	🏇 🐎
+트림	🪚 🫧
+틀림없이	👊
+티	🫖 🧋 👕
+티라노사우루스	🦖
+티라노사우르스	🦖
+티라노사우르스 렉스	🦖
+티렉스	🦖
+티비	📺
+티셔츠	👕
+티첼	🧕
+티켓	🎫 🎟
+틱	✅ ☑
+파다	🪏
+파도	🌊 🏄 🏄‍♂ 🏄‍♀
+파도 타기	🏄 🏄‍♂
+파라솔	🏖 ⛱
+파라솔이	🏖
+파라솔이 있는 해변	🏖
+파란	💙 🍏 📘 🔵
+파란 사과	🍏
+파란 원	🔵
+파란 책	📘
+파란 하트	💙
+파란색	💙 👕 📘 🧿 🔵 🟦 🔷 🔹 🩵
+파란색 사각형	🟦
+파란색 책	📘
+파란색 하트	💙
+파랑	🔵 🔷 🔹
+파리	🪰
+파선	⇠ ⇡ ⇢ ⇣
+파선 모양 아래쪽 화살표	⇣
+파선 모양 오른쪽 화살표	⇢
+파선 모양 왼쪽 화살표	⇠
+파선 모양 위쪽 화살표	⇡
+파스타	🍝
+파에야	🥘
+파우치	👝
+파운드	💷
+파운드화	💷
+파워	🏋 🏋‍♂ 🪫
+파워 리프팅	🏋 🏋‍♂
+파워 부족	🪫
+파이	🥧
+파이 한조각	🥧
+파이브	🙏 🫷 🫸
+파이프	🪈
+파인애플	🍍
+파인트	🍺
+파일	📁 📂 🗂 🗃 🗄
+파일 보관 서랍장	🗄
+파일럿	🧑‍✈ 👨‍✈ 👩‍✈
+파일철	🗄
+파충류	🦎
+파칭코	🎰
+파킹	🅿
+파티	🎉 😛 🥳 👯 👯‍♂ 👯‍♀ 🍹 🎈 🎊 🪅 🪩 🪇
+파티마	🪬
+파티하는	🥳
+파티하는 얼굴	🥳
+파프리카	🫑
+판다	🐼
+판다 얼굴	🐼
+판다곰	🐼
+판사	🧑‍⚖ 👨‍⚖ 👩‍⚖
+판타지	👿 👺 👻 👽 👾 👸 👼 🧙 🧙‍♂ 🧙‍♀ 🧚 🧚‍♂
+팔	💪 🎱 🦾
+팔각	✴
+팔각 별	✴
+팔각형	🛑
+팔라펠	🧆 🥙
+팔레트	🎨 👨‍🎨 👩‍🎨
+팔리는	🪝
+팔분음표	♪
+팝콘	🍿
+팡	🍾
+팡 튀어오르는	🍾
+패드	🗒 🗓
+패러세일링	🪂
+패션	👠
+패스워드	🔑
+패스트리	🥧
+패스트푸드	🍔 🍟
+팩	🧃
+팩스	📠
+팩스기	📠
+팩시밀리	📠
+팬	🍳 🥘
+팬케이크	🥞
+퍼즐	🧩
+퍼트	🏌 🏌‍♂
+퍼플	💟
+퍼플 하트	💟
+퍽	🏒
+펀치	👊
+펄	🧋
+펄럭	🪭
+펄럭 펄럭	🪭
+펄럭이는	🏳 🏴
+펄럭이는 검은색 깃발	🏴
+펄럭이는 흰색 깃발	🏳
+펄릭이는	🏴
+펌프	⛽
+페리	⛴
+페스츄리	🎂 🍰
+페스트리	🥧
+페스티발	🎎
+페이	💸 💳
+페이지	📃 📄
+페이퍼	🖇 🧻
+페이퍼 클립	🖇
+페이퍼 타월	🧻
+페인트	🫟 🖌
+페인트 브러쉬	🖌
+페인트붓	🖌
+페인팅	🖌
+페트리	🧫
+페트리 접시	🧫
+페페로니	🍕
+펜	🖊 ✒ 🖋 🔏
+펜싱	🤺
+펜싱하는	🤺
+펜싱하는 사람	🤺
+펜촉	✒ 🖋 🔏
+펭귄	🐧
+편	🖐 🐥
+편리한	🪛
+편미분	∂
+편안	👘
+편안한	☺ 🫂 🥿
+편의점	🏪
+편자	🧲
+편지	💌 ✉ 📧 📨 📩 📤 📥 📫 📪 📬 📭 📮
+편지 받기	📥
+편지 보내기	📤
+편지함	📤 📫 📬 📭 📥
+펼쳐진	📖
+펼쳐진 책	📖
+펼치기	👐
+펼치지	📕
+펼치지 않은 책	📕
+펼친	👋 👐
+펼친 두 손	👐
+펼친 손	👋
+펼침	📖
+평등	🟰
+평온	🧘 🧘‍♂ 🧘‍♀ 🪷
+평행	∥ ▰
+평화	😌 ✌ 🧘 🧘‍♂ 🧘‍♀ 🕊 🪷 ☮
+평화 기호	☮
+평화 상징	☮
+평화로운	☮
+폐	🫁
+포도	🍇
+포렌식	🫆
+포세이돈	🔱
+포스트잇	📑
+포식자	🐯 🐅 🐆
+포옹	🤗 👐 🫂
+포옹하고	🤗
+포옹하고 있는 얼굴	🤗
+포옹하는	🫂
+포옹하는 사람	🫂
+포유동물	🫎 🫏
+포인터	► ▻ ◄ ◅
+포장	🍬 🎁 🛃
+포춘	🥠
+포춘 쿠키	🥠
+포츈	🥠
+포츈 쿠키	🥠
+포켓볼	🎱
+포켓볼 8번 공	🎱
+포크	🍽 🍴
+포크와	🍽 🍴
+포크와 나이프	🍴
+포크와 나이프가 있는 접시	🍽
+포크찹	🥩
+포타슘	🍌
+포테이토	🥔
+포토벨로	🍄‍🟫
+포함	∈ ∋
+포함하고	▣ ◈ ◉ ◙
+포함하지	⋭
+폭발	💥 🌋 💣 🤯
+폭발적인	🧨
+폭발하는	🤯
+폭발하는 얼굴	🤯
+폭약	🧨
+폭죽	🧨 🎇
+폭탄	💣
+폰	🤳 ♟ 📵
+폴더	📁 📂 🗂
+폴더 열기	📂
+퐁듀	🫕
+표	🎫
+표 확인	🎫
+표범	🐆
+표시	❣ 🚦 📑 🔖 ☢ ☣ 🔛 − ⊥ ✌ 💮 💈
+표시하는	🤟
+표시한	👌
+표의	🈚 🈲 🈴
+표의 문자	🈚 🈲 🈴
+표의문자	🈷 🈶 🈯 🉐 🈹 🉑 🈸 🈳 🈺 🈵
+표정	😌 😑
+표정 없는 얼굴	😑
+표지	📔
+표지가	📔 📫 📪 📬 📭
+표지가 내려간 닫힌 우편함	📪
+표지가 내려간 열린 우편함	📭
+표지가 올라간 닫힌 우편함	📫
+표지가 올라간 열린 우편함	📬
+표지가 있는 노트	📔
+표지판	🪧
+표현의	🗯
+푸드	🫘
+푸들	🐩
+푸딩	🍮
+푸른	🩵
+풀	🌿 ☘
+풋사과	🍏
+풋콩	🫛
+풍경	🎐
+풍랑	🌊
+풍선	🎈 💬 🗯 💭
+풍차돌리기	🤸 🤸‍♂ 🤸‍♀
+프라이	🍟 🍳
+프라이드	🌈
+프라이버시	🔏
+프라이팬	🍳
+프랑스	🥐 🥖
+프랑크푸르트	🌭
+프랑크푸르트 소시지	🌭
+프레임	🎞
+프레첼	🥨
+프렌치	🍟
+프렌치 프라이	🍟
+프렌치프라이	🍟
+프로그래머	🧑‍💻 👨‍💻 👩‍💻
+프로젝터	📽
+프리	🆓
+프리 신호	🆓
+프리스비	🥏
+프린세스	👸
+프린스	🤴
+프린터	🖨
+프린트	🫆
+플라멩고	💃 🕺
+플라밍고	🦩
+플라워	🪷 💮
+플랑크톤	🪼
+플래그	🏴 🏳
+플래시	📸
+플래시 터트린 카메라	📸
+플래시라이트	🔦
+플래시를	📸
+플래시를 터트리고 있는 카메라	📸
+플래카드	🪧
+플랫	♭ 🥿
+플랫 슈즈	🥿
+플랫베드	🛻
+플랫브레드	🫓
+플러그	🔌
+플러스	➕
+플러팅	🫦
+플레이	▶
+플로피	💾
+플로피 디스크	💾
+플루트	🪈
+플루티스트	🪈
+플립플랍	🩴
+피	🧛 🧛‍♂ 🧛‍♀ 🅿
+피곤	🛌
+피곤한	😪 🫩 😫
+피곤한 얼굴	😫
+피곤함	😵 😫 🥱
+피그	🐗
+피난처	🛖
+피냐	🥥
+피냐 콜라다	🥥
+피냐타	🪅
+피노키오	🤥
+피는	🌸 🌷
+피닉스	🐦‍🔥
+피다	🌼
+피로한	🫩
+피리	🪈
+피망	🫑
+피부과	😷
+피부과 의사	😷
+피스톨	🔫
+피씨	💻
+피아노	🎹
+피자	🍕 🍄‍🟫
+피자 토핑	🍄‍🟫
+피자 한 조각	🍕
+피켓	🪧
+피클	🥒
+피타	🫓
+픽업	🛻
+픽업트럭	🛻
+핀	📌 📍 🧷
+필기	📔
+필기도구	✏ 🖋
+필드	🏌 🏑
+필드 하키	🏑
+필름	🎞
+필링	🥧
+핏방울	🩸
+핑퐁	🏓
+하고	🙌 🌬
+하기	🥷
+하나	👁
+하는	🤫 😒 🤢 🙅 🙅‍♂ 🙅‍♀ 🙆 🙆‍♂ 🙆‍♀ 🧖 🧖‍♂ 🧖‍♀
+하늘색	🏳‍⚧ 🩵
+하늘색 하트	🩵
+하다	🪝
+하마	🦛
+하얀	🦷 🔳
+하얀색	🏳‍⚧ 💟 ❔ ❕ ⚪
+하얀색 느낌표	❕
+하얀색 물음표	❔
+하얀색 물음표 부호	❕
+하얀색 원	⚪
+하얀색 하트	💟
+하이	🫷 🫸
+하이 파이브	🫷 🫸
+하이크	🚶
+하이킹	🚶 🚶‍♂ 🚶‍♀ 🥾
+하이파이브	✋ 🙌 🙏
+하이힐	👠
+하즈	🕋
+하키	🏑 🏒
+하키와	🏒
+하트	♥ 🥰 😍 😘 😻 💌 💘 💝 💖 💗 💓 💞
+하트 3개와 함께 웃는 얼굴	🥰
+하트 눈 고양이 얼굴	😻
+하트 눈 얼굴	😍
+하트 두 개	💕
+하트 모양	♥
+하트 모양 느낌표	❣
+하트 뿅뿅 얼굴	😍
+하트 장식	💟
+하트가	💑
+하트가 있는 연인	💑
+하트모양	😻
+하트모양 눈으로 미소짓는 고양이 얼굴	😻
+하트와	🥰
+하트와 함께 웃는 얼굴	🥰
+하품	😴 🥱
+하품하는	🥱
+하품하는 얼굴	🥱
+하프	🪉
+하하	🤣 😂
+하하하	😆 🫠
+하향	📉 ⬇
+하향 화살표	⬇
+하현	🌗 🌘
+하현 반달	🌗
+하현달	🌖
+학교	🏫 🚌 📔 📚 🎒
+학교 가방	🎒
+학사모	🧑‍🎓 👨‍🎓 👩‍🎓
+학생	🧑‍🎓 👨‍🎓 👩‍🎓 🎒
+학생 가방	🎒
+학자	🎓
+한	🤏 👁 🙋 🙋‍♂ 🙋‍♀ 🌽 🍕 🍲 🕐 🕜 📆 🔂
+한 곡 반복 재생	🔂
+한 곡 반복 재생 버튼	🔂
+한 꼬집	🤏
+한 눈	👁
+한 손 든 남자	🙋‍♂
+한 손 든 사람	🙋 🙋‍♂ 🙋‍♀
+한 손 든 여자	🙋‍♀
+한 손을 든 사람	🙋
+한 손을 들고 즐거워하는 사람	🙋
+한 시	🕐
+한 시 반	🕜
+한 장씩 뜯어내는 달력	📆
+한개	👁
+한꼬집	👌
+한달	🈷
+한덩이	🍞
+한번	🔂
+한손	🙋‍♂ 🙋‍♀
+한숨	😮‍💨
+한시	🕜
+한시 반	🕜
+한잔	🥛
+한조각	🥧
+한쪽	🫣 🦵 🦶
+한쪽 눈을 가리고 훔쳐보는 얼굴	🫣
+한쪽 다리	🦵
+한쪽 발	🦶
+한쪽으로	🫤
+할	🈹
+할로윈	🎃 👻 🧛 🧛‍♂ 🧛‍♀ 🧟 🧟‍♂ 🧟‍♀ 🐈‍⬛ 🍫 🍬
+할로윈 장식	🎃
+할리우드	🎥
+할머니	👵
+할아버지	👴 🎅
+할일	📋
+핥다	👅
+함	⊮
+함께	🥰
+함사	🪬
+함수	∘
+함정	🪤
+합	🈴
+합격	🈴
+합기도	🥋
+합성	∘
+합성 함수	∘
+합의	🤝
+합장	🙏
+합집합	∪ ⋃
+합하기	🈴
+합할	🈴
+합할 합	🈴
+핫	🫠
+핫도그	🌭
+핫스팟	🛜
+핫케이크	🥞
+항공	✈
+항공기	🛩 🛬
+항복	🏳
+항해	⚓
+해	🌻 🌄 🌅 🌆 🌇 ☀ ⛅ 🌤 🌥 🌦 ⛱ 🌞
+해 방긋	🌞
+해가	🌄 🌅 🌇
+해가 뜸	🌄 🌅
+해가 짐	🌇
+해골	💀 ☠ 🩻 🏴‍☠
+해골 깃발	🏴‍☠
+해골 바가지	💀
+해골과	☠
+해골과 뼈다귀	☠
+해님	🌞
+해머	🔨
+해바라기	🌻
+해변	🏄 🏄‍♂ 🏄‍♀ 🐳 🐋 🐬 🌴 🏖 👙 🩴
+해변가	⛱
+해부학	🫀
+해산물	🦞
+해양	🏄 🏄‍♂ 🫍 🦭 🪼
+해저	🧜 🧜‍♂ 🧜‍♀
+해적	🦜 🏴‍☠
+해적 깃발	🏴‍☠
+해질녘	🌆 🌇
+해충	🪳 🪰
+해파리	🪼
+핸드	🫳 🫴 🪬 👐
+핸드백	👜 👛 👝
+핸드볼	🤾 🤾‍♂ 🤾‍♀
+핸드볼하는	🤾 🤾‍♂ 🤾‍♀
+핸드볼하는 남자	🤾‍♂
+핸드볼하는 사람	🤾
+핸드볼하는 여자	🤾‍♀
+핼러윈	🐈‍⬛ 🎃
+햄버거	🍔
+햄스터	🐹
+햄스터 얼굴	🐹
+햇빛	🌞
+했음	✔
+행글라이더	🪂
+행렬	⊹
+행복	😀 😃 😄 😁 🤣 😂 🙂 ☺ 🥲 🤸 🤸‍♂ 🤸‍♀
+행사	🎤 🎑 🎌
+행성	🪐 🌌
+행운	🤞 🍀 🧧
+행운을	🫡
+행운을 빌어	🫡
+행진	🪈
+향신료	🫚
+향하는	↴ ↵ 🫱 🫲 🤛 🤜
+향한	↰ ↱ ↲ ↳ 🫳 🫴 🤲 💁‍♂ 🔍 🔎
+향해	🐥
+허가	🉑
+허가증	🪪
+허그	🫂
+허를	😦
+허를 찔리다	😦
+허브	🌿 🫚
+헌혈	🩸
+헐	🫥
+헐떡이는	🥵
+헐벗은	🪾
+헤드폰	🎧
+헤롱거리는	🥴
+헤롱헤롱	🥴
+헤롱헤롱 얼굴	🥴
+헤어	🪮
+헤어스타일	💇
+헤어짐	💔
+헤어컷	💇 👩 💇‍♂ 💇‍♀
+헤엄	🏊‍♀
+헤이	👋
+헤헤	😂 🙃
+헬기	🚁
+헬리콥터	🚁
+헬멧	💂 💂‍♂ 💂‍♀ 👷 👷‍♂ 👷‍♀ 🪖 ⛑
+헬스장	💪
+헬프	🩼
+헷갈리는	🫤
+헷갈림	😵‍💫 😕
+혀	👅 😛 😜 😝
+혀를	😛 😜 😝
+혀를 내민 얼굴	😛
+현금	🧧 💰 💷 💸 💳 🏧
+현금인출기	🏧
+현기증	😵‍💫
+현기증 난 얼굴	😵‍💫
+현명	🤓
+현명한	👴 👵 🦉
+현미경	🔬
+현악기	🪕
+현장	👷‍♂ 👷‍♀
+혈액형	🆎 🅱 🅾 🅰
+혈액형 에이형	🅰
+형사	🕵 🕵‍♂ 🕵‍♀
+혜성	☄
+호기심	🦝
+호날두	⚽
+호랑이	🐅 🐯
+호랑이 얼굴	🐯
+호랑이띠	🐯
+호러	🧟 🧟‍♂ 🧟‍♀
+호른	📯
+호밀	🍞
+호박	🎃
+호박파이	🥧
+호수	🚣 🚣‍♂ 🚣‍♀ 🚤
+호전	❤‍🩹
+호주	🐨 🦘 🌏
+호주가	🌏
+호쵸	🔪
+호출	🛎
+호출 벨	🛎
+호출기	📟
+호텔	🏨 🛌 🏩 🛎 🛍 🛏 🛋
+호프	🍺
+호황	💹 📈
+호흡	🫁
+혹	🐪 🐫
+혼란	😵‍💫 🫤
+혼란스러운	😕
+혼란스러움	😖
+혼란스러워하는	😕
+혼란스러워하는 얼굴	😕
+혼례식	💒
+홀	⛳
+홀에	⛳
+홀에 깃발	⛳
+홈	🪹 🛖
+홍고추	🌶
+홍등	🏮
+홍학	🦩
+화	😠 💢
+화가	🧑‍🎨 👨‍🎨 👩‍🎨 🎨
+화가난	😤
+화끈한	🔥
+화난	😡 🤬 👺 🗯 😠 👿
+화난 얼굴	😠
+화난 표현의 오른쪽 말풍선	🗯
+화남	💢 🗯 🙍 🧂
+화내며	😤
+화내며 씩씩거리는 얼굴	😤
+화려한	🧐 🦚 👗 🎩
+화물	🛄 🛅
+화물 서비스	🛅
+화물차	🛻
+화분	🪴
+화산	🌋
+화살	🎯 🏹
+화살이	💘
+화살이 꽂힌 하트	💘
+화살촉이	↼ ↽ ↾ ↿ ⇀ ⇁ ⇂ ⇃
+화살표	← → ↑ ↓ ⇅ ⇆ 📲 📩 ⬆ ↗ ➡ ↘
+화살표(반시계방향)	↶ ↺
+화살표(시계	↷ ↻
+화살표가	📲 📩
+화살표가 있는 편지 봉투	📩
+화살표가 있는 휴대전화	📲
+화살표와	🔂
+화이트	🦷 💟 💮 ⭐ ⚪ ⬜ ◻ ◽ ▫
+화이트 라지 사각형	⬜
+화이트 미디엄 별	⭐
+화이트 미디엄 사각형	◻
+화이트 미디엄-스몰 사각형	◽
+화이트 서클	⚪
+화이트 스몰 사각형	▫
+화이트 플라워	💮
+화이트 하트	💟
+화이트칼라	🧑‍💼 👨‍💼 👩‍💼
+화장	💄 🪞
+화장실	🚻 🚽 🪠 🚾 🚹 🚺
+화장지	🧻
+화장품	💄
+화재	🧑‍🚒 👨‍🚒 👩‍🚒 🚒 🔥 🧯
+화창	🫡
+화창한	☀
+화투	🎴
+화투게임	🎴
+화투패	🎴
+화폐	💴 💵 💶 💷 💹 💱 💲
+화학	⚗ 🧪
+화학자	🧑‍🔬 👨‍🔬 👩‍🔬 🧪
+확성기	📢
+확신없는	😕
+확신이	🫤
+확신이 없음	🫤
+확인	🙆 🎫
+확인함	✅ ✔
+환	⊚
+환상	🧚 🧚‍♂ 🧚‍♀
+환생	🐦‍🔥
+환영	🤗
+환전	💱
+환한	🤪
+환한 미소	🤪
+환형동물	🪱
+환호	😀
+활	🏹 ♐
+활공	🪁
+활과	🏹
+활과 화살	🏹
+활동적	🤸 🤸‍♂ 🤸‍♀
+활력	🤸
+활짝	😀 😄 😺 😸
+활짝 웃는	😄
+활짝 웃는 고양이 얼굴	😺
+활짝 웃는 얼굴	😀
+황당	😠
+황당해	😳
+황사	😷
+황소	🐂 ♉
+황소자리	♉ 🐂
+황혼	🌇
+회계	🧾
+회복	❤‍🩹
+회사	🏢
+회사 건물	🏢
+회사원	🧑‍💼 👨‍💼 👩‍💼
+회상	📻
+회색	🩶
+회색 하트	🩶
+회색곰	🐻
+회오리모양	🍥
+회오리모양이	🍥
+회오리모양이 있는 어묵	🍥
+회의	🤝
+회의적인	🤨 🫤
+회전	🛞 🎠
+회전 목마	🎠
+회전하는	💞
+회전하는 하트	💞
+획득	🉐
+횡단보도	🚸
+후	😣 🌬
+후 하고 바람 부는 얼굴	🌬
+후광이	😇
+후광이 비치는 웃는 얼굴	😇
+후다닥	💨
+후속	⪺
+후식	🍧
+후아	😯 😱
+후지	🗻
+후지산	🗻
+후추	🫑
+후크	🪝
+후회	🙇 🙇‍♂ 🙇‍♀
+훅	🪝
+훈장	🎖
+훌쩍	😭 😿
+훔쳐보기	🫣
+훔쳐보는	🫣
+훔쳐봄	👀
+훗	🛖
+훨씬	≪ ≫ ⋘ ⋙
+훨씬 더 작음	⋘
+훨씬 더 큼	⋙
+훨씬 작음	≪
+훨씬 큼	≫
+휘발유	⛽
+휘파람	😮‍💨
+휠	🛞
+휠체어	♿ 👨‍🦼 👩‍🦼 👨‍🦽 👩‍🦽 🧑‍🦼 🧑‍🦽 🦽 🦼
+휠체어 표시	♿
+휠체어를	🧑‍🦼 👨‍🦼 👩‍🦼 🧑‍🦽 👨‍🦽 👩‍🦽
+휴	😥
+휴대전화	📱 📲 📶 📵 📳 📴
+휴대전화 끄기	📴 📵
+휴대전화 사용금지	📵
+휴대전화 전원 끄기	📴
+휴대전화 진동모드	📳
+휴대폰	📱 📲 📶
+휴식	🧖 🧖‍♂ 🧖‍♀ 🧘 🧘‍♂ 🧘‍♀
+휴양	🧖 🧖‍♂ 🧖‍♀
+휴일	🧑‍🎄
+휴지	🤧 🧻
+휴지통	🗑
+흐림	☁ 🌤 🌥
+흔드는	👋
+흔드는 손	👋
+흔들다	🫱 🫲 🙂‍↔
+흔들리는	🍃
+흔들림	🍃
+흘리는	😅 😂 🤤 🥵 😓 😹 😿
+흘리다	🫗
+흘리며	😅 🥲 😰
+흘린	🫟
+흘림	🫗
+흡수	🧽
+흡연	🚬 🚭
+흡연 구역 신호	🚬
+흡입	🪠
+흡혈귀	⚰
+흥분한	👻
+흥분함	💗
+흩뿌린	🫟
+흰	💮 🥼 ⛑
+흰 가운	🥼
+흰 꽃	💮
+흰 십자가가 있는 헬멧	⛑
+흰곰	🐻‍❄
+흰색	🤍 □ ▢ ▣ ▭ △ ▵ ▷ ▹ ▻ ▽ ▿
+흰색 깃발	🏳
+흰색 다이아몬드	◇
+흰색 미디엄 별	⭐
+흰색 미디엄-스몰 사각형	◽
+흰색 원	⚪
+흰색 원을 포함하고 있는 검은색 정사각형	◙
+흰색 정사각형	□
+흰색 중간 사각형	◻
+흰색 직사각형	▭
+흰색 큰 사각형	⬜
+흰색 하트	🤍
+흰쥐	🐁
+히로인	🦸 🦸‍♀
+히비스커스	🌺
+히아신스	🪻
+히어로	🦸 🦸‍♂ 🦸‍♀
+히잡	🧕
+히잡두른	🧕
+히잡두른 여자	🧕
+히죽거리는	😏
+히죽거리는 얼굴	😏
+히죽히죽	😏
+힌두교	🪷 🛕 🕉
+힌두교 사원	🛕
+힐링	❤‍🩹 ☮
+힘	💪
+힘든	🫩
+힘이	💪 🦁
+힘이 센	💪 🦁
+힙합	🤘

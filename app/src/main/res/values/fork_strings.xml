@@ -472,6 +472,12 @@
     <string name="fork_widget_trivia_failed">No new trivia (check the Gemini key)</string>
     <string name="fork_widget_trivia_loading">Getting new trivia…</string>
     <string name="fork_widget_emoji">Emoji ideas widget</string>
-    <string name="fork_widget_emoji_summary">6 emojis that fit what you are writing (asks Gemini when typing pauses). Tap to type. Needs a Gemini key</string>
+    <string name="fork_widget_emoji_summary">6 emojis that fit what you are writing. By default from the built-in emoji dictionary (offline, free, instant) for the last words. The ✨ button or automatic AI let Gemini read the whole sentence (needs a key). Tap to type; the ones you use come first.</string>
     <string name="fork_widget_emoji_hint">Write something for emoji ideas</string>
+    <string name="fork_widget_emoji_source">Suggestions from</string>
+    <string name="fork_widget_emoji_local">Emoji dictionary</string>
+    <string name="fork_widget_emoji_local_ai">Dictionary + ✨ AI button</string>
+    <string name="fork_widget_emoji_auto_ai">AI, automatic</string>
+    <string name="fork_widget_emoji_ai">Emoji ideas from AI</string>
+    <string name="fork_widget_emoji_asking">Asking the AI…</string>
 </resources>

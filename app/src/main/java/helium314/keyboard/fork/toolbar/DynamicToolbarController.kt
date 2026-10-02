@@ -523,8 +523,10 @@ class DynamicToolbarController(private val context: Context) {
         }
         if (prefs.getBoolean(WidgetPrefs.TRIVIA, true) && gemini)
             pages.add(helium314.keyboard.fork.widget.WidgetArea.Page(WidgetPrefs.ID_TRIVIA, triviaView()))
-        if (prefs.getBoolean(WidgetPrefs.EMOJI, true) && gemini)
+        if (prefs.getBoolean(WidgetPrefs.EMOJI, true) && (gemini || emojiSource() != WidgetPrefs.EMOJI_AI)) {
+            helium314.keyboard.fork.widget.EmojiDictionary.preload(context)
             pages.add(helium314.keyboard.fork.widget.WidgetArea.Page(WidgetPrefs.ID_EMOJI, emojiView()))
+        }
         tb.setItems(ToolbarItems.defaultItems, ToolbarItems.endItems, ::onItemClicked, widgets = pages.isNotEmpty())
         tb.widgetArea.setPages(pages, prefs.getString(WidgetPrefs.PAGE, null))
         tb.widgetArea.onPageChanged = { id ->
@@ -558,7 +560,7 @@ class DynamicToolbarController(private val context: Context) {
         orientation = android.widget.LinearLayout.HORIZONTAL
         gravity = android.view.Gravity.CENTER_VERTICAL or android.view.Gravity.START
         emojiRow = this
-        showEmojis(emptyList())
+        showEmojis(emptyList(), false)
     }
 
     /** [id] is shown now; [opened]: because the toolbar opened (a new fact then) */
@@ -576,22 +578,39 @@ class DynamicToolbarController(private val context: Context) {
         helium314.keyboard.fork.widget.Trivia.refreshIfDue(context) { added -> if (added && fact == null) showTrivia() }
     }
 
-    /** typing paused: emojis for the text, when the emoji widget is what shows */
+    private fun emojiSource() = context.prefs().getString(WidgetPrefs.EMOJI_SOURCE, WidgetPrefs.EMOJI_LOCAL) ?: WidgetPrefs.EMOJI_LOCAL
+
+    /** the text changed: emojis for it, when the emoji widget is what shows (Gemini only once typing pauses) */
     private fun scheduleEmoji() {
         handler.removeCallbacks(emojiSoon)
         if (toolbar?.widgetArea?.currentId != WidgetPrefs.ID_EMOJI || !isExpanded) return
-        handler.postDelayed(emojiSoon, 1200)
+        handler.postDelayed(emojiSoon, if (emojiSource() == WidgetPrefs.EMOJI_AI) 1200 else 120)
     }
 
     private fun suggestEmoji() {
         if (toolbar?.widgetArea?.currentId != WidgetPrefs.ID_EMOJI) return
         val text = latinIME?.forkTextBeforeCursor(200)?.toString().orEmpty()
+        val source = emojiSource()
+        if (source != WidgetPrefs.EMOJI_AI) {
+            // the built-in dictionary, right away
+            val aiButton = source == WidgetPrefs.EMOJI_LOCAL_AI && helium314.keyboard.fork.slate.SlateKeys.keys(context.prefs()).isNotEmpty()
+            return showEmojis(helium314.keyboard.fork.widget.EmojiDictionary.suggest(context, text,
+                helium314.keyboard.fork.widget.EmojiSuggest.COUNT), aiButton)
+        }
         val cached = helium314.keyboard.fork.widget.EmojiSuggest.cached(text)
-        if (cached != null) return showEmojis(cached)
-        helium314.keyboard.fork.widget.EmojiSuggest.suggest(context, text) { showEmojis(it) }
+        if (cached != null) return showEmojis(cached, false)
+        helium314.keyboard.fork.widget.EmojiSuggest.suggest(context, text) { showEmojis(it, false) }
     }
 
-    private fun showEmojis(emojis: List<String>) {
+    /** ✨: Gemini reads the whole text for emojis */
+    private fun askEmojiAi() {
+        val text = latinIME?.forkTextBeforeCursor(200)?.toString().orEmpty()
+        if (text.isBlank()) return
+        KeyboardSwitcher.getInstance().showToast(context.getString(R.string.fork_widget_emoji_asking), true)
+        helium314.keyboard.fork.widget.EmojiSuggest.suggest(context, text) { showEmojis(it, true) }
+    }
+
+    private fun showEmojis(emojis: List<String>, aiButton: Boolean) {
         val row = emojiRow ?: return
         val colors = Settings.getValues().mColors
         val density = context.resources.displayMetrics.density
@@ -602,15 +621,24 @@ class DynamicToolbarController(private val context: Context) {
                 setTextSize(android.util.TypedValue.COMPLEX_UNIT_SP, 12f)
                 setTextColor(colors.get(ColorType.KEY_HINT_TEXT))
                 helium314.keyboard.keyboard.KeyboardTypeface.applyToTextView(this)
-            })
-            return
+            }, android.widget.LinearLayout.LayoutParams(0, android.widget.LinearLayout.LayoutParams.WRAP_CONTENT, 1f))
         }
         for (e in emojis) row.addView(android.widget.TextView(context).apply {
             text = e
             gravity = android.view.Gravity.CENTER
             setTextSize(android.util.TypedValue.COMPLEX_UNIT_SP, 20f)
-            setOnClickListener { latinIME?.onTextInput(e) }
+            setOnClickListener {
+                helium314.keyboard.fork.widget.EmojiDictionary.used(context, e)
+                latinIME?.onTextInput(e)
+            }
         }, android.widget.LinearLayout.LayoutParams((38 * density).toInt(), android.widget.LinearLayout.LayoutParams.MATCH_PARENT))
+        if (aiButton) row.addView(android.widget.ImageView(context).apply {
+            setImageResource(R.drawable.ic_dot_sparkles)
+            contentDescription = context.getString(R.string.fork_widget_emoji_ai)
+            scaleType = android.widget.ImageView.ScaleType.CENTER_INSIDE
+            colors.setColor(this, ColorType.TOOL_BAR_KEY)
+            setOnClickListener { askEmojiAi() }
+        }, android.widget.LinearLayout.LayoutParams((36 * density).toInt(), android.widget.LinearLayout.LayoutParams.MATCH_PARENT))
     }
 
     /** new usage numbers now and then, when the keyboard shows */

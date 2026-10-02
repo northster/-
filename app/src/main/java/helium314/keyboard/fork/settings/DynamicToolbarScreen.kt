@@ -287,6 +287,14 @@ fun createDynamicToolbarSettings(context: Context) = listOf(
     Setting(context, helium314.keyboard.fork.widget.WidgetPrefs.EMOJI, R.string.fork_widget_emoji, R.string.fork_widget_emoji_summary) {
         SwitchPreference(it, true) { DynamicToolbarController.current?.setToolbarItems() }
     },
+    Setting(context, helium314.keyboard.fork.widget.WidgetPrefs.EMOJI_SOURCE, R.string.fork_widget_emoji_source) { setting ->
+        val ctx = androidx.compose.ui.platform.LocalContext.current
+        helium314.keyboard.settings.preferences.InlineChoicePreference(setting.title, setting.key, listOf(
+            ctx.getString(R.string.fork_widget_emoji_local) to helium314.keyboard.fork.widget.WidgetPrefs.EMOJI_LOCAL,
+            ctx.getString(R.string.fork_widget_emoji_local_ai) to helium314.keyboard.fork.widget.WidgetPrefs.EMOJI_LOCAL_AI,
+            ctx.getString(R.string.fork_widget_emoji_auto_ai) to helium314.keyboard.fork.widget.WidgetPrefs.EMOJI_AI,
+        ), helium314.keyboard.fork.widget.WidgetPrefs.EMOJI_LOCAL)
+    },
     Setting(context, GlowPrefs.AI_GLOW, R.string.fork_ai_glow, R.string.fork_ai_glow_summary) {
         SwitchPreference(it, true)
     },
@@ -481,6 +489,7 @@ fun WidgetScreen(onClickBack: () -> Unit) {
         helium314.keyboard.fork.widget.WidgetPrefs.TRIVIA_NOW.takeIf { trivia },
         R.string.fork_widget_cat_emoji,
         helium314.keyboard.fork.widget.WidgetPrefs.EMOJI,
+        helium314.keyboard.fork.widget.WidgetPrefs.EMOJI_SOURCE.takeIf { prefs.getBoolean(helium314.keyboard.fork.widget.WidgetPrefs.EMOJI, true) },
     )
     SearchSettingsScreen(onClickBack = onClickBack, title = stringResource(R.string.fork_screen_widgets), settings = items) {
         androidx.compose.foundation.layout.Column {

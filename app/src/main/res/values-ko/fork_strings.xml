@@ -469,6 +469,12 @@
     <string name="fork_widget_trivia_failed">지식을 받지 못했어요 (Gemini 키 확인)</string>
     <string name="fork_widget_trivia_loading">새 지식을 받는 중…</string>
     <string name="fork_widget_emoji">이모지 추천 위젯</string>
-    <string name="fork_widget_emoji_summary">쓰고 있는 글에 어울리는 이모지 6개를 추천해요(입력이 멈추면 Gemini에 물어봄). 누르면 입력. Gemini 키 필요</string>
+    <string name="fork_widget_emoji_summary">쓰고 있는 글에 어울리는 이모지 6개. 기본은 앱에 든 이모지 사전(오프라인, 무료, 바로 뜸)으로 마지막 단어들을 보고 골라요. ✨ 버튼이나 AI 자동은 Gemini가 문장 전체를 읽어요(키 필요). 누르면 입력, 자주 쓴 이모지가 앞으로.</string>
     <string name="fork_widget_emoji_hint">글을 쓰면 어울리는 이모지를 추천해요</string>
+    <string name="fork_widget_emoji_source">추천 방식</string>
+    <string name="fork_widget_emoji_local">이모지 사전</string>
+    <string name="fork_widget_emoji_local_ai">사전 + ✨ AI 버튼</string>
+    <string name="fork_widget_emoji_auto_ai">AI 자동</string>
+    <string name="fork_widget_emoji_ai">AI로 이모지 추천</string>
+    <string name="fork_widget_emoji_asking">AI에게 물어보는 중…</string>
 </resources>
