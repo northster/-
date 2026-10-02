@@ -44,6 +44,15 @@ jobs:
           echo "$DT_KEYSTORE_BASE64" | base64 -d > "$RUNNER_TEMP/dt-release.jks"
           echo "DT_KEYSTORE_FILE=$RUNNER_TEMP/dt-release.jks" >> "$GITHUB_ENV"
 
+      - name: Built-in GIF keys
+        # only says whether they are there, never the keys
+        env:
+          DT_KLIPY_KEY: ${{ secrets.DT_KLIPY_KEY }}
+          DT_GIPHY_KEY: ${{ secrets.DT_GIPHY_KEY }}
+        run: |
+          echo "KLIPY: $([ -n "$DT_KLIPY_KEY" ] && echo set || echo none)"
+          echo "GIPHY: $([ -n "$DT_GIPHY_KEY" ] && echo set || echo none)"
+
       - name: Build APK
         env:
           DT_BUILD_NUMBER: ${{ github.run_number }}
