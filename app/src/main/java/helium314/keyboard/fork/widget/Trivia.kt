@@ -69,9 +69,9 @@ object Trivia {
      */
     private fun migrate(prefs: SharedPreferences) {
         val version = prefs.getInt(PREF_VERSION, 0)
-        if (version >= 5) return
-        // versions 3 to 5: the Wikipedia-only facts were obscure or dry, they go too
-        prefs.edit { putString(PREF_FACTS, "[]"); putInt(PREF_VERSION, 5); remove(PREF_FAILED) }
+        if (version >= 6) return
+        // versions 3 to 6: the Wikipedia-only facts were obscure or dry, then some were plain definitions; they go too
+        prefs.edit { putString(PREF_FACTS, "[]"); putInt(PREF_VERSION, 6); remove(PREF_FAILED) }
     }
 
     private fun read(prefs: SharedPreferences): MutableList<Fact> {
@@ -230,7 +230,8 @@ object Trivia {
         val request = buildString {
             if (subjects.isNotEmpty()) {
                 append("Part S: for each numbered subject, write its most delightfully useless or quirky fact that most ")
-                append("people don't know. Skip a subject if you know no such fact for sure. Start each line with \"S\" and ")
+                append("people don't know. Never write a definition or what the subject is (\"logic studies reasoning\" is ")
+                append("not trivia). Skip a subject if you know no such fact for sure. Start each line with \"S\" and ")
                 append("the subject's number, like \"S3: \".\n")
                 subjects.forEachIndexed { i, t -> append(i + 1).append(". ").append(t).append('\n') }
                 append('\n')
@@ -291,9 +292,11 @@ object Trivia {
     /** the facts Gemini, searching the web, says are definitely true; none if the check can't be made */
     private fun verified(prefs: SharedPreferences, facts: List<String>): List<String> {
         if (facts.isEmpty()) return facts
-        val prompt = "You are a strict fact checker. Search the web to check each statement. Output, unchanged and one " +
-            "per line, only the statements that are definitely true as written. Leave out anything false, exaggerated, " +
-            "a popular myth, or that you can't confirm. Output nothing else."
+        val prompt = "You are a strict editor of a trivia feed. Search the web to check each statement. Output, unchanged " +
+            "and one per line, only the statements that are definitely true as written AND surprising to an ordinary " +
+            "person. Leave out anything false, exaggerated, a popular myth or that you can't confirm, and also anything " +
+            "obvious: definitions or descriptions of what something is (\"logic studies reasoning\", \"X is a city " +
+            "in Y\", \"X was a Chinese emperor\"), common knowledge, or dull facts. Output nothing else."
         val check = GeminiClient.run(prefs, prompt, facts.joinToString("\n"), search = true, raw = true)
         if (check !is GeminiClient.Outcome.Success) return emptyList()
         // with search on, answers may carry citation marks like [1]

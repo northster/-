@@ -13,9 +13,12 @@ import java.net.URLEncoder
  */
 object WikiFacts {
     private const val API = "https://en.wikipedia.org/w/api.php"
-    /** the Level 4 lists, without mathematics (too abstract for a toolbar) */
+    /**
+     * the Level 4 lists with concrete subjects: no mathematics, philosophy and religion, society and social sciences
+     * (abstract subjects like "logic" gave definitions instead of trivia)
+     */
     private val LISTS = listOf("Biology and health sciences", "Everyday life", "Geography", "History", "Arts",
-        "Physical sciences", "Technology", "Society and social sciences", "Philosophy and religion", "People")
+        "Physical sciences", "Technology", "People")
 
     /** what went wrong last, for the settings */
     @Volatile var lastError: String? = null
