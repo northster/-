@@ -26,6 +26,7 @@ HeliBoard와 달리 인터넷 권한이 있다. 아래 기능을 켜고 키를 �
 - Google Gemini: AI 명령, 번역, 잡학 상식, AI 이모지 추천. 선택한 글이 Google로 간다.
 - KLIPY / GIPHY: GIF 검색어
 - claude.ai: 사용량 위젯(본인 세션 키)
+- 위키백과(en.wikipedia.org): 잡학 상식의 절반(편집자가 검토한 "Did you know" 문장, CC BY-SA 4.0)
 - 환율, 링크 미리보기(붙여넣은 링크의 페이지 제목과 아이콘)
 
 키보드로 입력한 글을 따로 수집하거나 보내지 않는다. API 키는 기기 안에 암호화해서 저장한다.

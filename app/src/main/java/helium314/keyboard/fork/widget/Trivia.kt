@@ -14,10 +14,10 @@ import org.json.JSONArray
 import org.json.JSONObject
 
 /**
- * fork: useless but true trivia for the toolbar ("A day on Venus is longer than its year."). Gemini writes a batch of
- * short facts; each time the toolbar opens one is shown, those not seen yet first. Once only a few are left unseen (20 of
- * a batch of 25 seen) the next batch is fetched. A few hundred are kept, a new fact that is already kept is dropped, and
- * the latest ones are sent along so Gemini writes others.
+ * fork: useless but true trivia for the toolbar ("A day on Venus is longer than its year."). A batch of short facts
+ * (see [fetchBatch]: half from Wikipedia, half by Gemini and checked with a web search); each time the toolbar opens one
+ * is shown, those not seen yet first. Once only a few are left unseen (20 of a batch of 25 seen) the next batch is
+ * fetched. A few hundred are kept, a new fact that is already kept (also in other words) is dropped.
  */
 object Trivia {
     private const val PREF_FACTS = "fork_trivia_facts"
@@ -27,8 +27,8 @@ object Trivia {
     /** a new batch once this few are unseen */
     private const val LOW = 5
     private const val KEEP = 400
-    /** facts sent along as "not these" */
-    private const val AVOID = 120
+    /** facts sent along as "not these" (topics change every batch, so the latest few are enough) */
+    private const val AVOID = 40
     /** after a failed fetch, wait this long before trying again on its own */
     private const val RETRY_MS = 15 * 60_000L
     private const val PREF_FAILED = "fork_trivia_failed"
@@ -81,41 +81,101 @@ object Trivia {
         val app = context.applicationContext
         val korean = java.util.Locale.getDefault().language == "ko"
         Thread {
-            val prompt = "You write short, true and delightfully useless trivia facts. Every fact must be correct. " +
-                "Output only the facts, one per line, no numbering, no bullets, no quotes."
-            val request = (if (korean)
-                "쓸데없지만 사실인 잡학 상식을 ${BATCH}개 써 줘. 한 줄에 하나, 각각 ${MAX_CHARS - 5}자 이내의 짧은 한 문장. " +
-                    "동물, 우주, 역사, 음식, 사람 몸, 언어, 일상 사물 등 주제를 섞고 서로 겹치지 않게."
-            else "Write $BATCH useless but true trivia facts, one per line, each one short sentence under ${MAX_CHARS - 5} " +
-                "characters. Mix topics: animals, space, history, food, the human body, language, everyday things.") +
-                (if (avoid.isEmpty()) "" else if (korean) "\n\n아래 지식과 같거나 비슷한 건 쓰지 마:\n$avoid"
-                    else "\n\nDo not repeat these or anything close to them:\n$avoid")
-            val outcome = GeminiClient.run(app.prefs(), prompt, request, search = false, raw = true)
-            val added = if (outcome is GeminiClient.Outcome.Success) {
+            val fresh = fetchBatch(app, korean, avoid)
+            val added = if (fresh != null) {
                 val known = read(app.prefs())
-                val seenKeys = known.mapTo(HashSet()) { norm(it.text) }
-                val fresh = outcome.text.lines()
-                    .map { it.trim().trimStart('-', '*', '•', '·').replace(Regex("^\\d+[.)]\\s*"), "").trim().trim('"') }
+                val keys = known.mapTo(ArrayList()) { norm(it.text) }
+                val kept = fresh.map { cleanLine(it) }
                     .filter { it.length in 6..(MAX_CHARS + 10) }
-                    .filter { seenKeys.add(norm(it)) } // not kept yet, and not twice in this batch
+                    .filter { f ->
+                        // not kept yet (also not written a bit differently), and not twice in this batch
+                        val k = norm(f)
+                        if (keys.any { it == k || similar(it, k) }) false else { keys.add(k); true }
+                    }
                 // the oldest seen ones go first when there are too many
-                val all = known + fresh.map { Fact(it, false) }
+                val all = known + kept.map { Fact(it, false) }
                 var over = all.size - KEEP
-                val kept = all.filter { fact ->
+                write(app.prefs(), all.filter { fact ->
                     val drop = over > 0 && fact.seen
                     if (drop) over--
                     !drop
-                }
-                write(app.prefs(), kept)
+                })
                 app.prefs().edit { putLong(PREF_FETCHED, System.currentTimeMillis()); remove(PREF_FAILED) }
-                fresh.isNotEmpty()
+                kept.isNotEmpty()
             } else {
-                Log.w(TAG, "no trivia: ${(outcome as GeminiClient.Outcome.Failure).message}")
                 app.prefs().edit { putLong(PREF_FAILED, System.currentTimeMillis()) }
                 false
             }
             fetching = false
             handler.post { onDone(added) }
         }.start()
+    }
+
+    private val TOPICS = listOf("animals", "insects", "the ocean", "space", "planets", "the human body", "food", "drinks",
+        "plants", "history", "ancient times", "language and words", "everyday objects", "inventions", "sports",
+        "music", "geography", "countries", "weather", "chemistry", "physics", "money", "art", "birds", "dinosaurs")
+
+    /**
+     * About [BATCH] new facts, null if Gemini could not be reached. Two Gemini calls per batch:
+     *  1. half written by Gemini on three random topics, half retold from Wikipedia's "Did you know" (checked by
+     *     people), as short sentences in the user's language
+     *  2. Gemini checks its own half with Google Search and keeps only what is definitely true (not myths)
+     * Without Wikipedia (offline, error) the whole batch is Gemini's, still checked.
+     */
+    private fun fetchBatch(app: Context, korean: Boolean, avoid: String): List<String>? {
+        val prefs = app.prefs()
+        val wiki = WikiFacts.hooks(BATCH - BATCH / 2 + 6) // some get dropped when they can't be short
+        val own = if (wiki.isEmpty()) BATCH else BATCH / 2
+        val topics = TOPICS.shuffled().take(3).joinToString(", ")
+        val lang = if (korean) "Korean" else "English"
+        val prompt = "You write short, true and delightfully useless trivia facts. Every fact must be correct and " +
+            "well established. Never write popular myths or misconceptions (like goldfish having a 3-second memory). " +
+            "Avoid exact numbers, superlatives and \"the first / the only\" unless you are certain. If unsure, skip it. " +
+            "Each fact is one short sentence in $lang, at most ${MAX_CHARS - 5} characters. " +
+            "Output only lines starting with \"G: \" or \"W: \", nothing else."
+        val request = buildString {
+            append("Part G: write $own facts about $topics, one per line, each starting with \"G: \".\n")
+            if (wiki.isNotEmpty()) {
+                append("Part W: retell each of these checked facts as one short $lang sentence starting with \"W: \". ")
+                append("Keep the meaning exactly, add nothing. Skip any that can't be said that short.\n")
+                wiki.forEach { append("- ").append(it).append('\n') }
+            }
+            if (avoid.isNotEmpty()) append("\nDo not repeat these or anything close to them:\n").append(avoid)
+        }
+        val first = GeminiClient.run(prefs, prompt, request, search = false, raw = true)
+        if (first !is GeminiClient.Outcome.Success) {
+            Log.w(TAG, "no trivia: ${(first as GeminiClient.Outcome.Failure).message}")
+            return null
+        }
+        val lines = first.text.lines().map { it.trim() }
+        val fromWiki = lines.filter { it.startsWith("W:") }.map { it.removePrefix("W:").trim() }
+        val written = lines.filter { it.startsWith("G:") }.map { it.removePrefix("G:").trim() }.filter { it.isNotEmpty() }
+        return fromWiki + verified(prefs, written)
+    }
+
+    /** the facts Gemini, searching the web, says are definitely true; none if the check can't be made */
+    private fun verified(prefs: SharedPreferences, facts: List<String>): List<String> {
+        if (facts.isEmpty()) return facts
+        val prompt = "You are a strict fact checker. Search the web to check each statement. Output, unchanged and one " +
+            "per line, only the statements that are definitely true as written. Leave out anything false, exaggerated, " +
+            "a popular myth, or that you can't confirm. Output nothing else."
+        val check = GeminiClient.run(prefs, prompt, facts.joinToString("\n"), search = true, raw = true)
+        if (check !is GeminiClient.Outcome.Success) return emptyList()
+        // with search on, answers may carry citation marks like [1]
+        val ok = check.text.lines().map { norm(cleanLine(it.replace(Regex("\\[\\d+(?:,\\s*\\d+)*]"), ""))) }
+            .filter { it.isNotEmpty() }.toSet()
+        return facts.filter { norm(it) in ok }
+    }
+
+    private fun cleanLine(line: String) =
+        line.trim().trimStart('-', '*', '•', '·').replace(Regex("^\\d+[.)]\\s*"), "").trim().trim('"')
+
+    /** two facts share most of their letter pairs: the same fact in other words */
+    private fun similar(a: String, b: String): Boolean {
+        if (a.length < 4 || b.length < 4) return false
+        val pa = a.windowed(2).toSet()
+        val pb = b.windowed(2).toSet()
+        val inter = pa.count { it in pb }
+        return inter.toFloat() / (pa.size + pb.size - inter) >= 0.6f
     }
 }

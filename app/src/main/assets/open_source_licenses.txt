@@ -95,9 +95,14 @@ Unicode CLDR (https://cldr.unicode.org)
 Emoji keywords (Korean and English) for the emoji suggestions.
 Unicode License V3, full text below.
 
+Wikipedia (https://en.wikipedia.org)
+Some trivia facts are retold from the "Did you know" sections of English
+Wikipedia. Wikipedia text is under the Creative Commons Attribution-ShareAlike
+4.0 license (CC BY-SA 4.0), by the Wikipedia contributors.
+
 Online services
 ---------------
 Only used when you turn them on and add a key: Google Gemini (AI commands,
 translation, trivia, emoji ideas), KLIPY / GIPHY (GIF search, "Powered by
-KLIPY / GIPHY"), claude.ai (usage widget), exchange rates for the currency chip,
+KLIPY / GIPHY"), claude.ai (usage widget), Wikipedia (trivia), exchange rates for the currency chip,
 website titles and icons for link previews. Their own terms apply.
