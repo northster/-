@@ -25,13 +25,23 @@ object Trivia {
     private const val PREF_FETCHED = "fork_trivia_fetched"
     private const val TAG = "Trivia"
     private const val BATCH = 25
-    /** subjects sent per batch: Gemini skips some and the check drops some, about [BATCH] are left */
-    private const val SUBJECTS = 40
+    /**
+     * Half of a batch on a subject each (a different one every time, so they don't repeat), half free "useless but
+     * true" facts on a few random [TOPICS] (Gemini's own picks, the most fun). More are asked for than kept: Gemini skips
+     * some and the check drops some.
+     */
+    private const val SUBJECTS = 20
+    private const val FREE = 18
+
+    private val TOPICS = listOf("animals", "insects", "the sea", "space", "the human body", "food", "drinks", "plants",
+        "history", "ancient times", "words and languages", "everyday objects", "inventions", "sports", "music", "movies",
+        "geography", "countries", "weather", "chemistry", "physics", "money", "art", "birds", "dinosaurs", "sleep",
+        "cities", "toys and games", "holidays", "famous people", "the brain", "colors", "numbers", "jobs", "clothes")
     /** a new batch once this few are unseen */
     private const val LOW = 5
     private const val KEEP = 400
     /** facts sent along as "not these" (topics change every batch, so the latest few are enough) */
-    private const val AVOID = 40
+    private const val AVOID = 80
     /** after a failed fetch, wait this long before trying again on its own */
     private const val RETRY_MS = 15 * 60_000L
     private const val PREF_FAILED = "fork_trivia_failed"
@@ -182,7 +192,7 @@ object Trivia {
     /**
      * About [BATCH] new facts, null if nothing could be made. Two Gemini calls per batch:
      *  1. Gemini gets [SUBJECTS] subjects (a different Wikipedia vital article each time, the interests' share from a
-     *     Wikipedia search for them) and writes for each the one fact people don't know but enjoy learning
+     *     Wikipedia search for them) and writes each one's quirkiest fact, and writes [FREE] free useless facts
      *  2. Gemini checks those facts with Google Search, only what is definitely true stays (the first [BATCH])
      * Subjects are used once ever ([PREF_WIKI_SEEN]).
      */
@@ -191,6 +201,7 @@ object Trivia {
         val seen = wikiSeen(prefs)
         val notUsed = { key: String -> hookKey(key) !in seen }
         val subjectsWanted = SUBJECTS
+        val topics = TOPICS.shuffled().take(4).joinToString(", ")
         // the interests' share of the subjects first, the rest random; a few more than needed, some get skipped
         val interests = TriviaInterests.withKeywords(prefs)
         val share = if (interests.isEmpty()) 0f else TriviaInterests.share(prefs)
@@ -210,19 +221,22 @@ object Trivia {
         val style = if (korean) "Write every sentence in the plain written style ending in \"-다\" " +
             "(like \"해달은 서로 손을 잡고 잔다.\"), never -습니다/-요."
             else "Write plain statements in the present or past tense."
-        val prompt = "You write short trivia facts people don't know but love to learn: surprising, a little useless, " +
-            "understandable without background knowledge. Every fact must be true and well established. Never write " +
-            "popular myths or misconceptions (like goldfish having a 3-second memory). Avoid exact numbers unless you " +
-            "are certain. Each fact is one short sentence in $lang, at most ${MAX_CHARS - 5} characters, and names its " +
-            "subject so it makes sense on its own. $style Output only lines starting with \"S<number>: \", nothing else."
+        val prompt = "You write short, true and delightfully useless trivia facts: quirky, surprising, the kind people " +
+            "repeat to friends, understandable without background knowledge, not textbook knowledge. Every fact must " +
+            "be true and well established. Never write popular myths or misconceptions (like goldfish having a " +
+            "3-second memory). Avoid exact numbers unless you are certain. Each fact is one short sentence in $lang, at " +
+            "most ${MAX_CHARS - 5} characters, and names its subject so it makes sense on its own. $style " +
+            "Output only lines starting with \"S<number>: \" or \"G<number>: \", nothing else."
         val request = buildString {
             if (subjects.isNotEmpty()) {
-                append("Part S: for each numbered subject, write the one fact about it that most people don't know but find ")
-                append("surprising or fun. Skip a subject if you know no such fact for sure. Start each line with \"S\" and ")
+                append("Part S: for each numbered subject, write its most delightfully useless or quirky fact that most ")
+                append("people don't know. Skip a subject if you know no such fact for sure. Start each line with \"S\" and ")
                 append("the subject's number, like \"S3: \".\n")
                 subjects.forEachIndexed { i, t -> append(i + 1).append(". ").append(t).append('\n') }
                 append('\n')
             }
+            append("Part G: write $FREE delightfully useless facts, any you like, touching on $topics and more, each on ")
+            append("a different thing. Start each line with \"G\" and a number, like \"G1: \".\n\n")
             if (avoid.isNotEmpty()) append("Do not repeat these or anything close to them:\n").append(avoid)
         }
         val first = GeminiClient.run(prefs, prompt, request, search = false, raw = true)
@@ -239,11 +253,18 @@ object Trivia {
             val m = Regex("^$letter\\s*(\\d+)\\s*[:.)：]\\s*(.+)$").find(line) ?: return@mapNotNull null
             m.groupValues[1].toInt() - 1 to m.groupValues[2].trim()
         }.filter { plainStyle(it.second, korean) }
-        // checked with a web search, only what is definitely true stays
-        val written = labelled('S').filter { it.second.length in 6..(MAX_CHARS + 10) }
-        val checked = verified(prefs, written.map { it.second }).toSet()
-        val all = written.filter { it.second in checked }.map { (i, text) -> text to subjects.getOrNull(i) }.take(BATCH)
-        if (all.isEmpty()) lastError = "Gemini 답에서 쓸 문장이 없음 (S ${written.size}줄, 확인 통과 ${checked.size}줄)"
+        // checked with a web search (one call for both parts), only what is definitely true stays
+        val fitting = { it: Pair<Int, String> -> it.second.length in 6..(MAX_CHARS + 10) }
+        val onSubject = labelled('S').filter(fitting)
+        val free = labelled('G').filter(fitting)
+        val checked = verified(prefs, (onSubject + free).map { it.second }).toSet()
+        val fromSubjects = onSubject.filter { it.second in checked }.map { (i, text) -> text to subjects.getOrNull(i) }
+        val fromFree = free.filter { it.second in checked }.map { (_, text) -> text to null as String? }
+        // half and half, the other side fills in when one has fewer
+        val half = BATCH / 2
+        val takeSubjects = maxOf(half, BATCH - fromFree.size)
+        val all = (fromSubjects.take(takeSubjects) + fromFree).take(BATCH)
+        if (all.isEmpty()) lastError = "Gemini 답에서 쓸 문장이 없음 (S ${onSubject.size}줄, G ${free.size}줄, 확인 통과 ${checked.size}줄)"
         // the article to read more (the Korean one when there is one)
         val pages = WikiFacts.pages(all.mapNotNull { it.second }, korean)
         return all.map { (text, title) -> Shown(text, title?.let { pages[it] }) }.shuffled()
