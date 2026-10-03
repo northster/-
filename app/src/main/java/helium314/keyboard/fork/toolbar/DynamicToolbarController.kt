@@ -567,6 +567,7 @@ class DynamicToolbarController(private val context: Context) {
         tb.widgetArea.onPageChanged = { id ->
             prefs.edit { putString(WidgetPrefs.PAGE, id) }
             onWidgetShown(id, opened = false)
+            refreshSpaceWidget()
         }
         onWidgetShown(tb.widgetArea.currentId, opened = true)
     }
@@ -631,6 +632,27 @@ class DynamicToolbarController(private val context: Context) {
         runCatching { context.startActivity(intent) }
     }
 
+    /** the emojis the emoji widget shows (also for the spacebar) */
+    private var shownEmojis: List<String> = emptyList()
+
+    /**
+     * What the popup widget shows, as text for the spacebar (Settings: widget on the spacebar); null when there is
+     * nothing, the spacebar is then drawn as usual.
+     */
+    fun spaceWidgetText(): String? = when (toolbar?.widgetArea?.currentId) {
+        WidgetPrefs.ID_TRIVIA -> trivia?.text?.toString()?.takeIf { it.isNotBlank() }
+        WidgetPrefs.ID_EMOJI -> shownEmojis.takeIf { it.isNotEmpty() }?.joinToString("   ")
+        WidgetPrefs.ID_USAGE -> helium314.keyboard.fork.usage.ClaudeUsage.cached(context.prefs())?.let {
+            "Claude ${((it.session?.used ?: 0f) * 100).toInt()}% · ${((it.week?.used ?: 0f) * 100).toInt()}%"
+        }
+        else -> null
+    }
+
+    /** the widget's content changed: the spacebar shows it too */
+    private fun refreshSpaceWidget() {
+        if (ForkSettings.isWidgetOnSpace()) KeyboardSwitcher.getInstance().mainKeyboardView?.forkInvalidateSpace()
+    }
+
     /** the Wikipedia article of the fact shown, null if it has none */
     private var triviaPage: String? = null
 
@@ -653,6 +675,7 @@ class DynamicToolbarController(private val context: Context) {
         val fact = helium314.keyboard.fork.widget.Trivia.next(context)
         triviaPage = fact?.page
         view.text = fact?.text ?: context.getString(R.string.fork_widget_trivia_loading)
+        refreshSpaceWidget()
         helium314.keyboard.fork.widget.Trivia.refreshIfDue(context) { added -> if (added && fact == null) showTrivia() }
     }
 
@@ -697,6 +720,8 @@ class DynamicToolbarController(private val context: Context) {
 
     private fun showEmojis(emojis: List<String>, aiButton: Boolean) {
         val row = emojiRow ?: return
+        shownEmojis = emojis
+        refreshSpaceWidget()
         val colors = Settings.getValues().mColors
         val density = context.resources.displayMetrics.density
         row.removeAllViews()
@@ -734,6 +759,7 @@ class DynamicToolbarController(private val context: Context) {
         tb.usageView.setUsage(helium314.keyboard.fork.usage.ClaudeUsage.cached(context.prefs())) // times left move on
         helium314.keyboard.fork.usage.ClaudeUsage.refreshIfOld(context) { usage ->
             if (usage != null) toolbar?.usageView?.setUsage(usage)
+            refreshSpaceWidget()
         }
     }
 

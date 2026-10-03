@@ -494,7 +494,9 @@ public class KeyboardView extends View {
 
         // Draw key label.
         final Keyboard keyboard = getKeyboard();
-        final Drawable icon = (keyboard == null) ? null
+        // fork: no spacebar icon while the popup widget is shown there (MainKeyboardView draws it)
+        final Drawable icon = (keyboard == null
+                || (key.getCode() == Constants.CODE_SPACE && helium314.keyboard.fork.ForkSettings.isWidgetOnSpace())) ? null
                 : key.getIcon(keyboard.mIconsSet, params.mAnimAlpha);
         float labelX = centerX;
         float labelBaseline = centerY;

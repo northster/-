@@ -710,6 +710,15 @@ public final class MainKeyboardView extends KeyboardView implements DrawingProxy
         super.onDrawKeyTopVisuals(key, canvas, paint, params);
         final int code = key.getCode();
         if (code == Constants.CODE_SPACE) {
+            // fork: the popup widget instead of the icon and language
+            final helium314.keyboard.fork.toolbar.DynamicToolbarController toolbar =
+                    helium314.keyboard.fork.toolbar.DynamicToolbarController.getCurrent();
+            final String widget = helium314.keyboard.fork.ForkSettings.isWidgetOnSpace() && toolbar != null
+                    ? toolbar.spaceWidgetText() : null;
+            if (widget != null) {
+                helium314.keyboard.fork.widget.SpaceWidget.INSTANCE.draw(canvas, widget, key.getDrawWidth(), key.getHeight(),
+                        paint, mLanguageOnSpacebarTextColor, mLanguageOnSpacebarTextSize * 0.85f);
+            } else
             // If input language are explicitly selected.
             if (mLanguageOnSpacebarFormatType != LanguageOnSpacebarUtils.FORMAT_TYPE_NONE) {
                 drawLanguageOnSpacebar(key, canvas, paint);
@@ -842,6 +851,11 @@ public final class MainKeyboardView extends KeyboardView implements DrawingProxy
         canvas.drawText(spaceText, width / 2f, baseline - descent, paint);
         paint.clearShadowLayer();
         paint.setTextScaleX(1.0f);
+    }
+
+    /** fork: the spacebar is drawn again (the popup widget on it changed) */
+    public void forkInvalidateSpace() {
+        if (mSpaceKey != null) invalidateKey(mSpaceKey);
     }
 
     @Override

@@ -474,6 +474,8 @@
     <string name="fork_desc_widgets">툴바 오른쪽 칸: Claude 사용량, 토막상식, 이모지 추천</string>
     <string name="fork_widget_screen_summary">툴바의 도구 버튼 오른쪽 칸에 위젯을 하나씩 보여 줍니다. 그 칸을 좌우로 밀면 다음 위젯으로 넘어갑니다.</string>
     <string name="fork_widget_cat_usage">Claude 사용량</string>
+    <string name="fork_widget_on_space">스페이스바에 위젯 표시</string>
+    <string name="fork_widget_on_space_summary">스페이스바 아이콘 대신 지금 위젯 내용을 보여 줍니다. 보기만 되고 누를 수는 없습니다(전환과 탭은 툴바에서)</string>
     <string name="fork_widget_cat_trivia">토막상식</string>
     <string name="fork_widget_cat_emoji">이모지 추천</string>
     <string name="fork_widget_usage">Claude 사용량 위젯</string>

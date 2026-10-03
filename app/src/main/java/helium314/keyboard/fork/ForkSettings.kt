@@ -266,6 +266,10 @@ object ForkSettings {
     @JvmStatic
     fun isOneHandedSwipeEnabled() = initialized && appPrefs.getBoolean(PREF_ONE_HANDED_SWIPE, true)
 
+    /** the popup widget on the spacebar instead of its icon */
+    @JvmStatic
+    fun isWidgetOnSpace() = initialized && appPrefs.getBoolean(helium314.keyboard.fork.widget.SpaceWidget.PREF, false)
+
     /** Thresholds in px. [density] should be the one of the display the keyboard is shown on. */
     @JvmStatic
     fun swipeThresholds(density: Float): SwipeThresholds {

@@ -477,6 +477,8 @@
     <string name="fork_desc_widgets">The toolbar\'s right part: Claude usage, trivia, emoji ideas</string>
     <string name="fork_widget_screen_summary">The part of the toolbar right of the tool buttons shows one widget at a time. Swipe it sideways for the next one.</string>
     <string name="fork_widget_cat_usage">Claude usage</string>
+    <string name="fork_widget_on_space">Widget on the spacebar</string>
+    <string name="fork_widget_on_space_summary">The current widget instead of the spacebar icon. Only shown, not tappable (switch and tap it on the toolbar)</string>
     <string name="fork_widget_cat_trivia">Trivia</string>
     <string name="fork_widget_cat_emoji">Emoji ideas</string>
     <string name="fork_widget_usage">Claude usage widget</string>
