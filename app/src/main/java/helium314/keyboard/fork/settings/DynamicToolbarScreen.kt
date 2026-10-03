@@ -284,6 +284,17 @@ fun createDynamicToolbarSettings(context: Context) = listOf(
         // the spacebar is drawn again with or without it
         SwitchPreference(it, false) { helium314.keyboard.keyboard.KeyboardSwitcher.getInstance().setThemeNeedsReload() }
     },
+    Setting(context, helium314.keyboard.fork.widget.SpaceWidget.PREF_WHICH, R.string.fork_widget_on_space_which) { setting ->
+        val ctx = androidx.compose.ui.platform.LocalContext.current
+        val space = helium314.keyboard.fork.widget.SpaceWidget
+        val ids = helium314.keyboard.fork.widget.WidgetPrefs
+        helium314.keyboard.settings.preferences.InlineChoicePreference(setting.title, setting.key, listOf(
+            ctx.getString(R.string.fork_widget_on_space_same) to space.SAME,
+            ctx.getString(R.string.fork_widget_cat_trivia) to ids.ID_TRIVIA,
+            ctx.getString(R.string.fork_widget_cat_emoji) to ids.ID_EMOJI,
+            ctx.getString(R.string.fork_widget_cat_usage) to ids.ID_USAGE,
+        ), space.SAME) { helium314.keyboard.keyboard.KeyboardSwitcher.getInstance().setThemeNeedsReload() }
+    },
     Setting(context, helium314.keyboard.fork.widget.WidgetPrefs.TRIVIA_NOW, R.string.fork_widget_trivia_now) { setting ->
         val ctx = androidx.compose.ui.platform.LocalContext.current
         val trivia = helium314.keyboard.fork.widget.Trivia
@@ -517,6 +528,9 @@ fun WidgetScreen(onClickBack: () -> Unit) {
     val trivia = prefs.getBoolean(helium314.keyboard.fork.widget.WidgetPrefs.TRIVIA, true)
     val items = listOfNotNull(
         helium314.keyboard.fork.widget.SpaceWidget.PREF,
+        helium314.keyboard.fork.widget.SpaceWidget.PREF_WHICH.takeIf {
+            prefs.getBoolean(helium314.keyboard.fork.widget.SpaceWidget.PREF, false)
+        },
         R.string.fork_widget_cat_usage,
         helium314.keyboard.fork.widget.WidgetPrefs.USAGE,
         helium314.keyboard.fork.usage.ClaudeUsage.PREF_SESSION_KEY.takeIf { usage },

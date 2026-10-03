@@ -12,6 +12,9 @@ import helium314.keyboard.keyboard.KeyboardTypeface
  */
 object SpaceWidget {
     const val PREF = "fork_widget_on_space"
+    /** which widget: [SAME] (the one shown on the toolbar) or a widget id from [WidgetPrefs] */
+    const val PREF_WHICH = "fork_widget_on_space_which"
+    const val SAME = "same"
 
     /** [text] in up to two lines, centered in a key of [width] x [height], small and dimmed */
     fun draw(canvas: Canvas, text: String, width: Int, height: Int, paint: Paint, color: Int, textSize: Float) {

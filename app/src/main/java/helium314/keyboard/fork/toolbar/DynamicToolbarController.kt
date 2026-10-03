@@ -639,7 +639,7 @@ class DynamicToolbarController(private val context: Context) {
      * What the popup widget shows, as text for the spacebar (Settings: widget on the spacebar); null when there is
      * nothing, the spacebar is then drawn as usual.
      */
-    fun spaceWidgetText(): String? = when (toolbar?.widgetArea?.currentId) {
+    fun spaceWidgetText(): String? = when (spaceWidgetId()) {
         WidgetPrefs.ID_TRIVIA -> trivia?.text?.toString()?.takeIf { it.isNotBlank() }
         WidgetPrefs.ID_EMOJI -> shownEmojis.takeIf { it.isNotEmpty() }?.joinToString("   ")
         WidgetPrefs.ID_USAGE -> helium314.keyboard.fork.usage.ClaudeUsage.cached(context.prefs())?.let {
@@ -647,6 +647,17 @@ class DynamicToolbarController(private val context: Context) {
         }
         else -> null
     }
+
+    /** the widget the spacebar shows: the one chosen in the settings, or the toolbar's */
+    private fun spaceWidgetId(): String? {
+        if (!ForkSettings.isWidgetOnSpace()) return null
+        val chosen = context.prefs().getString(helium314.keyboard.fork.widget.SpaceWidget.PREF_WHICH,
+            helium314.keyboard.fork.widget.SpaceWidget.SAME)
+        return if (chosen == helium314.keyboard.fork.widget.SpaceWidget.SAME) toolbar?.widgetArea?.currentId else chosen
+    }
+
+    /** a widget is shown on the toolbar or on the spacebar, so it keeps its content up to date */
+    private fun widgetShown(id: String) = toolbar?.widgetArea?.currentId == id || spaceWidgetId() == id
 
     /** space held (letter keys move the cursor): the next or previous widget */
     fun stepSpaceWidget(by: Int) {
@@ -657,7 +668,7 @@ class DynamicToolbarController(private val context: Context) {
 
     /** space held and let go without sliding: what tapping the widget does */
     fun spaceWidgetAction() {
-        when (toolbar?.widgetArea?.currentId) {
+        when (spaceWidgetId() ?: toolbar?.widgetArea?.currentId) {
             WidgetPrefs.ID_TRIVIA ->
                 if (helium314.keyboard.fork.slate.SlateKeys.keys(context.prefs()).isEmpty()) openSettings() else showTrivia()
             WidgetPrefs.ID_EMOJI -> shownEmojis.firstOrNull()?.let { e ->
@@ -708,12 +719,12 @@ class DynamicToolbarController(private val context: Context) {
     /** the text changed: emojis for it, when the emoji widget is what shows (Gemini only once typing pauses) */
     private fun scheduleEmoji() {
         handler.removeCallbacks(emojiSoon)
-        if (toolbar?.widgetArea?.currentId != WidgetPrefs.ID_EMOJI || !isExpanded) return
+        if (!widgetShown(WidgetPrefs.ID_EMOJI) || (!isExpanded && spaceWidgetId() != WidgetPrefs.ID_EMOJI)) return
         handler.postDelayed(emojiSoon, if (emojiSource() == WidgetPrefs.EMOJI_AI) 1200 else 120)
     }
 
     private fun suggestEmoji() {
-        if (toolbar?.widgetArea?.currentId != WidgetPrefs.ID_EMOJI) return
+        if (!widgetShown(WidgetPrefs.ID_EMOJI)) return
         val text = latinIME?.forkTextBeforeCursor(200)?.toString().orEmpty()
         val source = emojiSource()
         if (source != WidgetPrefs.EMOJI_AI) {
@@ -1295,7 +1306,11 @@ class DynamicToolbarController(private val context: Context) {
     /** the keyboard went away: with the setting, the toolbar is closed for the next time */
     /** the keyboard came up: a toolbar left open shows a new fact too, not the one from last time */
     fun onWindowShown() {
-        if (isExpanded) onWidgetShown(toolbar?.widgetArea?.currentId, opened = true)
+        val onToolbar = toolbar?.widgetArea?.currentId
+        if (isExpanded) onWidgetShown(onToolbar, opened = true)
+        // the spacebar's own widget (chosen in the settings) is fresh too, also with the toolbar closed
+        val onSpace = spaceWidgetId()
+        if (onSpace != null && (onSpace != onToolbar || !isExpanded)) onWidgetShown(onSpace, opened = true)
     }
 
     fun onWindowHidden() {
