@@ -59,6 +59,8 @@
     <string name="fork_permission_app_desc">이 앱의 시스템 설정 화면</string>
     <string name="fork_permission_granted">허용됨</string>
     <string name="fork_permission_needed">허용 안 됨</string>
+    <string name="fork_accent_on_delete">강조 키를 백스페이스로</string>
+    <string name="fork_accent_on_delete_summary">엔터 대신 백스페이스에 강조 색과 모양(엔터 키 색, 둥근 모서리)을 줍니다. 엔터는 다른 기능 키처럼 보입니다</string>
     <string name="fork_open_source">오픈소스 고지</string>
     <string name="fork_open_source_summary">HeliBoard(GPL-3.0), WM Keyboard, SwiftSlate, pixelarticons(MIT), Unicode CLDR</string>
     <string name="fork_cat_settings_mode">설정 모드</string>

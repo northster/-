@@ -358,7 +358,7 @@ sealed interface KeyData : AbstractKeyData {
         var newLabelFlags = labelFlags or additionalLabelFlags or getAdditionalLabelFlags(params)
         val newPopupKeys = popup.merge(getAdditionalPopupKeys(params))
 
-        val background = when (type) {
+        val usual = when (type) {
             KeyType.CHARACTER, KeyType.NUMERIC -> Key.BACKGROUND_TYPE_NORMAL
             KeyType.FUNCTION, KeyType.MODIFIER, KeyType.SYSTEM_GUI -> Key.BACKGROUND_TYPE_FUNCTIONAL
             KeyType.PLACEHOLDER, KeyType.UNSPECIFIED -> Key.BACKGROUND_TYPE_EMPTY
@@ -367,6 +367,12 @@ sealed interface KeyData : AbstractKeyData {
             KeyType.LOCK -> Key.BACKGROUND_TYPE_FUNCTIONAL
             null -> getDefaultBackground(params)
         }
+        // fork: the highlighted look (enter key color and shape) on backspace instead of enter, if set
+        val isDelete = newCode == KeyCode.DELETE || label == KeyLabel.DELETE
+        val background = if (!helium314.keyboard.fork.ForkSettings.isAccentOnDelete()) usual
+            else if (isDelete && usual != Key.BACKGROUND_TYPE_EMPTY) Key.BACKGROUND_TYPE_ACTION
+            else if (usual == Key.BACKGROUND_TYPE_ACTION) Key.BACKGROUND_TYPE_FUNCTIONAL
+            else usual
         if (background == Key.BACKGROUND_TYPE_FUNCTIONAL)
             newLabelFlags = newLabelFlags or Key.LABEL_FLAGS_FOLLOW_FUNCTIONAL_TEXT_COLOR
 

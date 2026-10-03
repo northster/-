@@ -62,6 +62,8 @@
     <string name="fork_permission_app_desc">The system page of this app</string>
     <string name="fork_permission_granted">Allowed</string>
     <string name="fork_permission_needed">Not allowed</string>
+    <string name="fork_accent_on_delete">Highlight backspace instead of enter</string>
+    <string name="fork_accent_on_delete_summary">The enter key color and shape go to backspace; enter looks like the other function keys</string>
     <string name="fork_open_source">Open-source notices</string>
     <string name="fork_open_source_summary">HeliBoard (GPL-3.0), WM Keyboard, SwiftSlate, pixelarticons (MIT), Unicode CLDR</string>
     <string name="fork_cat_settings_mode">Settings mode</string>

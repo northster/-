@@ -266,6 +266,11 @@ object ForkSettings {
     @JvmStatic
     fun isOneHandedSwipeEnabled() = initialized && appPrefs.getBoolean(PREF_ONE_HANDED_SWIPE, true)
 
+    /** the highlighted key look (enter key color and shape) on backspace, enter looks like the other function keys */
+    const val PREF_ACCENT_ON_DELETE = "fork_accent_on_delete"
+    @JvmStatic
+    fun isAccentOnDelete() = initialized && appPrefs.getBoolean(PREF_ACCENT_ON_DELETE, false)
+
     /** the popup widget on the spacebar instead of its icon */
     @JvmStatic
     fun isWidgetOnSpace() = initialized && appPrefs.getBoolean(helium314.keyboard.fork.widget.SpaceWidget.PREF, false)
