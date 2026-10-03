@@ -219,6 +219,10 @@ fun createForkClipboardSettings(context: Context) = listOf(
             step = 2f,
         )
     },
+    Setting(context, helium314.keyboard.fork.ForkSettings.PREF_LETTER_HOLD_CURSOR, R.string.fork_letter_hold_cursor,
+        R.string.fork_letter_hold_cursor_summary) {
+        SwitchPreference(it, false)
+    },
     Setting(context, helium314.keyboard.fork.ForkSettings.PREF_VIRTUAL_CARET, R.string.fork_virtual_caret,
         R.string.fork_virtual_caret_summary) {
         SwitchPreference(it, true)

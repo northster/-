@@ -648,6 +648,30 @@ class DynamicToolbarController(private val context: Context) {
         else -> null
     }
 
+    /** space held (letter keys move the cursor): the next or previous widget */
+    fun stepSpaceWidget(by: Int) {
+        val area = toolbar?.widgetArea ?: return
+        area.step(by)
+        latinIME?.mKeyboardActionListener?.onPressKey(KeyCode.NOT_SPECIFIED, 0, 1, helium314.keyboard.event.HapticEvent.KEY_PRESS)
+    }
+
+    /** space held and let go without sliding: what tapping the widget does */
+    fun spaceWidgetAction() {
+        when (toolbar?.widgetArea?.currentId) {
+            WidgetPrefs.ID_TRIVIA ->
+                if (helium314.keyboard.fork.slate.SlateKeys.keys(context.prefs()).isEmpty()) openSettings() else showTrivia()
+            WidgetPrefs.ID_EMOJI -> shownEmojis.firstOrNull()?.let { e ->
+                helium314.keyboard.fork.widget.EmojiDictionary.used(context, e)
+                runCatching { helium314.keyboard.keyboard.emoji.RecentEmojis.add(e) }
+                latinIME?.onTextInput(e)
+            }
+            WidgetPrefs.ID_USAGE -> helium314.keyboard.fork.usage.ClaudeUsage.refreshIfOld(context, force = true) { usage ->
+                if (usage != null) toolbar?.usageView?.setUsage(usage)
+                refreshSpaceWidget()
+            }
+        }
+    }
+
     /** the widget's content changed: the spacebar shows it too */
     private fun refreshSpaceWidget() {
         if (ForkSettings.isWidgetOnSpace()) KeyboardSwitcher.getInstance().mainKeyboardView?.forkInvalidateSpace()

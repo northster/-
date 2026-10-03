@@ -315,6 +315,8 @@
     <string name="fork_space_long_press">Time to start cursor mode</string>
     <string name="fork_space_long_press_summary">How long space must be held until moving the finger moves the cursor (Default: 1.5 x the key long press time)</string>
     <string name="fork_space_long_press_default">Default</string>
+    <string name="fork_letter_hold_cursor">Hold a letter key to move the cursor</string>
+    <string name="fork_letter_hold_cursor_summary">Hold any letter key and move to move the cursor, instead of the spacebar (letter keys lose their other long press). Holding space works the popup widget: slide for the next one, let go to tap it</string>
     <string name="fork_virtual_caret">Floating cursor (iPhone style)</string>
     <string name="fork_virtual_caret_summary">While space is held, a cursor follows your finger over the text and the real cursor jumps to the nearest letter. Apps that do not tell where their letters are move step by step</string>
     <string name="fork_smart_typed_tester">Try the typing chips</string>

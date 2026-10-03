@@ -271,6 +271,14 @@ object ForkSettings {
     @JvmStatic
     fun isAccentOnDelete() = initialized && appPrefs.getBoolean(PREF_ACCENT_ON_DELETE, false)
 
+    /**
+     * letter keys move the cursor when held (their popup keys are gone), space held works the popup widget instead
+     * (slide: next widget, let go: what tapping it does)
+     */
+    const val PREF_LETTER_HOLD_CURSOR = "fork_letter_hold_cursor"
+    @JvmStatic
+    fun isLetterHoldCursor() = initialized && appPrefs.getBoolean(PREF_LETTER_HOLD_CURSOR, false)
+
     /** the popup widget on the spacebar instead of its icon */
     @JvmStatic
     fun isWidgetOnSpace() = initialized && appPrefs.getBoolean(helium314.keyboard.fork.widget.SpaceWidget.PREF, false)

@@ -903,6 +903,33 @@ public final class PointerTracker implements PointerTrackerQueue.Element,
         sListener.onSpaceCursorStart();
     }
 
+    /** fork: a letter key (or other plain character key) that moves the cursor when held, if that is set */
+    private static boolean isLetterCursorKey(final Key key) {
+        return ForkSettings.isLetterHoldCursor() && key.getBackgroundType() == Key.BACKGROUND_TYPE_NORMAL
+                && key.getCode() > 0 && key.getCode() != Constants.CODE_SPACE;
+    }
+
+    /**
+     * fork: space held while letter keys move the cursor: the popup widget. Sliding sideways switches the widget,
+     * letting go without sliding does what tapping it does (e.g. the next fact).
+     */
+    private void enterSpaceWidgetMode() {
+        mToolbarSwipeDetector.abort();
+        sTimerProxy.cancelKeyTimersOf(this);
+        mInSpaceWidgetMode = true;
+        mSpaceWidgetStepped = false;
+        mKeySwipeAllowed = true;
+        sInKeySwipe = true;
+        mInHorizontalSwipe = true; // keeps other swipe handling away
+        mInVerticalSwipe = false;
+        mStartX = mLastX;
+        mStartY = mLastY;
+    }
+
+    private boolean mInSpaceWidgetMode = false;
+    /** the widget was switched while space was held: letting go does nothing more */
+    private boolean mSpaceWidgetStepped = false;
+
     /** fork: where the finger was when space cursor mode started */
     private int mSpaceCursorOriginX;
     private int mSpaceCursorOriginY;
@@ -1073,6 +1100,19 @@ public final class PointerTracker implements PointerTrackerQueue.Element,
     }
 
     private void onKeySwipe(final int code, final int x, final int y, final long eventTime) {
+        if (mInSpaceWidgetMode) {
+            // two thirds of a key width per widget
+            final int step = Math.max(1, mKeyboard.mMostCommonKeyWidth / 3 * 2);
+            final int steps = (x - mStartX) / step;
+            final helium314.keyboard.fork.toolbar.DynamicToolbarController toolbar =
+                    helium314.keyboard.fork.toolbar.DynamicToolbarController.getCurrent();
+            if (steps != 0 && toolbar != null) {
+                toolbar.stepSpaceWidget(steps > 0 ? 1 : -1);
+                mStartX += steps * step;
+                mSpaceWidgetStepped = true;
+            }
+            return;
+        }
         if (mInSpaceCursorMode) { // fork: space long press cursor movement, independent of swipe settings
             // floating caret following the finger, if the app tells where its characters are
             if (sListener.onSpaceCursorDrag(x - mSpaceCursorOriginX, y - mSpaceCursorOriginY)) {
@@ -1255,6 +1295,16 @@ public final class PointerTracker implements PointerTrackerQueue.Element,
         }
 
         mToolbarSwipeDetector.abort();
+        if (mInSpaceWidgetMode) {
+            mInSpaceWidgetMode = false;
+            mKeySwipeAllowed = false;
+            sInKeySwipe = false;
+            mInHorizontalSwipe = false;
+            final helium314.keyboard.fork.toolbar.DynamicToolbarController toolbar =
+                    helium314.keyboard.fork.toolbar.DynamicToolbarController.getCurrent();
+            if (!mSpaceWidgetStepped && toolbar != null) toolbar.spaceWidgetAction();
+            return;
+        }
         if (mInSpaceCursorMode) {
             mInSpaceCursorMode = false;
             sListener.onCustomRequest(KeyboardActionListener.CustomAction.TOUCHPAD_OFF);
@@ -1324,6 +1374,17 @@ public final class PointerTracker implements PointerTrackerQueue.Element,
         final int code = key.getCode();
         sListener.onLongPressKey(code);
         mToolbarSwipeDetector.abort();
+        // fork: letter keys move the cursor when held (instead of their popup keys), space then works the popup widget
+        if (isLetterCursorKey(key)) {
+            setReleasedKeyGraphics(key, false);
+            enterSpaceCursorMode();
+            return;
+        }
+        if (code == Constants.CODE_SPACE && ForkSettings.isLetterHoldCursor()) {
+            setReleasedKeyGraphics(key, false);
+            enterSpaceWidgetMode();
+            return;
+        }
         if (code == Constants.CODE_SPACE && ForkSettings.SPACE_LONG_PRESS_CURSOR && key.getPopupKeys() == null) {
             setReleasedKeyGraphics(key, false);
             enterSpaceCursorMode();
@@ -1387,6 +1448,12 @@ public final class PointerTracker implements PointerTrackerQueue.Element,
 
     private void onCancelEventInternal() {
         mToolbarSwipeDetector.abort();
+        if (mInSpaceWidgetMode) {
+            mInSpaceWidgetMode = false;
+            mKeySwipeAllowed = false;
+            sInKeySwipe = false;
+            mInHorizontalSwipe = false;
+        }
         if (mInSpaceCursorMode) {
             mInSpaceCursorMode = false;
             mKeySwipeAllowed = false;
@@ -1441,6 +1508,11 @@ public final class PointerTracker implements PointerTrackerQueue.Element,
         sTimerProxy.cancelLongPressAlphaSymbolKeyTimer();
         if (sInGesture) return;
         if (key == null) return;
+        // fork: letter keys hold for the cursor (if set), whether they have popup keys or not
+        if (isLetterCursorKey(key)) {
+            sTimerProxy.startLongPressTimerOf(this, Settings.getValues().mKeyLongpressTimeout);
+            return;
+        }
         if (!key.isLongPressEnabled()) return;
         // Caveat: Please note that isLongPressEnabled() can be true even if the current key
         // doesn't have its popup keys. (e.g. spacebar, globe key) If we are in the dragging finger

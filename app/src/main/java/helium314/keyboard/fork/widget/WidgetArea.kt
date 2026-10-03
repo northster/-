@@ -59,7 +59,8 @@ class WidgetArea(context: Context) : FrameLayout(context) {
         }
     }
 
-    private fun step(by: Int) {
+    /** the next ([by] 1) or previous (-1) widget */
+    fun step(by: Int) {
         if (pages.size < 2) return
         current = (current + by + pages.size) % pages.size
         show(current, by)

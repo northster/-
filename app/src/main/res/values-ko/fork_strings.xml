@@ -312,6 +312,8 @@
     <string name="fork_space_long_press">커서 이동 모드 들어가는 시간</string>
     <string name="fork_space_long_press_summary">스페이스바를 이만큼 누르고 있으면 커서 이동 모드가 됩니다 (기본: 키 길게 누르기 시간의 1.5배)</string>
     <string name="fork_space_long_press_default">기본</string>
+    <string name="fork_letter_hold_cursor">문자 키를 꾹 눌러 커서 이동</string>
+    <string name="fork_letter_hold_cursor_summary">스페이스바 대신 아무 문자 키나 꾹 누른 채 움직여 커서를 옮깁니다(문자 키 길게 누르기의 다른 기능은 꺼짐). 스페이스바를 꾹 누르면 팝업 위젯: 옆으로 밀면 다음 위젯, 그냥 떼면 위젯을 누른 것과 같습니다</string>
     <string name="fork_virtual_caret">떠다니는 커서 (아이폰 방식)</string>
     <string name="fork_virtual_caret_summary">스페이스바를 누른 채 움직이면 커서가 손가락을 따라 글 위를 움직이고, 실제 커서는 가장 가까운 글자로 옮겨집니다. 글자 위치를 알려 주지 않는 앱에서는 한 칸씩 움직입니다</string>
     <string name="fork_smart_typed_tester">입력 스마트 칩 테스트</string>
