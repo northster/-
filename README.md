@@ -35,6 +35,7 @@ HeliBoard와 달리 인터넷 권한이 있다. 아래 기능을 켜고 키를 �
 - DT Keyboard: [GNU GPL v3.0](LICENSE). HeliBoard(GPL-3.0)를 고친 버전이고, HeliBoard는 OpenBoard와 AOSP LatinIME([Apache 2.0](LICENSE-Apache-2.0))을 바탕으로 한다. 자세한 출처는 [HeliBoard README](https://github.com/HeliBorg/HeliBoard#credits) 참고.
 - 가져온 코드(MIT): [WM Keyboard](https://github.com/wasi-master/wmkeyboard) (Wasi Master), [SwiftSlate](https://github.com/Musheer360/SwiftSlate) (Musheer Alam)
 - 아이콘: [pixelarticons](https://github.com/halfmage/pixelarticons) (MIT, Gerrit Halfmann)을 도트로 다시 그림
+- 일반 아이콘(도트 아이콘을 끈 경우): [Material Symbols](https://github.com/google/material-design-icons) (Apache 2.0, Google)
 - 이모지 키워드: [Unicode CLDR](https://cldr.unicode.org) (Unicode License V3)
 - 전체 고지문: 앱의 설정 > 정보 > 오픈소스 고지, 또는 [open_source_licenses.txt](app/src/main/assets/open_source_licenses.txt)
 - 제스처 타이핑 라이브러리는 HeliBoard처럼 앱에 들어 있지 않고 사용자가 직접 불러온다(비공개 라이브러리).

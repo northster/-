@@ -283,10 +283,10 @@ private fun SettingsUndoRedo() {
     val prefs = ctx.prefs()
     if (history.canUndo || history.canRedo) {
         IconButton(onClick = { history.undo(prefs) }, enabled = history.canUndo) {
-            Icon(painterResource(R.drawable.ic_dot_undo), stringResource(R.string.undo))
+            Icon(painterResource(helium314.keyboard.fork.DotIcons.of(R.drawable.ic_dot_undo)), stringResource(R.string.undo))
         }
         IconButton(onClick = { history.redo(prefs) }, enabled = history.canRedo) {
-            Icon(painterResource(R.drawable.ic_dot_redo), stringResource(R.string.redo))
+            Icon(painterResource(helium314.keyboard.fork.DotIcons.of(R.drawable.ic_dot_redo)), stringResource(R.string.redo))
         }
     }
 }

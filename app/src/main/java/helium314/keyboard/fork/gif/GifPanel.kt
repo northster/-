@@ -163,7 +163,7 @@ class GifPanel(
     }
 
     private fun bindStar(star: ImageView, favorite: Boolean) {
-        star.setImageResource(if (favorite) R.drawable.ic_dot_star_filled else R.drawable.ic_dot_star)
+        star.setImageResource(if (favorite) helium314.keyboard.fork.DotIcons.of(R.drawable.ic_dot_star_filled) else helium314.keyboard.fork.DotIcons.of(R.drawable.ic_dot_star))
         star.setColorFilter(if (favorite) palette.get(ColorType.ACTION_KEY_BACKGROUND) else 0xFFFFFFFF.toInt())
         star.contentDescription = context.getString(if (favorite) R.string.fork_gif_unfavorite else R.string.fork_gif_favorite)
     }

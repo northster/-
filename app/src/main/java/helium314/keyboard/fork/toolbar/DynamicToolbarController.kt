@@ -521,7 +521,7 @@ class DynamicToolbarController(private val context: Context) {
             manager.pinnedOnly = !manager.pinnedOnly
             KeyboardSwitcher.getInstance().clipboardHistoryView?.forkRefreshList()
             toolbar?.setHeaderActionActive(ClipAction.enabled(context.prefs()).indexOf(ClipAction.PINNED), manager.pinnedOnly,
-                if (manager.pinnedOnly) R.drawable.ic_dot_pin_filled else R.drawable.ic_dot_pin)
+                if (manager.pinnedOnly) helium314.keyboard.fork.DotIcons.of(R.drawable.ic_dot_pin_filled) else helium314.keyboard.fork.DotIcons.of(R.drawable.ic_dot_pin))
             return
         }
         if (action == ClipAction.CLEAR_CLIPBOARD) {
@@ -779,7 +779,7 @@ class DynamicToolbarController(private val context: Context) {
             }
         }, android.widget.LinearLayout.LayoutParams((38 * density).toInt(), android.widget.LinearLayout.LayoutParams.MATCH_PARENT))
         if (aiButton) row.addView(android.widget.ImageView(context).apply {
-            setImageResource(R.drawable.ic_dot_sparkles)
+            setImageResource(helium314.keyboard.fork.DotIcons.of(R.drawable.ic_dot_sparkles))
             contentDescription = context.getString(R.string.fork_widget_emoji_ai)
             scaleType = android.widget.ImageView.ScaleType.CENTER_INSIDE
             colors.setColor(this, ColorType.TOOL_BAR_KEY)
@@ -1380,7 +1380,7 @@ class DynamicToolbarController(private val context: Context) {
         val panel = translatePanel ?: return
         val text = translateRange(translateKind)?.text ?: translateTarget()
         tb.showToolHeader(context.getString(R.string.fork_translate_title),
-            listOf(androidx.core.content.ContextCompat.getDrawable(context, R.drawable.ic_dot_select_word) to
+            listOf(androidx.core.content.ContextCompat.getDrawable(context, helium314.keyboard.fork.DotIcons.of(R.drawable.ic_dot_select_word)) to
                 context.getString(R.string.fork_translate_custom)),
             onBack = { closeTranslatePanel() },
             onAction = { startTranslateTyping() },

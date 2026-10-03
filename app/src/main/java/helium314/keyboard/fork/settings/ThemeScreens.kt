@@ -280,6 +280,7 @@ fun ThemeColorsScreen(onClickBack: () -> Unit) {
                 R.string.fork_theme_cat_display,
                 if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.P)
                     helium314.keyboard.latin.settings.Settings.PREF_THEME_DAY_NIGHT else null,
+                helium314.keyboard.fork.DotIcons.PREF,
                 helium314.keyboard.fork.ForkSettings.PREF_ACCENT_ON_DELETE,
                 helium314.keyboard.latin.settings.Settings.PREF_NAVBAR_COLOR,
                 helium314.keyboard.latin.settings.Settings.PREF_CUSTOM_ICON_NAMES,

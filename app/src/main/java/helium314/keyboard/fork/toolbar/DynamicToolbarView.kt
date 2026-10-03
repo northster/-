@@ -225,7 +225,7 @@ class DynamicToolbarView @JvmOverloads constructor(
         chipBar.removeAllViews()
         chips.removeAllViews()
         val side = (48 * density).toInt()
-        chipBar.addView(iconButton(R.drawable.ic_dot_left, context.getString(R.string.fork_tool_back)) { onBack() },
+        chipBar.addView(iconButton(helium314.keyboard.fork.DotIcons.of(R.drawable.ic_dot_left), context.getString(R.string.fork_tool_back)) { onBack() },
             LinearLayout.LayoutParams(side, LayoutParams.MATCH_PARENT).apply { marginStart = backMargin })
         val code = actions.firstOrNull { it is helium314.keyboard.fork.clipboard.ClipPrefs.SmartAction.Code }?.value
         if (smart && imageUri == null && text != null && actions.isNotEmpty()) {
@@ -272,7 +272,7 @@ class DynamicToolbarView @JvmOverloads constructor(
     fun showSmartHit(query: String, result: String, onUse: () -> Unit, onBack: () -> Unit) {
         chipBar.removeAllViews()
         chips.removeAllViews()
-        chipBar.addView(iconButton(R.drawable.ic_dot_left, context.getString(R.string.fork_tool_back)) { onBack() },
+        chipBar.addView(iconButton(helium314.keyboard.fork.DotIcons.of(R.drawable.ic_dot_left), context.getString(R.string.fork_tool_back)) { onBack() },
             LinearLayout.LayoutParams((48 * density).toInt(), LayoutParams.MATCH_PARENT).apply { marginStart = backMargin })
         chips.gravity = Gravity.START or Gravity.CENTER_VERTICAL
         chips.addView(TextView(context).apply {
@@ -299,7 +299,7 @@ class DynamicToolbarView @JvmOverloads constructor(
     fun showSlateProgress(label: String, onCancel: () -> Unit) {
         chipBar.removeAllViews()
         chips.removeAllViews()
-        chipBar.addView(iconButton(R.drawable.ic_dot_close, context.getString(android.R.string.cancel)) { onCancel() },
+        chipBar.addView(iconButton(helium314.keyboard.fork.DotIcons.of(R.drawable.ic_dot_close), context.getString(android.R.string.cancel)) { onCancel() },
             LinearLayout.LayoutParams((48 * density).toInt(), LayoutParams.MATCH_PARENT))
         // centered in the toolbar (the border glows while it runs)
         val status = TextView(context).apply {
@@ -323,7 +323,7 @@ class DynamicToolbarView @JvmOverloads constructor(
     fun showCommandChips(labels: List<String>, onPick: (Int) -> Unit, onBack: () -> Unit) {
         chipBar.removeAllViews()
         chips.removeAllViews()
-        chipBar.addView(iconButton(R.drawable.ic_dot_left, context.getString(R.string.fork_tool_back)) { onBack() },
+        chipBar.addView(iconButton(helium314.keyboard.fork.DotIcons.of(R.drawable.ic_dot_left), context.getString(R.string.fork_tool_back)) { onBack() },
             LinearLayout.LayoutParams((48 * density).toInt(), LayoutParams.MATCH_PARENT).apply { marginStart = backMargin })
         val scroll = HorizontalScrollView(context).apply { isHorizontalScrollBarEnabled = false }
         val list = LinearLayout(context).apply { orientation = LinearLayout.HORIZONTAL; gravity = Gravity.CENTER_VERTICAL }
@@ -347,7 +347,7 @@ class DynamicToolbarView @JvmOverloads constructor(
     fun showAutofill(view: View, onBack: () -> Unit) {
         chipBar.removeAllViews()
         chips.removeAllViews()
-        chipBar.addView(iconButton(R.drawable.ic_dot_left, context.getString(R.string.fork_tool_back)) { onBack() },
+        chipBar.addView(iconButton(helium314.keyboard.fork.DotIcons.of(R.drawable.ic_dot_left), context.getString(R.string.fork_tool_back)) { onBack() },
             LinearLayout.LayoutParams((48 * density).toInt(), LayoutParams.MATCH_PARENT).apply { marginStart = backMargin })
         (view.parent as? android.view.ViewGroup)?.removeView(view)
         chipBar.addView(view, LinearLayout.LayoutParams(0, LayoutParams.MATCH_PARENT, 1f).apply {
@@ -425,7 +425,7 @@ class DynamicToolbarView @JvmOverloads constructor(
     fun showSearch(onClose: () -> Unit, gif: Boolean = false) {
         val colors = Settings.getValues().mColors
         searchBar.removeAllViews()
-        searchBar.addView(iconButton(if (gif) R.drawable.ic_dot_gif else R.drawable.ic_dot_search,
+        searchBar.addView(iconButton(if (gif) helium314.keyboard.fork.DotIcons.of(R.drawable.ic_dot_gif) else helium314.keyboard.fork.DotIcons.of(R.drawable.ic_dot_search),
             context.getString(if (gif) R.string.fork_toolbar_gif else R.string.fork_clip_search)) { },
             LinearLayout.LayoutParams((40 * density).toInt(), LayoutParams.MATCH_PARENT))
         queryView.setTextColor(colors.get(ColorType.KEY_TEXT))
@@ -434,7 +434,7 @@ class DynamicToolbarView @JvmOverloads constructor(
         KeyboardTypeface.applyToTextView(queryView)
         searchBar.addView(queryView, LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT))
         searchBar.addView(resultScroll, LinearLayout.LayoutParams(0, LayoutParams.MATCH_PARENT, 1f))
-        searchBar.addView(iconButton(R.drawable.ic_dot_close, context.getString(android.R.string.cancel)) { onClose() },
+        searchBar.addView(iconButton(helium314.keyboard.fork.DotIcons.of(R.drawable.ic_dot_close), context.getString(android.R.string.cancel)) { onClose() },
             LinearLayout.LayoutParams((40 * density).toInt(), LayoutParams.MATCH_PARENT))
         row.visibility = GONE
         header.visibility = GONE
@@ -619,7 +619,7 @@ class DynamicToolbarView @JvmOverloads constructor(
         header.removeAllViews()
         val size = LinearLayout.LayoutParams((48 * density).toInt(), LayoutParams.MATCH_PARENT)
         // back is < in every header (no divider after it)
-        header.addView(iconButton(R.drawable.ic_dot_left, context.getString(R.string.fork_tool_back)) { onBack() }, LinearLayout.LayoutParams(size).apply { marginStart = backMargin })
+        header.addView(iconButton(helium314.keyboard.fork.DotIcons.of(R.drawable.ic_dot_left), context.getString(R.string.fork_tool_back)) { onBack() }, LinearLayout.LayoutParams(size).apply { marginStart = backMargin })
         header.addView(TextView(context).apply {
             text = title
             setSingleLine()
@@ -701,7 +701,7 @@ class DynamicToolbarView @JvmOverloads constructor(
         val colors = Settings.getValues().mColors
         header.removeAllViews()
         headerActions.clear()
-        header.addView(iconButton(R.drawable.ic_dot_left, context.getString(R.string.fork_tool_back)) { onBack() },
+        header.addView(iconButton(helium314.keyboard.fork.DotIcons.of(R.drawable.ic_dot_left), context.getString(R.string.fork_tool_back)) { onBack() },
             LinearLayout.LayoutParams((48 * density).toInt(), LayoutParams.MATCH_PARENT).apply { marginStart = backMargin })
         header.addView(TextView(context).apply {
             inputField = this
@@ -761,10 +761,10 @@ class DynamicToolbarView @JvmOverloads constructor(
         val colors = Settings.getValues().mColors
         header.removeAllViews()
         headerActions.clear()
-        header.addView(iconButton(R.drawable.ic_dot_left, context.getString(R.string.fork_tool_back)) { onBack() },
+        header.addView(iconButton(helium314.keyboard.fork.DotIcons.of(R.drawable.ic_dot_left), context.getString(R.string.fork_tool_back)) { onBack() },
             LinearLayout.LayoutParams((48 * density).toInt(), LayoutParams.MATCH_PARENT).apply { marginStart = backMargin })
         header.addView(ImageView(context).apply {
-            setImageResource(R.drawable.ic_dot_gif)
+            setImageResource(helium314.keyboard.fork.DotIcons.of(R.drawable.ic_dot_gif))
             contentDescription = context.getString(R.string.fork_toolbar_gif)
             scaleType = ImageView.ScaleType.CENTER_INSIDE
             colors.setColor(this, ColorType.TOOL_BAR_KEY)
@@ -791,8 +791,8 @@ class DynamicToolbarView @JvmOverloads constructor(
             marginEnd = (4 * density).toInt()
         })
         listOf(
-            Triple(R.drawable.ic_dot_emoji_recents, R.string.fork_gif_recent, onRecent),
-            Triple(if (filter == 2) R.drawable.ic_dot_star_filled else R.drawable.ic_dot_star, R.string.fork_gif_favorites, onFavorites),
+            Triple(helium314.keyboard.fork.DotIcons.of(R.drawable.ic_dot_emoji_recents), R.string.fork_gif_recent, onRecent),
+            Triple(if (filter == 2) helium314.keyboard.fork.DotIcons.of(R.drawable.ic_dot_star_filled) else helium314.keyboard.fork.DotIcons.of(R.drawable.ic_dot_star), R.string.fork_gif_favorites, onFavorites),
         ).forEachIndexed { i, (icon, label, action) ->
             val button = iconButton(icon, context.getString(label)) { action() }
             if (filter == i + 1) button.setColorFilter(colors.get(ColorType.ACTION_KEY_BACKGROUND))
@@ -817,7 +817,7 @@ class DynamicToolbarView @JvmOverloads constructor(
         val colors = Settings.getValues().mColors
         header.removeAllViews()
         emojiTabs.clear()
-        header.addView(iconButton(R.drawable.ic_dot_left, context.getString(R.string.fork_tool_back)) { onBack() },
+        header.addView(iconButton(helium314.keyboard.fork.DotIcons.of(R.drawable.ic_dot_left), context.getString(R.string.fork_tool_back)) { onBack() },
             LinearLayout.LayoutParams((48 * density).toInt(), LayoutParams.MATCH_PARENT).apply { marginStart = backMargin })
         val strip = LinearLayout(context).apply {
             orientation = LinearLayout.HORIZONTAL
@@ -846,7 +846,7 @@ class DynamicToolbarView @JvmOverloads constructor(
             LinearLayout.LayoutParams((1 * density).toInt().coerceAtLeast(1), (18 * density).toInt()).apply {
                 marginStart = (4 * density).toInt()
             })
-        header.addView(iconButton(R.drawable.ic_dot_search, context.getString(R.string.fork_emoji_search)) { onSearch() },
+        header.addView(iconButton(helium314.keyboard.fork.DotIcons.of(R.drawable.ic_dot_search), context.getString(R.string.fork_emoji_search)) { onSearch() },
             LinearLayout.LayoutParams((48 * density).toInt(), LayoutParams.MATCH_PARENT))
         setEmojiTabSelected(selected)
         row.visibility = GONE

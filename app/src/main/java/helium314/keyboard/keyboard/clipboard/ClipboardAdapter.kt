@@ -110,9 +110,11 @@ class ClipboardAdapter(
             clipboardLayoutParams.setItemProperties(view)
             val colors = Settings.getValues().mColors
             pinButton = view.findViewById<ImageView>(R.id.clipboard_entry_pin).apply {
+                setImageResource(helium314.keyboard.fork.DotIcons.of(R.drawable.ic_dot_pin))
                 setOnClickListener { (view.tag as? Long)?.let { keyEventListener.onTogglePin(it) } }
             }
             deleteButton = view.findViewById<ImageView>(R.id.clipboard_entry_delete).apply {
+                setImageResource(helium314.keyboard.fork.DotIcons.of(R.drawable.ic_dot_trash))
                 setOnClickListener { (view.tag as? Long)?.let { keyEventListener.onDeleteClip(it) } }
             }
             colors.setColor(deleteButton, ColorType.KEY_HINT_TEXT)
@@ -141,14 +143,14 @@ class ClipboardAdapter(
             val colors = Settings.getValues().mColors
             if (selecting) {
                 val isSelected = historyEntry.id in selected
-                pinnedIconView.setImageResource(R.drawable.ic_dot_check)
+                pinnedIconView.setImageResource(helium314.keyboard.fork.DotIcons.of(R.drawable.ic_dot_check))
                 colors.setColor(pinnedIconView, if (isSelected) ColorType.ACTION_KEY_BACKGROUND else ColorType.KEY_HINT_TEXT)
                 pinnedIconView.alpha = if (isSelected) 1f else 0.35f
                 itemView.alpha = if (isSelected) 1f else 0.75f
             } else {
                 // pinned: filled in the text color, clearly visible; not pinned: a faint outline
                 // the card's own pin: coarser, dots as big as the text's (the toolbar's pin looked too fine here)
-                pinnedIconView.setImageResource(if (historyEntry.isPinned) R.drawable.ic_dot_pin_card_filled else R.drawable.ic_dot_pin_card)
+                pinnedIconView.setImageResource(if (historyEntry.isPinned) helium314.keyboard.fork.DotIcons.of(R.drawable.ic_dot_pin_card_filled) else helium314.keyboard.fork.DotIcons.of(R.drawable.ic_dot_pin_card))
                 colors.setColor(pinnedIconView, if (historyEntry.isPinned) ColorType.KEY_TEXT else ColorType.KEY_HINT_TEXT)
                 pinnedIconView.alpha = 1f
                 itemView.alpha = 1f

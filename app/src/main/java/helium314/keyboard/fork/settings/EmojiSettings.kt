@@ -74,10 +74,10 @@ private fun EmojiTabOrderPreference(name: String, description: String?) {
                     color = if (shown) s.foreground else s.mutedForeground,
                     modifier = Modifier.weight(1f).padding(start = 12.dp))
                 IconButton(onClick = { save(tabs.toMutableList().apply { add(i - 1, removeAt(i)) }) }, enabled = i > 0) {
-                    Icon(painterResource(R.drawable.ic_dot_left), stringResource(R.string.fork_move_up), Modifier.rotate(90f))
+                    Icon(painterResource(helium314.keyboard.fork.DotIcons.of(R.drawable.ic_dot_left)), stringResource(R.string.fork_move_up), Modifier.rotate(90f))
                 }
                 IconButton(onClick = { save(tabs.toMutableList().apply { add(i + 1, removeAt(i)) }) }, enabled = i < tabs.lastIndex) {
-                    Icon(painterResource(R.drawable.ic_dot_left), stringResource(R.string.fork_move_down), Modifier.rotate(-90f))
+                    Icon(painterResource(helium314.keyboard.fork.DotIcons.of(R.drawable.ic_dot_left)), stringResource(R.string.fork_move_down), Modifier.rotate(-90f))
                 }
                 ShadcnSwitch(checked = shown, onCheckedChange = { on ->
                     save(tabs.toMutableList().apply { set(i, category to on) })

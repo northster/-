@@ -47,6 +47,7 @@ class App : Application() {
             upgradeToolbarPrefs(prefs())
         transferOldPinnedClips(this) // todo: remove in a few months, maybe end 2026
         app = this
+        helium314.keyboard.fork.DotIcons.init(this)
         Defaults.initDynamicDefaults(this)
     }
 

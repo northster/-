@@ -31,8 +31,8 @@ enum class ClipAction(val toolbarKey: ToolbarKey?, val defaultOn: Boolean) {
     RIGHT(ToolbarKey.RIGHT, false);
 
     fun icon(context: Context): Drawable? = when (this) {
-        SEARCH -> ContextCompat.getDrawable(context, R.drawable.ic_dot_search)
-        PINNED -> ContextCompat.getDrawable(context, R.drawable.ic_dot_pin)
+        SEARCH -> ContextCompat.getDrawable(context, helium314.keyboard.fork.DotIcons.of(R.drawable.ic_dot_search))
+        PINNED -> ContextCompat.getDrawable(context, helium314.keyboard.fork.DotIcons.of(R.drawable.ic_dot_pin))
         else -> KeyboardIconsSet.instance.getNewDrawable(toolbarKey!!.name, context)
     }
 

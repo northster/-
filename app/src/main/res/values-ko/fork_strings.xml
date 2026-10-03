@@ -59,6 +59,8 @@
     <string name="fork_permission_app_desc">이 앱의 시스템 설정 화면</string>
     <string name="fork_permission_granted">허용됨</string>
     <string name="fork_permission_needed">허용 안 됨</string>
+    <string name="fork_dot_icons">도트 아이콘</string>
+    <string name="fork_dot_icons_summary">끄면 키와 툴바에 일반 아이콘을 씁니다. 글꼴은 그대로입니다</string>
     <string name="fork_accent_on_delete">강조 키를 백스페이스로</string>
     <string name="fork_accent_on_delete_summary">엔터의 강조 색과 모양을 백스페이스에 줍니다</string>
     <string name="fork_open_source">오픈소스 고지</string>

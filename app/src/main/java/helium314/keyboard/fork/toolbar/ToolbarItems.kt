@@ -25,18 +25,18 @@ object ToolbarItems {
     const val REDO = "redo"
 
     /** Current toolbar content. Placeholders only for now. */
-    val defaultItems = listOf(
-        ToolbarItem(CLIPBOARD, R.drawable.ic_dot_clipboard, R.string.fork_toolbar_clipboard),
+    val defaultItems get() = listOf(
+        ToolbarItem(CLIPBOARD, helium314.keyboard.fork.DotIcons.of(R.drawable.ic_dot_clipboard), R.string.fork_toolbar_clipboard),
         // AI commands (?fix, text replacers ...)
-        ToolbarItem(AI, R.drawable.ic_dot_sparkles, R.string.fork_toolbar_ai),
-        ToolbarItem(TRANSLATE, R.drawable.ic_dot_translate, R.string.fork_toolbar_translate),
-        ToolbarItem(GIF, R.drawable.ic_dot_gif, R.string.fork_toolbar_gif),
+        ToolbarItem(AI, helium314.keyboard.fork.DotIcons.of(R.drawable.ic_dot_sparkles), R.string.fork_toolbar_ai),
+        ToolbarItem(TRANSLATE, helium314.keyboard.fork.DotIcons.of(R.drawable.ic_dot_translate), R.string.fork_toolbar_translate),
+        ToolbarItem(GIF, helium314.keyboard.fork.DotIcons.of(R.drawable.ic_dot_gif), R.string.fork_toolbar_gif),
         // the settings button (MORE) is gone: the settings open from the app icon
     )
 
     /** always at the right end of the toolbar, after a divider */
-    val endItems = listOf(
-        ToolbarItem(UNDO, R.drawable.ic_dot_undo, R.string.undo),
-        ToolbarItem(REDO, R.drawable.ic_dot_redo, R.string.redo),
+    val endItems get() = listOf(
+        ToolbarItem(UNDO, helium314.keyboard.fork.DotIcons.of(R.drawable.ic_dot_undo), R.string.undo),
+        ToolbarItem(REDO, helium314.keyboard.fork.DotIcons.of(R.drawable.ic_dot_redo), R.string.redo),
     )
 }

@@ -162,7 +162,7 @@ private fun SubtypeRow(subtype: InputMethodSubtype, isEnabled: Boolean) {
             .padding(vertical = 10.dp, horizontal = 16.dp)
     ) {
         androidx.compose.material3.Icon(
-            androidx.compose.ui.res.painterResource(R.drawable.ic_dot_check), null,
+            androidx.compose.ui.res.painterResource(helium314.keyboard.fork.DotIcons.of(R.drawable.ic_dot_check)), null,
             modifier = Modifier.padding(end = 12.dp).size(20.dp),
             tint = if (enabled) MaterialTheme.colorScheme.primary else androidx.compose.ui.graphics.Color.Transparent,
         )

@@ -58,7 +58,7 @@ private fun GeminiKeysPreference() {
         keys.forEachIndexed { i, key ->
             Preference(name = "••••" + key.takeLast(4), description = stringResource(R.string.fork_slate_key_saved),
                 onClick = { deleting = i }) {
-                Icon(painterResource(R.drawable.ic_dot_trash), stringResource(R.string.delete))
+                Icon(painterResource(helium314.keyboard.fork.DotIcons.of(R.drawable.ic_dot_trash)), stringResource(R.string.delete))
             }
         }
         Preference(name = stringResource(R.string.fork_slate_key_add), description = stringResource(R.string.fork_slate_key_add_summary),

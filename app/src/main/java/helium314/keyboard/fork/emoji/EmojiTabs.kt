@@ -29,16 +29,16 @@ internal object EmojiTabs {
 
     /** dot matrix tab icon */
     fun icon(category: EmojiCategory.Category) = when (category) {
-        EmojiCategory.Category.RECENTS -> R.drawable.ic_dot_emoji_recents
-        EmojiCategory.Category.SMILEYS -> R.drawable.ic_dot_smile
-        EmojiCategory.Category.PEOPLE -> R.drawable.ic_dot_emoji_people
-        EmojiCategory.Category.NATURE -> R.drawable.ic_dot_emoji_nature
-        EmojiCategory.Category.FOOD -> R.drawable.ic_dot_emoji_food
-        EmojiCategory.Category.TRAVEL_PLACES -> R.drawable.ic_dot_emoji_travel
-        EmojiCategory.Category.ACTIVITIES -> R.drawable.ic_dot_emoji_activities
-        EmojiCategory.Category.OBJECTS -> R.drawable.ic_dot_emoji_objects
-        EmojiCategory.Category.SYMBOLS -> R.drawable.ic_dot_emoji_symbols
-        EmojiCategory.Category.FLAGS -> R.drawable.ic_dot_emoji_flags
-        EmojiCategory.Category.EMOTICONS -> R.drawable.ic_dot_emoji_emoticons
+        EmojiCategory.Category.RECENTS -> helium314.keyboard.fork.DotIcons.of(R.drawable.ic_dot_emoji_recents)
+        EmojiCategory.Category.SMILEYS -> helium314.keyboard.fork.DotIcons.of(R.drawable.ic_dot_smile)
+        EmojiCategory.Category.PEOPLE -> helium314.keyboard.fork.DotIcons.of(R.drawable.ic_dot_emoji_people)
+        EmojiCategory.Category.NATURE -> helium314.keyboard.fork.DotIcons.of(R.drawable.ic_dot_emoji_nature)
+        EmojiCategory.Category.FOOD -> helium314.keyboard.fork.DotIcons.of(R.drawable.ic_dot_emoji_food)
+        EmojiCategory.Category.TRAVEL_PLACES -> helium314.keyboard.fork.DotIcons.of(R.drawable.ic_dot_emoji_travel)
+        EmojiCategory.Category.ACTIVITIES -> helium314.keyboard.fork.DotIcons.of(R.drawable.ic_dot_emoji_activities)
+        EmojiCategory.Category.OBJECTS -> helium314.keyboard.fork.DotIcons.of(R.drawable.ic_dot_emoji_objects)
+        EmojiCategory.Category.SYMBOLS -> helium314.keyboard.fork.DotIcons.of(R.drawable.ic_dot_emoji_symbols)
+        EmojiCategory.Category.FLAGS -> helium314.keyboard.fork.DotIcons.of(R.drawable.ic_dot_emoji_flags)
+        EmojiCategory.Category.EMOTICONS -> helium314.keyboard.fork.DotIcons.of(R.drawable.ic_dot_emoji_emoticons)
     }
 }
