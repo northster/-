@@ -8,7 +8,7 @@ import helium314.keyboard.latin.R
 import helium314.keyboard.latin.utils.prefs
 
 /**
- * fork: dot matrix icons (ic_dot_*) or plain ones (ic_plain_*, Material Symbols, scripts/plain_icons.py). The text
+ * fork: dot matrix icons (ic_dot_*) or plain ones (ic_plain_*, Phosphor light, scripts/plain_icons.py). The text
  * font is not affected. Every ic_dot_ icon is shown through [of].
  */
 object DotIcons {

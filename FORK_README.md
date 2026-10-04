@@ -311,9 +311,8 @@ SwiftSlate(github.com/Musheer360/SwiftSlate, MIT)의 명령 방식을 키보드 
 - 대부분은 pixelarticons(github.com/halfmage/pixelarticons, MIT, Copyright (c) 2020 Gerrit Halfmann)의 24×24 픽셀 아이콘을 12×12 점 격자로 줄인 것이다(`scripts/pixel_icons.py`, 대응표 `MAP`). 점 간격과 크기는 키 글자 크기의 Doto 글꼴과 같게(24dp에 12점, 지름 1.7dp). 아이콘마다 가장 덜 뭉개지는 위치(0/1픽셀 어긋남)에서 줄인다. Shift, 지구본, 스페이스, GIF, 지우기와 AI(별 두 개), 실행 취소/다시 하기/엔터(줄이면 둥근 모서리의 대각선 한 칸이 빠진 점처럼 보여서 네모 모서리로)는 12×12에 직접 그린 그림이다. 클립 카드의 책갈피는 1점 테두리, 불투명도 1. `npm pack pixelarticons`로 받은 `package/svg` 폴더를 넣어 `python3 scripts/pixel_icons.py <svg 폴더> app/src/main/res/drawable`로 다시 만든다(dot_icons.py 다음에 실행).
 - 새 아이콘은 이 파일에 그림을 추가하고, `KeyboardIconsSet.forkDotIcons`나 툴바 항목에 연결한다.
 - 테마 > 표시 > 도트 아이콘(기본 켬)을 끄면 일반 아이콘을 쓴다. 글꼴(도트 텍스트)은 그대로.
-  - 키(Shift, ⌫, 엔터, 스페이스 등): `forkDotIcons`를 덮어쓰지 않아서 아이콘 스타일(머티리얼/둥근/홀로)의 HeliBoard 아이콘이 나온다(`KeyboardIconsSet.loadIcons`).
-  - 툴바, 패널, 이모지 탭, 클립보드, 설정 화면: 모든 `R.drawable.ic_dot_*`는 `DotIcons.of()`를 거쳐서, 끄면 같은 이름의 `ic_plain_*`가 쓰인다.
-  - `ic_plain_*`는 Material Symbols(Rounded, Apache 2.0)를 색만 흰색으로 바꿔 받은 것이다. `python3 scripts/plain_icons.py app/src/main/res/drawable`로 다시 받는다(도트 아이콘을 추가하면 이 스크립트의 `MAP`에도 추가).
+  - 키(Shift 포함), 툴바, 패널, 이모지 탭, 클립보드, 설정 화면 모두 같은 세트로 통일: 모든 `R.drawable.ic_dot_*`는 `DotIcons.of()`를 거쳐서, 끄면 같은 이름의 `ic_plain_*`가 쓰인다(키는 `KeyboardIconsSet.loadIcons`에서 `forkDotIcons`를 같은 식으로 바꿈).
+  - `ic_plain_*`는 Phosphor Icons(light, 채운 상태는 fill, MIT)를 색만 흰색으로 바꿔 VectorDrawable로 옮긴 것이다. 스페이스(⎵)는 Phosphor에 없어서 같은 선 굵기로 직접 그렸다. `npm pack @phosphor-icons/core`의 `package/assets` 폴더로 `python3 scripts/plain_icons.py <assets 폴더> app/src/main/res/drawable`를 실행해 다시 만든다(도트 아이콘을 추가하면 이 스크립트의 `MAP`에도 추가).
   - 바꾸면 테마를 다시 불러와 키보드와 툴바가 새로 만들어진다.
 
 ## 11. 입력 중 밑줄 없애기
@@ -406,7 +405,7 @@ SwiftSlate(github.com/Musheer360/SwiftSlate, MIT)의 명령 방식을 키보드 
 - 값은 그대로 유지되고, 검색하면 숨긴 설정도 나온다. 숨긴 키를 `SettingsSections`가 걸러서 모든 화면에 같이 적용된다.
 
 ## 라이선스 고지
-- 설정 > 정보 > 오픈소스 고지: `assets/open_source_licenses.txt`(HeliBoard GPL, WM Keyboard / SwiftSlate / pixelarticons MIT 전문, Material Symbols Apache 2.0)와
+- 설정 > 정보 > 오픈소스 고지: `assets/open_source_licenses.txt`(HeliBoard GPL, WM Keyboard / SwiftSlate / pixelarticons MIT 전문, Phosphor Icons MIT)와
   `assets/emoji_keywords.LICENSE`(Unicode)를 보여 준다. 새로 코드를 가져오면 이 파일에 고지를 추가할 것.
 - GIF 패널 오른쪽 아래에 "Powered by KLIPY / GIPHY"(제공사 요구 사항).
 - 정보 화면의 GitHub와 라이선스 링크는 이 저장소, 레이아웃 / 색상 위키와 토론은 HeliBoard 것을 그대로 쓴다.

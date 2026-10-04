@@ -1,12 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- fork: Material Symbols "flag" (Apache License 2.0), scripts/plain_icons.py -->
+<!-- fork: Phosphor "flag" light (MIT), scripts/plain_icons.py -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
-    android:width="24dp"
-    android:height="24dp"
-    android:viewportWidth="960"
-    android:viewportHeight="960"
-    android:autoMirrored="true">
-  <path
-      android:fillColor="#FFFFFFFF"
-      android:pathData="M280,560L280,800Q280,817 268.5,828.5Q257,840 240,840Q223,840 211.5,828.5Q200,817 200,800L200,200Q200,183 211.5,171.5Q223,160 240,160L527,160Q541,160 552,169Q563,178 566,192L576,240L760,240Q777,240 788.5,251.5Q800,263 800,280L800,600Q800,617 788.5,628.5Q777,640 760,640L553,640Q539,640 528,631Q517,622 514,608L504,560L280,560ZM586,560L720,560L720,320L543,320Q529,320 518,311Q507,302 504,288L494,240L280,240L280,480L537,480Q551,480 562,489Q573,498 576,512L586,560ZM500,400L500,400Q500,400 500,400Q500,400 500,400L500,400L500,400L500,400L500,400Q500,400 500,400Q500,400 500,400L500,400L500,400L500,400Z"/>
+    android:width="24dp" android:height="24dp"
+    android:viewportWidth="256" android:viewportHeight="256">
+    <path android:fillColor="#FFFFFFFF" android:pathData="M44.08,51.37A6,6,0,0,0,42,55.9V224a6,6,0,0,0,12,0V178.78c28.08-22.79,51.88-11,79.34,2.57,16.12,8,33.49,16.58,52,16.58,13.57,0,27.76-4.6,42.56-17.42A6,6,0,0,0,230,176V55.9a6,6,0,0,0-9.93-4.54c-29,25.12-53.28,13.09-81.41-.84C110.77,36.71,79,21.16,44.08,51.37ZM218,173.17c-28.08,22.8-51.88,11-79.34-2.58C113.4,158.08,85.09,144.07,54,164V58.72c28.08-22.8,51.88-11,79.34,2.56C158.6,73.79,186.91,87.8,218,67.91Z"/>
 </vector>

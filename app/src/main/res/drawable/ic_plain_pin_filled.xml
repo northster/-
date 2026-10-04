@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- fork: Material Symbols "bookmark" (Apache License 2.0), scripts/plain_icons.py -->
+<!-- fork: Phosphor "bookmark-simple" fill (MIT), scripts/plain_icons.py -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
-    android:width="24dp"
-    android:height="24dp"
-    android:viewportWidth="960"
-    android:viewportHeight="960">
-  <path
-      android:fillColor="#FFFFFFFF"
-      android:pathData="M480,720L312,792Q272,809 236,785.5Q200,762 200,719L200,200Q200,167 223.5,143.5Q247,120 280,120L680,120Q713,120 736.5,143.5Q760,167 760,200L760,719Q760,762 724,785.5Q688,809 648,792L480,720Z"/>
+    android:width="24dp" android:height="24dp"
+    android:viewportWidth="256" android:viewportHeight="256">
+    <path android:fillColor="#FFFFFFFF" android:pathData="M184,32H72A16,16,0,0,0,56,48V224a8,8,0,0,0,12.24,6.78L128,193.43l59.77,37.35A8,8,0,0,0,200,224V48A16,16,0,0,0,184,32Z"/>
 </vector>

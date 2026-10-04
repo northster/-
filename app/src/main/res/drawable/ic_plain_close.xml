@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- fork: Material Symbols "close" (Apache License 2.0), scripts/plain_icons.py -->
+<!-- fork: Phosphor "x" light (MIT), scripts/plain_icons.py -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
-    android:width="24dp"
-    android:height="24dp"
-    android:viewportWidth="960"
-    android:viewportHeight="960">
-  <path
-      android:fillColor="#FFFFFFFF"
-      android:pathData="M480,536L284,732Q273,743 256,743Q239,743 228,732Q217,721 217,704Q217,687 228,676L424,480L228,284Q217,273 217,256Q217,239 228,228Q239,217 256,217Q273,217 284,228L480,424L676,228Q687,217 704,217Q721,217 732,228Q743,239 743,256Q743,273 732,284L536,480L732,676Q743,687 743,704Q743,721 732,732Q721,743 704,743Q687,743 676,732L480,536Z"/>
+    android:width="24dp" android:height="24dp"
+    android:viewportWidth="256" android:viewportHeight="256">
+    <path android:fillColor="#FFFFFFFF" android:pathData="M204.24,195.76a6,6,0,1,1-8.48,8.48L128,136.49,60.24,204.24a6,6,0,0,1-8.48-8.48L119.51,128,51.76,60.24a6,6,0,0,1,8.48-8.48L128,119.51l67.76-67.75a6,6,0,0,1,8.48,8.48L136.49,128Z"/>
 </vector>

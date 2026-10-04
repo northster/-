@@ -28,8 +28,8 @@ class KeyboardIconsSet private constructor() {
             else -> keyboardIconsMaterial
         }
         val overrideIds = customIconIds(context, prefs)
-        // fork: dot matrix icons over the style's, unless turned off (Theme > display)
-        val styleIds = if (helium314.keyboard.fork.DotIcons.enabled()) defaultIds + forkDotIcons else defaultIds
+        // fork: dot matrix icons over the style's, or their plain counterparts (Theme > display), one look everywhere
+        val styleIds = defaultIds + forkDotIcons.mapValues { helium314.keyboard.fork.DotIcons.of(it.value) }
         val ids = if (overrideIds.isEmpty()) styleIds else styleIds + overrideIds
         if (!needsReload && ids == iconIds) return
         iconIds = ids
@@ -329,15 +329,14 @@ class KeyboardIconsSet private constructor() {
         fun getAllIcons(context: Context): Map<String, List<Int>> {
             // currently active style first
             val iconStyle = context.prefs().getString(Settings.PREF_ICON_STYLE, Defaults.PREF_ICON_STYLE(context.prefs()))
-            val dots = helium314.keyboard.fork.DotIcons.enabled()
             return keyboardIconsMaterial.entries.associate { (name, id) ->
                 val style = when (iconStyle) {
                     KeyboardTheme.STYLE_HOLO -> listOfNotNull(keyboardIconsHolo[name], keyboardIconsRounded[name], id)
                     KeyboardTheme.STYLE_ROUNDED -> listOfNotNull(keyboardIconsRounded[name], id, keyboardIconsHolo[name])
                     else -> listOfNotNull(id, keyboardIconsRounded[name], keyboardIconsHolo[name])
                 }
-                val dot = listOfNotNull(forkDotIcons[name])
-                name to (if (dots) dot + style else style + dot).distinct()
+                val fork = listOfNotNull(forkDotIcons[name]?.let { helium314.keyboard.fork.DotIcons.of(it) })
+                name to (fork + style).distinct()
             }
         }
 
