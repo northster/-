@@ -106,7 +106,8 @@ object KeyboardTypeface {
         } else if (text != null && containsHangul(text)) {
             // fork: Korean font for anything with Hangul in it. Without one, not the Latin font either: it usually has
             //  no Hangul, and the fallback font would get its weight (e.g. Doto Black makes Hangul very bold)
-            koreanTypeface() ?: defaultTypeface
+            //  (also when the caller passes the Latin font as its default, like the clipboard)
+            koreanTypeface() ?: defaultTypeface.takeIf { it != customTypeface() } ?: Typeface.DEFAULT
         } else {
             customTypeface() ?: defaultTypeface
         }
