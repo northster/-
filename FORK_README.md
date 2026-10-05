@@ -312,7 +312,7 @@ SwiftSlate(github.com/Musheer360/SwiftSlate, MIT)의 명령 방식을 키보드 
 - 새 아이콘은 이 파일에 그림을 추가하고, `KeyboardIconsSet.forkDotIcons`나 툴바 항목에 연결한다.
 - 테마 > 표시 > 도트 아이콘(기본 켬)을 끄면 일반 아이콘을 쓴다. 글꼴(도트 텍스트)은 그대로.
   - 키(Shift 포함), 툴바, 패널, 이모지 탭, 클립보드, 설정 화면 모두 같은 세트로 통일: 모든 `R.drawable.ic_dot_*`는 `DotIcons.of()`를 거쳐서, 끄면 같은 이름의 `ic_plain_*`가 쓰인다(키는 `KeyboardIconsSet.loadIcons`에서 `forkDotIcons`를 같은 식으로 바꿈).
-  - `ic_plain_*`는 Phosphor Icons(light, 채운 상태는 fill, MIT)를 색만 흰색으로 바꿔 VectorDrawable로 옮긴 것이다. 스페이스(⎵)는 Phosphor에 없어서 같은 선 굵기로 직접 그렸다. `npm pack @phosphor-icons/core`의 `package/assets` 폴더로 `python3 scripts/plain_icons.py <assets 폴더> app/src/main/res/drawable`를 실행해 다시 만든다(도트 아이콘을 추가하면 이 스크립트의 `MAP`에도 추가).
+  - `ic_plain_*`는 iOS(SF Symbols) 느낌의 Framework7 Icons(MIT)를 색만 흰색으로 바꿔 VectorDrawable로 옮긴 것이다. Framework7에 없는 클립보드, GIF, 번역, 음식은 선 굵기가 비슷한 Phosphor Icons regular(MIT), 스페이스(⎵)는 직접 그렸다. `npm pack framework7-icons`의 `package/svg`와 `npm pack @phosphor-icons/core`의 `package/assets`로 `python3 scripts/plain_icons.py <svg 폴더> <assets 폴더> app/src/main/res/drawable`를 실행해 다시 만든다(도트 아이콘을 추가하면 이 스크립트의 `MAP`에도 추가).
   - 바꾸면 테마를 다시 불러와 키보드와 툴바가 새로 만들어진다.
 
 ## 11. 입력 중 밑줄 없애기
@@ -405,7 +405,7 @@ SwiftSlate(github.com/Musheer360/SwiftSlate, MIT)의 명령 방식을 키보드 
 - 값은 그대로 유지되고, 검색하면 숨긴 설정도 나온다. 숨긴 키를 `SettingsSections`가 걸러서 모든 화면에 같이 적용된다.
 
 ## 라이선스 고지
-- 설정 > 정보 > 오픈소스 고지: `assets/open_source_licenses.txt`(HeliBoard GPL, WM Keyboard / SwiftSlate / pixelarticons MIT 전문, Phosphor Icons MIT)와
+- 설정 > 정보 > 오픈소스 고지: `assets/open_source_licenses.txt`(HeliBoard GPL, WM Keyboard / SwiftSlate / pixelarticons MIT 전문, Framework7 / Phosphor Icons MIT)와
   `assets/emoji_keywords.LICENSE`(Unicode)를 보여 준다. 새로 코드를 가져오면 이 파일에 고지를 추가할 것.
 - GIF 패널 오른쪽 아래에 "Powered by KLIPY / GIPHY"(제공사 요구 사항).
 - 정보 화면의 GitHub와 라이선스 링크는 이 저장소, 레이아웃 / 색상 위키와 토론은 HeliBoard 것을 그대로 쓴다.
