@@ -5,6 +5,14 @@
 // Ask the phone for fresh weather every 30 minutes (on :00 and :30).
 #define WEATHER_EVERY_MIN 30
 
+// Shake clip: 16 frames at ~15 fps (about 1.1 s), then back to rest.
+// Frame count and rate are capped for battery; a 3 s cool-down stops
+// back-to-back flicks from chaining clips, and below 10% it does not play.
+#define ANIM_FRAMES 16
+#define ANIM_FRAME_MS 66
+#define ANIM_COOLDOWN_MS 3000
+#define ANIM_MIN_BATTERY 10
+
 static Window *s_window;
 
 static void update_time(void) {
@@ -29,9 +37,12 @@ static void request_weather(void) {
 
 static void request_weather_cb(void *data) { request_weather(); }
 
+static void update_tap_subscription(void);
+
 static void inbox_received(DictionaryIterator *iter, void *context) {
   bool layout_changed;
   if (!state_apply_message(iter, &layout_changed)) return;
+  update_tap_subscription();
   if (layout_changed) face_apply_layout();
   update_time();  // clock mode may have changed
   face_mark_all_dirty();
@@ -39,6 +50,51 @@ static void inbox_received(DictionaryIterator *iter, void *context) {
 
 static void inbox_dropped(AppMessageResult reason, void *context) {
   APP_LOG(APP_LOG_LEVEL_WARNING, "inbox dropped: %d", (int)reason);
+}
+
+/* ---- shake animation ---------------------------------------------------- */
+
+static AppTimer *s_anim_timer;
+static int s_anim_frame;
+static uint64_t s_anim_ready_at;  // ms timestamp after the cool-down
+
+static uint64_t now_ms(void) {
+  time_t s;
+  uint16_t ms;
+  time_ms(&s, &ms);
+  return (uint64_t)s * 1000 + ms;
+}
+
+static void anim_step(void *data) {
+  s_anim_frame++;
+  if (s_anim_frame >= ANIM_FRAMES) {
+    s_anim_timer = NULL;
+    face_set_anim(-1, 0);
+    s_anim_ready_at = now_ms() + ANIM_COOLDOWN_MS;
+    return;
+  }
+  face_set_anim(s_anim_frame * 1000 / (ANIM_FRAMES - 1), s_anim_frame);
+  s_anim_timer = app_timer_register(ANIM_FRAME_MS, anim_step, NULL);
+}
+
+static void tap_handler(AccelAxisType axis, int32_t direction) {
+  if (s_anim_timer || now_ms() < s_anim_ready_at) return;
+  if (g_battery.charge_percent <= ANIM_MIN_BATTERY && !g_battery.is_charging) return;
+  s_anim_frame = 0;
+  face_set_anim(0, 0);
+  s_anim_timer = app_timer_register(ANIM_FRAME_MS, anim_step, NULL);
+}
+
+// The tap service only runs while the option is on.
+static void update_tap_subscription(void) {
+  static bool subscribed;
+  if (g_settings.shake_anim && !subscribed) {
+    accel_tap_service_subscribe(tap_handler);
+    subscribed = true;
+  } else if (!g_settings.shake_anim && subscribed) {
+    accel_tap_service_unsubscribe();
+    subscribed = false;
+  }
 }
 
 /* ---- services ----------------------------------------------------------- */
@@ -120,12 +176,16 @@ static void init(void) {
   health_service_events_subscribe(health_handler, NULL);
 #endif
 
+  update_tap_subscription();
+
   app_message_register_inbox_received(inbox_received);
   app_message_register_inbox_dropped(inbox_dropped);
   app_message_open(256, 64);
 }
 
 static void deinit(void) {
+  if (s_anim_timer) app_timer_cancel(s_anim_timer);
+  if (g_settings.shake_anim) accel_tap_service_unsubscribe();
   tick_timer_service_unsubscribe();
   battery_state_service_unsubscribe();
   connection_service_unsubscribe();
