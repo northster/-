@@ -6,10 +6,11 @@ Pebble Time(basalt, 144×168, 64색)용 워치페이스. 게임 Marathon(Bungie)
 
 | 표시 | 내용 |
 |---|---|
-| 시간 | 큰 숫자(Chakra Petch Bold 46px), 12/24시간, AM/PM·24H 라벨, `D.280/W41`(연중 일수/ISO 주차) |
+| 헤더 | 워치 이름(`PEBBLE TIME` / `TIME STEEL`, 워치 모델에서 읽음), 블루투스, 배터리 % |
+| 시간 | 큰 숫자(Chakra Petch Bold 46px), 12/24시간, AM/PM·24H, 날씨 기준 위치 `37.57N 126.98E`(위치 없으면 펌웨어 버전) |
 | 날짜 | 반원 캡이 달린 요일 탭 + `07.10` |
-| 날씨 | 현재 기온 + 상태 아이콘(직접 그린 도형). Open-Meteo, 폰 위치 기준, API 키 없음. 3시간 넘으면 `WX.OLD` |
-| 걸음수 | Health API, 5자리(`08421`), 목표 10,000보 진행 눈금 + % |
+| 날씨 | 현재 기온(`23°C`) + 상태 아이콘(직접 그린 도형) + 마지막 갱신 시각 `UPD 07:30`. Open-Meteo, 폰 위치 기준, API 키 없음. 3시간 넘으면 `WEATHER OLD` |
+| 걸음수 | Health API, 5자리(`08421`), 목표 10,000보 진행 눈금 + %, 오늘 걸은 거리 `6.1KM`, `GOAL 10K` |
 | 배터리 | 5칸 + 숫자, 20% 이하면 경고색, 충전 중 `+` |
 | 블루투스 | 연결: 룬 아이콘 / 끊김: `LINK-X` 경고 블록 + 진동(옵션) |
 | 흔들기 | 손목을 흔들면 약 1.1초 블록 재배치 애니메이션 |
@@ -24,9 +25,8 @@ Pebble Time(basalt, 144×168, 64색)용 워치페이스. 게임 Marathon(Bungie)
 | 회색 1/4원 타일 패턴(4개가 모여 잎·원 모양) | 날씨 칸 오른쪽 아래 2×2 1/4원 블록 (`shapes_quarter_tiles`) |
 | 큰 반원 | 요일 탭의 반원 캡 (`shapes_half_disc`) |
 | 삼각형 패턴 필드 | 날짜 줄 끝의 삼각형 열 (`shapes_triangle_row`) |
-| 동심원 아크 | 걸음 칸 오른쪽 아래 동심원 (`shapes_rings`) |
-| 산업용 코드 라벨 `TR - S.35001`, `58N`, `0.8`, `SIGNAL SET. 72C` | `TR-S.35001`, `WX.CUR`, `STP.CNT`, `D.280/W41`, `LINK-X` — 픽셀 폰트 Silkscreen 8px |
-| `+` 마크, 작은 검정 사각형, 바코드 같은 눈금 | 시간 칸 `+`, 걸음 칸 바코드·진행 눈금 |
+| 산업용 코드 라벨 `TR - S.35001`, 좌표 `37.5665° N — 126.9780° E` | 의미 없는 코드 대신 워치 정보를 같은 말투로: `PEBBLE TIME`, `37.57N 126.98E`, `UPD 07:30`, `GOAL 10K`, `6.1KM`, `80%`, `LINK-X` — 픽셀 폰트 Silkscreen 8px |
+| `+` 마크, 작은 검정 사각형, 눈금 | 시간 칸 `+`, 걸음 진행 눈금 |
 | 각진 블록 글자, 모노스페이스 숫자 | Chakra Petch Bold(모서리를 깎은 각진 산세리프) |
 | 형광 라임·청록·파랑·흑백 / 바이올렛 / 민트 바탕 / 핫핑크 | 테마 6종 (아래 표) |
 
@@ -65,9 +65,13 @@ python3 tools/palette_map.py --image ref.jpg -n 8          # 이미지 대표색
 
 ### 배치 프리셋
 
-![배치](docs/screenshots/01-static-layouts.png)
+![배치](docs/screenshots/06-layouts.png)
 
-STACK(시간 위) / INVERT(날씨·걸음 위, 시간 아래) / COLUMN(왼쪽 칸 + 시·분 세로). 위치는 `src/c/layout.c` 표 하나로 정해진다.
+A STACK(시간 위) / B INVERT(시간 아래) / C COLUMN(왼쪽 칸 + 시·분 세로) / D BAND(날씨 띠·시간·걸음 띠) / E COLUMN-R(C의 좌우 반전). 위치는 `src/c/layout.c` 표 하나로 정해지고, 칸은 크기에 따라 보통·좁은 칸·띠 세 가지 모양으로 그려진다. 시간 칸은 숫자 실제 높이(원점 +14px, 32px)로 위아래 간격을 맞춘다.
+
+배치 × 테마 조합 예시:
+
+![조합](docs/screenshots/07-variants.png)
 
 ### 폰트 (모두 SIL OFL 1.1)
 
@@ -102,8 +106,8 @@ pebble-mesh를 고른 이유: 요구사항(basalt, Open-Meteo·폰 위치, Healt
 ```
 src/c/main.c      서비스 구독(시간·배터리·연결·Health·탭), AppMessage, 흔들기 애니메이션 타이머
 src/c/face.c      모듈 Layer와 그리기 (헤더/시간/날짜/날씨 칸/걸음 칸), 애니메이션 상태
-src/c/shapes.c    반원, 1/4원 타일, 삼각형 열, 동심원, 바코드, +, 날씨 아이콘, BT 룬
-src/c/layout.c    배치 프리셋 3개 (모듈 위치 표)
+src/c/shapes.c    반원, 1/4원 타일, 삼각형 열, +, 날씨 아이콘, BT 룬
+src/c/layout.c    배치 프리셋 5개 (모듈 위치 표)
 src/c/theme.c     테마 6개 (색 역할 표)
 src/c/state.c     설정·날씨 영구 저장, 메시지 해석, 걸음수, 기온 포맷
 src/pkjs/index.js 날씨 요청/캐시, 메시지 큐, Clay 열기/저장

@@ -30,43 +30,6 @@ void shapes_triangle_row(GContext *ctx, GRect box, int size, int gap, int phase,
   }
 }
 
-void shapes_rings(GContext *ctx, GPoint center, int r_min, int r_max, int step, GColor color) {
-  graphics_context_set_stroke_color(ctx, color);
-  graphics_context_set_stroke_width(ctx, 1);
-  for (int r = r_min; r <= r_max; r += step) {
-    graphics_draw_circle(ctx, center, r);
-  }
-}
-
-void shapes_hatch(GContext *ctx, GRect box, int step, GColor color) {
-  graphics_context_set_stroke_color(ctx, color);
-  int w = box.size.w, h = box.size.h;
-  for (int d = -h; d < w; d += step) {
-    // line from (d, h) to (d + h, 0), clipped to the box
-    int x0 = d, y0 = h - 1, x1 = d + h - 1, y1 = 0;
-    if (x0 < 0) { y0 += x0; x0 = 0; }
-    if (x1 >= w) { y1 += x1 - (w - 1); x1 = w - 1; }
-    if (y0 < y1) continue;
-    graphics_draw_line(ctx, GPoint(box.origin.x + x0, box.origin.y + y0),
-                       GPoint(box.origin.x + x1, box.origin.y + y1));
-  }
-}
-
-void shapes_barcode(GContext *ctx, GRect box, uint32_t seed, GColor color) {
-  graphics_context_set_fill_color(ctx, color);
-  uint32_t s = seed * 2654435761u + 1;
-  int x = box.origin.x;
-  int right = box.origin.x + box.size.w;
-  while (x < right) {
-    s = s * 1103515245u + 12345u;
-    int bar = 1 + ((s >> 16) % 3);
-    int space = 1 + ((s >> 20) % 2);
-    if (x + bar > right) bar = right - x;
-    graphics_fill_rect(ctx, GRect(x, box.origin.y, bar, box.size.h), 0, GCornerNone);
-    x += bar + space;
-  }
-}
-
 void shapes_quarter_tiles(GContext *ctx, GRect box, int tile, int phase, GColor color) {
   graphics_context_set_fill_color(ctx, color);
   for (int j = 0; j * tile < box.size.h; j++) {
@@ -90,13 +53,6 @@ void shapes_plus(GContext *ctx, GPoint c, int r, GColor color) {
   graphics_context_set_stroke_color(ctx, color);
   graphics_draw_line(ctx, GPoint(c.x - r, c.y), GPoint(c.x + r, c.y));
   graphics_draw_line(ctx, GPoint(c.x, c.y - r), GPoint(c.x, c.y + r));
-}
-
-void shapes_crosshair(GContext *ctx, GPoint c, int r, GColor color) {
-  graphics_context_set_stroke_color(ctx, color);
-  graphics_draw_circle(ctx, c, r);
-  graphics_draw_line(ctx, GPoint(c.x - r - 2, c.y), GPoint(c.x + r + 2, c.y));
-  graphics_draw_line(ctx, GPoint(c.x, c.y - r - 2), GPoint(c.x, c.y + r + 2));
 }
 
 /* ---- weather glyphs ---------------------------------------------------- */

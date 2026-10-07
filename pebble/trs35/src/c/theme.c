@@ -31,7 +31,7 @@ static const Theme s_themes[THEME_COUNT] = {
     .bg = {GColorCelesteARGB8}, .fg = {GColorBlackARGB8}, .muted = {GColorDarkGrayARGB8},
     .tile = {GColorElectricBlueARGB8},
     .a1 = {GColorSpringBudARGB8}, .a1_ink = {GColorBlackARGB8},
-    .a2 = {GColorBlackARGB8}, .a2_ink = {GColorWhiteARGB8},
+    .a2 = {GColorBlueMoonARGB8}, .a2_ink = {GColorWhiteARGB8},
     .a3 = {GColorBlackARGB8}, .a3_ink = {GColorWhiteARGB8},
     .panel = {GColorWhiteARGB8}, .panel_ink = {GColorBlackARGB8},
     .alert = {GColorFollyARGB8}, .alert_ink = {GColorWhiteARGB8},

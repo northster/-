@@ -148,7 +148,9 @@ static void init(void) {
   g_weather.temp_c10 = 234;
   g_weather.code = 2;
   g_weather.is_day = true;
-  g_weather.updated = time(NULL);
+  g_weather.updated = time(NULL) - 23 * 60;
+  g_weather.lat100 = 3757;
+  g_weather.lon100 = 12698;
 #if defined(TRS_THEME)
   g_settings.theme = TRS_THEME;
 #endif

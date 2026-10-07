@@ -3,7 +3,7 @@
 
 // The face is a set of rectangular modules; a layout preset places them.
 typedef enum {
-  MOD_HEADER,  // code label, bluetooth, battery
+  MOD_HEADER,  // watch name, bluetooth, battery
   MOD_TIME,
   MOD_DATE,
   MOD_WX,      // weather cell
@@ -12,9 +12,11 @@ typedef enum {
 } ModuleId;
 
 typedef enum {
-  LAYOUT_STACK = 0,   // time on top, two cells below
-  LAYOUT_INVERT = 1,  // two cells on top, time below
-  LAYOUT_COLUMN = 2,  // cells in a left column, hours over minutes on the right
+  LAYOUT_STACK = 0,     // time on top, two cells below
+  LAYOUT_INVERT = 1,    // two cells on top, time below
+  LAYOUT_COLUMN = 2,    // cells in a left column, hours over minutes on the right
+  LAYOUT_BAND = 3,      // weather band, time, date, steps band
+  LAYOUT_COLUMN_R = 4,  // COLUMN mirrored: hours/minutes left, cells right
 } LayoutId;
 
 typedef struct {

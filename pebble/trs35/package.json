@@ -28,6 +28,8 @@
       "TEMP_C10",
       "WCODE",
       "IS_DAY",
+      "LAT100",
+      "LON100",
       "WEATHER_REQ"
     ],
     "resources": {

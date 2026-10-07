@@ -21,9 +21,12 @@ Weather g_weather = {
   .code = -1,
   .is_day = true,
   .updated = 0,
+  .lat100 = TEMP_NONE,
+  .lon100 = TEMP_NONE,
 };
 
 int g_steps = 0;
+int g_distance_m = 0;
 BatteryChargeState g_battery;
 bool g_bt_connected = true;
 
@@ -95,11 +98,20 @@ bool state_apply_message(DictionaryIterator *iter, bool *layout_changed) {
   bool weather_changed = false;
   Tuple *temp = dict_find(iter, MESSAGE_KEY_TEMP_C10);
   Tuple *code = dict_find(iter, MESSAGE_KEY_WCODE);
+#if defined(TRS_DEMO)
+  temp = NULL;  // keep the sample weather for screenshots
+#endif
   if (temp && code) {
     g_weather.temp_c10 = (int16_t)tuple_int(temp);
     g_weather.code = (int16_t)tuple_int(code);
     Tuple *day = dict_find(iter, MESSAGE_KEY_IS_DAY);
     g_weather.is_day = day ? tuple_int(day) != 0 : true;
+    Tuple *lat = dict_find(iter, MESSAGE_KEY_LAT100);
+    Tuple *lon = dict_find(iter, MESSAGE_KEY_LON100);
+    if (lat && lon) {
+      g_weather.lat100 = (int16_t)tuple_int(lat);
+      g_weather.lon100 = (int16_t)tuple_int(lon);
+    }
     g_weather.updated = time(NULL);
     state_save_weather();
     weather_changed = true;
@@ -110,12 +122,17 @@ bool state_apply_message(DictionaryIterator *iter, bool *layout_changed) {
 void state_update_steps(void) {
 #if defined(TRS_DEMO)
   g_steps = 8421;
+  g_distance_m = 6130;
 #elif defined(PBL_HEALTH)
-  HealthServiceAccessibilityMask mask = health_service_metric_accessible(
-      HealthMetricStepCount, time_start_of_today(), time(NULL));
-  g_steps = (mask & HealthServiceAccessibilityMaskAvailable)
+  time_t start = time_start_of_today(), now = time(NULL);
+  g_steps = (health_service_metric_accessible(HealthMetricStepCount, start, now) &
+             HealthServiceAccessibilityMaskAvailable)
                 ? (int)health_service_sum_today(HealthMetricStepCount)
                 : 0;
+  g_distance_m = (health_service_metric_accessible(HealthMetricWalkedDistanceMeters, start, now) &
+                  HealthServiceAccessibilityMaskAvailable)
+                     ? (int)health_service_sum_today(HealthMetricWalkedDistanceMeters)
+                     : 0;
 #endif
 }
 
@@ -134,4 +151,19 @@ void state_format_temp(char *buf, size_t len) {
 bool state_weather_stale(void) {
   if (g_weather.updated == 0) return true;
   return time(NULL) - g_weather.updated > WEATHER_STALE_SEC;
+}
+
+void state_format_position(char *buf, size_t len) {
+  if (g_weather.lat100 == TEMP_NONE || g_weather.lon100 == TEMP_NONE) {
+    buf[0] = '\0';
+    return;
+  }
+  int la = g_weather.lat100, lo = g_weather.lon100;
+  snprintf(buf, len, "%d.%02d%c %d.%02d%c", abs(la) / 100, abs(la) % 100, la < 0 ? 'S' : 'N',
+           abs(lo) / 100, abs(lo) % 100, lo < 0 ? 'W' : 'E');
+}
+
+const char *state_watch_name(void) {
+  // basalt only runs on Pebble Time and Time Steel
+  return watch_info_get_model() == WATCH_INFO_MODEL_PEBBLE_TIME_STEEL ? "TIME STEEL" : "PEBBLE TIME";
 }

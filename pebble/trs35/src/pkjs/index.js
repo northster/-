@@ -59,7 +59,13 @@ function readJSON(key) {
 }
 
 function sendWeather(w) {
-  send({ TEMP_C10: w.tempC10, WCODE: w.code, IS_DAY: w.isDay ? 1 : 0 });
+  var msg = { TEMP_C10: w.tempC10, WCODE: w.code, IS_DAY: w.isDay ? 1 : 0 };
+  // the face prints where the reading is from, e.g. 37.57N 126.98E
+  if (typeof w.lat === 'number') {
+    msg.LAT100 = Math.round(w.lat * 100);
+    msg.LON100 = Math.round(w.lon * 100);
+  }
+  send(msg);
 }
 
 function fetchFor(lat, lon) {
@@ -73,6 +79,8 @@ function fetchFor(lat, lon) {
       return;
     }
     w.at = Date.now();
+    w.lat = lat;
+    w.lon = lon;
     localStorage.setItem(CACHE_KEY, JSON.stringify(w));
     console.log('open-meteo: ' + (w.tempC10 / 10) + 'C code ' + w.code);
     sendWeather(w);

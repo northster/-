@@ -7,7 +7,7 @@ typedef enum { CLOCK_AUTO = 0, CLOCK_12H = 1, CLOCK_24H = 2 } ClockMode;
 typedef enum { UNIT_C = 0, UNIT_F = 1 } TempUnit;
 
 #define THEME_COUNT 6
-#define LAYOUT_COUNT 3
+#define LAYOUT_COUNT 5
 
 typedef struct {
   uint8_t theme;       // index into the theme table (theme.c)
@@ -25,11 +25,14 @@ typedef struct {
   int16_t code;        // WMO weather code, -1 when unknown
   bool is_day;
   time_t updated;      // when the phone last sent weather, 0 = never
+  int16_t lat100;      // phone position in 1/100 degree, TEMP_NONE when unknown
+  int16_t lon100;
 } Weather;
 
 extern Settings g_settings;
 extern Weather g_weather;
 extern int g_steps;
+extern int g_distance_m;  // walked today
 extern BatteryChargeState g_battery;
 extern bool g_bt_connected;
 
@@ -42,6 +45,12 @@ void state_save_weather(void);
 bool state_apply_message(DictionaryIterator *iter, bool *layout_changed);
 
 void state_update_steps(void);
+
+// "37.57N 126.98E", or "" when the phone never sent a position.
+void state_format_position(char *buf, size_t len);
+
+// "PEBBLE TIME" etc. from the watch's model id.
+const char *state_watch_name(void);
 
 // Writes "23°" / "-4°" / "--°" in the user's unit.
 void state_format_temp(char *buf, size_t len);
