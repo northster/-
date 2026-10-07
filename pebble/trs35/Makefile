@@ -4,6 +4,9 @@
 #   make phone PHONE=192.168.0.12 build + install on the watch through the phone
 #   make demo                     emulator with frozen 10:08 and sample data
 #   make shot                     emulator screenshot -> docs/screenshots/latest.png
+#   make font FONT=KHInterference-Bold.ttf [NARROW=...]
+#                                 use another display font (not committed)
+#   make font-reset               back to the bundled TRS Grid
 #   make logs / make test
 #
 # PHONE can also come from the PEBBLE_PHONE environment variable, which the
@@ -13,7 +16,7 @@ PHONE ?= $(PEBBLE_PHONE)
 PEBBLE ?= pebble
 PEBBLE_PY := $(dir $(shell readlink -f $(shell command -v $(PEBBLE) 2>/dev/null)))python
 
-.PHONY: build emu demo phone logs shot test health config clean
+.PHONY: build emu demo phone logs shot test health config font font-reset fonts clean
 
 build:
 	$(PEBBLE) build
@@ -45,6 +48,25 @@ config:
 
 test:
 	node tools/test_weather.js
+
+# Display fonts: resources/fonts/display.ttf (time, date, temperature) and
+# narrow.ttf (step count). Both are git-ignored so a licensed font never
+# lands in the repository. Positions are re-measured on the next build.
+font:
+	@test -n "$(FONT)" || { echo "usage: make font FONT=path/to/font.ttf [NARROW=path]"; exit 1; }
+	cp "$(FONT)" resources/fonts/display.ttf
+	cp "$(or $(NARROW),$(FONT))" resources/fonts/narrow.ttf
+	$(PEBBLE) clean
+
+font-reset:
+	cp resources/fonts/TRSGrid.ttf resources/fonts/display.ttf
+	cp resources/fonts/TRSGrid-Narrow.ttf resources/fonts/narrow.ttf
+	$(PEBBLE) clean
+
+# Rebuild the bundled TRS Grid cuts (needs: pip install fonttools shapely)
+fonts:
+	python3 tools/make_font.py
+	python3 tools/make_font.py --narrow
 
 clean:
 	$(PEBBLE) clean

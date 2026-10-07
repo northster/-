@@ -3,7 +3,13 @@
   "author": "northster",
   "version": "1.0.0",
   "private": true,
-  "keywords": ["watchface", "graphic", "weather", "health", "geometric"],
+  "keywords": [
+    "watchface",
+    "graphic",
+    "weather",
+    "health",
+    "geometric"
+  ],
   "dependencies": {
     "@rebble/clay": "^1.0.8"
   },
@@ -13,11 +19,17 @@
     "sdkVersion": "3",
     "enableMultiJS": true,
     "projectType": "native",
-    "targetPlatforms": ["basalt"],
+    "targetPlatforms": [
+      "basalt"
+    ],
     "watchapp": {
       "watchface": true
     },
-    "capabilities": ["configurable", "health", "location"],
+    "capabilities": [
+      "configurable",
+      "health",
+      "location"
+    ],
     "messageKeys": [
       "THEME",
       "LAYOUT",
@@ -36,15 +48,27 @@
       "media": [
         {
           "type": "font",
-          "name": "FONT_TIME_52",
-          "file": "fonts/ChakraPetch-Bold.ttf",
+          "name": "FONT_TIME_53",
+          "file": "fonts/display.ttf",
           "characterRegex": "[0-9:]"
         },
         {
           "type": "font",
-          "name": "FONT_MED_20",
-          "file": "fonts/ChakraPetch-Bold.ttf",
-          "characterRegex": "[0-9A-Z:.,/+° -]"
+          "name": "FONT_DATE_21",
+          "file": "fonts/display.ttf",
+          "characterRegex": "[0-9A-Z. ]"
+        },
+        {
+          "type": "font",
+          "name": "FONT_TEMP_24",
+          "file": "fonts/display.ttf",
+          "characterRegex": "[0-9°-]"
+        },
+        {
+          "type": "font",
+          "name": "FONT_STEPS_30",
+          "file": "fonts/narrow.ttf",
+          "characterRegex": "[0-9]"
         },
         {
           "type": "font",

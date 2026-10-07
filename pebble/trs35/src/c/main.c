@@ -119,7 +119,7 @@ static void connection_handler(bool connected) {
   }
 }
 
-#if defined(PBL_HEALTH)
+#if defined(PBL_HEALTH) && !defined(TRS_DEMO)
 static void health_handler(HealthEventType event, void *context) {
   if (event == HealthEventMovementUpdate || event == HealthEventSignificantUpdate) {
     int before = g_steps;

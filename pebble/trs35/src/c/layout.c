@@ -1,58 +1,31 @@
 #include "layout.h"
 #include "state.h"
 
-// 144 x 168 (basalt). Modules butt against each other like a collage.
-// Time boxes are sized so the gap above the digits matches the gap below
-// the label line (see time_update in face.c).
+// 144 x 168 (basalt). Every module keeps its size in every preset; only the
+// positions change, so the drawing code has one shape to get right.
+//   header 15, time frame 85, gap 1, date 18, gap 1, cells 48
 static const Layout s_layouts[LAYOUT_COUNT] = {
-  [LAYOUT_STACK] = {
-    // the time gets the biggest block; the two cells are kept short
-    .mod = {
-      [MOD_HEADER] = {{0, 0}, {144, 16}},
-      [MOD_TIME]   = {{0, 16}, {144, 74}},
-      [MOD_DATE]   = {{0, 90}, {144, 20}},
-      [MOD_WX]     = {{0, 112}, {72, 56}},
-      [MOD_STEPS]  = {{72, 112}, {72, 56}},
-    },
-  },
-  [LAYOUT_INVERT] = {
-    .mod = {
-      [MOD_HEADER] = {{0, 0}, {144, 16}},
-      [MOD_WX]     = {{0, 16}, {72, 72}},
-      [MOD_STEPS]  = {{72, 16}, {72, 72}},
-      [MOD_DATE]   = {{0, 91}, {144, 20}},
-      [MOD_TIME]   = {{0, 112}, {144, 56}},
-    },
-  },
-  [LAYOUT_COLUMN] = {
-    .mod = {
-      [MOD_HEADER] = {{0, 0}, {144, 16}},
-      [MOD_WX]     = {{0, 16}, {50, 76}},
-      [MOD_STEPS]  = {{0, 92}, {50, 76}},
-      [MOD_TIME]   = {{50, 16}, {94, 110}},
-      [MOD_DATE]   = {{54, 128}, {90, 40}},
-    },
-    .time_stacked = true,
-  },
-  [LAYOUT_BAND] = {
-    .mod = {
-      [MOD_HEADER] = {{0, 0}, {144, 16}},
-      [MOD_WX]     = {{0, 16}, {144, 32}},
-      [MOD_TIME]   = {{0, 48}, {144, 54}},
-      [MOD_DATE]   = {{0, 102}, {144, 20}},
-      [MOD_STEPS]  = {{0, 124}, {144, 44}},
-    },
-  },
-  [LAYOUT_COLUMN_R] = {
-    .mod = {
-      [MOD_HEADER] = {{0, 0}, {144, 16}},
-      [MOD_TIME]   = {{0, 16}, {94, 110}},
-      [MOD_DATE]   = {{4, 128}, {90, 40}},
-      [MOD_WX]     = {{94, 16}, {50, 76}},
-      [MOD_STEPS]  = {{94, 92}, {50, 76}},
-    },
-    .time_stacked = true,
-  },
+  [LAYOUT_STACK] = {{
+    [MOD_HEADER] = {{0, 0}, {144, 15}},
+    [MOD_TIME]   = {{0, 15}, {144, 85}},
+    [MOD_DATE]   = {{0, 101}, {144, 18}},
+    [MOD_WX]     = {{0, 120}, {72, 48}},
+    [MOD_STEPS]  = {{72, 120}, {72, 48}},
+  }},
+  [LAYOUT_SWAP] = {{
+    [MOD_HEADER] = {{0, 0}, {144, 15}},
+    [MOD_TIME]   = {{0, 15}, {144, 85}},
+    [MOD_DATE]   = {{0, 101}, {144, 18}},
+    [MOD_WX]     = {{72, 120}, {72, 48}},
+    [MOD_STEPS]  = {{0, 120}, {72, 48}},
+  }},
+  [LAYOUT_INVERT] = {{
+    [MOD_HEADER] = {{0, 0}, {144, 15}},
+    [MOD_WX]     = {{0, 15}, {72, 48}},
+    [MOD_STEPS]  = {{72, 15}, {72, 48}},
+    [MOD_DATE]   = {{0, 64}, {144, 18}},
+    [MOD_TIME]   = {{0, 83}, {144, 85}},
+  }},
 };
 
 const Layout *layout_get(int id) {

@@ -6,8 +6,8 @@
 typedef enum { CLOCK_AUTO = 0, CLOCK_12H = 1, CLOCK_24H = 2 } ClockMode;
 typedef enum { UNIT_C = 0, UNIT_F = 1 } TempUnit;
 
-#define THEME_COUNT 6
-#define LAYOUT_COUNT 5
+#define THEME_COUNT 7
+#define LAYOUT_COUNT 3
 
 typedef struct {
   uint8_t theme;       // index into the theme table (theme.c)

@@ -3,3 +3,5 @@ node_modules/
 package-lock.json
 !*.sh
 .lock-waf*
+resources/fonts/display.ttf
+resources/fonts/narrow.ttf

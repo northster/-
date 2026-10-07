@@ -8,14 +8,16 @@ function swatch(colors) {
   }).join('');
 }
 
-// Same colors as src/c/theme.c (Pebble palette values).
+// Same order and colors as src/c/theme.c (Pebble palette values):
+// field, main ink, block, panel, spot.
 var THEMES = [
-  ['ACID', 'Black, lime, cyan, blue', ['#000000', '#AAFF00', '#55FFFF', '#0055FF', '#FFFFFF']],
-  ['VIOLET', 'Black, violet, lime', ['#000000', '#AA55FF', '#AAFF00', '#FFFFFF', '#5500AA']],
-  ['MINT', 'Pale mint paper, black blocks', ['#AAFFFF', '#000000', '#AAFF00', '#0055FF', '#FFFFFF']],
-  ['SIGNAL', 'White paper, black and lime blocks', ['#FFFFFF', '#000000', '#AAFF00', '#AAAAAA', '#555555']],
-  ['NULL', 'Hot pink, white and black', ['#FF0055', '#FFFFFF', '#000000', '#FF55AA', '#000000']],
-  ['FLARE', 'Ultramarine, lime, coral', ['#5500FF', '#AAFF00', '#FF5555', '#FF0055', '#5500AA']]
+  ['LIME', 'Acid lime, black and white blocks, blue spot', ['#AAFF00', '#000000', '#000000', '#FFFFFF', '#0055FF']],
+  ['MINT', 'Pale mint field', ['#AAFFFF', '#000000', '#000000', '#FFFFFF', '#0055FF']],
+  ['ACID', 'Black field, lime block', ['#000000', '#FFFFFF', '#AAFF00', '#FFFFFF', '#55FFFF']],
+  ['VIOLET', 'Black field, violet block', ['#000000', '#FFFFFF', '#AA55FF', '#FFFFFF', '#AAFF00']],
+  ['SIGNAL', 'White paper, lime panel', ['#FFFFFF', '#000000', '#000000', '#AAFF00', '#0055FF']],
+  ['NULL', 'Hot pink field', ['#FF0055', '#000000', '#000000', '#FFFFFF', '#000000']],
+  ['FLARE', 'Ultramarine field, lime panel', ['#5500FF', '#FFFFFF', '#000000', '#AAFF00', '#FF0055']]
 ];
 
 var themeTable = THEMES.map(function(t) {
@@ -40,7 +42,7 @@ module.exports = [
         type: 'select',
         messageKey: 'THEME',
         label: '색 테마 / Color theme',
-        defaultValue: '2',
+        defaultValue: '0',
         options: THEMES.map(function(t, i) {
           return { label: t[0] + ' — ' + t[1], value: String(i) };
         })
@@ -52,11 +54,9 @@ module.exports = [
         label: '배치 프리셋 / Layout',
         defaultValue: '0',
         options: [
-          { label: 'STACK — 시간 위, 날씨·걸음 아래', value: '0' },
-          { label: 'INVERT — 날씨·걸음 위, 시간 아래', value: '1' },
-          { label: 'COLUMN — 왼쪽 칸 + 시/분 세로', value: '2' },
-          { label: 'BAND — 날씨 띠, 시간, 걸음 띠', value: '3' },
-          { label: 'COLUMN-R — 시/분 세로 + 오른쪽 칸', value: '4' }
+          { label: 'STACK — 시간 위, 날씨 왼쪽·걸음 오른쪽', value: '0' },
+          { label: 'SWAP — 날씨·걸음 좌우 바꿈', value: '1' },
+          { label: 'INVERT — 날씨·걸음 위, 시간 아래', value: '2' }
         ]
       }
     ]

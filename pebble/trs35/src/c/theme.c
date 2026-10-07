@@ -1,71 +1,24 @@
 #include "theme.h"
 #include "state.h"
 
-// Colors were sampled from the reference images and mapped with
-// tools/palette_map.py (nearest Pebble color by Lab delta-E); where two
-// candidates were about equally close the more saturated one won, since the
-// Pebble Time screen washes colors out. See README "색 매핑".
+// Pebble palette colors (see tools/palette_map.py and README "색 매핑").
+// Each theme uses its field, black/white blocks and one spot color.
+#define C(x) {GColor##x##ARGB8}
 static const Theme s_themes[THEME_COUNT] = {
-  // 0 ACID: black field, grey tiles, lime / cyan / blue blocks
-  {
-    .bg = {GColorBlackARGB8}, .fg = {GColorWhiteARGB8}, .muted = {GColorLightGrayARGB8},
-    .tile = {GColorDarkGrayARGB8},
-    .a1 = {GColorSpringBudARGB8}, .a1_ink = {GColorBlackARGB8},
-    .a2 = {GColorElectricBlueARGB8}, .a2_ink = {GColorBlackARGB8},
-    .a3 = {GColorBlueMoonARGB8}, .a3_ink = {GColorWhiteARGB8},
-    .panel = {GColorWhiteARGB8}, .panel_ink = {GColorBlackARGB8},
-    .alert = {GColorOrangeARGB8}, .alert_ink = {GColorBlackARGB8},
-  },
-  // 1 VIOLET: black / violet / lime / white
-  {
-    .bg = {GColorBlackARGB8}, .fg = {GColorWhiteARGB8}, .muted = {GColorLightGrayARGB8},
-    .tile = {GColorIndigoARGB8},
-    .a1 = {GColorSpringBudARGB8}, .a1_ink = {GColorBlackARGB8},
-    .a2 = {GColorWhiteARGB8}, .a2_ink = {GColorBlackARGB8},
-    .a3 = {GColorLavenderIndigoARGB8}, .a3_ink = {GColorBlackARGB8},
-    .panel = {GColorWhiteARGB8}, .panel_ink = {GColorBlackARGB8},
-    .alert = {GColorFollyARGB8}, .alert_ink = {GColorWhiteARGB8},
-  },
-  // 2 MINT: pale mint paper, black blocks, lime and cyan
-  {
-    .bg = {GColorCelesteARGB8}, .fg = {GColorBlackARGB8}, .muted = {GColorDarkGrayARGB8},
-    .tile = {GColorElectricBlueARGB8},
-    .a1 = {GColorSpringBudARGB8}, .a1_ink = {GColorBlackARGB8},
-    .a2 = {GColorBlueMoonARGB8}, .a2_ink = {GColorWhiteARGB8},
-    .a3 = {GColorBlackARGB8}, .a3_ink = {GColorWhiteARGB8},
-    .panel = {GColorWhiteARGB8}, .panel_ink = {GColorBlackARGB8},
-    .alert = {GColorFollyARGB8}, .alert_ink = {GColorWhiteARGB8},
-  },
-  // 3 SIGNAL: white paper, black bars, lime
-  {
-    .bg = {GColorWhiteARGB8}, .fg = {GColorBlackARGB8}, .muted = {GColorDarkGrayARGB8},
-    .tile = {GColorLightGrayARGB8},
-    .a1 = {GColorSpringBudARGB8}, .a1_ink = {GColorBlackARGB8},
-    .a2 = {GColorSpringBudARGB8}, .a2_ink = {GColorBlackARGB8},
-    .a3 = {GColorBlackARGB8}, .a3_ink = {GColorWhiteARGB8},
-    .panel = {GColorSpringBudARGB8}, .panel_ink = {GColorBlackARGB8},
-    .alert = {GColorRedARGB8}, .alert_ink = {GColorWhiteARGB8},
-  },
-  // 4 NULL: hot pink and white, black ink
-  {
-    .bg = {GColorFollyARGB8}, .fg = {GColorBlackARGB8}, .muted = {GColorBlackARGB8},
-    .tile = {GColorBrilliantRoseARGB8},
-    .a1 = {GColorBlackARGB8}, .a1_ink = {GColorWhiteARGB8},
-    .a2 = {GColorFollyARGB8}, .a2_ink = {GColorBlackARGB8},
-    .a3 = {GColorBlackARGB8}, .a3_ink = {GColorWhiteARGB8},
-    .panel = {GColorWhiteARGB8}, .panel_ink = {GColorBlackARGB8},
-    .alert = {GColorSpringBudARGB8}, .alert_ink = {GColorBlackARGB8},
-  },
-  // 5 FLARE: ultramarine field, lime, coral red, pink
-  {
-    .bg = {GColorElectricUltramarineARGB8}, .fg = {GColorWhiteARGB8}, .muted = {GColorCelesteARGB8},
-    .tile = {GColorIndigoARGB8},
-    .a1 = {GColorSpringBudARGB8}, .a1_ink = {GColorBlackARGB8},
-    .a2 = {GColorSunsetOrangeARGB8}, .a2_ink = {GColorBlackARGB8},
-    .a3 = {GColorFollyARGB8}, .a3_ink = {GColorBlackARGB8},
-    .panel = {GColorSpringBudARGB8}, .panel_ink = {GColorBlackARGB8},
-    .alert = {GColorYellowARGB8}, .alert_ink = {GColorBlackARGB8},
-  },
+  // 0 LIME: acid-lime field, black and white blocks, blue spot (the mock-up)
+  { C(SpringBud), C(Black), C(DarkGray), C(Black), C(White), C(White), C(Black), C(BlueMoon) },
+  // 1 MINT: pale mint field
+  { C(Celeste), C(Black), C(DarkGray), C(Black), C(White), C(White), C(Black), C(BlueMoon) },
+  // 2 ACID: black field, lime block
+  { C(Black), C(White), C(LightGray), C(SpringBud), C(Black), C(White), C(Black), C(ElectricBlue) },
+  // 3 VIOLET: black field, violet block, lime spot
+  { C(Black), C(White), C(LightGray), C(LavenderIndigo), C(Black), C(White), C(Black), C(SpringBud) },
+  // 4 SIGNAL: white paper, lime panel
+  { C(White), C(Black), C(DarkGray), C(Black), C(White), C(SpringBud), C(Black), C(BlueMoon) },
+  // 5 NULL: hot pink field, white panel, black spot
+  { C(Folly), C(Black), C(White), C(Black), C(White), C(White), C(Black), C(Black) },
+  // 6 FLARE: ultramarine field, lime panel, pink spot
+  { C(ElectricUltramarine), C(White), C(Celeste), C(Black), C(White), C(SpringBud), C(Black), C(Folly) },
 };
 
 const Theme *theme_get(void) {

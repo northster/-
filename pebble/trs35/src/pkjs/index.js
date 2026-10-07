@@ -2,8 +2,7 @@
 //
 // The watch asks with WEATHER_REQ every 30 minutes; on start-up we send the
 // cached reading right away and only hit the network when it is old.
-// On failure nothing is sent: the watch keeps the last reading and tags it
-// "WX.OLD" once it is over three hours old.
+// On failure nothing is sent: the watch keeps the last reading.
 // Temperature always travels in tenths of a degree Celsius; the watch
 // converts to Fahrenheit itself, so switching units needs no refetch.
 

@@ -1,21 +1,39 @@
 #include "face.h"
+#include "barcode.h"
 #include "shapes.h"
 #include "state.h"
 #include "theme.h"
 
+// Everything below is laid out on a 6px side margin: content runs from
+// x = 6 to x = 137 (and 6 / 65 inside a 72px cell). Positions are local to
+// each module; layout.c places the modules.
+#define MARGIN 6
 #define STEP_GOAL 10000
+
+// Digit ink metrics measured from the fonts at build time (see wscript).
+#ifndef FM_TIME_TOP
+#define FM_TIME_TOP 15
+#define FM_TIME_H 37
+#define FM_DATE_TOP 6
+#define FM_DATE_H 15
+#define FM_TEMP_TOP 7
+#define FM_TEMP_H 17
+#define FM_STEPS_TOP 9
+#define FM_STEPS_H 21
+#endif
+// Silkscreen 8: caps are 5px tall, 3px below the text box top and 1px in
+// from its left edge.
+#define CODE_TOP 3
+#define CODE_LEFT 1
+#define CODE_H 5
 
 static Layer *s_root;
 static Layer *s_mod[MOD_COUNT];
 static Layer *s_fx;  // shake-clip overlay, empty at rest
 
-static GFont s_font_time;
-static GFont s_font_med;
-static GFont s_font_code;
+static GFont s_font_time, s_font_date, s_font_temp, s_font_steps, s_font_code;
 
-static char s_hh[4], s_mm[4], s_time[8];
-static char s_ampm[4];
-static char s_wday[4], s_date[8];
+static char s_time[8], s_ampm[4], s_wday[4], s_date[8], s_hhmm[6];
 static int s_minute;
 
 // animation state, see face_set_anim
@@ -27,342 +45,229 @@ static int s_anim_frame = 0;
 
 static int lerp(int a, int b, int p) { return a + (b - a) * p / 1000; }
 
-static GRect local(Layer *layer) { return layer_get_bounds(layer); }
-
-static void text(GContext *ctx, const char *s, GFont font, GRect box, GTextAlignment align,
-                 GColor color) {
-  graphics_context_set_text_color(ctx, color);
-  graphics_draw_text(ctx, s, font, box, GTextOverflowModeFill, align, NULL);
-}
+static void begin(GContext *ctx) { graphics_context_set_antialiased(ctx, false); }
 
 static void fill(GContext *ctx, GRect r, GColor c) {
   graphics_context_set_fill_color(ctx, c);
   graphics_fill_rect(ctx, r, 0, GCornerNone);
 }
 
-// The cells trade colors for the middle of the shake clip.
+static int text_w(const char *s, GFont font) {
+  return graphics_text_layout_get_content_size(s, font, GRect(0, 0, 200, 60), GTextOverflowModeFill,
+                                               GTextAlignmentLeft).w;
+}
+
+// Draws `s` with its ink top at y (font_top: ink offset of that font).
+static void text_at(GContext *ctx, const char *s, GFont font, int font_top, int x, int y, int w,
+                    GColor color) {
+  graphics_context_set_text_color(ctx, color);
+  graphics_draw_text(ctx, s, font, GRect(x, y - font_top, w, 80), GTextOverflowModeFill,
+                     GTextAlignmentLeft, NULL);
+}
+
+static void code_at(GContext *ctx, const char *s, int x, int y, GColor c) {
+  text_at(ctx, s, s_font_code, CODE_TOP, x - CODE_LEFT, y, 100, c);
+}
+
+// The two cells trade colors for the middle of the shake clip.
 static bool colors_swapped(void) { return s_anim_t >= 0 && s_anim_p > 600; }
 
-/* ---- header ------------------------------------------------------------- */
-
-static void draw_battery(GContext *ctx, GRect b, const Theme *th, bool show_pct) {
-  int pct = g_battery.charge_percent;
-  bool low = pct <= 20 && !g_battery.is_charging;
-  GColor c = low ? th->alert : th->fg;
-  int seg_w = 4, gap = 1, n = 5;
-  int x0 = b.size.w - 2 - n * (seg_w + gap);
-  int filled = (pct + 19) / 20;
-  graphics_context_set_stroke_color(ctx, th->muted);
-  for (int i = 0; i < n; i++) {
-    GRect seg = GRect(x0 + i * (seg_w + gap), 4, seg_w, 8);
-    if (i < filled) fill(ctx, seg, c);
-    else graphics_draw_rect(ctx, seg);
-  }
-  if (!show_pct) return;
-  char buf[16];
-  snprintf(buf, sizeof(buf), g_battery.is_charging ? "+%d%%" : "%d%%", pct);
-  text(ctx, buf, s_font_code, GRect(x0 - 30, 2, 28, 10), GTextAlignmentRight, low ? th->alert : th->muted);
-}
+/* ---- header: PEBBLE TIME_                         80% ▮▮▮▮▯ ------------- */
 
 static void header_update(Layer *layer, GContext *ctx) {
+  begin(ctx);
   const Theme *th = theme_get();
-  GRect b = local(layer);
+  GRect b = layer_get_bounds(layer);
   fill(ctx, b, th->bg);
+  const int y = 5;  // caps row 5..9
 
-  // accent tab with the watch's name; shrinks during the shake clip
-  int full = 66;
-  int bw = lerp(full, 22, s_anim_p);
-  fill(ctx, GRect(0, 0, bw, b.size.h), th->a1);
-  shapes_triangle_row(ctx, GRect(bw, 0, 8, b.size.h), b.size.h, 200, 0, th->a1);
-  if (bw > 56) {
-    text(ctx, state_watch_name(), s_font_code, GRect(3, 2, bw - 3, 12), GTextAlignmentLeft, th->a1_ink);
+  // the watch's name with a terminal cursor (it blinks during the shake
+  // clip); while the phone is lost the slot becomes an inverted NO LINK tag
+  const char *name = g_bt_connected ? state_watch_name() : "NO LINK";
+  int nw = text_w(name, s_font_code);
+  GColor ink = th->fg;
+  if (!g_bt_connected) {
+    fill(ctx, GRect(MARGIN - 2, y - 2, nw + 3, CODE_H + 4), th->fg);
+    ink = th->bg;
+  }
+  code_at(ctx, name, MARGIN, y, ink);
+  if (s_anim_t < 0 || (s_anim_frame / 2) % 2 == 0) {
+    fill(ctx, GRect(MARGIN + nw + 2, y + CODE_H - 1, 3, 1), th->fg);
   }
 
-  if (g_bt_connected) {
-    shapes_bt(ctx, GPoint(80, 3), 10, th->muted);
-  } else {
-    // phone lost: alert block takes the place of the rune and battery %
-    GRect alert = GRect(76, 1, 38, 14);
-    fill(ctx, alert, th->alert);
-    text(ctx, "LINK-X", s_font_code, GRect(alert.origin.x + 2, alert.origin.y + 1, alert.size.w - 2, 12),
-         GTextAlignmentLeft, th->alert_ink);
+  // battery: five 4x7 cells ending on the right margin, empty ones in muted
+  int pct = g_battery.charge_percent;
+  int cells_x = b.size.w - MARGIN - 5 * 5 + 1;
+  int filled = (pct + 19) / 20;
+  for (int i = 0; i < 5; i++) {
+    fill(ctx, GRect(cells_x + i * 5, y - 1, 4, 7), i < filled ? th->fg : th->muted);
   }
-  draw_battery(ctx, b, th, g_bt_connected);
+  char buf[8];
+  snprintf(buf, sizeof(buf), g_battery.is_charging ? "+%d%%" : "%d%%", pct);
+  int px = cells_x - 4 - text_w(buf, s_font_code);
+  bool low = pct <= 20 && !g_battery.is_charging;
+  code_at(ctx, buf, px, y, low ? th->fg : th->muted);
 }
 
-/* ---- time --------------------------------------------------------------- */
+/* ---- time: corner marks, digits, minute ruler, position / AM-PM --------- */
 
-// Chakra Petch Bold 52: the digits start DIGIT_TOP px below the text origin
-// and are DIGIT_H px tall. Everything in the time box is placed from these.
-#define DIGIT_TOP 14
-#define DIGIT_H 36
-#define RULER_H 7
-#define LABEL_GAP 6   // digits to the label line
-#define LABEL_H 8
-
-static void digits(GContext *ctx, const char *s, GRect box, int top, const Theme *th) {
-  text(ctx, s, s_font_time, GRect(box.origin.x, top - DIGIT_TOP, box.size.w, DIGIT_H + DIGIT_TOP + 8),
-       GTextAlignmentCenter, th->fg);
-}
+// local rows inside the 85px frame; the content is centered between the marks
+#define T_DIGITS 13
+#define T_RULER (T_DIGITS + FM_TIME_H + 4)   // 7px ruler box
+#define T_LABELS (T_RULER + 7 + 6)
 
 static void time_update(Layer *layer, GContext *ctx) {
+  begin(ctx);
   const Theme *th = theme_get();
-  const Layout *lay = layout_get(g_settings.layout);
-  GRect b = local(layer);
+  GRect b = layer_get_bounds(layer);
   fill(ctx, b, th->bg);
+  int r = b.size.w - 1 - MARGIN, btm = b.size.h - 1;
+
+  shapes_corner(ctx, MARGIN, 1, 1, 1, th->fg);
+  shapes_corner(ctx, r, 1, -1, 1, th->fg);
+  shapes_corner(ctx, MARGIN, btm - 1, 1, -1, th->fg);
+  shapes_corner(ctx, r, btm - 1, -1, -1, th->fg);
 
   // glitch: a couple of frames jump sideways
   int jx = 0;
-  if (s_anim_t >= 0 && (s_anim_frame % 4) == 1) jx = (s_anim_frame & 4) ? 4 : -4;
+  if (s_anim_t >= 0 && (s_anim_frame % 4) == 1) jx = (s_anim_frame & 4) ? 3 : -3;
+  // centre the ink, not the advance (the last glyph's advance has trailing room)
+  int w = text_w(s_time, s_font_time);
+  int x = (b.size.w - w) / 2 + 3;
+  text_at(ctx, s_time, s_font_time, FM_TIME_TOP, x + jx, T_DIGITS, w + 8, th->fg);
 
-  char pos[24];
-  state_format_position(pos, sizeof(pos));
+  int pos = s_minute * 1000 / 60;
+  if (s_anim_t >= 0) pos = lerp(pos, s_anim_t < 500 ? 1000 : 0, s_anim_p);  // sweep
+  GRect ruler = GRect(MARGIN + 4, T_RULER, b.size.w - 2 * (MARGIN + 4), 7);
+  shapes_ruler(ctx, ruler, pos, th->muted, th->fg);
 
-  if (lay->time_stacked) {
-    // hours over minutes with an accent rule between, labels at the bottom
-    int block = 2 * DIGIT_H + 2 * LABEL_GAP + 2 + LABEL_GAP + LABEL_H;
-    int top = (b.size.h - block) / 2;
-    int rule = top + DIGIT_H + LABEL_GAP;
-    int mm_top = rule + 2 + LABEL_GAP;
-    int label_y = mm_top + DIGIT_H + LABEL_GAP - 2;
-    bool right_edge = b.origin.x == 0;  // mirrored layout: accent slab on the outer edge
-    int slab_x = right_edge ? 2 : b.size.w - 6;
-    int inner_x = right_edge ? 8 : 0;
-    int inner_w = b.size.w - 8;
-    fill(ctx, GRect(slab_x, top, 4, label_y + LABEL_H - top), th->a2);
-    digits(ctx, s_hh, GRect(inner_x + jx, 0, inner_w, 0), top, th);
-    fill(ctx, GRect(inner_x + 10, rule, inner_w - 20, 2), th->a1);
-    digits(ctx, s_mm, GRect(inner_x - jx, 0, inner_w, 0), mm_top, th);
-    text(ctx, s_ampm, s_font_code, GRect(inner_x + 10, label_y - 1, inner_w - 20, 10), GTextAlignmentRight,
-         th->muted);
-    shapes_plus(ctx, GPoint(inner_x + 13, label_y + 3), 3, th->fg);
-  } else {
-    // digits, then (if there is room) a ruler whose marker shows the
-    // minute within the hour, then the label line; all inside corner brackets
-    bool ruler = b.size.h >= 64;
-    int block = DIGIT_H + LABEL_GAP + (ruler ? RULER_H + 4 : 0) + LABEL_H;
-    int top = (b.size.h - block) / 2;
-    int y = top + DIGIT_H + LABEL_GAP;
-    shapes_brackets(ctx, GRect(2, 2, b.size.w - 4, b.size.h - 4), 5, th->muted);
-    digits(ctx, s_time, GRect(jx, 0, b.size.w, 0), top, th);
-    if (ruler) {
-      int pos = s_minute * 1000 / 60;
-      if (s_anim_t >= 0) pos = lerp(pos, s_anim_t < 500 ? 1000 : 0, s_anim_p);  // sweep
-      shapes_ruler(ctx, GRect(10, y, b.size.w - 20, RULER_H), pos, th->muted, th->a2);
-      y += RULER_H + 4;
-    }
-    // where the weather is from (phone position), else the firmware version
-    if (pos[0] == '\0') {
-      WatchInfoVersion v = watch_info_get_firmware_version();
-      snprintf(pos, sizeof(pos), "FW %d.%d.%d", v.major, v.minor, v.patch);
-    }
-    text(ctx, pos, s_font_code, GRect(10, y - 1, 100, 10), GTextAlignmentLeft, th->muted);
-    text(ctx, s_ampm, s_font_code, GRect(b.size.w - 46, y - 1, 36, 10), GTextAlignmentRight, th->muted);
+  // where the weather is from (phone position), else the firmware version
+  char where[24];
+  state_format_position(where, sizeof(where));
+  if (where[0] == '\0') {
+    WatchInfoVersion v = watch_info_get_firmware_version();
+    snprintf(where, sizeof(where), "FW %d.%d.%d", v.major, v.minor, v.patch);
   }
+  code_at(ctx, where, ruler.origin.x, T_LABELS, th->muted);
+  code_at(ctx, s_ampm, ruler.origin.x + ruler.size.w - text_w(s_ampm, s_font_code), T_LABELS, th->muted);
 }
 
-/* ---- date --------------------------------------------------------------- */
+/* ---- date: WED   07.10◢            [checker] --------------------------- */
+
+#define DATE_X 54  // date column, clear of the widest weekday
 
 static void date_update(Layer *layer, GContext *ctx) {
+  begin(ctx);
   const Theme *th = theme_get();
-  GRect b = local(layer);
+  GRect b = layer_get_bounds(layer);
   fill(ctx, b, th->bg);
+  const int y = 1;  // ink rows 1..15
 
-  int pw = 48;
-  int phase = s_anim_t >= 0 ? s_anim_t * 40 / 1000 : 0;
-  // weekday tab with a half-disc cap (spins once during the clip)
-  int rot = 90 + (s_anim_t >= 0 ? s_anim_t * 360 / 1000 : 0);
-  fill(ctx, GRect(0, 1, pw - 1, 18), th->panel);
-  shapes_half_disc(ctx, GPoint(pw - 2, 10), 9, rot, th->panel);
-  text(ctx, s_wday, s_font_med, GRect(0, -4, pw - 2, 24), GTextAlignmentCenter, th->panel_ink);
-  pw += 8;
+  text_at(ctx, s_wday, s_font_date, FM_DATE_TOP, MARGIN, y, 50, th->fg);
+  text_at(ctx, s_date, s_font_date, FM_DATE_TOP, DATE_X, y, 70, th->fg);
+  shapes_wedge(ctx, DATE_X + text_w(s_date, s_font_date), y + FM_DATE_H - 5, 5, th->fg);
 
-  if (b.size.h >= 36) {
-    // two rows (narrow column): weekday + triangles, then the date
-    shapes_triangle_row(ctx, GRect(pw + 4, 5, b.size.w - pw - 6, 10), 10, 2, phase, th->a1);
-    text(ctx, s_date, s_font_med, GRect(0, 16, b.size.w - 4, 24), GTextAlignmentLeft, th->fg);
-  } else {
-    text(ctx, s_date, s_font_med, GRect(pw + 2, -4, 60, 24), GTextAlignmentLeft, th->fg);
-    if (b.size.w >= 120) {
-      shapes_checker(ctx, GRect(b.size.w - 14, 3, 12, 15), 3, s_anim_t >= 0 ? s_anim_frame : 0, th->a2);
-    }
-  }
+  int phase = s_anim_t >= 0 ? s_anim_frame / 2 : 0;
+  shapes_checker(ctx, GRect(b.size.w - MARGIN - 15, y, 15, 15), 3, phase, th->accent);
 }
 
-/* ---- weather cell ------------------------------------------------------- */
-
-// Cells come in four shapes: normal (about 72x72), compact (72x56),
-// narrow column (50 wide) and wide band (full width, under 50 tall).
-typedef enum { CELL_NORMAL, CELL_COMPACT, CELL_NARROW, CELL_BAND } CellShape;
-
-static CellShape cell_shape(GRect b) {
-  if (b.size.h < 50) return CELL_BAND;
-  if (b.size.w < 60) return CELL_NARROW;
-  return b.size.h < 64 ? CELL_COMPACT : CELL_NORMAL;
-}
+/* ---- weather cell: barcode over a block with icon + temperature -------- */
 
 static void wx_update(Layer *layer, GContext *ctx) {
+  begin(ctx);
   const Theme *th = theme_get();
-  GRect b = local(layer);
+  GRect b = layer_get_bounds(layer);
   bool sw = colors_swapped();
-  GColor cell = sw ? th->a1 : th->a3;
-  GColor ink = sw ? th->a1_ink : th->a3_ink;
-  GColor shape = sw ? th->a3 : th->a2;
-  fill(ctx, b, cell);
-  CellShape cs = cell_shape(b);
-  int phase = s_anim_t >= 0 ? s_anim_frame / 2 : 0;
+  GColor block = sw ? th->panel : th->block;
+  GColor ink = sw ? th->panel_ink : th->block_ink;
+  fill(ctx, b, th->bg);
 
-  char temp[12];
-  state_format_temp(temp, sizeof(temp));
-  if (cs != CELL_NARROW && g_weather.temp_c10 != TEMP_NONE) {
-    strncat(temp, g_settings.temp_unit == UNIT_F ? "F" : "C", sizeof(temp) - strlen(temp) - 1);
-  }
-  // when the phone last delivered weather
-  char upd[16] = "NO DATA";
-  if (g_weather.updated) {
-    struct tm *t = localtime(&g_weather.updated);
-    strftime(upd, sizeof(upd), clock_is_24h_style() ? "UPD %H:%M" : "UPD %I:%M", t);
-  }
-  const char *label = state_weather_stale() && g_weather.updated ? "WEATHER OLD" : "WEATHER";
-
-  if (cs == CELL_BAND) {
-    // [tiles] [icon] [23°C] ............ UPD / 07:30
-    int tile = (b.size.h - 6) / 2;
-    shapes_quarter_tiles(ctx, GRect(3, 3, 2 * tile, 2 * tile), tile, phase, shape);
-    int icon = b.size.h - 10;
-    int x = 2 * tile + 8;
-    shapes_weather(ctx, GPoint(x, 5), icon, g_weather.code, g_weather.is_day, ink, cell);
-    text(ctx, temp, s_font_med, GRect(x + icon + 5, (b.size.h - 24) / 2 - 2, 64, 24), GTextAlignmentLeft, ink);
-    char hm[8] = "--:--";
-    if (g_weather.updated) strncpy(hm, upd + 4, sizeof(hm) - 1);
-    text(ctx, state_weather_stale() ? "OLD" : "UPD", s_font_code, GRect(b.size.w - 36, b.size.h / 2 - 11, 32, 10),
-         GTextAlignmentRight, ink);
-    text(ctx, hm, s_font_code, GRect(b.size.w - 36, b.size.h / 2 + 1, 32, 10), GTextAlignmentRight, ink);
-    return;
-  }
-
-  if (cs == CELL_COMPACT) {
-    // WEATHER / [icon] 23°C / UPD 07:30 [tiles]
-    text(ctx, label, s_font_code, GRect(4, 3, b.size.w - 6, 10), GTextAlignmentLeft, ink);
-    shapes_weather(ctx, GPoint(4, 16), 18, g_weather.code, g_weather.is_day, ink, cell);
-    // number in the big font, the unit letter small beside it
-    char deg[8];
-    state_format_temp(deg, sizeof(deg));
-    GRect tbox = GRect(25, 10, b.size.w - 26, 24);
-    text(ctx, deg, s_font_med, tbox, GTextAlignmentLeft, ink);
-    if (g_weather.temp_c10 != TEMP_NONE) {
-      GSize sz = graphics_text_layout_get_content_size(deg, s_font_med, tbox, GTextOverflowModeFill,
-                                                       GTextAlignmentLeft);
-      text(ctx, g_settings.temp_unit == UNIT_F ? "F" : "C", s_font_code,
-           GRect(tbox.origin.x + sz.w + 1, 15, 10, 10), GTextAlignmentLeft, ink);
-    }
-    shapes_quarter_tiles(ctx, GRect(b.size.w - 18, b.size.h - 18, 18, 18), 9, phase, shape);
-    text(ctx, upd, s_font_code, GRect(4, b.size.h - 12, 50, 10), GTextAlignmentLeft, ink);
-    return;
-  }
-
-  int tile = cs == CELL_NARROW ? 10 : 13;
-  text(ctx, label, s_font_code, GRect(4, 3, b.size.w - 6, 10), GTextAlignmentLeft, ink);
-  if (cs == CELL_NORMAL) {
-    shapes_quarter_tiles(ctx, GRect(b.size.w - 2 * tile, 0, 2 * tile, 2 * tile), tile, phase, shape);
-    shapes_weather(ctx, GPoint(4, 15), 24, g_weather.code, g_weather.is_day, ink, cell);
-    text(ctx, temp, s_font_med, GRect(4, 36, b.size.w - 6, 24), GTextAlignmentLeft, ink);
-    text(ctx, upd, s_font_code, GRect(4, b.size.h - 12, 50, 10), GTextAlignmentLeft, ink);
+  // Code 128 of the current time (HHMM): it scans as the time shown above.
+  // During the clip it scrambles.
+  char code[16];
+  if (s_anim_t >= 0) {
+    snprintf(code, sizeof(code), "%02d%02d", (s_anim_frame * 37) % 100, (s_anim_frame * 61 + 7) % 100);
   } else {
-    shapes_quarter_tiles(ctx, GRect(b.size.w - 2 * tile, b.size.h - 2 * tile, 2 * tile, 2 * tile), tile, phase,
-                         shape);
-    shapes_weather(ctx, GPoint(4, 15), 22, g_weather.code, g_weather.is_day, ink, cell);
-    text(ctx, temp, s_font_med, GRect(3, 36, b.size.w - 4, 24), GTextAlignmentLeft, ink);
+    snprintf(code, sizeof(code), "%s", s_hhmm);
+  }
+  int bw = BARCODE_MODULES(4);
+  barcode_draw(ctx, GPoint((b.size.w - bw) / 2, 1), 16, code, th->fg);
+
+  GRect blk = GRect(0, 18, b.size.w, b.size.h - 18);
+  fill(ctx, blk, block);
+  int icon = 17;
+  int cy = blk.origin.y + (blk.size.h - icon) / 2;
+  shapes_weather(ctx, GPoint(MARGIN, cy), icon, g_weather.code, g_weather.is_day, ink, block);
+
+  // number in the display font, then a small drawn degree ring and the unit
+  // letter in the label font (the font's own ° is too wide for this cell)
+  char temp[8];
+  state_format_temp(temp, sizeof(temp));
+  char *deg = strstr(temp, "°");
+  if (deg) *deg = '\0';
+  int tx = MARGIN + icon + 6;
+  int ty = blk.origin.y + (blk.size.h - FM_TEMP_H) / 2;
+  int tw = text_w(temp, s_font_temp) - 1;  // minus the trailing advance
+  if (tx + tw + 12 > b.size.w - 2) tx = b.size.w - 2 - 12 - tw;  // "-12" squeezes toward the icon
+  text_at(ctx, temp, s_font_temp, FM_TEMP_TOP, tx, ty, 60, ink);
+  int dx = tx + tw + 2;
+  fill(ctx, GRect(dx + 1, ty, 2, 1), ink);
+  fill(ctx, GRect(dx + 1, ty + 3, 2, 1), ink);
+  fill(ctx, GRect(dx, ty + 1, 1, 2), ink);
+  fill(ctx, GRect(dx + 3, ty + 1, 1, 2), ink);
+  if (g_weather.temp_c10 != TEMP_NONE) {
+    code_at(ctx, g_settings.temp_unit == UNIT_F ? "F" : "C", dx + 6, ty + 4, ink);
   }
 }
 
-/* ---- steps cell --------------------------------------------------------- */
-
-static void progress_ticks(GContext *ctx, GRect r, int n, int done, GColor ink) {
-  int tw = r.size.w / n;
-  graphics_context_set_stroke_color(ctx, ink);
-  for (int i = 0; i < n; i++) {
-    GRect t = GRect(r.origin.x + i * tw, r.origin.y, tw - 2, r.size.h);
-    if (i < done) fill(ctx, t, ink);
-    else graphics_draw_rect(ctx, t);
-  }
-}
-
-// Outlined bar filled with hazard stripes up to `pct` percent.
-static void progress_bar(GContext *ctx, GRect r, int pct, GColor ink) {
-  graphics_context_set_stroke_color(ctx, ink);
-  graphics_draw_rect(ctx, r);
-  int w = (r.size.w - 2) * (pct > 100 ? 100 : pct) / 100;
-  int phase = s_anim_t >= 0 ? -s_anim_frame * 2 : 0;
-  if (w > 0) shapes_stripes(ctx, GRect(r.origin.x + 1, r.origin.y + 1, w, r.size.h - 2), 4, 2, phase, ink);
-}
+/* ---- steps panel: leader line ×+, count, % and distance ---------------- */
 
 static void steps_update(Layer *layer, GContext *ctx) {
+  begin(ctx);
   const Theme *th = theme_get();
-  GRect b = local(layer);
+  GRect b = layer_get_bounds(layer);
   bool sw = colors_swapped();
-  GColor cell = sw ? th->a2 : th->panel;
-  GColor ink = sw ? th->a2_ink : th->panel_ink;
-  fill(ctx, b, cell);
-  CellShape cs = cell_shape(b);
+  GColor panel = sw ? th->block : th->panel;
+  GColor ink = sw ? th->block_ink : th->panel_ink;
+  fill(ctx, b, panel);
+  int right = b.size.w - MARGIN;  // first column past the content
+
+  // leader: a corner tab, a 45 degree tick, then a dotted-to-solid rule that
+  // ends in a cross and a plus (registration marks)
+  fill(ctx, GRect(0, 0, 10, 2), ink);
+  fill(ctx, GRect(0, 2, 1, 8), ink);
+  for (int i = 0; i < 7; i++) fill(ctx, GRect(3 + i, 3 + i, 1, 1), ink);
+  const int ry = 4;
+  for (int x = 13; x < 23; x += 2) fill(ctx, GRect(x, ry, 1, 1), ink);
+  fill(ctx, GRect(23, ry, right - 14 - 23, 1), ink);
+  shapes_cross(ctx, GPoint(right - 10, ry), 2, ink);
+  shapes_plus(ctx, GPoint(right - 3, ry), 2, ink);
+
+  char num[16];
+  snprintf(num, sizeof(num), "%05d", g_steps > 99999 ? 99999 : g_steps);
+  int nw = text_w(num, s_font_steps);
+  text_at(ctx, num, s_font_steps, FM_STEPS_TOP, (b.size.w - nw) / 2 + 1, 14, nw + 4, ink);
 
   int pct = g_steps * 100 / STEP_GOAL;
-  char pbuf[16];
-  char dist[16];
+  char pbuf[16], dist[16];
+  snprintf(pbuf, sizeof(pbuf), "%d%%", pct > 999 ? 999 : pct);
   snprintf(dist, sizeof(dist), "%d.%dKM", g_distance_m / 1000, (g_distance_m % 1000) / 100);
-  char num[16];
-  if (cs == CELL_NARROW && g_steps >= 10000) snprintf(num, sizeof(num), "%dK", g_steps / 1000);
-  else if (cs == CELL_NARROW) snprintf(num, sizeof(num), "%d", g_steps);
-  else snprintf(num, sizeof(num), "%05d", g_steps > 99999 ? 99999 : g_steps);
-
-  if (cs == CELL_BAND) {
-    // STEPS 08421 [ticks........] / 84%   6.1KM
-    text(ctx, "STEPS", s_font_code, GRect(6, 4, 40, 10), GTextAlignmentLeft, ink);
-    text(ctx, num, s_font_med, GRect(5, 12, 70, 24), GTextAlignmentLeft, ink);
-    progress_bar(ctx, GRect(76, 9, b.size.w - 80, 9), pct, ink);
-    snprintf(pbuf, sizeof(pbuf), "%d%%", pct > 999 ? 999 : pct);
-    text(ctx, pbuf, s_font_code, GRect(76, 24, 40, 10), GTextAlignmentLeft, ink);
-    text(ctx, dist, s_font_code, GRect(b.size.w - 44, 24, 40, 10), GTextAlignmentRight, ink);
-    return;
-  }
-
-  text(ctx, "STEPS", s_font_code, GRect(4, 3, b.size.w - 6, 10), GTextAlignmentLeft, ink);
-  text(ctx, num, s_font_med, GRect(3, 10, b.size.w - 4, 24), GTextAlignmentLeft, ink);
-  if (cs != CELL_NARROW) {
-    // walking-forward chevrons; they march during the clip
-    shapes_chevrons(ctx, GRect(b.size.w - 25, 3, 21, 9), 3, s_anim_t >= 0 ? s_anim_frame * 2 : 0, ink);
-  }
-  if (cs == CELL_COMPACT) {
-    // STEPS / 08421 / [////////    ] / 84%  6.1KM
-    progress_bar(ctx, GRect(4, 34, b.size.w - 8, 8), pct, ink);
-    snprintf(pbuf, sizeof(pbuf), "%d%%", pct > 999 ? 999 : pct);
-    text(ctx, pbuf, s_font_code, GRect(4, b.size.h - 12, 40, 10), GTextAlignmentLeft, ink);
-    text(ctx, dist, s_font_code, GRect(b.size.w - 40, b.size.h - 12, 36, 10), GTextAlignmentRight, ink);
-  } else if (cs == CELL_NORMAL) {
-    progress_ticks(ctx, GRect(4, 39, b.size.w - 6, 6), 10, pct * 10 / 100, ink);
-    snprintf(pbuf, sizeof(pbuf), "%d%%", pct > 999 ? 999 : pct);
-    text(ctx, pbuf, s_font_code, GRect(4, 48, 40, 10), GTextAlignmentLeft, ink);
-    text(ctx, "GOAL 10K", s_font_code, GRect(4, b.size.h - 12, 50, 10), GTextAlignmentLeft, ink);
-    text(ctx, dist, s_font_code, GRect(b.size.w - 40, 48, 36, 10), GTextAlignmentRight, ink);
-  } else {
-    progress_ticks(ctx, GRect(4, 39, b.size.w - 6, 6), 5, pct * 5 / 100, ink);
-    snprintf(pbuf, sizeof(pbuf), "%d%%", pct > 999 ? 999 : pct);
-    text(ctx, pbuf, s_font_code, GRect(4, 48, 40, 10), GTextAlignmentLeft, ink);
-    text(ctx, dist, s_font_code, GRect(4, 60, 44, 10), GTextAlignmentLeft, ink);
-  }
+  const int ly = b.size.h - 4 - CODE_H;
+  code_at(ctx, pbuf, MARGIN, ly, ink);
+  code_at(ctx, dist, right - text_w(dist, s_font_code), ly, ink);
 }
 
 /* ---- shake overlay ------------------------------------------------------ */
 
-// A ring with a crosshair and turning rays opens over the time and closes
-// again (the "ACTIVE" target of the references).
+// A ring with a crosshair and turning rays opens over the time and closes.
 static void fx_update(Layer *layer, GContext *ctx) {
   if (s_anim_t < 0) return;
+  begin(ctx);
   const Theme *th = theme_get();
   GRect t = layer_get_frame(s_mod[MOD_TIME]);
-  GPoint c = GPoint(t.origin.x + t.size.w / 2, t.origin.y + t.size.h / 2);
-  int r = 6 + s_anim_p * 40 / 1000;
-  graphics_context_set_stroke_color(ctx, th->a2);
+  GPoint c = GPoint(t.origin.x + t.size.w / 2, t.origin.y + T_DIGITS + FM_TIME_H / 2);
+  int r = 6 + s_anim_p * 36 / 1000;
+  graphics_context_set_stroke_color(ctx, th->accent);
   graphics_context_set_stroke_width(ctx, 3);
   graphics_draw_circle(ctx, c, r);
   graphics_context_set_stroke_width(ctx, 1);
@@ -374,41 +279,38 @@ static void fx_update(Layer *layer, GContext *ctx) {
     graphics_draw_line(ctx, GPoint(c.x + sx * r0 / TRIG_MAX_RATIO, c.y - cy * r0 / TRIG_MAX_RATIO),
                        GPoint(c.x + sx * r1 / TRIG_MAX_RATIO, c.y - cy * r1 / TRIG_MAX_RATIO));
   }
-  shapes_plus(ctx, c, 5, th->a2);
+  shapes_plus(ctx, c, 5, th->accent);
 }
 
 /* ---- structure ---------------------------------------------------------- */
 
 static void root_update(Layer *layer, GContext *ctx) {
-  fill(ctx, local(layer), theme_get()->bg);
+  fill(ctx, layer_get_bounds(layer), theme_get()->bg);
 }
 
 static void place_modules(void) {
   const Layout *lay = layout_get(g_settings.layout);
-  for (int i = 0; i < MOD_COUNT; i++) {
-    layer_set_frame(s_mod[i], lay->mod[i]);
-  }
+  for (int i = 0; i < MOD_COUNT; i++) layer_set_frame(s_mod[i], lay->mod[i]);
   if (s_anim_t >= 0) {
     // weather and steps cells trade places and come back
-    GRect a = lay->mod[MOD_WX], b = lay->mod[MOD_STEPS];
-    GRect ma = a, mb = b;
-    ma.origin.x = lerp(a.origin.x, b.origin.x, s_anim_p);
-    ma.origin.y = lerp(a.origin.y, b.origin.y, s_anim_p);
-    mb.origin.x = lerp(b.origin.x, a.origin.x, s_anim_p);
-    mb.origin.y = lerp(b.origin.y, a.origin.y, s_anim_p);
+    GRect a = lay->mod[MOD_WX], c = lay->mod[MOD_STEPS];
+    GRect ma = a, mc = c;
+    ma.origin.x = lerp(a.origin.x, c.origin.x, s_anim_p);
+    mc.origin.x = lerp(c.origin.x, a.origin.x, s_anim_p);
     layer_set_frame(s_mod[MOD_WX], ma);
-    layer_set_frame(s_mod[MOD_STEPS], mb);
+    layer_set_frame(s_mod[MOD_STEPS], mc);
   }
 }
 
 void face_create(Window *window) {
-  s_font_time = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_TIME_52));
-  s_font_med = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_MED_20));
+  s_font_time = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_TIME_53));
+  s_font_date = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_DATE_21));
+  s_font_temp = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_TEMP_24));
+  s_font_steps = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_STEPS_30));
   s_font_code = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_CODE_8));
 
   s_root = window_get_root_layer(window);
   layer_set_update_proc(s_root, root_update);
-
   for (int i = 0; i < MOD_COUNT; i++) {
     s_mod[i] = layer_create(GRect(0, 0, 1, 1));
     layer_add_child(s_root, s_mod[i]);
@@ -428,7 +330,9 @@ void face_destroy(void) {
   layer_destroy(s_fx);
   for (int i = 0; i < MOD_COUNT; i++) layer_destroy(s_mod[i]);
   fonts_unload_custom_font(s_font_time);
-  fonts_unload_custom_font(s_font_med);
+  fonts_unload_custom_font(s_font_date);
+  fonts_unload_custom_font(s_font_temp);
+  fonts_unload_custom_font(s_font_steps);
   fonts_unload_custom_font(s_font_code);
 }
 
@@ -448,12 +352,8 @@ void face_mark_all_dirty(void) {
 void face_set_anim(int t, int frame) {
   s_anim_t = t;
   s_anim_frame = frame;
-  if (t < 0) {
-    s_anim_p = 0;
-  } else {
-    // sin(pi * t): 0 -> 1000 -> 0
-    s_anim_p = sin_lookup(TRIG_MAX_ANGLE / 2 * t / 1000) * 1000 / TRIG_MAX_RATIO;
-  }
+  // sin(pi * t): 0 -> 1000 -> 0
+  s_anim_p = t < 0 ? 0 : sin_lookup(TRIG_MAX_ANGLE / 2 * t / 1000) * 1000 / TRIG_MAX_RATIO;
   place_modules();
   face_mark_all_dirty();
 }
@@ -461,18 +361,19 @@ void face_set_anim(int t, int frame) {
 void face_set_time(struct tm *now) {
   bool h24 = g_settings.clock_mode == CLOCK_24H ||
              (g_settings.clock_mode == CLOCK_AUTO && clock_is_24h_style());
-  strftime(s_hh, sizeof(s_hh), h24 ? "%H" : "%I", now);
-  strftime(s_mm, sizeof(s_mm), "%M", now);
-  s_minute = now->tm_min;
-  snprintf(s_time, sizeof(s_time), "%s:%s", s_hh, s_mm);
+  strftime(s_time, sizeof(s_time), h24 ? "%H:%M" : "%I:%M", now);
   if (h24) snprintf(s_ampm, sizeof(s_ampm), "24H");
   else strftime(s_ampm, sizeof(s_ampm), "%p", now);
+  strftime(s_hhmm, sizeof(s_hhmm), "%H%M", now);
+  s_minute = now->tm_min;
 
   // no pointer tables: app data is not relocated, so index into one string
   static const char days[] = "SUNMONTUEWEDTHUFRISAT";
   memcpy(s_wday, &days[(now->tm_wday % 7) * 3], 3);
   s_wday[3] = '\0';
   strftime(s_date, sizeof(s_date), "%d.%m", now);
+
   layer_mark_dirty(s_mod[MOD_TIME]);
   layer_mark_dirty(s_mod[MOD_DATE]);
+  layer_mark_dirty(s_mod[MOD_WX]);  // the barcode carries the time
 }

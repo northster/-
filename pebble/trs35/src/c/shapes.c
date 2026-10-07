@@ -1,71 +1,15 @@
 #include "shapes.h"
 
-void shapes_half_disc(GContext *ctx, GPoint center, int r, int rot_deg, GColor color) {
+void shapes_corner(GContext *ctx, int x, int y, int dx, int dy, GColor color) {
+  // a 3x3 block on the corner, a 3x2 block beside it along the edge and a
+  // 1px tick further along the other edge, mirrored by (dx, dy) = (+-1, +-1)
   graphics_context_set_fill_color(ctx, color);
-  GRect box = GRect(center.x - r, center.y - r, 2 * r + 1, 2 * r + 1);
-  // fill_radial angles are clockwise from 12 o'clock; -90..90 is the upper half
-  int32_t a0 = DEG_TO_TRIGANGLE(rot_deg - 90);
-  int32_t a1 = DEG_TO_TRIGANGLE(rot_deg + 90);
-  graphics_fill_radial(ctx, box, GOvalScaleModeFitCircle, r, a0, a1);
-}
-
-void shapes_triangle_row(GContext *ctx, GRect box, int size, int gap, int phase, GColor color) {
-  graphics_context_set_stroke_color(ctx, color);
-  int pitch = size + gap;
-  if (pitch <= 0) return;
-  int start = box.origin.x - pitch + (phase % pitch + pitch) % pitch;
-  int right = box.origin.x + box.size.w;
-  int half = size / 2;
-  for (int x0 = start; x0 < right; x0 += pitch) {
-    // triangle pointing right: column i is a vertical line of shrinking height
-    for (int i = 0; i < size; i++) {
-      int x = x0 + i;
-      if (x < box.origin.x || x >= right) continue;
-      int span = half - (i * half) / size;  // half-height of this column
-      int y0 = box.origin.y + half - span;
-      int y1 = box.origin.y + half + span;
-      if (y1 >= box.origin.y + box.size.h) y1 = box.origin.y + box.size.h - 1;
-      graphics_draw_line(ctx, GPoint(x, y0), GPoint(x, y1));
-    }
-  }
-}
-
-void shapes_quarter_tiles(GContext *ctx, GRect box, int tile, int phase, GColor color) {
-  graphics_context_set_fill_color(ctx, color);
-  for (int j = 0; j * tile < box.size.h; j++) {
-    for (int i = 0; i * tile < box.size.w; i++) {
-      // pairs of cells face each other, so neighbours form leaves and full discs
-      int corner = ((i & 1) + 2 * (j & 1) + phase + ((i / 2 + j / 2) % 2) * 2) & 3;
-      int x = box.origin.x + i * tile, y = box.origin.y + j * tile;
-      // corners: 0 top-left, 1 top-right, 2 bottom-right, 3 bottom-left
-      int cx = (corner == 1 || corner == 2) ? x + tile : x;
-      int cy = (corner >= 2) ? y + tile : y;
-      // fill_radial: clockwise from 12 o'clock; pick the quadrant inside the cell
-      int start = (corner == 0) ? 90 : (corner == 1) ? 180 : (corner == 2) ? 270 : 0;
-      GRect circle = GRect(cx - tile, cy - tile, 2 * tile, 2 * tile);
-      graphics_fill_radial(ctx, circle, GOvalScaleModeFitCircle, tile,
-                           DEG_TO_TRIGANGLE(start), DEG_TO_TRIGANGLE(start + 90));
-    }
-  }
-}
-
-void shapes_plus(GContext *ctx, GPoint c, int r, GColor color) {
-  graphics_context_set_stroke_color(ctx, color);
-  graphics_draw_line(ctx, GPoint(c.x - r, c.y), GPoint(c.x + r, c.y));
-  graphics_draw_line(ctx, GPoint(c.x, c.y - r), GPoint(c.x, c.y + r));
-}
-
-void shapes_brackets(GContext *ctx, GRect b, int len, GColor color) {
-  graphics_context_set_fill_color(ctx, color);
-  int x0 = b.origin.x, y0 = b.origin.y, x1 = x0 + b.size.w - 1, y1 = y0 + b.size.h - 1;
-  graphics_fill_rect(ctx, GRect(x0, y0, len, 1), 0, GCornerNone);
-  graphics_fill_rect(ctx, GRect(x0, y0, 1, len), 0, GCornerNone);
-  graphics_fill_rect(ctx, GRect(x1 - len + 1, y0, len, 1), 0, GCornerNone);
-  graphics_fill_rect(ctx, GRect(x1, y0, 1, len), 0, GCornerNone);
-  graphics_fill_rect(ctx, GRect(x0, y1, len, 1), 0, GCornerNone);
-  graphics_fill_rect(ctx, GRect(x0, y1 - len + 1, 1, len), 0, GCornerNone);
-  graphics_fill_rect(ctx, GRect(x1 - len + 1, y1, len, 1), 0, GCornerNone);
-  graphics_fill_rect(ctx, GRect(x1, y1 - len + 1, 1, len), 0, GCornerNone);
+  int bx = dx > 0 ? x : x - 2, by = dy > 0 ? y : y - 2;
+  graphics_fill_rect(ctx, GRect(bx, by, 3, 3), 0, GCornerNone);
+  int sx = dx > 0 ? x + 4 : x - 6, sy = dy > 0 ? y : y - 1;
+  graphics_fill_rect(ctx, GRect(sx, sy, 3, 2), 0, GCornerNone);
+  int ty = dy > 0 ? y + 5 : y - 7;
+  graphics_fill_rect(ctx, GRect(x, ty, 1, 3), 0, GCornerNone);
 }
 
 void shapes_ruler(GContext *ctx, GRect b, int pos, GColor ticks, GColor marker) {
@@ -77,55 +21,47 @@ void shapes_ruler(GContext *ctx, GRect b, int pos, GColor ticks, GColor marker) 
     int h = (i % 3 == 0) ? 4 : 2;
     graphics_fill_rect(ctx, GRect(x, base - h, 1, h), 0, GCornerNone);
   }
-  // marker: a small triangle standing on the baseline, pointing down
+  // marker: a 7px wide triangle on a stem that stands on the baseline
   int mx = b.origin.x + pos * (b.size.w - 1) / 1000;
-  graphics_context_set_stroke_color(ctx, marker);
-  for (int r = 0; r < 4; r++) {
-    graphics_draw_line(ctx, GPoint(mx - 3 + r, base - 6 + r), GPoint(mx + 3 - r, base - 6 + r));
-  }
+  int top = base - 6;
   graphics_context_set_fill_color(ctx, marker);
-  graphics_fill_rect(ctx, GRect(mx, base - 2, 1, 3), 0, GCornerNone);
+  for (int r = 0; r < 4; r++) {
+    graphics_fill_rect(ctx, GRect(mx - 3 + r, top + r, 7 - 2 * r, 1), 0, GCornerNone);
+  }
+  graphics_fill_rect(ctx, GRect(mx, top + 4, 1, 3), 0, GCornerNone);
 }
 
 void shapes_checker(GContext *ctx, GRect b, int cell, int phase, GColor color) {
   graphics_context_set_fill_color(ctx, color);
   for (int j = 0; j * cell < b.size.h; j++) {
     for (int i = 0; i * cell < b.size.w; i++) {
-      if (((i + j + phase) & 1) == 0) continue;
-      int w = cell, h = cell;
-      if ((i + 1) * cell > b.size.w) w = b.size.w - i * cell;
-      if ((j + 1) * cell > b.size.h) h = b.size.h - j * cell;
-      graphics_fill_rect(ctx, GRect(b.origin.x + i * cell, b.origin.y + j * cell, w, h), 0, GCornerNone);
+      if (((i + j + phase) & 1) == 1) continue;
+      graphics_fill_rect(ctx, GRect(b.origin.x + i * cell, b.origin.y + j * cell, cell, cell), 0,
+                         GCornerNone);
     }
   }
 }
 
-void shapes_stripes(GContext *ctx, GRect b, int step, int width, int phase, GColor color) {
-  // one run per row: every row is the row above shifted by one pixel
+void shapes_wedge(GContext *ctx, int x, int y, int n, GColor color) {
+  // right triangle with its right angle at the bottom right of an n x n box
   graphics_context_set_fill_color(ctx, color);
-  for (int y = 0; y < b.size.h; y++) {
-    int off = ((phase + y) % step + step) % step;
-    for (int x = -off; x < b.size.w; x += step) {
-      int x0 = x < 0 ? 0 : x;
-      int x1 = x + width > b.size.w ? b.size.w : x + width;
-      if (x1 > x0) graphics_fill_rect(ctx, GRect(b.origin.x + x0, b.origin.y + y, x1 - x0, 1), 0, GCornerNone);
-    }
+  for (int r = 0; r < n; r++) {
+    graphics_fill_rect(ctx, GRect(x + n - 1 - r, y + r, r + 1, 1), 0, GCornerNone);
   }
 }
 
-void shapes_chevrons(GContext *ctx, GRect b, int n, int phase, GColor color) {
-  graphics_context_set_stroke_color(ctx, color);
-  graphics_context_set_stroke_width(ctx, 2);
-  int pitch = b.size.w / n;
-  int half = b.size.h / 2;
-  for (int i = 0; i < n; i++) {
-    int x = b.origin.x + i * pitch + (phase % pitch);
-    if (x + half >= b.origin.x + b.size.w) x -= b.size.w;
-    if (x < b.origin.x) continue;
-    graphics_draw_line(ctx, GPoint(x, b.origin.y + 1), GPoint(x + half - 1, b.origin.y + half));
-    graphics_draw_line(ctx, GPoint(x + half - 1, b.origin.y + half), GPoint(x, b.origin.y + b.size.h - 2));
+void shapes_plus(GContext *ctx, GPoint c, int r, GColor color) {
+  graphics_context_set_fill_color(ctx, color);
+  graphics_fill_rect(ctx, GRect(c.x - r, c.y, 2 * r + 1, 1), 0, GCornerNone);
+  graphics_fill_rect(ctx, GRect(c.x, c.y - r, 1, 2 * r + 1), 0, GCornerNone);
+}
+
+void shapes_cross(GContext *ctx, GPoint c, int r, GColor color) {
+  graphics_context_set_fill_color(ctx, color);
+  for (int i = -r; i <= r; i++) {
+    graphics_fill_rect(ctx, GRect(c.x + i, c.y + i, 1, 1), 0, GCornerNone);
+    graphics_fill_rect(ctx, GRect(c.x + i, c.y - i, 1, 1), 0, GCornerNone);
   }
-  graphics_context_set_stroke_width(ctx, 1);
 }
 
 /* ---- weather glyphs ---------------------------------------------------- */
@@ -241,17 +177,4 @@ void shapes_weather(GContext *ctx, GPoint o, int s, int code, bool is_day, GColo
       graphics_draw_line(ctx, GPoint(x + 3, y0), GPoint(x, y0 + s / 4));
     }
   }
-}
-
-void shapes_bt(GContext *ctx, GPoint o, int h, GColor color) {
-  graphics_context_set_stroke_color(ctx, color);
-  graphics_context_set_stroke_width(ctx, 1);
-  int w = h / 2;
-  int cx = o.x + w / 2;
-  GPoint top = GPoint(cx, o.y), bot = GPoint(cx, o.y + h - 1);
-  graphics_draw_line(ctx, top, bot);
-  graphics_draw_line(ctx, top, GPoint(o.x + w, o.y + h / 4));
-  graphics_draw_line(ctx, GPoint(o.x + w, o.y + h / 4), GPoint(o.x, o.y + h * 3 / 4));
-  graphics_draw_line(ctx, bot, GPoint(o.x + w, o.y + h * 3 / 4));
-  graphics_draw_line(ctx, GPoint(o.x + w, o.y + h * 3 / 4), GPoint(o.x, o.y + h / 4));
 }

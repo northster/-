@@ -1,14 +1,14 @@
 #include "state.h"
 #include <stdlib.h>
 
-#define PERSIST_SETTINGS 1
+#define PERSIST_SETTINGS 3  // bumped when the theme list changed
 #define PERSIST_WEATHER 2
 
 // Weather older than this is drawn as stale (tiny "OLD" tag).
 #define WEATHER_STALE_SEC (3 * 60 * 60)
 
 Settings g_settings = {
-  .theme = 2,   // MINT
+  .theme = 0,   // LIME
   .layout = 0,  // STACK
   .clock_mode = CLOCK_AUTO,
   .temp_unit = UNIT_C,

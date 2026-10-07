@@ -3,25 +3,22 @@
 
 // The face is a set of rectangular modules; a layout preset places them.
 typedef enum {
-  MOD_HEADER,  // watch name, bluetooth, battery
-  MOD_TIME,
-  MOD_DATE,
-  MOD_WX,      // weather cell
-  MOD_STEPS,   // steps cell
+  MOD_HEADER,  // watch name, link, battery
+  MOD_TIME,    // time inside corner marks, minute ruler, position / AM-PM
+  MOD_DATE,    // weekday, date, checker
+  MOD_WX,      // barcode + weather block
+  MOD_STEPS,   // steps panel
   MOD_COUNT
 } ModuleId;
 
 typedef enum {
-  LAYOUT_STACK = 0,     // time on top, two cells below
-  LAYOUT_INVERT = 1,    // two cells on top, time below
-  LAYOUT_COLUMN = 2,    // cells in a left column, hours over minutes on the right
-  LAYOUT_BAND = 3,      // weather band, time, date, steps band
-  LAYOUT_COLUMN_R = 4,  // COLUMN mirrored: hours/minutes left, cells right
+  LAYOUT_STACK = 0,   // time on top, weather left, steps right
+  LAYOUT_SWAP = 1,    // as STACK with the two cells swapped
+  LAYOUT_INVERT = 2,  // cells on top, time below
 } LayoutId;
 
 typedef struct {
   GRect mod[MOD_COUNT];
-  bool time_stacked;   // hours above minutes
 } Layout;
 
 const Layout *layout_get(int id);
