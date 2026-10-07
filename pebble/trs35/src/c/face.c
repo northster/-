@@ -39,7 +39,7 @@ static Layer *s_fx;  // shake-clip overlay, empty at rest
 
 static GFont s_font_time, s_font_date, s_font_temp, s_font_steps, s_font_code;
 
-static char s_time[8], s_ampm[4], s_wday[4], s_date[8], s_hhmm[6];
+static char s_time[8], s_ampm[4], s_wday[4], s_date[8], s_dtg[8];
 static int s_minute;
 
 // animation state, see face_set_anim
@@ -204,17 +204,17 @@ static void wx_update(Layer *layer, GContext *ctx) {
   GColor ink = sw ? th->panel_ink : th->block_ink;
   fill(ctx, b, th->bg);
 
-  // Code 93 of the current time (HHMM) across the whole cell, 12px tall,
-  // above the block. 4 digits are exactly 72 modules without the trailing
-  // termination bar, so it fills the cell edge to edge (and no longer scans).
-  // During the clip it scrambles.
+  // Code 128 of day + time (DDHHMM, a date-time group: 07 10:08 -> 071008),
+  // 12px tall above the block. 6 digits are 68 modules, centered in the 72px
+  // cell; it scans. During the clip it scrambles.
   char code[16];
   if (s_anim_t >= 0) {
-    snprintf(code, sizeof(code), "%02d%02d", (s_anim_frame * 37) % 100, (s_anim_frame * 61 + 7) % 100);
+    snprintf(code, sizeof(code), "%02d%02d%02d", (s_anim_frame * 13) % 100, (s_anim_frame * 37) % 100,
+             (s_anim_frame * 61 + 7) % 100);
   } else {
-    snprintf(code, sizeof(code), "%s", s_hhmm);
+    snprintf(code, sizeof(code), "%s", s_dtg);
   }
-  barcode_draw(ctx, GPoint(0, 0), WX_CODE_H, code, false, th->fg);
+  barcode_draw(ctx, GPoint((b.size.w - BARCODE_MODULES(6)) / 2, 0), WX_CODE_H, code, th->fg);
 
   GRect blk = GRect(0, WX_CODE_H, b.size.w, b.size.h - WX_CODE_H);
   fill(ctx, blk, block);
@@ -257,16 +257,21 @@ static void steps_update(Layer *layer, GContext *ctx) {
   fill(ctx, b, panel);
   int right = b.size.w - MARGIN;  // first column past the content
 
-  // leader: a corner tab, a 45 degree tick, then a dotted-to-solid rule that
-  // ends in a cross and a plus (registration marks)
-  fill(ctx, GRect(0, 0, 10, 2), ink);
-  fill(ctx, GRect(0, 2, 2, 8), ink);
-  for (int i = 0; i < 8; i++) fill(ctx, GRect(1 + i, 2 + i, i == 7 ? 2 : 3, 1), ink);
+  // leader, right to left: a corner tab in the top right, a 45 degree tick,
+  // then a dotted-to-solid rule that ends in a cross and a plus
+  // (registration marks)
+  const int w = b.size.w;
+  fill(ctx, GRect(w - 10, 0, 10, 2), ink);
+  fill(ctx, GRect(w - 2, 2, 2, 8), ink);
+  for (int i = 0; i < 8; i++) {
+    int len = i == 7 ? 2 : 3;
+    fill(ctx, GRect(w - 1 - i - len, 2 + i, len, 1), ink);
+  }
   const int ry = 4;
-  for (int x = 13; x < 23; x += 2) fill(ctx, GRect(x, ry, 1, 1), ink);
-  fill(ctx, GRect(23, ry, right - 16 - 23, 1), ink);
-  shapes_cross(ctx, GPoint(right - 10, ry), 2, ink);
-  shapes_plus(ctx, GPoint(right - 3, ry), 2, ink);
+  for (int x = w - 14; x > 40; x -= 2) fill(ctx, GRect(x, ry, 1, 1), ink);
+  fill(ctx, GRect(18, ry, 23, 1), ink);
+  shapes_cross(ctx, GPoint(11, ry), 2, ink);
+  shapes_plus(ctx, GPoint(4, ry), 2, ink);
 
   char num[16];
   snprintf(num, sizeof(num), "%05d", g_steps > 99999 ? 99999 : g_steps);
@@ -389,7 +394,7 @@ void face_set_time(struct tm *now) {
   strftime(s_time, sizeof(s_time), h24 ? "%H:%M" : "%I:%M", now);
   if (h24) snprintf(s_ampm, sizeof(s_ampm), "24H");
   else strftime(s_ampm, sizeof(s_ampm), "%p", now);
-  strftime(s_hhmm, sizeof(s_hhmm), "%H%M", now);
+  strftime(s_dtg, sizeof(s_dtg), "%d%H%M", now);
   s_minute = now->tm_min;
 
   // no pointer tables: app data is not relocated, so index into one string
