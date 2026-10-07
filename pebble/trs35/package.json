@@ -28,8 +28,7 @@
       "TEMP_C10",
       "WCODE",
       "IS_DAY",
-      "WEATHER_REQ",
-      "WEATHER_ERR"
+      "WEATHER_REQ"
     ],
     "resources": {
       "media": [

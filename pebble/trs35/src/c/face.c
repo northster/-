@@ -44,7 +44,7 @@ static bool colors_swapped(void) { return s_anim_t >= 0 && s_anim_p > 600; }
 
 /* ---- header ------------------------------------------------------------- */
 
-static void draw_battery(GContext *ctx, GRect b, const Theme *th) {
+static void draw_battery(GContext *ctx, GRect b, const Theme *th, bool show_pct) {
   int pct = g_battery.charge_percent;
   bool low = pct <= 20 && !g_battery.is_charging;
   GColor c = low ? th->alert : th->fg;
@@ -57,6 +57,7 @@ static void draw_battery(GContext *ctx, GRect b, const Theme *th) {
     if (i < filled) fill(ctx, seg, c);
     else graphics_draw_rect(ctx, seg);
   }
+  if (!show_pct) return;
   char buf[16];
   snprintf(buf, sizeof(buf), g_battery.is_charging ? "+%d" : "%d", pct);
   text(ctx, buf, s_font_code, GRect(x0 - 26, 2, 24, 10), GTextAlignmentRight, low ? th->alert : th->muted);
@@ -78,12 +79,13 @@ static void header_update(Layer *layer, GContext *ctx) {
   if (g_bt_connected) {
     shapes_bt(ctx, GPoint(84, 3), 10, th->muted);
   } else {
-    GRect alert = GRect(80, 1, 34, 14);
+    // phone lost: alert block takes the place of the rune and battery %
+    GRect alert = GRect(78, 1, 38, 14);
     fill(ctx, alert, th->alert);
     text(ctx, "LINK-X", s_font_code, GRect(alert.origin.x + 2, alert.origin.y + 1, alert.size.w - 2, 12),
          GTextAlignmentLeft, th->alert_ink);
   }
-  draw_battery(ctx, b, th);
+  draw_battery(ctx, b, th, g_bt_connected);
 }
 
 /* ---- time --------------------------------------------------------------- */
