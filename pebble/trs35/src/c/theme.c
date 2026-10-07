@@ -43,7 +43,7 @@ static const Theme s_themes[THEME_COUNT] = {
     .a1 = {GColorSpringBudARGB8}, .a1_ink = {GColorBlackARGB8},
     .a2 = {GColorSpringBudARGB8}, .a2_ink = {GColorBlackARGB8},
     .a3 = {GColorBlackARGB8}, .a3_ink = {GColorWhiteARGB8},
-    .panel = {GColorBlackARGB8}, .panel_ink = {GColorWhiteARGB8},
+    .panel = {GColorSpringBudARGB8}, .panel_ink = {GColorBlackARGB8},
     .alert = {GColorRedARGB8}, .alert_ink = {GColorWhiteARGB8},
   },
   // 4 NULL: hot pink and white, black ink
@@ -52,7 +52,7 @@ static const Theme s_themes[THEME_COUNT] = {
     .tile = {GColorBrilliantRoseARGB8},
     .a1 = {GColorBlackARGB8}, .a1_ink = {GColorWhiteARGB8},
     .a2 = {GColorFollyARGB8}, .a2_ink = {GColorBlackARGB8},
-    .a3 = {GColorWhiteARGB8}, .a3_ink = {GColorBlackARGB8},
+    .a3 = {GColorBlackARGB8}, .a3_ink = {GColorWhiteARGB8},
     .panel = {GColorWhiteARGB8}, .panel_ink = {GColorBlackARGB8},
     .alert = {GColorSpringBudARGB8}, .alert_ink = {GColorBlackARGB8},
   },

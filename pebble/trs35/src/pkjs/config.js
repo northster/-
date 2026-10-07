@@ -13,8 +13,8 @@ var THEMES = [
   ['ACID', 'Black, lime, cyan, blue', ['#000000', '#AAFF00', '#55FFFF', '#0055FF', '#FFFFFF']],
   ['VIOLET', 'Black, violet, lime', ['#000000', '#AA55FF', '#AAFF00', '#FFFFFF', '#5500AA']],
   ['MINT', 'Pale mint paper, black blocks', ['#AAFFFF', '#000000', '#AAFF00', '#FFFFFF', '#55FFFF']],
-  ['SIGNAL', 'White paper, black bars, lime', ['#FFFFFF', '#000000', '#AAFF00', '#AAAAAA', '#555555']],
-  ['NULL', 'Hot pink and white', ['#FF0055', '#FFFFFF', '#000000', '#FF55AA', '#FF0055']],
+  ['SIGNAL', 'White paper, black and lime blocks', ['#FFFFFF', '#000000', '#AAFF00', '#AAAAAA', '#555555']],
+  ['NULL', 'Hot pink, white and black', ['#FF0055', '#FFFFFF', '#000000', '#FF55AA', '#000000']],
   ['FLARE', 'Ultramarine, lime, coral', ['#5500FF', '#AAFF00', '#FF5555', '#FF0055', '#5500AA']]
 ];
 
