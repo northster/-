@@ -20,6 +20,14 @@ void shapes_hatch(GContext *ctx, GRect box, int step, GColor color);
 // Barcode-like vertical ticks from a seed, filling `box`.
 void shapes_barcode(GContext *ctx, GRect box, uint32_t seed, GColor color);
 
+// Field of quarter discs (the grey tile pattern of the references): one
+// quarter disc per `tile` px cell, its corner picked from the cell position
+// plus `phase` (0..3) so the field can turn during the shake clip.
+void shapes_quarter_tiles(GContext *ctx, GRect box, int tile, int phase, GColor color);
+
+// Plus sign, arm length `r`.
+void shapes_plus(GContext *ctx, GPoint c, int r, GColor color);
+
 // Registration mark: small circle with a cross through it.
 void shapes_crosshair(GContext *ctx, GPoint c, int r, GColor color);
 

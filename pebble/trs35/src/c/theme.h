@@ -7,6 +7,7 @@ typedef struct {
   GColor bg;        // screen background
   GColor fg;        // main text on bg (time)
   GColor muted;     // small code labels on bg
+  GColor tile;      // quarter-disc pattern behind the time (low contrast)
   GColor a1;        // primary accent block (acid lime in the default theme)
   GColor a1_ink;
   GColor a2;        // secondary accent (cyan)

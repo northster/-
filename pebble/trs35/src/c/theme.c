@@ -1,54 +1,70 @@
 #include "theme.h"
 #include "state.h"
 
-// Colors come from tools/palette_map.py (nearest Pebble color by Lab
-// delta-E), nudged toward the more saturated neighbor where the Pebble Time
-// screen would otherwise look washed out. See README "색 매핑".
+// Colors were sampled from the reference images and mapped with
+// tools/palette_map.py (nearest Pebble color by Lab delta-E); where two
+// candidates were about equally close the more saturated one won, since the
+// Pebble Time screen washes colors out. See README "색 매핑".
 static const Theme s_themes[THEME_COUNT] = {
-  // 0 ACID: black field, lime / cyan / blue blocks
+  // 0 ACID: black field, grey tiles, lime / cyan / blue blocks
   {
     .bg = {GColorBlackARGB8}, .fg = {GColorWhiteARGB8}, .muted = {GColorLightGrayARGB8},
+    .tile = {GColorDarkGrayARGB8},
     .a1 = {GColorSpringBudARGB8}, .a1_ink = {GColorBlackARGB8},
-    .a2 = {GColorCyanARGB8}, .a2_ink = {GColorBlackARGB8},
+    .a2 = {GColorElectricBlueARGB8}, .a2_ink = {GColorBlackARGB8},
     .a3 = {GColorBlueMoonARGB8}, .a3_ink = {GColorWhiteARGB8},
     .panel = {GColorWhiteARGB8}, .panel_ink = {GColorBlackARGB8},
     .alert = {GColorOrangeARGB8}, .alert_ink = {GColorBlackARGB8},
   },
-  // 1 SIGNAL: white paper, black ink, blue + lime accents
-  {
-    .bg = {GColorWhiteARGB8}, .fg = {GColorBlackARGB8}, .muted = {GColorDarkGrayARGB8},
-    .a1 = {GColorSpringBudARGB8}, .a1_ink = {GColorBlackARGB8},
-    .a2 = {GColorBlueARGB8}, .a2_ink = {GColorWhiteARGB8},
-    .a3 = {GColorBlackARGB8}, .a3_ink = {GColorWhiteARGB8},
-    .panel = {GColorLightGrayARGB8}, .panel_ink = {GColorBlackARGB8},
-    .alert = {GColorRedARGB8}, .alert_ink = {GColorWhiteARGB8},
-  },
-  // 2 CRYO: deep blue field, cyan and white
-  {
-    .bg = {GColorOxfordBlueARGB8}, .fg = {GColorWhiteARGB8}, .muted = {GColorPictonBlueARGB8},
-    .a1 = {GColorCyanARGB8}, .a1_ink = {GColorOxfordBlueARGB8},
-    .a2 = {GColorWhiteARGB8}, .a2_ink = {GColorOxfordBlueARGB8},
-    .a3 = {GColorBlueMoonARGB8}, .a3_ink = {GColorWhiteARGB8},
-    .panel = {GColorElectricBlueARGB8}, .panel_ink = {GColorOxfordBlueARGB8},
-    .alert = {GColorBrilliantRoseARGB8}, .alert_ink = {GColorBlackARGB8},
-  },
-  // 3 MONO: greys with a single lime accent
-  {
-    .bg = {GColorBlackARGB8}, .fg = {GColorWhiteARGB8}, .muted = {GColorDarkGrayARGB8},
-    .a1 = {GColorSpringBudARGB8}, .a1_ink = {GColorBlackARGB8},
-    .a2 = {GColorLightGrayARGB8}, .a2_ink = {GColorBlackARGB8},
-    .a3 = {GColorDarkGrayARGB8}, .a3_ink = {GColorWhiteARGB8},
-    .panel = {GColorWhiteARGB8}, .panel_ink = {GColorBlackARGB8},
-    .alert = {GColorWhiteARGB8}, .alert_ink = {GColorBlackARGB8},
-  },
-  // 4 FLARE: black field, hot orange / rose / lime
+  // 1 VIOLET: black / violet / lime / white
   {
     .bg = {GColorBlackARGB8}, .fg = {GColorWhiteARGB8}, .muted = {GColorLightGrayARGB8},
-    .a1 = {GColorOrangeARGB8}, .a1_ink = {GColorBlackARGB8},
-    .a2 = {GColorBrilliantRoseARGB8}, .a2_ink = {GColorBlackARGB8},
-    .a3 = {GColorSpringBudARGB8}, .a3_ink = {GColorBlackARGB8},
+    .tile = {GColorIndigoARGB8},
+    .a1 = {GColorSpringBudARGB8}, .a1_ink = {GColorBlackARGB8},
+    .a2 = {GColorWhiteARGB8}, .a2_ink = {GColorBlackARGB8},
+    .a3 = {GColorLavenderIndigoARGB8}, .a3_ink = {GColorBlackARGB8},
     .panel = {GColorWhiteARGB8}, .panel_ink = {GColorBlackARGB8},
-    .alert = {GColorCyanARGB8}, .alert_ink = {GColorBlackARGB8},
+    .alert = {GColorFollyARGB8}, .alert_ink = {GColorWhiteARGB8},
+  },
+  // 2 MINT: pale mint paper, black blocks, lime and cyan
+  {
+    .bg = {GColorCelesteARGB8}, .fg = {GColorBlackARGB8}, .muted = {GColorDarkGrayARGB8},
+    .tile = {GColorElectricBlueARGB8},
+    .a1 = {GColorSpringBudARGB8}, .a1_ink = {GColorBlackARGB8},
+    .a2 = {GColorBlackARGB8}, .a2_ink = {GColorWhiteARGB8},
+    .a3 = {GColorBlackARGB8}, .a3_ink = {GColorWhiteARGB8},
+    .panel = {GColorWhiteARGB8}, .panel_ink = {GColorBlackARGB8},
+    .alert = {GColorFollyARGB8}, .alert_ink = {GColorWhiteARGB8},
+  },
+  // 3 SIGNAL: white paper, black bars, lime
+  {
+    .bg = {GColorWhiteARGB8}, .fg = {GColorBlackARGB8}, .muted = {GColorDarkGrayARGB8},
+    .tile = {GColorLightGrayARGB8},
+    .a1 = {GColorSpringBudARGB8}, .a1_ink = {GColorBlackARGB8},
+    .a2 = {GColorSpringBudARGB8}, .a2_ink = {GColorBlackARGB8},
+    .a3 = {GColorBlackARGB8}, .a3_ink = {GColorWhiteARGB8},
+    .panel = {GColorBlackARGB8}, .panel_ink = {GColorWhiteARGB8},
+    .alert = {GColorRedARGB8}, .alert_ink = {GColorWhiteARGB8},
+  },
+  // 4 NULL: hot pink and white, black ink
+  {
+    .bg = {GColorFollyARGB8}, .fg = {GColorBlackARGB8}, .muted = {GColorBlackARGB8},
+    .tile = {GColorBrilliantRoseARGB8},
+    .a1 = {GColorBlackARGB8}, .a1_ink = {GColorWhiteARGB8},
+    .a2 = {GColorFollyARGB8}, .a2_ink = {GColorBlackARGB8},
+    .a3 = {GColorWhiteARGB8}, .a3_ink = {GColorBlackARGB8},
+    .panel = {GColorWhiteARGB8}, .panel_ink = {GColorBlackARGB8},
+    .alert = {GColorSpringBudARGB8}, .alert_ink = {GColorBlackARGB8},
+  },
+  // 5 FLARE: ultramarine field, lime, coral red, pink
+  {
+    .bg = {GColorElectricUltramarineARGB8}, .fg = {GColorWhiteARGB8}, .muted = {GColorCelesteARGB8},
+    .tile = {GColorIndigoARGB8},
+    .a1 = {GColorSpringBudARGB8}, .a1_ink = {GColorBlackARGB8},
+    .a2 = {GColorSunsetOrangeARGB8}, .a2_ink = {GColorBlackARGB8},
+    .a3 = {GColorFollyARGB8}, .a3_ink = {GColorBlackARGB8},
+    .panel = {GColorSpringBudARGB8}, .panel_ink = {GColorBlackARGB8},
+    .alert = {GColorYellowARGB8}, .alert_ink = {GColorBlackARGB8},
   },
 };
 

@@ -67,6 +67,31 @@ void shapes_barcode(GContext *ctx, GRect box, uint32_t seed, GColor color) {
   }
 }
 
+void shapes_quarter_tiles(GContext *ctx, GRect box, int tile, int phase, GColor color) {
+  graphics_context_set_fill_color(ctx, color);
+  for (int j = 0; j * tile < box.size.h; j++) {
+    for (int i = 0; i * tile < box.size.w; i++) {
+      // pairs of cells face each other, so neighbours form leaves and full discs
+      int corner = ((i & 1) + 2 * (j & 1) + phase + ((i / 2 + j / 2) % 2) * 2) & 3;
+      int x = box.origin.x + i * tile, y = box.origin.y + j * tile;
+      // corners: 0 top-left, 1 top-right, 2 bottom-right, 3 bottom-left
+      int cx = (corner == 1 || corner == 2) ? x + tile : x;
+      int cy = (corner >= 2) ? y + tile : y;
+      // fill_radial: clockwise from 12 o'clock; pick the quadrant inside the cell
+      int start = (corner == 0) ? 90 : (corner == 1) ? 180 : (corner == 2) ? 270 : 0;
+      GRect circle = GRect(cx - tile, cy - tile, 2 * tile, 2 * tile);
+      graphics_fill_radial(ctx, circle, GOvalScaleModeFitCircle, tile,
+                           DEG_TO_TRIGANGLE(start), DEG_TO_TRIGANGLE(start + 90));
+    }
+  }
+}
+
+void shapes_plus(GContext *ctx, GPoint c, int r, GColor color) {
+  graphics_context_set_stroke_color(ctx, color);
+  graphics_draw_line(ctx, GPoint(c.x - r, c.y), GPoint(c.x + r, c.y));
+  graphics_draw_line(ctx, GPoint(c.x, c.y - r), GPoint(c.x, c.y + r));
+}
+
 void shapes_crosshair(GContext *ctx, GPoint c, int r, GColor color) {
   graphics_context_set_stroke_color(ctx, color);
   graphics_draw_circle(ctx, c, r);

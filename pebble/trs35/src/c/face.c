@@ -100,6 +100,8 @@ static void time_update(Layer *layer, GContext *ctx) {
   int jx = 0;
   if (s_anim_t >= 0 && (s_anim_frame % 4) == 1) jx = (s_anim_frame & 4) ? 4 : -4;
 
+  shapes_plus(ctx, lay->time_stacked ? GPoint(6, 6) : GPoint(b.size.w - 6, 5), 3, th->fg);
+
   if (lay->time_stacked) {
     int half = b.size.h / 2;
     // cyan slab behind the hour column edge
@@ -124,19 +126,23 @@ static void date_update(Layer *layer, GContext *ctx) {
   GRect b = local(layer);
   fill(ctx, b, th->bg);
 
-  int pw = 50;
+  int pw = 48;
   int phase = s_anim_t >= 0 ? s_anim_t * 40 / 1000 : 0;
-  fill(ctx, GRect(0, 1, pw, 18), th->panel);
-  text(ctx, s_wday, s_font_med, GRect(0, -4, pw, 24), GTextAlignmentCenter, th->panel_ink);
+  // weekday tab with a half-disc cap (spins once during the clip)
+  int rot = 90 + (s_anim_t >= 0 ? s_anim_t * 360 / 1000 : 0);
+  fill(ctx, GRect(0, 1, pw - 1, 18), th->panel);
+  shapes_half_disc(ctx, GPoint(pw - 2, 10), 9, rot, th->panel);
+  text(ctx, s_wday, s_font_med, GRect(0, -4, pw - 2, 24), GTextAlignmentCenter, th->panel_ink);
+  pw += 8;
 
   if (b.size.h >= 36) {
     // two rows (narrow column): weekday + triangles, then the date
     shapes_triangle_row(ctx, GRect(pw + 4, 5, b.size.w - pw - 6, 10), 10, 2, phase, th->a1);
     text(ctx, s_date, s_font_med, GRect(0, 16, b.size.w - 4, 24), GTextAlignmentLeft, th->fg);
   } else {
-    text(ctx, s_date, s_font_med, GRect(pw + 4, -4, 60, 24), GTextAlignmentLeft, th->fg);
+    text(ctx, s_date, s_font_med, GRect(pw + 2, -4, 60, 24), GTextAlignmentLeft, th->fg);
     if (b.size.w >= 120) {
-      shapes_triangle_row(ctx, GRect(b.size.w - 36, 5, 34, 10), 10, 2, phase, th->a1);
+      shapes_triangle_row(ctx, GRect(b.size.w - 24, 5, 22, 10), 10, 2, phase, th->a1);
     }
   }
 }
@@ -152,10 +158,12 @@ static void wx_update(Layer *layer, GContext *ctx) {
   GColor shape = sw ? th->a3 : th->a2;
   fill(ctx, b, cell);
 
-  // half disc rising from the bottom right; spins during the clip
-  int r = (b.size.w < 60 ? b.size.w : b.size.h) * 2 / 5;
-  int rot = s_anim_t >= 0 ? s_anim_t * 360 / 1000 : 0;
-  shapes_half_disc(ctx, GPoint(b.size.w - r / 3, b.size.h), r, rot, shape);
+  // 2x2 quarter-disc block in the bottom right corner; the discs turn
+  // during the clip
+  int tile = b.size.w < 60 ? 11 : 15;
+  int phase = s_anim_t >= 0 ? s_anim_frame / 2 : 0;
+  shapes_quarter_tiles(ctx, GRect(b.size.w - 2 * tile, b.size.h - 2 * tile, 2 * tile, 2 * tile),
+                       tile, phase, shape);
 
   const char *label = state_weather_stale() && g_weather.updated ? "WX.OLD" : "WX.CUR";
   text(ctx, label, s_font_code, GRect(3, 2, b.size.w - 4, 10), GTextAlignmentLeft, ink);

@@ -7,7 +7,13 @@
 // Temperature always travels in tenths of a degree Celsius; the watch
 // converts to Fahrenheit itself, so switching units needs no refetch.
 
+var Clay = require('@rebble/clay');
+var clayConfig = require('./config');
 var weather = require('./weather');
+
+// Clay's own handlers would send the settings outside our queue and could
+// collide with a weather message, so open and close are handled here.
+var clay = new Clay(clayConfig, null, { autoHandleEvents: false });
 
 var CACHE_KEY = 'trs35.weather';
 var COORDS_KEY = 'trs35.coords';
@@ -98,4 +104,13 @@ Pebble.addEventListener('ready', function() {
 
 Pebble.addEventListener('appmessage', function(e) {
   if (e.payload && 'WEATHER_REQ' in e.payload) refresh();
+});
+
+Pebble.addEventListener('showConfiguration', function() {
+  Pebble.openURL(clay.generateUrl());
+});
+
+Pebble.addEventListener('webviewclosed', function(e) {
+  if (!e || !e.response) return;  // cancelled
+  send(clay.getSettings(e.response));
 });
