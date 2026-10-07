@@ -4,7 +4,7 @@
 #   make phone PHONE=192.168.0.12 build + install on the watch through the phone
 #   make demo                     emulator with frozen 10:08 and sample data
 #   make shot                     emulator screenshot -> docs/screenshots/latest.png
-#   make font FONT=KHInterference-Bold.ttf [NARROW=...]
+#   make font FONT=KHInterference-Bold.otf [NARROW=...]
 #                                 use another display font (not committed)
 #   make font-reset               back to the bundled TRS Grid
 #   make logs / make test
@@ -49,24 +49,24 @@ config:
 test:
 	node tools/test_weather.js
 
-# Display fonts: resources/fonts/display.ttf (time, date, temperature) and
-# narrow.ttf (step count). Both are git-ignored so a licensed font never
-# lands in the repository. Positions are re-measured on the next build.
+# Display fonts: resources/fonts/{time,date,temp,steps}.ttf. They are
+# git-ignored so a licensed font never lands in the repository; positions
+# are re-measured on the next build. NARROW (optional) is used for steps.
+FONT_FILES := time date temp
 font:
-	@test -n "$(FONT)" || { echo "usage: make font FONT=path/to/font.ttf [NARROW=path]"; exit 1; }
-	cp "$(FONT)" resources/fonts/display.ttf
-	cp "$(or $(NARROW),$(FONT))" resources/fonts/narrow.ttf
+	@test -n "$(FONT)" || { echo "usage: make font FONT=path/to/font.otf [NARROW=path]"; exit 1; }
+	for f in $(FONT_FILES); do cp "$(FONT)" resources/fonts/$$f.ttf; done
+	cp "$(or $(NARROW),$(FONT))" resources/fonts/steps.ttf
 	$(PEBBLE) clean
 
 font-reset:
-	cp resources/fonts/TRSGrid.ttf resources/fonts/display.ttf
-	cp resources/fonts/TRSGrid-Narrow.ttf resources/fonts/narrow.ttf
+	for f in Time Date Temp Steps; do \
+	  cp resources/fonts/TRSGrid-$$f.ttf resources/fonts/$$(echo $$f | tr A-Z a-z).ttf; done
 	$(PEBBLE) clean
 
-# Rebuild the bundled TRS Grid cuts (needs: pip install fonttools shapely)
+# Rebuild the bundled TRS Grid pixel cuts (needs: pip install fonttools shapely)
 fonts:
 	python3 tools/make_font.py
-	python3 tools/make_font.py --narrow
 
 clean:
 	$(PEBBLE) clean

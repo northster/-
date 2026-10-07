@@ -3,5 +3,10 @@ node_modules/
 package-lock.json
 !*.sh
 .lock-waf*
+resources/fonts/time.ttf
+resources/fonts/date.ttf
+resources/fonts/temp.ttf
+resources/fonts/steps.ttf
 resources/fonts/display.ttf
 resources/fonts/narrow.ttf
+tools/__pycache__/

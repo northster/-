@@ -22,6 +22,9 @@ void shapes_wedge(GContext *ctx, int x, int y, int n, GColor color);
 void shapes_plus(GContext *ctx, GPoint c, int r, GColor color);
 void shapes_cross(GContext *ctx, GPoint c, int r, GColor color);
 
+// The mock-up's partly-cloudy (day) icon, 18 x 13, at `origin`.
+void shapes_partly_cloudy(GContext *ctx, GPoint origin, GColor fg);
+
 // Weather glyph for a WMO code inside a square of side `s` at `origin`.
 // `bg` is used to cut the crescent moon.
 void shapes_weather(GContext *ctx, GPoint origin, int s, int code, bool is_day,

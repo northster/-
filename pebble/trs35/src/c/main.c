@@ -12,6 +12,9 @@
 #define ANIM_FRAME_MS 66
 #define ANIM_COOLDOWN_MS 3000
 #define ANIM_MIN_BATTERY 10
+// Switched off for now: the tap service is never subscribed and the
+// settings page no longer offers it. Set to 1 to bring the clip back.
+#define SHAKE_ENABLED 0
 
 static Window *s_window;
 
@@ -19,8 +22,12 @@ static void update_time(void) {
   time_t now = time(NULL);
   struct tm *t = localtime(&now);
 #if defined(TRS_DEMO)
-  t->tm_hour = 10;
-  t->tm_min = 8;
+#ifndef TRS_HOUR
+#define TRS_HOUR 10
+#define TRS_MIN 8
+#endif
+  t->tm_hour = TRS_HOUR;
+  t->tm_min = TRS_MIN;
 #endif
   face_set_time(t);
 }
@@ -86,10 +93,11 @@ static void tap_handler(AccelAxisType axis, int32_t direction) {
 // The tap service only runs while the option is on.
 static void update_tap_subscription(void) {
   static bool subscribed;
-  if (g_settings.shake_anim && !subscribed) {
+  bool want = SHAKE_ENABLED && g_settings.shake_anim;
+  if (want && !subscribed) {
     accel_tap_service_subscribe(tap_handler);
     subscribed = true;
-  } else if (!g_settings.shake_anim && subscribed) {
+  } else if (!want && subscribed) {
     accel_tap_service_unsubscribe();
     subscribed = false;
   }
@@ -185,7 +193,7 @@ static void init(void) {
 
 static void deinit(void) {
   if (s_anim_timer) app_timer_cancel(s_anim_timer);
-  if (g_settings.shake_anim) accel_tap_service_unsubscribe();
+  if (SHAKE_ENABLED && g_settings.shake_anim) accel_tap_service_unsubscribe();
   tick_timer_service_unsubscribe();
   battery_state_service_unsubscribe();
   connection_service_unsubscribe();

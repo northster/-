@@ -1,16 +1,16 @@
 #
 # Standard Pebble SDK project wscript, plus:
 #
-# * Display fonts. The face draws its numbers with resources/fonts/display.ttf
-#   (time, date, temperature) and resources/fonts/narrow.ttf (step count).
-#   Both are git-ignored: when missing they are copied from the bundled
-#   TRS Grid cuts, and `make font FONT=...` drops in another font such as a
-#   licensed KH Interference.
+# * Display fonts. The face draws its numbers with resources/fonts/time.ttf,
+#   date.ttf, temp.ttf and steps.ttf. They are git-ignored: when missing they
+#   are copied from the bundled TRS Grid pixel cuts (tools/make_font.py), and
+#   `make font FONT=...` drops in another font such as a licensed
+#   KH Interference.
 # * Font metrics. Where the digits' ink sits inside a text box depends on the
 #   font, so it is measured here with FreeType (the same renderer the SDK's
 #   font converter uses) and handed to the C code as FM_* defines.
-# * TRS_DEMO=1 [TRS_THEME=n] [TRS_LAYOUT=n] pebble build
-#   freezes the clock at 10:08 and fills weather/steps with sample values so
+# * TRS_DEMO=1 [TRS_THEME=n] [TRS_LAYOUT=n] [TRS_HOUR=h TRS_MIN=m] pebble build
+#   freezes the clock (10:08 unless given) and fills weather/steps with sample values so
 #   emulator screenshots are reproducible.
 #
 import os.path
@@ -23,17 +23,18 @@ HERE = os.path.abspath('.')  # waf runs wscript from the project directory
 FONT_DIR = os.path.join(HERE, 'resources', 'fonts')
 
 # file -> bundled default
-FONTS = {'display.ttf': 'TRSGrid.ttf', 'narrow.ttf': 'TRSGrid-Narrow.ttf'}
+FONTS = {'time.ttf': 'TRSGrid-Time.ttf', 'date.ttf': 'TRSGrid-Date.ttf',
+         'temp.ttf': 'TRSGrid-Temp.ttf', 'steps.ttf': 'TRSGrid-Steps.ttf'}
 for name, default in FONTS.items():
     if not os.path.exists(os.path.join(FONT_DIR, name)):
         shutil.copyfile(os.path.join(FONT_DIR, default), os.path.join(FONT_DIR, name))
 
 # (define prefix, font file, pixel size) -- sizes must match package.json
 MEASURED = [
-    ('FM_TIME', 'display.ttf', 53),
-    ('FM_DATE', 'display.ttf', 21),
-    ('FM_TEMP', 'display.ttf', 24),
-    ('FM_STEPS', 'narrow.ttf', 30),
+    ('FM_TIME', 'time.ttf', 53),
+    ('FM_DATE', 'date.ttf', 21),
+    ('FM_TEMP', 'temp.ttf', 24),
+    ('FM_STEPS', 'steps.ttf', 30),
 ]
 # Pebble's text renderer puts a glyph (size - bitmap_top + CAL) px below the
 # text box origin; CAL was measured once in the emulator.
@@ -41,7 +42,7 @@ CAL = 0
 
 
 def font_metrics():
-    """FM_<NAME>_TOP / FM_<NAME>_H: ink offset and height of the digits."""
+    """FM_<NAME>_TOP / _H / _RSB: ink offset, height and right bearing of the digits."""
     try:
         import freetype
     except ImportError:
@@ -58,6 +59,10 @@ def font_metrics():
             bottoms.append(face.glyph.bitmap_top - face.glyph.bitmap.rows)
         defines.append('{}_TOP={}'.format(prefix, size - max(tops) + CAL))
         defines.append('{}_H={}'.format(prefix, max(tops) - min(bottoms)))
+        # room the font leaves after a digit's ink (for centering on ink)
+        face.load_char('0', flags)
+        rsb = face.glyph.advance.x // 64 - face.glyph.bitmap_left - face.glyph.bitmap.width
+        defines.append('{}_RSB={}'.format(prefix, rsb))
     return defines
 
 
@@ -83,7 +88,7 @@ def build(ctx):
         ctx.env.append_value('DEFINES', metrics)
         if demo:
             ctx.env.append_value('DEFINES', 'TRS_DEMO=1')
-            for var in ('TRS_THEME', 'TRS_LAYOUT'):
+            for var in ('TRS_THEME', 'TRS_LAYOUT', 'TRS_HOUR', 'TRS_MIN'):
                 if os.environ.get(var):
                     ctx.env.append_value('DEFINES', '{}={}'.format(var, int(os.environ[var])))
         app_elf = '{}/pebble-app.elf'.format(ctx.env.BUILD_DIR)

@@ -1,15 +1,13 @@
 #include "shapes.h"
 
 void shapes_corner(GContext *ctx, int x, int y, int dx, int dy, GColor color) {
-  // a 3x3 block on the corner, a 3x2 block beside it along the edge and a
-  // 1px tick further along the other edge, mirrored by (dx, dy) = (+-1, +-1)
+  // a 3x3 block on the corner, a 3x1 dash along the edge after a 2px gap and
+  // a 1px tick further along the other edge, mirrored by (dx, dy) = (+-1, +-1)
   graphics_context_set_fill_color(ctx, color);
   int bx = dx > 0 ? x : x - 2, by = dy > 0 ? y : y - 2;
   graphics_fill_rect(ctx, GRect(bx, by, 3, 3), 0, GCornerNone);
-  int sx = dx > 0 ? x + 4 : x - 6, sy = dy > 0 ? y : y - 1;
-  graphics_fill_rect(ctx, GRect(sx, sy, 3, 2), 0, GCornerNone);
-  int ty = dy > 0 ? y + 5 : y - 7;
-  graphics_fill_rect(ctx, GRect(x, ty, 1, 3), 0, GCornerNone);
+  graphics_fill_rect(ctx, GRect(dx > 0 ? x + 5 : x - 7, y, 3, 1), 0, GCornerNone);
+  graphics_fill_rect(ctx, GRect(x, dy > 0 ? y + 5 : y - 7, 1, 3), 0, GCornerNone);
 }
 
 void shapes_ruler(GContext *ctx, GRect b, int pos, GColor ticks, GColor marker) {
@@ -97,6 +95,31 @@ static void cloud(GContext *ctx, GRect b, GColor fg) {
                      GCornersAll);
   graphics_fill_circle(ctx, GPoint(b.origin.x + w * 3 / 10, b.origin.y + h - base_h), h * 3 / 10);
   graphics_fill_circle(ctx, GPoint(b.origin.x + w * 6 / 10, b.origin.y + h * 4 / 10), h * 4 / 10);
+}
+
+// Partly cloudy (day), drawn by hand in the mock-up: 18 x 13.
+static const char s_partly_rows[] =
+    "...........#......"
+    "...........#......"
+    ".......#...#...#.."
+    "........#.....#..."
+    ".........#####...."
+    ".........#####...."
+    "...........###.###"
+    "......###...##...."
+    ".....#####...#...."
+    "...#.#####....#..."
+    ".##########....#.."
+    "############......"
+    ".##########.......";
+
+void shapes_partly_cloudy(GContext *ctx, GPoint o, GColor fg) {
+  graphics_context_set_fill_color(ctx, fg);
+  for (int i = 0; i < 18 * 13; i++) {
+    if (s_partly_rows[i] == '#') {
+      graphics_fill_rect(ctx, GRect(o.x + i % 18, o.y + i / 18, 1, 1), 0, GCornerNone);
+    }
+  }
 }
 
 void shapes_weather(GContext *ctx, GPoint o, int s, int code, bool is_day, GColor fg, GColor bg) {

@@ -49,25 +49,25 @@
         {
           "type": "font",
           "name": "FONT_TIME_53",
-          "file": "fonts/display.ttf",
+          "file": "fonts/time.ttf",
           "characterRegex": "[0-9:]"
         },
         {
           "type": "font",
           "name": "FONT_DATE_21",
-          "file": "fonts/display.ttf",
+          "file": "fonts/date.ttf",
           "characterRegex": "[0-9A-Z. ]"
         },
         {
           "type": "font",
           "name": "FONT_TEMP_24",
-          "file": "fonts/display.ttf",
-          "characterRegex": "[0-9°-]"
+          "file": "fonts/temp.ttf",
+          "characterRegex": "[0-9-]"
         },
         {
           "type": "font",
           "name": "FONT_STEPS_30",
-          "file": "fonts/narrow.ttf",
+          "file": "fonts/steps.ttf",
           "characterRegex": "[0-9]"
         },
         {

@@ -92,13 +92,7 @@ module.exports = [
     type: 'section',
     items: [
       { type: 'heading', defaultValue: '동작 / Behaviour' },
-      {
-        type: 'toggle',
-        messageKey: 'SHAKE_ANIM',
-        label: '흔들면 애니메이션 / Shake animation',
-        description: '손목을 흔들면 약 1초 동안 블록이 재배치됩니다 (16프레임).',
-        defaultValue: true
-      },
+      // the shake animation is switched off for now (SHAKE_ENABLED in main.c)
       {
         type: 'toggle',
         messageKey: 'BT_VIBE',

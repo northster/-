@@ -21,6 +21,10 @@
 #define FM_STEPS_TOP 9
 #define FM_STEPS_H 21
 #endif
+#ifndef FM_TIME_RSB
+#define FM_TIME_RSB 5
+#define FM_TEMP_RSB 3
+#endif
 // Silkscreen 8: caps are 5px tall, 3px below the text box top and 1px in
 // from its left edge.
 #define CODE_TOP 3
@@ -92,15 +96,18 @@ static void header_update(Layer *layer, GContext *ctx) {
   }
   code_at(ctx, name, MARGIN, y, ink);
   if (s_anim_t < 0 || (s_anim_frame / 2) % 2 == 0) {
-    fill(ctx, GRect(MARGIN + nw + 2, y + CODE_H - 1, 3, 1), th->fg);
+    fill(ctx, GRect(MARGIN + nw + 1, y + CODE_H - 1, 3, 1), th->fg);
   }
 
-  // battery: five 4x7 cells ending on the right margin, empty ones in muted
+  // battery: five 4x7 cells ending on the right margin; empty ones are a
+  // muted outline around the panel color
   int pct = g_battery.charge_percent;
   int cells_x = b.size.w - MARGIN - 5 * 5 + 1;
   int filled = (pct + 19) / 20;
   for (int i = 0; i < 5; i++) {
-    fill(ctx, GRect(cells_x + i * 5, y - 1, 4, 7), i < filled ? th->fg : th->muted);
+    GRect cell = GRect(cells_x + i * 5, y - 1, 4, 7);
+    fill(ctx, cell, i < filled ? th->fg : th->muted);
+    if (i >= filled) fill(ctx, grect_inset(cell, GEdgeInsets(1)), th->panel);
   }
   char buf[8];
   snprintf(buf, sizeof(buf), g_battery.is_charging ? "+%d%%" : "%d%%", pct);
@@ -133,7 +140,7 @@ static void time_update(Layer *layer, GContext *ctx) {
   if (s_anim_t >= 0 && (s_anim_frame % 4) == 1) jx = (s_anim_frame & 4) ? 3 : -3;
   // centre the ink, not the advance (the last glyph's advance has trailing room)
   int w = text_w(s_time, s_font_time);
-  int x = (b.size.w - w) / 2 + 3;
+  int x = (b.size.w - (w - FM_TIME_RSB) + 1) / 2;
   text_at(ctx, s_time, s_font_time, FM_TIME_TOP, x + jx, T_DIGITS, w + 8, th->fg);
 
   int pos = s_minute * 1000 / 60;
@@ -183,41 +190,41 @@ static void wx_update(Layer *layer, GContext *ctx) {
   fill(ctx, b, th->bg);
 
   // Code 128 of the current time (HHMM): it scans as the time shown above.
-  // During the clip it scrambles.
+  // During the clip it scrambles. It stands on the block, 18px tall.
   char code[16];
   if (s_anim_t >= 0) {
     snprintf(code, sizeof(code), "%02d%02d", (s_anim_frame * 37) % 100, (s_anim_frame * 61 + 7) % 100);
   } else {
     snprintf(code, sizeof(code), "%s", s_hhmm);
   }
-  int bw = BARCODE_MODULES(4);
-  barcode_draw(ctx, GPoint((b.size.w - bw) / 2, 1), 16, code, th->fg);
+  barcode_draw(ctx, GPoint(MARGIN, 0), 18, code, th->fg);
 
   GRect blk = GRect(0, 18, b.size.w, b.size.h - 18);
   fill(ctx, blk, block);
-  int icon = 17;
-  int cy = blk.origin.y + (blk.size.h - icon) / 2;
-  shapes_weather(ctx, GPoint(MARGIN, cy), icon, g_weather.code, g_weather.is_day, ink, block);
+  // icon in an 18 x 13 box, 7px below the block top
+  GPoint io = GPoint(MARGIN, blk.origin.y + 7);
+  if (g_weather.code >= 1 && g_weather.code <= 3 && g_weather.is_day) {
+    shapes_partly_cloudy(ctx, io, ink);
+  } else {
+    shapes_weather(ctx, GPoint(io.x + 2, io.y - 1), 15, g_weather.code, g_weather.is_day, ink, block);
+  }
 
-  // number in the display font, then a small drawn degree ring and the unit
-  // letter in the label font (the font's own ° is too wide for this cell)
+  // number in the temperature font, then a small drawn degree ring 4px after
+  // the last digit, top-aligned with it (no unit letter)
   char temp[8];
   state_format_temp(temp, sizeof(temp));
   char *deg = strstr(temp, "°");
   if (deg) *deg = '\0';
-  int tx = MARGIN + icon + 6;
+  int tx = MARGIN + 24;
   int ty = blk.origin.y + (blk.size.h - FM_TEMP_H) / 2;
-  int tw = text_w(temp, s_font_temp) - 1;  // minus the trailing advance
-  if (tx + tw + 12 > b.size.w - 2) tx = b.size.w - 2 - 12 - tw;  // "-12" squeezes toward the icon
+  int ink_w = text_w(temp, s_font_temp) - FM_TEMP_RSB;
+  if (tx + ink_w + 8 > b.size.w - 2) tx = b.size.w - 2 - 8 - ink_w;  // "-12" squeezes toward the icon
   text_at(ctx, temp, s_font_temp, FM_TEMP_TOP, tx, ty, 60, ink);
-  int dx = tx + tw + 2;
+  int dx = tx + ink_w + 4;
   fill(ctx, GRect(dx + 1, ty, 2, 1), ink);
   fill(ctx, GRect(dx + 1, ty + 3, 2, 1), ink);
   fill(ctx, GRect(dx, ty + 1, 1, 2), ink);
   fill(ctx, GRect(dx + 3, ty + 1, 1, 2), ink);
-  if (g_weather.temp_c10 != TEMP_NONE) {
-    code_at(ctx, g_settings.temp_unit == UNIT_F ? "F" : "C", dx + 6, ty + 4, ink);
-  }
 }
 
 /* ---- steps panel: leader line ×+, count, % and distance ---------------- */
@@ -235,11 +242,11 @@ static void steps_update(Layer *layer, GContext *ctx) {
   // leader: a corner tab, a 45 degree tick, then a dotted-to-solid rule that
   // ends in a cross and a plus (registration marks)
   fill(ctx, GRect(0, 0, 10, 2), ink);
-  fill(ctx, GRect(0, 2, 1, 8), ink);
-  for (int i = 0; i < 7; i++) fill(ctx, GRect(3 + i, 3 + i, 1, 1), ink);
+  fill(ctx, GRect(0, 2, 2, 8), ink);
+  for (int i = 0; i < 8; i++) fill(ctx, GRect(1 + i, 2 + i, i == 7 ? 2 : 3, 1), ink);
   const int ry = 4;
   for (int x = 13; x < 23; x += 2) fill(ctx, GRect(x, ry, 1, 1), ink);
-  fill(ctx, GRect(23, ry, right - 14 - 23, 1), ink);
+  fill(ctx, GRect(23, ry, right - 16 - 23, 1), ink);
   shapes_cross(ctx, GPoint(right - 10, ry), 2, ink);
   shapes_plus(ctx, GPoint(right - 3, ry), 2, ink);
 
