@@ -19,6 +19,9 @@ static const Theme s_themes[THEME_COUNT] = {
   { C(Folly), C(Black), C(White), C(Black), C(White), C(White), C(Black), C(Black) },
   // 6 FLARE: ultramarine field, lime panel, pink spot
   { C(ElectricUltramarine), C(White), C(Celeste), C(Black), C(White), C(SpringBud), C(Black), C(Folly) },
+  // 7 GREEN: LIME on pure green, the most saturated field the Pebble Time
+  // panel can show (SpringBud reads pale on the reflective screen)
+  { C(Green), C(Black), C(DarkGray), C(Black), C(White), C(White), C(Black), C(BlueMoon) },
 };
 
 const Theme *theme_get(void) {

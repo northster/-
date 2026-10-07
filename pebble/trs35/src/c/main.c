@@ -163,6 +163,9 @@ static void init(void) {
 #if defined(TRS_LAYOUT)
   g_settings.layout = TRS_LAYOUT;
 #endif
+#if defined(TRS_DATEFMT)
+  g_settings.date_fmt = TRS_DATEFMT;
+#endif
 #endif
   state_update_steps();
   g_battery = battery_state_service_peek();

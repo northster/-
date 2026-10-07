@@ -1,7 +1,7 @@
 {
   "name": "trs35",
   "author": "northster",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "private": true,
   "keywords": [
     "watchface",
@@ -37,6 +37,7 @@
       "TEMP_UNIT",
       "SHAKE_ANIM",
       "BT_VIBE",
+      "DATE_FMT",
       "TEMP_C10",
       "WCODE",
       "IS_DAY",

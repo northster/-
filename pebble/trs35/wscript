@@ -88,7 +88,7 @@ def build(ctx):
         ctx.env.append_value('DEFINES', metrics)
         if demo:
             ctx.env.append_value('DEFINES', 'TRS_DEMO=1')
-            for var in ('TRS_THEME', 'TRS_LAYOUT', 'TRS_HOUR', 'TRS_MIN'):
+            for var in ('TRS_THEME', 'TRS_LAYOUT', 'TRS_HOUR', 'TRS_MIN', 'TRS_DATEFMT'):
                 if os.environ.get(var):
                     ctx.env.append_value('DEFINES', '{}={}'.format(var, int(os.environ[var])))
         app_elf = '{}/pebble-app.elf'.format(ctx.env.BUILD_DIR)

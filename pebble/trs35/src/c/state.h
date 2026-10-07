@@ -5,8 +5,9 @@
 
 typedef enum { CLOCK_AUTO = 0, CLOCK_12H = 1, CLOCK_24H = 2 } ClockMode;
 typedef enum { UNIT_C = 0, UNIT_F = 1 } TempUnit;
+typedef enum { DATE_DM = 0, DATE_KR = 1 } DateFormat;  // WED 07.10 / 10.08 THU
 
-#define THEME_COUNT 7
+#define THEME_COUNT 8
 #define LAYOUT_COUNT 3
 
 typedef struct {
@@ -16,6 +17,7 @@ typedef struct {
   uint8_t temp_unit;   // TempUnit
   bool shake_anim;     // play the shuffle animation on a wrist flick
   bool bt_vibe;        // vibrate when the phone disconnects
+  uint8_t date_fmt;    // DateFormat
 } Settings;
 
 #define TEMP_NONE INT16_MIN

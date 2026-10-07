@@ -8,7 +8,7 @@ Pebble Time(basalt, 144×168, 64색)용 워치페이스. 게임 Marathon(Bungie)
 |---|---|
 | 헤더 | 워치 이름 `PEBBLE TIME_`(커서), 배터리 % + 5칸. 폰 연결이 끊기면 이름 자리가 반전 태그 `NO LINK` |
 | 시계 | 코너 마크 4개 안에 37px 숫자. 아래 눈금자 마커가 지금이 그 시간의 몇 분째인지 가리킴. 날씨를 받은 위치 `37.57N 126.98E`(없으면 펌웨어 버전), `AM`/`PM`/`24H` |
-| 날짜 | `WED 07.10` + 직각삼각형 마크, 오른쪽 체커(테마의 유일한 포인트 색) |
+| 날짜 | `WED 07.10` 또는 한국식 `10.07 WED`(설정) + 직각삼각형 마크, 오른쪽 체커(테마의 유일한 포인트 색) |
 | 바코드 | 실제로 스캔되는 Code 128. 내용은 현재 시각 `HHMM`(10:08이면 `1008`) |
 | 날씨 | 블록 안 아이콘 + `23°` (단위 글자 없음, 단위는 설정에서). Open-Meteo, 폰 위치 기준, API 키 없음 |
 | 걸음 | 흰 패널, 지시선 `↘ ····──── × +`, 5자리 걸음수, 목표 대비 %, 오늘 걸은 거리 |
@@ -59,7 +59,8 @@ make demo
 
 | # | 이름 | 바탕 | 블록 / 패널 | 포인트 |
 |---|---|---|---|---|
-| 0 | LIME (기본, 시안) | SpringBud `#AAFF00` | 검정 / 흰 | BlueMoon `#0055FF` |
+| 7 | GREEN (기본) | Green `#00FF00` | 검정 / 흰 | BlueMoon `#0055FF` |
+| 0 | LIME (시안) | SpringBud `#AAFF00` | 검정 / 흰 | BlueMoon |
 | 1 | MINT | Celeste `#AAFFFF` | 검정 / 흰 | BlueMoon |
 | 2 | ACID | 검정 | 라임 / 흰 | ElectricBlue |
 | 3 | VIOLET | 검정 | LavenderIndigo / 흰 | SpringBud |
@@ -68,6 +69,10 @@ make demo
 | 6 | FLARE | ElectricUltramarine | 검정 / 라임 | Folly |
 
 레퍼런스 색 매핑 예: 라임 `#C6FF33`→SpringBud(ΔE 12.5), 민트 `#CAEADA`→Celeste, 파랑 `#1D6FF9`→BlueMoon, 핫핑크 `#FF0961`→Folly(ΔE 6.7), 바이올렛 `#7D39EB`→LavenderIndigo.
+
+실제 Pebble Time(반사형 LCD)에서는 SpringBud 바탕이 많이 바래 보여서, 팔레트에서 가장 채도가 높은 Green을 바탕으로 쓴 GREEN을 기본으로 했다. 설정 화면에서도 맨 위에 나온다.
+
+![GREEN과 한국식 날짜](docs/screenshots/15-green-kr-date.png)
 
 배치 프리셋 3개는 모듈 크기가 같고 위치만 다르다: STACK(기본) / SWAP(두 칸 좌우 교체) / INVERT(칸 위, 시계 아래).
 
@@ -137,6 +142,10 @@ pebble emu-bt-connection --connected no --emulator basalt
 
 데모 빌드에서 테마·배치: `TRS_DEMO=1 TRS_THEME=1 TRS_LAYOUT=2 pebble build`.
 에뮬레이터에서 "This app requires Pebble Health" 창이 뜨면 `make health` 후 다시 설치.
+
+### 미리보기 이미지
+
+Pebble 앱의 워치페이스 미리보기는 앱스토어에 게시할 때 올린 스크린샷이다. `.pbw`로 직접 설치한 앱은 미리보기가 없는 게 정상이다. 보이게 하려면 `pebble publish`로 앱스토어(appstore-api.repebble.com)에 올리면서 스크린샷을 함께 올려야 한다.
 
 ### 실제 워치에 명령 한 줄로 설치
 

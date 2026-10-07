@@ -23,6 +23,7 @@
 #endif
 #ifndef FM_TIME_RSB
 #define FM_TIME_RSB 5
+#define FM_DATE_RSB 2
 #define FM_TEMP_RSB 3
 #endif
 // Silkscreen 8: caps are 5px tall, 3px below the text box top and 1px in
@@ -159,9 +160,10 @@ static void time_update(Layer *layer, GContext *ctx) {
   code_at(ctx, s_ampm, ruler.origin.x + ruler.size.w - text_w(s_ampm, s_font_code), T_LABELS, th->muted);
 }
 
-/* ---- date: WED   07.10◢            [checker] --------------------------- */
+/* ---- date: WED   07.10◢  or  10.08  THU◢    [checker] ---------------- */
 
-#define DATE_X 54  // date column, clear of the widest weekday
+#define DATE_X 54     // date column, clear of the widest weekday
+#define DATE_GAP 11   // ink gap between date and weekday in the Korean order
 
 static void date_update(Layer *layer, GContext *ctx) {
   begin(ctx);
@@ -170,9 +172,20 @@ static void date_update(Layer *layer, GContext *ctx) {
   fill(ctx, b, th->bg);
   const int y = 1;  // ink rows 1..15
 
-  text_at(ctx, s_wday, s_font_date, FM_DATE_TOP, MARGIN, y, 50, th->fg);
-  text_at(ctx, s_date, s_font_date, FM_DATE_TOP, DATE_X, y, 70, th->fg);
-  shapes_wedge(ctx, DATE_X + text_w(s_date, s_font_date), y + FM_DATE_H - 5, 5, th->fg);
+  // the wedge follows whatever comes last; text_w includes the font's
+  // trailing gap, which is the space the mock-up leaves before the wedge
+  int end;
+  if (g_settings.date_fmt == DATE_KR) {
+    text_at(ctx, s_date, s_font_date, FM_DATE_TOP, MARGIN, y, 70, th->fg);
+    int wx = MARGIN + text_w(s_date, s_font_date) - FM_DATE_RSB + DATE_GAP;
+    text_at(ctx, s_wday, s_font_date, FM_DATE_TOP, wx, y, 50, th->fg);
+    end = wx + text_w(s_wday, s_font_date);
+  } else {
+    text_at(ctx, s_wday, s_font_date, FM_DATE_TOP, MARGIN, y, 50, th->fg);
+    text_at(ctx, s_date, s_font_date, FM_DATE_TOP, DATE_X, y, 70, th->fg);
+    end = DATE_X + text_w(s_date, s_font_date);
+  }
+  shapes_wedge(ctx, end, y + FM_DATE_H - 5, 5, th->fg);
 
   int phase = s_anim_t >= 0 ? s_anim_frame / 2 : 0;
   shapes_checker(ctx, GRect(b.size.w - MARGIN - 15, y, 15, 15), 3, phase, th->accent);
@@ -378,7 +391,7 @@ void face_set_time(struct tm *now) {
   static const char days[] = "SUNMONTUEWEDTHUFRISAT";
   memcpy(s_wday, &days[(now->tm_wday % 7) * 3], 3);
   s_wday[3] = '\0';
-  strftime(s_date, sizeof(s_date), "%d.%m", now);
+  strftime(s_date, sizeof(s_date), g_settings.date_fmt == DATE_KR ? "%m.%d" : "%d.%m", now);
 
   layer_mark_dirty(s_mod[MOD_TIME]);
   layer_mark_dirty(s_mod[MOD_DATE]);

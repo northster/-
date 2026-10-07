@@ -17,10 +17,14 @@ var THEMES = [
   ['VIOLET', 'Black field, violet block', ['#000000', '#FFFFFF', '#AA55FF', '#FFFFFF', '#AAFF00']],
   ['SIGNAL', 'White paper, lime panel', ['#FFFFFF', '#000000', '#000000', '#AAFF00', '#0055FF']],
   ['NULL', 'Hot pink field', ['#FF0055', '#000000', '#000000', '#FFFFFF', '#000000']],
-  ['FLARE', 'Ultramarine field, lime panel', ['#5500FF', '#FFFFFF', '#000000', '#AAFF00', '#FF0055']]
+  ['FLARE', 'Ultramarine field, lime panel', ['#5500FF', '#FFFFFF', '#000000', '#AAFF00', '#FF0055']],
+  ['GREEN', 'Pure green field, the most vivid on the watch', ['#00FF00', '#000000', '#000000', '#FFFFFF', '#0055FF']]
 ];
+// shown in this order (GREEN first, it is the default); values stay the
+// theme.c indexes
+var THEME_ORDER = [7, 0, 1, 2, 3, 4, 5, 6];
 
-var themeTable = THEMES.map(function(t) {
+var themeTable = THEME_ORDER.map(function(i) { return THEMES[i]; }).map(function(t) {
   return '<div style="margin:6px 0">' + swatch(t[2]) +
     ' <b>' + t[0] + '</b> <small>' + t[1] + '</small></div>';
 }).join('');
@@ -42,9 +46,9 @@ module.exports = [
         type: 'select',
         messageKey: 'THEME',
         label: '색 테마 / Color theme',
-        defaultValue: '0',
-        options: THEMES.map(function(t, i) {
-          return { label: t[0] + ' — ' + t[1], value: String(i) };
+        defaultValue: '7',
+        options: THEME_ORDER.map(function(i) {
+          return { label: THEMES[i][0] + ' — ' + THEMES[i][1], value: String(i) };
         })
       },
       { type: 'text', defaultValue: themeTable },
@@ -74,6 +78,16 @@ module.exports = [
           { label: '워치 설정 따름 / Watch setting', value: '0' },
           { label: '12시간 / 12h', value: '1' },
           { label: '24시간 / 24h', value: '2' }
+        ]
+      },
+      {
+        type: 'radiogroup',
+        messageKey: 'DATE_FMT',
+        label: '날짜 / Date',
+        defaultValue: '0',
+        options: [
+          { label: 'WED 07.10 (요일 일.월)', value: '0' },
+          { label: '10.08 THU (월.일 요일, 한국식)', value: '1' }
         ]
       },
       {

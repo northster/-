@@ -8,12 +8,13 @@
 #define WEATHER_STALE_SEC (3 * 60 * 60)
 
 Settings g_settings = {
-  .theme = 0,   // LIME
+  .theme = 7,   // GREEN
   .layout = 0,  // STACK
   .clock_mode = CLOCK_AUTO,
   .temp_unit = UNIT_C,
   .shake_anim = true,
   .bt_vibe = true,
+  .date_fmt = DATE_DM,
 };
 
 Weather g_weather = {
@@ -93,6 +94,7 @@ bool state_apply_message(DictionaryIterator *iter, bool *layout_changed) {
   settings_changed |= read_u8(iter, MESSAGE_KEY_TEMP_UNIT, &g_settings.temp_unit, UNIT_F);
   settings_changed |= read_bool(iter, MESSAGE_KEY_SHAKE_ANIM, &g_settings.shake_anim);
   settings_changed |= read_bool(iter, MESSAGE_KEY_BT_VIBE, &g_settings.bt_vibe);
+  settings_changed |= read_u8(iter, MESSAGE_KEY_DATE_FMT, &g_settings.date_fmt, DATE_KR);
   if (settings_changed) state_save_settings();
 
   bool weather_changed = false;
