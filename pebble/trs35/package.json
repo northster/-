@@ -1,0 +1,57 @@
+{
+  "name": "trs35",
+  "author": "northster",
+  "version": "1.0.0",
+  "private": true,
+  "keywords": ["watchface", "graphic", "weather", "health", "geometric"],
+  "dependencies": {
+    "@rebble/clay": "^1.0.8"
+  },
+  "pebble": {
+    "displayName": "TR-S 35",
+    "uuid": "b1346215-19a7-420d-84e8-2bd5761cbd68",
+    "sdkVersion": "3",
+    "enableMultiJS": true,
+    "projectType": "native",
+    "targetPlatforms": ["basalt"],
+    "watchapp": {
+      "watchface": true
+    },
+    "capabilities": ["configurable", "health", "location"],
+    "messageKeys": [
+      "THEME",
+      "LAYOUT",
+      "CLOCK_MODE",
+      "TEMP_UNIT",
+      "SHAKE_ANIM",
+      "BT_VIBE",
+      "TEMP_C10",
+      "WCODE",
+      "IS_DAY",
+      "WEATHER_REQ",
+      "WEATHER_ERR"
+    ],
+    "resources": {
+      "media": [
+        {
+          "type": "font",
+          "name": "FONT_TIME_46",
+          "file": "fonts/ChakraPetch-Bold.ttf",
+          "characterRegex": "[0-9:]"
+        },
+        {
+          "type": "font",
+          "name": "FONT_MED_20",
+          "file": "fonts/ChakraPetch-Bold.ttf",
+          "characterRegex": "[0-9A-Z:.,/+° -]"
+        },
+        {
+          "type": "font",
+          "name": "FONT_CODE_8",
+          "file": "fonts/Silkscreen-Regular.ttf",
+          "characterRegex": "[ -~]"
+        }
+      ]
+    }
+  }
+}

@@ -5,7 +5,7 @@ name: DT Keyboard APK
 on:
   push:
     branches: [ main, 'claude/**' ]
-    paths-ignore: [ '**.md', 'scripts/**' ]
+    paths-ignore: [ '**.md', 'scripts/**', 'pebble/**' ]
   workflow_dispatch:
 
 permissions:

@@ -1,0 +1,45 @@
+#
+# Standard Pebble SDK project wscript, plus a TRS_DEMO switch:
+#   TRS_DEMO=1 [TRS_THEME=n] [TRS_LAYOUT=n] pebble build
+# freezes the clock at 10:08 and fills weather/steps with sample values so
+# emulator screenshots are reproducible (the emulator has no weather here).
+#
+import os.path
+
+top = '.'
+out = 'build'
+
+
+def options(ctx):
+    ctx.load('pebble_sdk')
+
+
+def configure(ctx):
+    ctx.load('pebble_sdk')
+
+
+def build(ctx):
+    ctx.load('pebble_sdk')
+
+    binaries = []
+    demo = os.environ.get('TRS_DEMO', '') not in ('', '0')
+
+    cached_env = ctx.env
+    for platform in ctx.env.TARGET_PLATFORMS:
+        ctx.env = ctx.all_envs[platform]
+        ctx.set_group(ctx.env.PLATFORM_NAME)
+        if demo:
+            ctx.env.append_value('DEFINES', 'TRS_DEMO=1')
+            # TRS_THEME / TRS_LAYOUT pick the start-up look for screenshots
+            for var in ('TRS_THEME', 'TRS_LAYOUT'):
+                if os.environ.get(var):
+                    ctx.env.append_value('DEFINES', '{}={}'.format(var, int(os.environ[var])))
+        app_elf = '{}/pebble-app.elf'.format(ctx.env.BUILD_DIR)
+        ctx.pbl_build(source=ctx.path.ant_glob('src/c/**/*.c'), target=app_elf, bin_type='app')
+        binaries.append({'platform': platform, 'app_elf': app_elf})
+    ctx.env = cached_env
+
+    ctx.set_group('bundle')
+    ctx.pbl_bundle(binaries=binaries,
+                   js=ctx.path.ant_glob(['src/pkjs/**/*.js', 'src/pkjs/**/*.json']),
+                   js_entry_file='src/pkjs/index.js')
