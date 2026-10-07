@@ -55,6 +55,79 @@ void shapes_plus(GContext *ctx, GPoint c, int r, GColor color) {
   graphics_draw_line(ctx, GPoint(c.x, c.y - r), GPoint(c.x, c.y + r));
 }
 
+void shapes_brackets(GContext *ctx, GRect b, int len, GColor color) {
+  graphics_context_set_fill_color(ctx, color);
+  int x0 = b.origin.x, y0 = b.origin.y, x1 = x0 + b.size.w - 1, y1 = y0 + b.size.h - 1;
+  graphics_fill_rect(ctx, GRect(x0, y0, len, 1), 0, GCornerNone);
+  graphics_fill_rect(ctx, GRect(x0, y0, 1, len), 0, GCornerNone);
+  graphics_fill_rect(ctx, GRect(x1 - len + 1, y0, len, 1), 0, GCornerNone);
+  graphics_fill_rect(ctx, GRect(x1, y0, 1, len), 0, GCornerNone);
+  graphics_fill_rect(ctx, GRect(x0, y1, len, 1), 0, GCornerNone);
+  graphics_fill_rect(ctx, GRect(x0, y1 - len + 1, 1, len), 0, GCornerNone);
+  graphics_fill_rect(ctx, GRect(x1 - len + 1, y1, len, 1), 0, GCornerNone);
+  graphics_fill_rect(ctx, GRect(x1, y1 - len + 1, 1, len), 0, GCornerNone);
+}
+
+void shapes_ruler(GContext *ctx, GRect b, int pos, GColor ticks, GColor marker) {
+  int base = b.origin.y + b.size.h - 1;
+  graphics_context_set_fill_color(ctx, ticks);
+  graphics_fill_rect(ctx, GRect(b.origin.x, base, b.size.w, 1), 0, GCornerNone);
+  for (int i = 0; i <= 12; i++) {
+    int x = b.origin.x + i * (b.size.w - 1) / 12;
+    int h = (i % 3 == 0) ? 4 : 2;
+    graphics_fill_rect(ctx, GRect(x, base - h, 1, h), 0, GCornerNone);
+  }
+  // marker: a small triangle standing on the baseline, pointing down
+  int mx = b.origin.x + pos * (b.size.w - 1) / 1000;
+  graphics_context_set_stroke_color(ctx, marker);
+  for (int r = 0; r < 4; r++) {
+    graphics_draw_line(ctx, GPoint(mx - 3 + r, base - 6 + r), GPoint(mx + 3 - r, base - 6 + r));
+  }
+  graphics_context_set_fill_color(ctx, marker);
+  graphics_fill_rect(ctx, GRect(mx, base - 2, 1, 3), 0, GCornerNone);
+}
+
+void shapes_checker(GContext *ctx, GRect b, int cell, int phase, GColor color) {
+  graphics_context_set_fill_color(ctx, color);
+  for (int j = 0; j * cell < b.size.h; j++) {
+    for (int i = 0; i * cell < b.size.w; i++) {
+      if (((i + j + phase) & 1) == 0) continue;
+      int w = cell, h = cell;
+      if ((i + 1) * cell > b.size.w) w = b.size.w - i * cell;
+      if ((j + 1) * cell > b.size.h) h = b.size.h - j * cell;
+      graphics_fill_rect(ctx, GRect(b.origin.x + i * cell, b.origin.y + j * cell, w, h), 0, GCornerNone);
+    }
+  }
+}
+
+void shapes_stripes(GContext *ctx, GRect b, int step, int width, int phase, GColor color) {
+  // one run per row: every row is the row above shifted by one pixel
+  graphics_context_set_fill_color(ctx, color);
+  for (int y = 0; y < b.size.h; y++) {
+    int off = ((phase + y) % step + step) % step;
+    for (int x = -off; x < b.size.w; x += step) {
+      int x0 = x < 0 ? 0 : x;
+      int x1 = x + width > b.size.w ? b.size.w : x + width;
+      if (x1 > x0) graphics_fill_rect(ctx, GRect(b.origin.x + x0, b.origin.y + y, x1 - x0, 1), 0, GCornerNone);
+    }
+  }
+}
+
+void shapes_chevrons(GContext *ctx, GRect b, int n, int phase, GColor color) {
+  graphics_context_set_stroke_color(ctx, color);
+  graphics_context_set_stroke_width(ctx, 2);
+  int pitch = b.size.w / n;
+  int half = b.size.h / 2;
+  for (int i = 0; i < n; i++) {
+    int x = b.origin.x + i * pitch + (phase % pitch);
+    if (x + half >= b.origin.x + b.size.w) x -= b.size.w;
+    if (x < b.origin.x) continue;
+    graphics_draw_line(ctx, GPoint(x, b.origin.y + 1), GPoint(x + half - 1, b.origin.y + half));
+    graphics_draw_line(ctx, GPoint(x + half - 1, b.origin.y + half), GPoint(x, b.origin.y + b.size.h - 2));
+  }
+  graphics_context_set_stroke_width(ctx, 1);
+}
+
 /* ---- weather glyphs ---------------------------------------------------- */
 
 static void sun(GContext *ctx, GPoint c, int r, GColor fg) {

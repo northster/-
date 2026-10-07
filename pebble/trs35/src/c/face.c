@@ -7,6 +7,7 @@
 
 static Layer *s_root;
 static Layer *s_mod[MOD_COUNT];
+static Layer *s_fx;  // shake-clip overlay, empty at rest
 
 static GFont s_font_time;
 static GFont s_font_med;
@@ -15,6 +16,7 @@ static GFont s_font_code;
 static char s_hh[4], s_mm[4], s_time[8];
 static char s_ampm[4];
 static char s_wday[4], s_date[8];
+static int s_minute;
 
 // animation state, see face_set_anim
 static int s_anim_t = -1;   // -1 = at rest
@@ -90,10 +92,11 @@ static void header_update(Layer *layer, GContext *ctx) {
 
 /* ---- time --------------------------------------------------------------- */
 
-// Chakra Petch Bold 46: the digits start 14px below the text origin and are
-// 32px tall. Everything in the time box is placed from these two numbers.
+// Chakra Petch Bold 52: the digits start DIGIT_TOP px below the text origin
+// and are DIGIT_H px tall. Everything in the time box is placed from these.
 #define DIGIT_TOP 14
-#define DIGIT_H 32
+#define DIGIT_H 36
+#define RULER_H 7
 #define LABEL_GAP 6   // digits to the label line
 #define LABEL_H 8
 
@@ -134,19 +137,27 @@ static void time_update(Layer *layer, GContext *ctx) {
          th->muted);
     shapes_plus(ctx, GPoint(inner_x + 13, label_y + 3), 3, th->fg);
   } else {
-    int block = DIGIT_H + LABEL_GAP + LABEL_H;
+    // digits, then (if there is room) a ruler whose marker shows the
+    // minute within the hour, then the label line; all inside corner brackets
+    bool ruler = b.size.h >= 64;
+    int block = DIGIT_H + LABEL_GAP + (ruler ? RULER_H + 4 : 0) + LABEL_H;
     int top = (b.size.h - block) / 2;
-    int label_y = top + DIGIT_H + LABEL_GAP;
-    fill(ctx, GRect(0, top, 3, block), th->a2);
+    int y = top + DIGIT_H + LABEL_GAP;
+    shapes_brackets(ctx, GRect(2, 2, b.size.w - 4, b.size.h - 4), 5, th->muted);
     digits(ctx, s_time, GRect(jx, 0, b.size.w, 0), top, th);
+    if (ruler) {
+      int pos = s_minute * 1000 / 60;
+      if (s_anim_t >= 0) pos = lerp(pos, s_anim_t < 500 ? 1000 : 0, s_anim_p);  // sweep
+      shapes_ruler(ctx, GRect(10, y, b.size.w - 20, RULER_H), pos, th->muted, th->a2);
+      y += RULER_H + 4;
+    }
     // where the weather is from (phone position), else the firmware version
     if (pos[0] == '\0') {
       WatchInfoVersion v = watch_info_get_firmware_version();
       snprintf(pos, sizeof(pos), "FW %d.%d.%d", v.major, v.minor, v.patch);
     }
-    text(ctx, pos, s_font_code, GRect(8, label_y - 1, 100, 10), GTextAlignmentLeft, th->muted);
-    text(ctx, s_ampm, s_font_code, GRect(b.size.w - 40, label_y - 1, 36, 10), GTextAlignmentRight, th->muted);
-    shapes_plus(ctx, GPoint(b.size.w - 6, top + 3), 3, th->fg);
+    text(ctx, pos, s_font_code, GRect(10, y - 1, 100, 10), GTextAlignmentLeft, th->muted);
+    text(ctx, s_ampm, s_font_code, GRect(b.size.w - 46, y - 1, 36, 10), GTextAlignmentRight, th->muted);
   }
 }
 
@@ -173,20 +184,21 @@ static void date_update(Layer *layer, GContext *ctx) {
   } else {
     text(ctx, s_date, s_font_med, GRect(pw + 2, -4, 60, 24), GTextAlignmentLeft, th->fg);
     if (b.size.w >= 120) {
-      shapes_triangle_row(ctx, GRect(b.size.w - 24, 5, 22, 10), 10, 2, phase, th->a1);
+      shapes_checker(ctx, GRect(b.size.w - 14, 3, 12, 15), 3, s_anim_t >= 0 ? s_anim_frame : 0, th->a2);
     }
   }
 }
 
 /* ---- weather cell ------------------------------------------------------- */
 
-// Cells come in three shapes: normal (about 72x72), narrow column (50 wide)
-// and wide band (full width, under 50 tall).
-typedef enum { CELL_NORMAL, CELL_NARROW, CELL_BAND } CellShape;
+// Cells come in four shapes: normal (about 72x72), compact (72x56),
+// narrow column (50 wide) and wide band (full width, under 50 tall).
+typedef enum { CELL_NORMAL, CELL_COMPACT, CELL_NARROW, CELL_BAND } CellShape;
 
 static CellShape cell_shape(GRect b) {
   if (b.size.h < 50) return CELL_BAND;
-  return b.size.w < 60 ? CELL_NARROW : CELL_NORMAL;
+  if (b.size.w < 60) return CELL_NARROW;
+  return b.size.h < 64 ? CELL_COMPACT : CELL_NORMAL;
 }
 
 static void wx_update(Layer *layer, GContext *ctx) {
@@ -229,6 +241,26 @@ static void wx_update(Layer *layer, GContext *ctx) {
     return;
   }
 
+  if (cs == CELL_COMPACT) {
+    // WEATHER / [icon] 23°C / UPD 07:30 [tiles]
+    text(ctx, label, s_font_code, GRect(4, 3, b.size.w - 6, 10), GTextAlignmentLeft, ink);
+    shapes_weather(ctx, GPoint(4, 16), 18, g_weather.code, g_weather.is_day, ink, cell);
+    // number in the big font, the unit letter small beside it
+    char deg[8];
+    state_format_temp(deg, sizeof(deg));
+    GRect tbox = GRect(25, 10, b.size.w - 26, 24);
+    text(ctx, deg, s_font_med, tbox, GTextAlignmentLeft, ink);
+    if (g_weather.temp_c10 != TEMP_NONE) {
+      GSize sz = graphics_text_layout_get_content_size(deg, s_font_med, tbox, GTextOverflowModeFill,
+                                                       GTextAlignmentLeft);
+      text(ctx, g_settings.temp_unit == UNIT_F ? "F" : "C", s_font_code,
+           GRect(tbox.origin.x + sz.w + 1, 15, 10, 10), GTextAlignmentLeft, ink);
+    }
+    shapes_quarter_tiles(ctx, GRect(b.size.w - 18, b.size.h - 18, 18, 18), 9, phase, shape);
+    text(ctx, upd, s_font_code, GRect(4, b.size.h - 12, 50, 10), GTextAlignmentLeft, ink);
+    return;
+  }
+
   int tile = cs == CELL_NARROW ? 10 : 13;
   text(ctx, label, s_font_code, GRect(4, 3, b.size.w - 6, 10), GTextAlignmentLeft, ink);
   if (cs == CELL_NORMAL) {
@@ -256,6 +288,15 @@ static void progress_ticks(GContext *ctx, GRect r, int n, int done, GColor ink) 
   }
 }
 
+// Outlined bar filled with hazard stripes up to `pct` percent.
+static void progress_bar(GContext *ctx, GRect r, int pct, GColor ink) {
+  graphics_context_set_stroke_color(ctx, ink);
+  graphics_draw_rect(ctx, r);
+  int w = (r.size.w - 2) * (pct > 100 ? 100 : pct) / 100;
+  int phase = s_anim_t >= 0 ? -s_anim_frame * 2 : 0;
+  if (w > 0) shapes_stripes(ctx, GRect(r.origin.x + 1, r.origin.y + 1, w, r.size.h - 2), 4, 2, phase, ink);
+}
+
 static void steps_update(Layer *layer, GContext *ctx) {
   const Theme *th = theme_get();
   GRect b = local(layer);
@@ -278,7 +319,7 @@ static void steps_update(Layer *layer, GContext *ctx) {
     // STEPS 08421 [ticks........] / 84%   6.1KM
     text(ctx, "STEPS", s_font_code, GRect(6, 4, 40, 10), GTextAlignmentLeft, ink);
     text(ctx, num, s_font_med, GRect(5, 12, 70, 24), GTextAlignmentLeft, ink);
-    progress_ticks(ctx, GRect(76, 10, b.size.w - 80, 8), 10, pct * 10 / 100, ink);
+    progress_bar(ctx, GRect(76, 9, b.size.w - 80, 9), pct, ink);
     snprintf(pbuf, sizeof(pbuf), "%d%%", pct > 999 ? 999 : pct);
     text(ctx, pbuf, s_font_code, GRect(76, 24, 40, 10), GTextAlignmentLeft, ink);
     text(ctx, dist, s_font_code, GRect(b.size.w - 44, 24, 40, 10), GTextAlignmentRight, ink);
@@ -286,8 +327,18 @@ static void steps_update(Layer *layer, GContext *ctx) {
   }
 
   text(ctx, "STEPS", s_font_code, GRect(4, 3, b.size.w - 6, 10), GTextAlignmentLeft, ink);
-  text(ctx, num, s_font_med, GRect(3, 12, b.size.w - 4, 24), GTextAlignmentLeft, ink);
-  if (cs == CELL_NORMAL) {
+  text(ctx, num, s_font_med, GRect(3, 10, b.size.w - 4, 24), GTextAlignmentLeft, ink);
+  if (cs != CELL_NARROW) {
+    // walking-forward chevrons; they march during the clip
+    shapes_chevrons(ctx, GRect(b.size.w - 25, 3, 21, 9), 3, s_anim_t >= 0 ? s_anim_frame * 2 : 0, ink);
+  }
+  if (cs == CELL_COMPACT) {
+    // STEPS / 08421 / [////////    ] / 84%  6.1KM
+    progress_bar(ctx, GRect(4, 34, b.size.w - 8, 8), pct, ink);
+    snprintf(pbuf, sizeof(pbuf), "%d%%", pct > 999 ? 999 : pct);
+    text(ctx, pbuf, s_font_code, GRect(4, b.size.h - 12, 40, 10), GTextAlignmentLeft, ink);
+    text(ctx, dist, s_font_code, GRect(b.size.w - 40, b.size.h - 12, 36, 10), GTextAlignmentRight, ink);
+  } else if (cs == CELL_NORMAL) {
     progress_ticks(ctx, GRect(4, 39, b.size.w - 6, 6), 10, pct * 10 / 100, ink);
     snprintf(pbuf, sizeof(pbuf), "%d%%", pct > 999 ? 999 : pct);
     text(ctx, pbuf, s_font_code, GRect(4, 48, 40, 10), GTextAlignmentLeft, ink);
@@ -299,6 +350,31 @@ static void steps_update(Layer *layer, GContext *ctx) {
     text(ctx, pbuf, s_font_code, GRect(4, 48, 40, 10), GTextAlignmentLeft, ink);
     text(ctx, dist, s_font_code, GRect(4, 60, 44, 10), GTextAlignmentLeft, ink);
   }
+}
+
+/* ---- shake overlay ------------------------------------------------------ */
+
+// A ring with a crosshair and turning rays opens over the time and closes
+// again (the "ACTIVE" target of the references).
+static void fx_update(Layer *layer, GContext *ctx) {
+  if (s_anim_t < 0) return;
+  const Theme *th = theme_get();
+  GRect t = layer_get_frame(s_mod[MOD_TIME]);
+  GPoint c = GPoint(t.origin.x + t.size.w / 2, t.origin.y + t.size.h / 2);
+  int r = 6 + s_anim_p * 40 / 1000;
+  graphics_context_set_stroke_color(ctx, th->a2);
+  graphics_context_set_stroke_width(ctx, 3);
+  graphics_draw_circle(ctx, c, r);
+  graphics_context_set_stroke_width(ctx, 1);
+  int turn = s_anim_t * TRIG_MAX_ANGLE / 4000;  // a quarter turn over the clip
+  for (int i = 0; i < 16; i++) {
+    int32_t a = turn + TRIG_MAX_ANGLE * i / 16;
+    int sx = sin_lookup(a), cy = cos_lookup(a);
+    int r0 = r + 4, r1 = r + 4 + r / 3;
+    graphics_draw_line(ctx, GPoint(c.x + sx * r0 / TRIG_MAX_RATIO, c.y - cy * r0 / TRIG_MAX_RATIO),
+                       GPoint(c.x + sx * r1 / TRIG_MAX_RATIO, c.y - cy * r1 / TRIG_MAX_RATIO));
+  }
+  shapes_plus(ctx, c, 5, th->a2);
 }
 
 /* ---- structure ---------------------------------------------------------- */
@@ -326,7 +402,7 @@ static void place_modules(void) {
 }
 
 void face_create(Window *window) {
-  s_font_time = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_TIME_46));
+  s_font_time = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_TIME_52));
   s_font_med = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_MED_20));
   s_font_code = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_CODE_8));
 
@@ -342,10 +418,14 @@ void face_create(Window *window) {
   layer_set_update_proc(s_mod[MOD_DATE], date_update);
   layer_set_update_proc(s_mod[MOD_WX], wx_update);
   layer_set_update_proc(s_mod[MOD_STEPS], steps_update);
+  s_fx = layer_create(layer_get_bounds(s_root));
+  layer_set_update_proc(s_fx, fx_update);
+  layer_add_child(s_root, s_fx);
   place_modules();
 }
 
 void face_destroy(void) {
+  layer_destroy(s_fx);
   for (int i = 0; i < MOD_COUNT; i++) layer_destroy(s_mod[i]);
   fonts_unload_custom_font(s_font_time);
   fonts_unload_custom_font(s_font_med);
@@ -361,6 +441,7 @@ void face_mark_dirty(ModuleId id) { layer_mark_dirty(s_mod[id]); }
 
 void face_mark_all_dirty(void) {
   layer_mark_dirty(s_root);
+  layer_mark_dirty(s_fx);
   for (int i = 0; i < MOD_COUNT; i++) layer_mark_dirty(s_mod[i]);
 }
 
@@ -382,6 +463,7 @@ void face_set_time(struct tm *now) {
              (g_settings.clock_mode == CLOCK_AUTO && clock_is_24h_style());
   strftime(s_hh, sizeof(s_hh), h24 ? "%H" : "%I", now);
   strftime(s_mm, sizeof(s_mm), "%M", now);
+  s_minute = now->tm_min;
   snprintf(s_time, sizeof(s_time), "%s:%s", s_hh, s_mm);
   if (h24) snprintf(s_ampm, sizeof(s_ampm), "24H");
   else strftime(s_ampm, sizeof(s_ampm), "%p", now);

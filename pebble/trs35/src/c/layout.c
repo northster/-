@@ -6,12 +6,13 @@
 // the label line (see time_update in face.c).
 static const Layout s_layouts[LAYOUT_COUNT] = {
   [LAYOUT_STACK] = {
+    // the time gets the biggest block; the two cells are kept short
     .mod = {
       [MOD_HEADER] = {{0, 0}, {144, 16}},
-      [MOD_TIME]   = {{0, 17}, {144, 56}},
-      [MOD_DATE]   = {{0, 74}, {144, 20}},
-      [MOD_WX]     = {{0, 96}, {72, 72}},
-      [MOD_STEPS]  = {{72, 96}, {72, 72}},
+      [MOD_TIME]   = {{0, 16}, {144, 74}},
+      [MOD_DATE]   = {{0, 90}, {144, 20}},
+      [MOD_WX]     = {{0, 112}, {72, 56}},
+      [MOD_STEPS]  = {{72, 112}, {72, 56}},
     },
   },
   [LAYOUT_INVERT] = {

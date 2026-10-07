@@ -36,7 +36,7 @@
       "media": [
         {
           "type": "font",
-          "name": "FONT_TIME_46",
+          "name": "FONT_TIME_52",
           "file": "fonts/ChakraPetch-Bold.ttf",
           "characterRegex": "[0-9:]"
         },

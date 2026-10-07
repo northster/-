@@ -40,7 +40,7 @@ module.exports = [
         type: 'select',
         messageKey: 'THEME',
         label: '색 테마 / Color theme',
-        defaultValue: '0',
+        defaultValue: '2',
         options: THEMES.map(function(t, i) {
           return { label: t[0] + ' — ' + t[1], value: String(i) };
         })

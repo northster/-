@@ -56,21 +56,19 @@ static void inbox_dropped(AppMessageResult reason, void *context) {
 
 static AppTimer *s_anim_timer;
 static int s_anim_frame;
-static uint64_t s_anim_ready_at;  // ms timestamp after the cool-down
+// Cool-down is a timer rather than a timestamp, so a clock change from the
+// phone (time sync, time zone) cannot leave the animation locked.
+static bool s_anim_cooling;
 
-static uint64_t now_ms(void) {
-  time_t s;
-  uint16_t ms;
-  time_ms(&s, &ms);
-  return (uint64_t)s * 1000 + ms;
-}
+static void cooldown_done(void *data) { s_anim_cooling = false; }
 
 static void anim_step(void *data) {
   s_anim_frame++;
   if (s_anim_frame >= ANIM_FRAMES) {
     s_anim_timer = NULL;
     face_set_anim(-1, 0);
-    s_anim_ready_at = now_ms() + ANIM_COOLDOWN_MS;
+    s_anim_cooling = true;
+    app_timer_register(ANIM_COOLDOWN_MS, cooldown_done, NULL);
     return;
   }
   face_set_anim(s_anim_frame * 1000 / (ANIM_FRAMES - 1), s_anim_frame);
@@ -78,7 +76,7 @@ static void anim_step(void *data) {
 }
 
 static void tap_handler(AccelAxisType axis, int32_t direction) {
-  if (s_anim_timer || now_ms() < s_anim_ready_at) return;
+  if (s_anim_timer || s_anim_cooling) return;
   if (g_battery.charge_percent <= ANIM_MIN_BATTERY && !g_battery.is_charging) return;
   s_anim_frame = 0;
   face_set_anim(0, 0);
