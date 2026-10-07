@@ -1,21 +1,16 @@
 #include "barcode.h"
 
-// Code 128 symbol patterns 0..105 as 11-bit masks, bar = 1, MSB first.
-static const uint16_t s_patterns[106] = {
-  0x6CC, 0x66C, 0x666, 0x498, 0x48C, 0x44C, 0x4C8, 0x4C4, 0x464, 0x648,
-  0x644, 0x624, 0x59C, 0x4DC, 0x4CE, 0x5CC, 0x4EC, 0x4E6, 0x672, 0x65C,
-  0x64E, 0x6E4, 0x674, 0x76E, 0x74C, 0x72C, 0x726, 0x764, 0x734, 0x732,
-  0x6D8, 0x6C6, 0x636, 0x518, 0x458, 0x446, 0x588, 0x468, 0x462, 0x688,
-  0x628, 0x622, 0x5B8, 0x58E, 0x46E, 0x5D8, 0x5C6, 0x476, 0x776, 0x68E,
-  0x62E, 0x6E8, 0x6E2, 0x6EE, 0x758, 0x746, 0x716, 0x768, 0x762, 0x71A,
-  0x77A, 0x642, 0x78A, 0x530, 0x50C, 0x4B0, 0x486, 0x42C, 0x426, 0x590,
-  0x584, 0x4D0, 0x4C2, 0x434, 0x432, 0x612, 0x650, 0x7BA, 0x614, 0x47A,
-  0x53C, 0x4BC, 0x49E, 0x5E4, 0x4F4, 0x4F2, 0x7A4, 0x794, 0x792, 0x6DE,
-  0x6F6, 0x7B6, 0x578, 0x51E, 0x45E, 0x5E8, 0x5E2, 0x7A8, 0x7A2, 0x5DE,
-  0x5EE, 0x75E, 0x7AE, 0x684, 0x690, 0x69C,
+// Code 93 symbol patterns 0..46 and the start/stop "*" (47) as 9-bit masks,
+// bar = 1, MSB first.
+static const uint16_t s_patterns[48] = {
+  0x114, 0x148, 0x144, 0x142, 0x128, 0x124, 0x122, 0x150,
+  0x112, 0x10A, 0x1A8, 0x1A4, 0x1A2, 0x194, 0x192, 0x18A,
+  0x168, 0x164, 0x162, 0x134, 0x11A, 0x158, 0x14C, 0x146,
+  0x12C, 0x116, 0x1B4, 0x1B2, 0x1AC, 0x1A6, 0x196, 0x19A,
+  0x16C, 0x166, 0x136, 0x13A, 0x12E, 0x1D4, 0x1D2, 0x1CA,
+  0x16E, 0x176, 0x1AE, 0x126, 0x1DA, 0x1D6, 0x132, 0x15E,
 };
-#define START_C 105
-#define STOP 0x18EB  // 13 modules: 1100011101011
+#define START_STOP 47
 
 static int draw_bits(GContext *ctx, int x, int y, int h, uint16_t bits, int n) {
   for (int i = n - 1; i >= 0; i--, x++) {
@@ -24,21 +19,27 @@ static int draw_bits(GContext *ctx, int x, int y, int h, uint16_t bits, int n) {
   return x;
 }
 
-int barcode_draw(GContext *ctx, GPoint o, int h, const char *digits, GColor color) {
-  int len = strlen(digits);
-  if (len == 0 || len % 2) return 0;
-  for (int i = 0; i < len; i++) {
+// mod-47 check over values[0..n), weights 1..max counted from the right
+static int check(const int *v, int n, int max) {
+  int sum = 0;
+  for (int i = 0; i < n; i++) sum += v[i] * ((n - 1 - i) % max + 1);
+  return sum % 47;
+}
+
+int barcode_draw(GContext *ctx, GPoint o, int h, const char *digits, bool term, GColor color) {
+  int v[BARCODE_MAX_DIGITS + 2];
+  int n = strlen(digits);
+  if (n == 0 || n > BARCODE_MAX_DIGITS) return 0;
+  for (int i = 0; i < n; i++) {
     if (digits[i] < '0' || digits[i] > '9') return 0;
+    v[i] = digits[i] - '0';
   }
+  v[n] = check(v, n, 20);
+  v[n + 1] = check(v, n + 1, 15);
   graphics_context_set_fill_color(ctx, color);
-  int x = draw_bits(ctx, o.x, o.y, h, s_patterns[START_C], 11);
-  int check = START_C;
-  for (int i = 0; i < len / 2; i++) {
-    int v = (digits[2 * i] - '0') * 10 + (digits[2 * i + 1] - '0');
-    check += v * (i + 1);
-    x = draw_bits(ctx, x, o.y, h, s_patterns[v], 11);
-  }
-  x = draw_bits(ctx, x, o.y, h, s_patterns[check % 103], 11);
-  x = draw_bits(ctx, x, o.y, h, STOP, 13);
+  int x = draw_bits(ctx, o.x, o.y, h, s_patterns[START_STOP], 9);
+  for (int i = 0; i < n + 2; i++) x = draw_bits(ctx, x, o.y, h, s_patterns[v[i]], 9);
+  x = draw_bits(ctx, x, o.y, h, s_patterns[START_STOP], 9);
+  if (term) x = draw_bits(ctx, x, o.y, h, 1, 1);
   return x - o.x;
 }

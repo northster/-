@@ -8,6 +8,7 @@
 // x = 6 to x = 137 (and 6 / 65 inside a 72px cell). Positions are local to
 // each module; layout.c places the modules.
 #define MARGIN 6
+#define WX_CODE_H 12  // barcode strip on top of the weather cell
 #define STEP_GOAL 10000
 
 // Digit ink metrics measured from the fonts at build time (see wscript).
@@ -203,20 +204,24 @@ static void wx_update(Layer *layer, GContext *ctx) {
   GColor ink = sw ? th->panel_ink : th->block_ink;
   fill(ctx, b, th->bg);
 
-  // Code 128 of the current time (HHMM): it scans as the time shown above.
-  // During the clip it scrambles. It stands on the block, 18px tall.
+  // Code 93 of the current time (HHMM) across the whole cell, 12px tall,
+  // above the block. 4 digits are exactly 72 modules without the trailing
+  // termination bar, so it fills the cell edge to edge (and no longer scans).
+  // During the clip it scrambles.
   char code[16];
   if (s_anim_t >= 0) {
     snprintf(code, sizeof(code), "%02d%02d", (s_anim_frame * 37) % 100, (s_anim_frame * 61 + 7) % 100);
   } else {
     snprintf(code, sizeof(code), "%s", s_hhmm);
   }
-  barcode_draw(ctx, GPoint(MARGIN, 0), 18, code, th->fg);
+  barcode_draw(ctx, GPoint(0, 0), WX_CODE_H, code, false, th->fg);
 
-  GRect blk = GRect(0, 18, b.size.w, b.size.h - 18);
+  GRect blk = GRect(0, WX_CODE_H, b.size.w, b.size.h - WX_CODE_H);
   fill(ctx, blk, block);
-  // icon in an 18 x 13 box, 7px below the block top
-  GPoint io = GPoint(MARGIN, blk.origin.y + 7);
+  // temperature centered in the block (odd spare row goes on top), the
+  // 18 x 13 icon one row lower
+  int ty = blk.origin.y + (blk.size.h - FM_TEMP_H + 1) / 2;
+  GPoint io = GPoint(MARGIN, ty + 1);
   if (g_weather.code >= 1 && g_weather.code <= 3 && g_weather.is_day) {
     shapes_partly_cloudy(ctx, io, ink);
   } else {
@@ -230,7 +235,6 @@ static void wx_update(Layer *layer, GContext *ctx) {
   char *deg = strstr(temp, "°");
   if (deg) *deg = '\0';
   int tx = MARGIN + 24;
-  int ty = blk.origin.y + (blk.size.h - FM_TEMP_H) / 2;
   int ink_w = text_w(temp, s_font_temp) - FM_TEMP_RSB;
   if (tx + ink_w + 8 > b.size.w - 2) tx = b.size.w - 2 - 8 - ink_w;  // "-12" squeezes toward the icon
   text_at(ctx, temp, s_font_temp, FM_TEMP_TOP, tx, ty, 60, ink);
