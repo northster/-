@@ -53,26 +53,20 @@ make demo
 
 `resources/fonts/{time,date,temp,steps}.ttf`는 git이 무시한다. 빌드할 때 FreeType으로 숫자 높이·위치·오른쪽 여백을 다시 재서 정렬이 자동으로 맞는다(`wscript`의 `FM_*`). 되돌리기: `make font-reset`.
 
-### 테마 (모두 Pebble 64색, `tools/palette_map.py`로 레퍼런스 색에서 매핑)
+### 색
 
-![테마와 배치](docs/screenshots/11-themes-layouts.png)
+색은 **초록 Green `#00FF00` · 흰 · 검정** 3색과 체커의 **빨강 Red `#FF0000`**으로 고정했다(보조 글자·눈금은 회색). 실제 Pebble Time(반사형 LCD)에서 SpringBud 라임이 많이 바래 보여서, 팔레트에서 채도가 가장 높은 Green을 쓴다. 색 프리셋은 이 세 색을 바탕 · 날씨 블록 · 걸음 패널 자리에 바꿔 놓는 3! = 6가지다. 글자는 초록·흰 위에서 검정, 검정 위에서 흰색.
 
-| # | 이름 | 바탕 | 블록 / 패널 | 포인트 |
-|---|---|---|---|---|
-| 7 | GREEN (기본) | Green `#00FF00` | 검정 / 흰 | BlueMoon `#0055FF` |
-| 0 | LIME (시안) | SpringBud `#AAFF00` | 검정 / 흰 | BlueMoon |
-| 1 | MINT | Celeste `#AAFFFF` | 검정 / 흰 | BlueMoon |
-| 2 | ACID | 검정 | 라임 / 흰 | ElectricBlue |
-| 3 | VIOLET | 검정 | LavenderIndigo / 흰 | SpringBud |
-| 4 | SIGNAL | 흰 | 검정 / 라임 | BlueMoon |
-| 5 | NULL | Folly `#FF0055` | 검정 / 흰 | 검정 |
-| 6 | FLARE | ElectricUltramarine | 검정 / 라임 | Folly |
+![색 배치 6종](docs/screenshots/16-colors.png)
 
-레퍼런스 색 매핑 예: 라임 `#C6FF33`→SpringBud(ΔE 12.5), 민트 `#CAEADA`→Celeste, 파랑 `#1D6FF9`→BlueMoon, 핫핑크 `#FF0961`→Folly(ΔE 6.7), 바이올렛 `#7D39EB`→LavenderIndigo.
-
-실제 Pebble Time(반사형 LCD)에서는 SpringBud 바탕이 많이 바래 보여서, 팔레트에서 가장 채도가 높은 Green을 바탕으로 쓴 GREEN을 기본으로 했다. 설정 화면에서도 맨 위에 나온다.
-
-![GREEN과 한국식 날짜](docs/screenshots/15-green-kr-date.png)
+| # | 바탕 | 날씨 블록 | 걸음 패널 |
+|---|---|---|---|
+| 1 (기본) | 초록 | 검정 | 흰 |
+| 2 | 초록 | 흰 | 검정 |
+| 3 | 흰 | 검정 | 초록 |
+| 4 | 흰 | 초록 | 검정 |
+| 5 | 검정 | 초록 | 흰 |
+| 6 | 검정 | 흰 | 초록 |
 
 배치 프리셋 3개는 모듈 크기가 같고 위치만 다르다: STACK(기본) / SWAP(두 칸 좌우 교체) / INVERT(칸 위, 시계 아래).
 

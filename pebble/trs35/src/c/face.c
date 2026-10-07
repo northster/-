@@ -101,14 +101,15 @@ static void header_update(Layer *layer, GContext *ctx) {
   }
 
   // battery: five 4x7 cells ending on the right margin; empty ones are a
-  // muted outline around the panel color
+  // muted outline around white (never the panel color: on a black panel an
+  // empty cell would read as full)
   int pct = g_battery.charge_percent;
   int cells_x = b.size.w - MARGIN - 5 * 5 + 1;
   int filled = (pct + 19) / 20;
   for (int i = 0; i < 5; i++) {
     GRect cell = GRect(cells_x + i * 5, y - 1, 4, 7);
     fill(ctx, cell, i < filled ? th->fg : th->muted);
-    if (i >= filled) fill(ctx, grect_inset(cell, GEdgeInsets(1)), th->panel);
+    if (i >= filled) fill(ctx, grect_inset(cell, GEdgeInsets(1)), GColorWhite);
   }
   char buf[8];
   snprintf(buf, sizeof(buf), g_battery.is_charging ? "+%d%%" : "%d%%", pct);

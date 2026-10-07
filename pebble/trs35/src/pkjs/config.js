@@ -8,23 +8,20 @@ function swatch(colors) {
   }).join('');
 }
 
-// Same order and colors as src/c/theme.c (Pebble palette values):
-// field, main ink, block, panel, spot.
+// Same order as src/c/theme.c: the fixed green / white / black palette with
+// a red checker; presets only move the three colors between the field, the
+// weather block and the steps panel. Swatches: field, block, panel, checker.
+var G = '#00FF00', W = '#FFFFFF', K = '#000000', R = '#FF0000';
 var THEMES = [
-  ['LIME', 'Acid lime, black and white blocks, blue spot', ['#AAFF00', '#000000', '#000000', '#FFFFFF', '#0055FF']],
-  ['MINT', 'Pale mint field', ['#AAFFFF', '#000000', '#000000', '#FFFFFF', '#0055FF']],
-  ['ACID', 'Black field, lime block', ['#000000', '#FFFFFF', '#AAFF00', '#FFFFFF', '#55FFFF']],
-  ['VIOLET', 'Black field, violet block', ['#000000', '#FFFFFF', '#AA55FF', '#FFFFFF', '#AAFF00']],
-  ['SIGNAL', 'White paper, lime panel', ['#FFFFFF', '#000000', '#000000', '#AAFF00', '#0055FF']],
-  ['NULL', 'Hot pink field', ['#FF0055', '#000000', '#000000', '#FFFFFF', '#000000']],
-  ['FLARE', 'Ultramarine field, lime panel', ['#5500FF', '#FFFFFF', '#000000', '#AAFF00', '#FF0055']],
-  ['GREEN', 'Pure green field, the most vivid on the watch', ['#00FF00', '#000000', '#000000', '#FFFFFF', '#0055FF']]
+  ['GREEN · BLACK · WHITE', 'Green field, black weather, white steps', [G, K, W, R]],
+  ['GREEN · WHITE · BLACK', 'Green field, white weather, black steps', [G, W, K, R]],
+  ['WHITE · BLACK · GREEN', 'White field, black weather, green steps', [W, K, G, R]],
+  ['WHITE · GREEN · BLACK', 'White field, green weather, black steps', [W, G, K, R]],
+  ['BLACK · GREEN · WHITE', 'Black field, green weather, white steps', [K, G, W, R]],
+  ['BLACK · WHITE · GREEN', 'Black field, white weather, green steps', [K, W, G, R]]
 ];
-// shown in this order (GREEN first, it is the default); values stay the
-// theme.c indexes
-var THEME_ORDER = [7, 0, 1, 2, 3, 4, 5, 6];
 
-var themeTable = THEME_ORDER.map(function(i) { return THEMES[i]; }).map(function(t) {
+var themeTable = THEMES.map(function(t) {
   return '<div style="margin:6px 0">' + swatch(t[2]) +
     ' <b>' + t[0] + '</b> <small>' + t[1] + '</small></div>';
 }).join('');
@@ -45,10 +42,10 @@ module.exports = [
       {
         type: 'select',
         messageKey: 'THEME',
-        label: '색 테마 / Color theme',
-        defaultValue: '7',
-        options: THEME_ORDER.map(function(i) {
-          return { label: THEMES[i][0] + ' — ' + THEMES[i][1], value: String(i) };
+        label: '색 배치 / Colors (바탕 · 날씨 · 걸음)',
+        defaultValue: '0',
+        options: THEMES.map(function(t, i) {
+          return { label: t[0], value: String(i) };
         })
       },
       { type: 'text', defaultValue: themeTable },

@@ -8,7 +8,7 @@
 #define WEATHER_STALE_SEC (3 * 60 * 60)
 
 Settings g_settings = {
-  .theme = 7,   // GREEN
+  .theme = 0,   // green field, black block, white panel
   .layout = 0,  // STACK
   .clock_mode = CLOCK_AUTO,
   .temp_unit = UNIT_C,

@@ -7,7 +7,7 @@ typedef enum { CLOCK_AUTO = 0, CLOCK_12H = 1, CLOCK_24H = 2 } ClockMode;
 typedef enum { UNIT_C = 0, UNIT_F = 1 } TempUnit;
 typedef enum { DATE_DM = 0, DATE_KR = 1 } DateFormat;  // WED 07.10 / 10.08 THU
 
-#define THEME_COUNT 8
+#define THEME_COUNT 6
 #define LAYOUT_COUNT 3
 
 typedef struct {
