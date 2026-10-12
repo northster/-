@@ -166,6 +166,7 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
 
     /** Text shared from the X app, or typed/pasted. */
     fun openLink(text: String) {
+        stopConvertJobs()
         backStack.clear()
         _screen.value = Screen.MAIN
         _main.update { it.copy(input = text.trim()) }
