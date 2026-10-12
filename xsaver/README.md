@@ -4,8 +4,16 @@ X(트위터) 게시물의 사진·영상·GIF를 갤러리에 저장하고, 영�
 갤럭시 Z 폴드(커버/내부 화면)에 맞춤. 키보드 앱과 같은 저장소에 있지만 별개의 Gradle 프로젝트다.
 
 ## 설치
-[Releases](https://github.com/northster/-/releases)에서 `xsaver-N` Pre-release의 `XSaver-release.apk`.
+[Releases](https://github.com/northster/-/releases)에서 `xsaver-1.0.N` Pre-release의 `XSaver-release.apk`.
 `xsaver/` 아래가 바뀌어 push될 때마다 자동으로 빌드된다(최근 3개만 남김). 키보드와 같은 개인 키로 서명해서 새 버전을 덮어 설치할 수 있다.
+
+### Obtainium으로 자동 업데이트
+키보드와 같은 저장소에 릴리스가 함께 올라오므로, 앱마다 **릴리스 제목 필터**로 자기 릴리스만 보게 한다.
+- 앱 추가 → URL `https://github.com/northster/-`
+- Include prereleases: 켬
+- Filter release titles by regular expression: `^X 저장`
+- Filter APKs by regular expression: `XSaver`
+- 이미 등록한 DT Keyboard 항목에는 제목 필터 `^DT Keyboard`를 넣어 둔다(안 그러면 최신 릴리스가 XSaver일 때 키보드 APK를 못 찾는다).
 
 ## 사용법
 - X 앱에서 게시물 공유 → **X 미디어 저장**. 또는 앱에서 링크를 붙여넣기.

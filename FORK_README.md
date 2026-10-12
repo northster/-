@@ -93,7 +93,7 @@ fork/
   - 앱 이름 "DT Keyboard Dev", 패키지 `io.github.northster.dtkeyboard.debug`. 정식 앱과 따로 설치된다(설정도 따로).
   - 빌드마다 사전 릴리스(pre-release) `dt-<번호>`(버전 `4.1-dt.<번호>`)를 만들고, 최신 10개만 남긴다.
   - "Latest"는 정식 릴리스 몫이라 개발 빌드는 Releases 목록의 맨 위 pre-release에서 받는다.
-  - Obtainium으로 개발 빌드를 받으려면 "Include prereleases"를 켜고 APK 필터를 `debug`로.
+  - Obtainium으로 개발 빌드를 받으려면 "Include prereleases"를 켜고 APK 필터를 `debug`로. 같은 저장소에 XSaver 릴리스도 올라오므로 릴리스 제목 필터를 `^DT Keyboard`로.
 - 정식 릴리스(`.github/workflows/dt-release.yml`): `v`로 시작하는 태그를 push하면(예: `git tag v1.0.0 && git push origin v1.0.0`,
   또는 GitHub 웹에서 Releases > Draft a new release > 새 태그 `v1.0.0`) 릴리스 빌드를 만들어 "Latest" 릴리스로 올린다.
   - 앱 이름 "DT Keyboard", 패키지 `io.github.northster.dtkeyboard`, 버전 이름은 태그에서(`v1.0.0` → `1.0.0`).

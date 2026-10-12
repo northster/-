@@ -1,6 +1,8 @@
 name: XSaver APK
 
-# X 저장 (xsaver/): installable APK on every push that touches it, published as a pre-release "xsaver-N".
+# X 저장 (xsaver/): installable APK on every push that touches it, published as a pre-release "xsaver-1.0.N".
+# The tag carries the app's versionName so Obtainium can tell which build is installed; titles start with "X 저장"
+# so Obtainium entries for this repository can tell XSaver releases from DT Keyboard ones.
 on:
   push:
     paths: [ 'xsaver/**', '.github/workflows/xsaver.yml' ]
@@ -63,7 +65,7 @@ jobs:
         # never "latest": that stays the keyboard's release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: xsaver-${{ github.run_number }}
+          tag_name: xsaver-1.0.${{ github.run_number }}
           name: X 저장 (XSaver) 1.0.${{ github.run_number }}
           target_commitish: ${{ github.sha }}
           prerelease: true
@@ -81,8 +83,11 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           gh release list --limit 100 --json tagName --jq '.[].tagName' \
-            | grep -E '^xsaver-[0-9]+$' | sort -t- -k2 -n -r | tail -n +4 \
+            | grep -E '^xsaver-1\.0\.[0-9]+$' | sort -V -r | tail -n +4 \
             | xargs -r -I{} gh release delete {} --yes --cleanup-tag
+          # the first builds were tagged xsaver-N
+          gh release list --limit 100 --json tagName --jq '.[].tagName' \
+            | grep -E '^xsaver-[0-9]+$' | xargs -r -I{} gh release delete {} --yes --cleanup-tag
 
       - name: Remove the signing key
         if: ${{ always() }}
