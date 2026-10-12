@@ -5,7 +5,7 @@ name: DT Keyboard APK
 on:
   push:
     branches: [ main, 'claude/**' ]
-    paths-ignore: [ '**.md', 'scripts/**', 'xsaver/**', '.github/workflows/xsaver.yml' ]
+    paths-ignore: [ '**.md', 'scripts/**' ]
   workflow_dispatch:
 
 permissions:
