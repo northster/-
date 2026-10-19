@@ -1,0 +1,30 @@
+name: DT probe (temporary)
+on: workflow_dispatch
+permissions:
+  contents: write
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: claude/dynamic-toolbar-android-keyboard-n9rsg9
+      - name: Fetch Korean emoji dictionary
+        run: |
+          base=https://codeberg.org/Helium314/aosp-dictionaries
+          curl -sS "https://codeberg.org/api/v1/repos/Helium314/aosp-dictionaries/contents/emoji_cldr_signal_dictionaries" \
+            | python3 -c "import json,sys;print([x['name'] for x in json.load(sys.stdin)])"
+          for f in README.md LICENSE readme.md; do
+            echo "== $f"; curl -sSf "$base/raw/branch/main/emoji_cldr_signal_dictionaries/$f" | head -60 || true
+          done
+          echo "== repo README"; curl -sSf "$base/raw/branch/main/README.md" | grep -i -A8 "emoji\|licen" | head -60 || true
+          mkdir -p probe-out
+          curl -sSfL -o probe-out/emoji_ko.dict "$base/raw/branch/main/emoji_cldr_signal_dictionaries/emoji_ko.dict"
+          ls -la probe-out; head -c 200 probe-out/emoji_ko.dict | strings | head
+      - name: Commit
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@users.noreply.github.com"
+          git add -f probe-out/emoji_ko.dict
+          git commit -m "probe: emoji_ko.dict (temporary)"
+          git push origin HEAD:claude/dynamic-toolbar-android-keyboard-n9rsg9
