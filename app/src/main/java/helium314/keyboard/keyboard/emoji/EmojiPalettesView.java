@@ -619,7 +619,7 @@ public final class EmojiPalettesView extends LinearLayout
             var locale = RichInputMethodManager.getInstance().getCurrentSubtype().getLocale();
             if (sDictionaryFacilitator == null || ! sDictionaryFacilitator.isForLocale(locale)) {
                 closeDictionaryFacilitator();
-                var dictFile = DictionaryInfoUtils.getCachedDictForLocaleAndType(locale, Dictionary.TYPE_EMOJI, getContext());
+                var dictFile = DictionaryInfoUtils.getEmojiDict(locale, getContext());
                 var dictionary = dictFile != null? DictionaryFactory.getDictionary(dictFile, locale) : null;
                 sDictionaryFacilitator = dictionary != null? new SingleDictionaryFacilitator(dictionary) : null;
             }

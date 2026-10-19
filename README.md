@@ -37,5 +37,6 @@ HeliBoard와 달리 인터넷 권한이 있다. 아래 기능을 켜고 키를 �
 - 아이콘: [pixelarticons](https://github.com/halfmage/pixelarticons) (MIT, Gerrit Halfmann)을 도트로 다시 그림
 - 일반 아이콘(도트 아이콘을 끈 경우): [Framework7 Icons](https://github.com/framework7io/framework7-icons) (MIT, Vladimir Kharlampidi), 일부 [Phosphor Icons](https://github.com/phosphor-icons/core) (MIT)
 - 이모지 키워드: [Unicode CLDR](https://cldr.unicode.org) (Unicode License V3)
+- 한국어 이모지 검색 사전: [HeliBoard 사전](https://codeberg.org/Helium314/aosp-dictionaries) (Unicode CLDR, Signal AGPL-3.0)
 - 전체 고지문: 앱의 설정 > 정보 > 오픈소스 고지, 또는 [open_source_licenses.txt](app/src/main/assets/open_source_licenses.txt)
 - 제스처 타이핑 라이브러리는 HeliBoard처럼 앱에 들어 있지 않고 사용자가 직접 불러온다(비공개 라이브러리).

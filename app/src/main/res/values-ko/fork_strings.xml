@@ -371,7 +371,7 @@
     <string name="fork_typo_reset_summary">고른 화면 상황에서 배운 것을 처음부터 다시 배웁니다</string>
     <string name="fork_typo_reset_confirm">%1$s에서 배운 터치 위치와 오타를 모두 지우시겠습니까?</string>
     <string name="fork_emoji_dict">이모지 검색 사전</string>
-    <string name="fork_emoji_dict_summary">이모지 패널의 🔍 검색에는 언어별 이모지 사전이 필요합니다. 여기서 추가합니다</string>
+    <string name="fork_emoji_dict_summary">한국어는 기본으로 들어 있습니다. 다른 언어로 🔍 검색하려면 여기서 이모지 사전을 추가합니다</string>
     <string name="fork_toolbar_gif">GIF</string>
     <string name="fork_toolbar_settings">설정</string>
     <string name="fork_glow_color">스마트 칩 글로우 색</string>

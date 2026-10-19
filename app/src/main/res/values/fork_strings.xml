@@ -374,7 +374,7 @@
     <string name="fork_typo_reset_summary">Learns the chosen screen situation from scratch</string>
     <string name="fork_typo_reset_confirm">Delete the touches and typos learned for %1$s?</string>
     <string name="fork_emoji_dict">Emoji search dictionary</string>
-    <string name="fork_emoji_dict_summary">The 🔍 in the emoji panel needs an emoji dictionary for your language; add one here</string>
+    <string name="fork_emoji_dict_summary">Korean is built in. Other languages for the 🔍 in the emoji panel: add their emoji dictionary here</string>
     <string name="fork_toolbar_gif">GIF</string>
     <string name="fork_toolbar_settings">Settings</string>
     <string name="fork_glow_color">Smart chip glow color</string>

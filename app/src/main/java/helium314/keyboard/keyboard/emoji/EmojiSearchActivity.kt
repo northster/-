@@ -98,7 +98,6 @@ import helium314.keyboard.latin.RichInputMethodSubtype
 import helium314.keyboard.latin.SingleDictionaryFacilitator
 import helium314.keyboard.latin.common.ColorType
 import helium314.keyboard.latin.common.splitOnWhitespace
-import helium314.keyboard.latin.dictionary.Dictionary
 import helium314.keyboard.latin.dictionary.DictionaryFactory
 import helium314.keyboard.latin.settings.Settings
 import helium314.keyboard.latin.utils.CloseIcon
@@ -407,7 +406,7 @@ class EmojiSearchActivity : ComponentActivity() {
             val locale = RichInputMethodManager.getInstance().currentSubtype.locale
             if (dictionaryFacilitator?.isForLocale(locale) != true) {
                 dictionaryFacilitator?.closeDictionaries()
-                dictionaryFacilitator = DictionaryInfoUtils.getCachedDictForLocaleAndType(locale, Dictionary.TYPE_EMOJI, context)
+                dictionaryFacilitator = DictionaryInfoUtils.getEmojiDict(locale, context) // fork: or the one in the app
                     ?.let { DictionaryFactory.getDictionary(it, locale) }?.let { SingleDictionaryFacilitator(it) }
             }
         }

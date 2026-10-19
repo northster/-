@@ -326,7 +326,7 @@ SwiftSlate(github.com/Musheer360/SwiftSlate, MIT)의 명령 방식을 키보드 
 - 이모지를 열면 툴바가 자동으로 펼쳐지고, 머리줄이 `⌨ | 카테고리 탭들`로 바뀐다. ⌨는 항상 왼쪽에 고정되고, 탭들은 좌우로 밀어서 고른다.
 - 첫 탭은 최근 사용 이모지다. 길게 누르면 최근 기록을 지운다. 탭 아이콘은 도트 매트릭스다.
 - 탭 순서와 보일 탭: 외관 및 크기 > 글자 > 이모지 탭(`fork/emoji/EmojiTabs.kt`).
-- 머리줄 맨 오른쪽에는 항상 | 검색 버튼이 있다. HeliBoard의 이모지 검색을 열고, 이모지 사전이 없으면 안내만 한다.
+- 머리줄 맨 오른쪽에는 항상 | 검색 버튼이 있다. HeliBoard의 이모지 검색을 열고, 이모지 사전이 없으면 안내만 한다. 한국어 이모지 사전(`assets/dicts/emoji_ko.dict`, HeliBoard 사전 저장소 codeberg.org/Helium314/aosp-dictionaries의 emoji_cldr_signal_dictionaries 그대로, Unicode CLDR + Signal AGPL-3.0)이 앱에 들어 있어 따로 받지 않아도 된다. 처음 검색할 때 사전 폴더로 꺼내 쓰고(`DictionaryInfoUtils.getEmojiDict`), 사용자가 추가한 이모지 사전이 있으면 그쪽이 먼저다. 단어 제안용 사전 목록에는 이모지 사전 제안을 켰을 때만 들어간다(`DictionaryFactory`).
 - 스크롤바는 목록 오른쪽의 세로 점선이다(`DotScrollbarDecoration`).
 - 이모지 목록을 좌우로 밀어 카테고리를 넘기는 기능은 없앴다(탭으로만 바꾼다).
 - 머리줄을 위로 밀면 패널이 화면의 약 2/3까지 커진다. 아래로 밀거나 뒤로가기를 누르면 돌아온다(클립보드와 같은 `ForkTallPanel`).

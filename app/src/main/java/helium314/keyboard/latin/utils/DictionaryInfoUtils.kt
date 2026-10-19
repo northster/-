@@ -10,6 +10,7 @@ import android.text.TextUtils
 import com.android.inputmethod.latin.utils.BinaryDictionaryUtils
 import helium314.keyboard.latin.dictionary.Dictionary
 import helium314.keyboard.latin.common.FileUtils
+import helium314.keyboard.latin.common.LocaleUtils
 import helium314.keyboard.latin.common.LocaleUtils.constructLocale
 import helium314.keyboard.latin.common.loopOverCodePoints
 import helium314.keyboard.latin.define.DecoderSpecificConstants
@@ -106,7 +107,20 @@ object DictionaryInfoUtils {
     @JvmStatic
     fun getLocalesWithEmojiDicts(context: Context): List<Locale> =
         SubtypeSettings.getEnabledSubtypes(true)
-            .map { it.locale() }.filter { getCachedDictForLocaleAndType(it, Dictionary.TYPE_EMOJI, context) != null }
+            .map { it.locale() }.filter { getEmojiDict(it, context) != null }
+
+    /**
+     * fork: the emoji dictionary for [locale]: the one added in the settings, else the one in the app (assets/dicts,
+     * so far Korean), extracted the first time it's needed
+     */
+    @JvmStatic
+    fun getEmojiDict(locale: Locale, context: Context): File? {
+        getCachedDictForLocaleAndType(locale, Dictionary.TYPE_EMOJI, context)?.let { return it }
+        val asset = getAssetsDictionaryList(context)?.filter { it.substringBefore("_") == Dictionary.TYPE_EMOJI }
+            ?.let { dicts -> LocaleUtils.getBestMatch(locale, dicts) { extractLocaleFromAssetsDictionaryFile(it) } }
+            ?: return null
+        return extractAssetsDictionary(asset, locale, context)
+    }
 
     @JvmStatic
     fun getCachedDictForLocaleAndType(locale: Locale, type: String, context: Context): File? =

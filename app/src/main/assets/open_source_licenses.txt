@@ -145,6 +145,16 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 
+Korean emoji search dictionary (assets/dicts/emoji_ko.dict)
+From HeliBoard's dictionaries (https://codeberg.org/Helium314/aosp-dictionaries,
+emoji_cldr_signal_dictionaries), unchanged. Made from Unicode CLDR emoji
+annotations (Unicode License V3, below) and Signal's emoji search data
+(https://github.com/signalapp/Signal-Android, GNU AGPL v3.0,
+https://www.gnu.org/licenses/agpl-3.0.html). Copyright Signal Messenger, LLC.
+Its sources are listed in the aosp-dictionaries repository
+(emoji_cldr_signal_wordlists/emoji_cldr_signal.source).
+
+
 Unicode CLDR (https://cldr.unicode.org)
 Emoji keywords (Korean and English) for the emoji suggestions.
 Unicode License V3, full text below.
