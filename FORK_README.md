@@ -310,8 +310,9 @@ SwiftSlate(github.com/Musheer360/SwiftSlate, MIT)의 명령 방식을 키보드 
 - 모든 아이콘은 긴 변이 10점인 같은 크기로 맞춘다(얇은 <, >, ✓, ✕는 8점). 한 줄에 놓아도 같은 정사각형 버튼으로 보이게.
 - 대부분은 pixelarticons(github.com/halfmage/pixelarticons, MIT, Copyright (c) 2020 Gerrit Halfmann)의 24×24 픽셀 아이콘을 12×12 점 격자로 줄인 것이다(`scripts/pixel_icons.py`, 대응표 `MAP`). 점 간격과 크기는 키 글자 크기의 Doto 글꼴과 같게(24dp에 12점, 지름 1.7dp). 아이콘마다 가장 덜 뭉개지는 위치(0/1픽셀 어긋남)에서 줄인다. Shift, 지구본, 스페이스, GIF, 지우기와 AI(별 두 개), 실행 취소/다시 하기/엔터(줄이면 둥근 모서리의 대각선 한 칸이 빠진 점처럼 보여서 네모 모서리로)는 12×12에 직접 그린 그림이다. 클립 카드의 책갈피는 1점 테두리, 불투명도 1. `npm pack pixelarticons`로 받은 `package/svg` 폴더를 넣어 `python3 scripts/pixel_icons.py <svg 폴더> app/src/main/res/drawable`로 다시 만든다(dot_icons.py 다음에 실행).
 - 새 아이콘은 이 파일에 그림을 추가하고, `KeyboardIconsSet.forkDotIcons`나 툴바 항목에 연결한다.
-- 테마 > 표시 > 도트 아이콘(기본 켬)을 끄면 일반 아이콘을 쓴다. 글꼴(도트 텍스트)은 그대로.
-  - 키(Shift 포함), 툴바, 패널, 이모지 탭, 클립보드, 설정 화면 모두 같은 세트로 통일: 모든 `R.drawable.ic_dot_*`는 `DotIcons.of()`를 거쳐서, 끄면 같은 이름의 `ic_plain_*`가 쓰인다(키는 `KeyboardIconsSet.loadIcons`에서 `forkDotIcons`를 같은 식으로 바꿈).
+- 테마 > 표시 > 아이콘에서 모양을 고른다: 도트(기본) / iOS 스타일 / 얇은 선. 글꼴(도트 텍스트)은 그대로. 예전의 도트 아이콘 스위치를 끈 사람은 iOS 스타일로 이어진다(`DotIcons.style`).
+  - 얇은 선(`ic_line_*`): Tabler Icons(MIT)의 외곽선 아이콘을 선 굵기 1.5(원래 2)로 그린 것. 굵기 차이 없는 산세리프 같은 느낌. 켜진 상태(Shift, 별, 고정)는 Tabler의 채운 아이콘. `npm pack @tabler/icons`의 `package/icons`로 `python3 scripts/line_icons.py <icons 폴더> app/src/main/res/drawable`를 실행해 다시 만든다.
+  - 키(Shift 포함), 툴바, 패널, 이모지 탭, 클립보드, 설정 화면 모두 같은 세트로 통일: 모든 `R.drawable.ic_dot_*`는 `DotIcons.of()`를 거쳐서, 고른 모양에 따라 같은 이름의 `ic_plain_*`(iOS)나 `ic_line_*`(얇은 선)가 쓰인다(키는 `KeyboardIconsSet.loadIcons`에서 `forkDotIcons`를 같은 식으로 바꿈).
   - `ic_plain_*`는 iOS(SF Symbols) 느낌의 Framework7 Icons(MIT)를 색만 흰색으로 바꿔 VectorDrawable로 옮긴 것이다. Framework7에 없는 클립보드, GIF, 번역, 음식은 선 굵기가 비슷한 Phosphor Icons regular(MIT), 스페이스(⎵)는 직접 그렸다. `npm pack framework7-icons`의 `package/svg`와 `npm pack @phosphor-icons/core`의 `package/assets`로 `python3 scripts/plain_icons.py <svg 폴더> <assets 폴더> app/src/main/res/drawable`를 실행해 다시 만든다(도트 아이콘을 추가하면 이 스크립트의 `MAP`에도 추가).
   - 바꾸면 테마를 다시 불러와 키보드와 툴바가 새로 만들어진다.
 

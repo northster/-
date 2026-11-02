@@ -237,9 +237,16 @@ fun createAppearanceSettings(context: Context) = listOf(
         // the layouts are built again with the swapped key looks
         SwitchPreference(it, false) { KeyboardSwitcher.getInstance().setThemeNeedsReload() }
     },
-    Setting(context, helium314.keyboard.fork.DotIcons.PREF, R.string.fork_dot_icons, R.string.fork_dot_icons_summary) {
+    Setting(context, helium314.keyboard.fork.DotIcons.PREF_STYLE, R.string.fork_icon_style, R.string.fork_icon_style_summary) {
+        val items = listOf(
+            stringResource(R.string.fork_icon_style_dot) to helium314.keyboard.fork.DotIcons.DOT,
+            stringResource(R.string.fork_icon_style_ios) to helium314.keyboard.fork.DotIcons.IOS,
+            stringResource(R.string.fork_icon_style_line) to helium314.keyboard.fork.DotIcons.LINE,
+        )
         // keys, toolbar and panels are built again with the other icons
-        SwitchPreference(it, true) { KeyboardSwitcher.getInstance().setThemeNeedsReload() }
+        ListPreference(it, items, helium314.keyboard.fork.DotIcons.style(LocalContext.current.prefs())) {
+            KeyboardSwitcher.getInstance().setThemeNeedsReload()
+        }
     },
     Setting(context, Settings.PREF_NAVBAR_COLOR, R.string.theme_navbar, R.string.day_night_mode_summary) {
         SwitchPreference(it, Defaults.PREF_NAVBAR_COLOR)

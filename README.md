@@ -35,7 +35,8 @@ HeliBoard와 달리 인터넷 권한이 있다. 아래 기능을 켜고 키를 �
 - DT Keyboard: [GNU GPL v3.0](LICENSE). HeliBoard(GPL-3.0)를 고친 버전이고, HeliBoard는 OpenBoard와 AOSP LatinIME([Apache 2.0](LICENSE-Apache-2.0))을 바탕으로 한다. 자세한 출처는 [HeliBoard README](https://github.com/HeliBorg/HeliBoard#credits) 참고.
 - 가져온 코드(MIT): [WM Keyboard](https://github.com/wasi-master/wmkeyboard) (Wasi Master), [SwiftSlate](https://github.com/Musheer360/SwiftSlate) (Musheer Alam)
 - 아이콘: [pixelarticons](https://github.com/halfmage/pixelarticons) (MIT, Gerrit Halfmann)을 도트로 다시 그림
-- 일반 아이콘(도트 아이콘을 끈 경우): [Framework7 Icons](https://github.com/framework7io/framework7-icons) (MIT, Vladimir Kharlampidi), 일부 [Phosphor Icons](https://github.com/phosphor-icons/core) (MIT)
+- 얇은 선 아이콘: [Tabler Icons](https://github.com/tabler/tabler-icons) (MIT, Paweł Kuna)
+- iOS 스타일 아이콘: [Framework7 Icons](https://github.com/framework7io/framework7-icons) (MIT, Vladimir Kharlampidi), 일부 [Phosphor Icons](https://github.com/phosphor-icons/core) (MIT)
 - 이모지 키워드: [Unicode CLDR](https://cldr.unicode.org) (Unicode License V3)
 - 한국어 이모지 검색 사전: [HeliBoard 사전](https://codeberg.org/Helium314/aosp-dictionaries) (Unicode CLDR, Signal AGPL-3.0)
 - 전체 고지문: 앱의 설정 > 정보 > 오픈소스 고지, 또는 [open_source_licenses.txt](app/src/main/assets/open_source_licenses.txt)

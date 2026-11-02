@@ -62,8 +62,11 @@
     <string name="fork_permission_app_desc">The system page of this app</string>
     <string name="fork_permission_granted">Allowed</string>
     <string name="fork_permission_needed">Not allowed</string>
-    <string name="fork_dot_icons">Dot matrix icons</string>
-    <string name="fork_dot_icons_summary">Off: plain icons on the keys and the toolbar. The font stays</string>
+    <string name="fork_icon_style">Icons</string>
+    <string name="fork_icon_style_summary">The look of the icons on the keys and the toolbar. The font stays</string>
+    <string name="fork_icon_style_dot">Dot matrix</string>
+    <string name="fork_icon_style_ios">iOS style</string>
+    <string name="fork_icon_style_line">Thin lines</string>
     <string name="fork_accent_on_delete">Highlight backspace instead of enter</string>
     <string name="fork_accent_on_delete_summary">The enter key\'s highlight color and shape go to backspace</string>
     <string name="fork_open_source">Open-source notices</string>

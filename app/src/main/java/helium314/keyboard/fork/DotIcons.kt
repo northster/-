@@ -8,23 +8,36 @@ import helium314.keyboard.latin.R
 import helium314.keyboard.latin.utils.prefs
 
 /**
- * fork: dot matrix icons (ic_dot_*) or plain ones (ic_plain_*, iOS style Framework7 Icons, scripts/plain_icons.py). The text
- * font is not affected. Every ic_dot_ icon is shown through [of].
+ * fork: the icon style (Theme > display > icons): dot matrix icons (ic_dot_*), iOS style ones (ic_plain_*, Framework7
+ * Icons, scripts/plain_icons.py) or thin lines (ic_line_*, Tabler Icons, scripts/line_icons.py). The text font is not
+ * affected. Every ic_dot_ icon is shown through [of].
  */
 object DotIcons {
-    const val PREF = "fork_dot_icons"
+    const val PREF_STYLE = "fork_icon_style"
+    const val DOT = "dot"
+    const val IOS = "ios"
+    const val LINE = "line"
+    /** the older on / off switch (off = iOS style), read while no style is chosen */
+    private const val PREF_OLD = "fork_dot_icons"
     private var prefs: SharedPreferences? = null
 
     fun init(context: Context) {
         prefs = context.prefs()
     }
 
-    fun enabled() = prefs?.getBoolean(PREF, true) ?: true
+    fun style(prefs: SharedPreferences): String =
+        prefs.getString(PREF_STYLE, null) ?: if (prefs.getBoolean(PREF_OLD, true)) DOT else IOS
 
-    /** [dot] (an ic_dot_ drawable) or its plain counterpart */
+    fun style() = prefs?.let { style(it) } ?: DOT
+
+    /** [dot] (an ic_dot_ drawable) or the same icon in the chosen style */
     @JvmStatic
     @DrawableRes
-    fun of(@DrawableRes dot: Int): Int = if (enabled()) dot else PLAIN[dot] ?: dot
+    fun of(@DrawableRes dot: Int): Int = when (style()) {
+        IOS -> PLAIN[dot] ?: dot
+        LINE -> LINE_ICONS[dot] ?: dot
+        else -> dot
+    }
 
     private val PLAIN = mapOf(
         R.drawable.ic_dot_backspace to R.drawable.ic_plain_backspace,
@@ -73,5 +86,54 @@ object DotIcons {
         R.drawable.ic_dot_trash to R.drawable.ic_plain_trash,
         R.drawable.ic_dot_undo to R.drawable.ic_plain_undo,
         R.drawable.ic_dot_zap to R.drawable.ic_plain_zap,
+    )
+
+    private val LINE_ICONS = mapOf(
+        R.drawable.ic_dot_backspace to R.drawable.ic_line_backspace,
+        R.drawable.ic_dot_check to R.drawable.ic_line_check,
+        R.drawable.ic_dot_clipboard to R.drawable.ic_line_clipboard,
+        R.drawable.ic_dot_close to R.drawable.ic_line_close,
+        R.drawable.ic_dot_copy to R.drawable.ic_line_copy,
+        R.drawable.ic_dot_cut to R.drawable.ic_line_cut,
+        R.drawable.ic_dot_emoji_activities to R.drawable.ic_line_emoji_activities,
+        R.drawable.ic_dot_emoji_emoticons to R.drawable.ic_line_emoji_emoticons,
+        R.drawable.ic_dot_emoji_flags to R.drawable.ic_line_emoji_flags,
+        R.drawable.ic_dot_emoji_food to R.drawable.ic_line_emoji_food,
+        R.drawable.ic_dot_emoji_nature to R.drawable.ic_line_emoji_nature,
+        R.drawable.ic_dot_emoji_objects to R.drawable.ic_line_emoji_objects,
+        R.drawable.ic_dot_emoji_people to R.drawable.ic_line_emoji_people,
+        R.drawable.ic_dot_emoji_recents to R.drawable.ic_line_emoji_recents,
+        R.drawable.ic_dot_emoji_symbols to R.drawable.ic_line_emoji_symbols,
+        R.drawable.ic_dot_emoji_travel to R.drawable.ic_line_emoji_travel,
+        R.drawable.ic_dot_enter to R.drawable.ic_line_enter,
+        R.drawable.ic_dot_gif to R.drawable.ic_line_gif,
+        R.drawable.ic_dot_globe to R.drawable.ic_line_globe,
+        R.drawable.ic_dot_keyboard to R.drawable.ic_line_keyboard,
+        R.drawable.ic_dot_left to R.drawable.ic_line_left,
+        R.drawable.ic_dot_more to R.drawable.ic_line_more,
+        R.drawable.ic_dot_paste to R.drawable.ic_line_paste,
+        R.drawable.ic_dot_pin to R.drawable.ic_line_pin,
+        R.drawable.ic_dot_pin_card to R.drawable.ic_line_pin_card,
+        R.drawable.ic_dot_pin_card_filled to R.drawable.ic_line_pin_card_filled,
+        R.drawable.ic_dot_pin_filled to R.drawable.ic_line_pin_filled,
+        R.drawable.ic_dot_question to R.drawable.ic_line_question,
+        R.drawable.ic_dot_redo to R.drawable.ic_line_redo,
+        R.drawable.ic_dot_right to R.drawable.ic_line_right,
+        R.drawable.ic_dot_search to R.drawable.ic_line_search,
+        R.drawable.ic_dot_select_all to R.drawable.ic_line_select_all,
+        R.drawable.ic_dot_select_word to R.drawable.ic_line_select_word,
+        R.drawable.ic_dot_settings to R.drawable.ic_line_settings,
+        R.drawable.ic_dot_shift to R.drawable.ic_line_shift,
+        R.drawable.ic_dot_shift_filled to R.drawable.ic_line_shift_filled,
+        R.drawable.ic_dot_shift_locked to R.drawable.ic_line_shift_locked,
+        R.drawable.ic_dot_smile to R.drawable.ic_line_smile,
+        R.drawable.ic_dot_space to R.drawable.ic_line_space,
+        R.drawable.ic_dot_sparkles to R.drawable.ic_line_sparkles,
+        R.drawable.ic_dot_star to R.drawable.ic_line_star,
+        R.drawable.ic_dot_star_filled to R.drawable.ic_line_star_filled,
+        R.drawable.ic_dot_translate to R.drawable.ic_line_translate,
+        R.drawable.ic_dot_trash to R.drawable.ic_line_trash,
+        R.drawable.ic_dot_undo to R.drawable.ic_line_undo,
+        R.drawable.ic_dot_zap to R.drawable.ic_line_zap,
     )
 }
