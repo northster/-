@@ -300,6 +300,9 @@ class DynamicToolbarController(private val context: Context) {
     // ---------------------------------------------------------------- "pull" open / close (ToolbarMotion)
 
     private var motionAnimator: ValueAnimator? = null
+    /** the keyboard view whose layer was taken away for the motion, and its layer type before */
+    private var motionKeyboardView: View? = null
+    private var layerTypeBefore = View.LAYER_TYPE_NONE
     /** views whose clipping was turned off so the rows can move past the keyboard's edges, with what it was */
     private val unclipped = ArrayList<Pair<android.view.ViewGroup, Boolean>>()
 
@@ -314,6 +317,11 @@ class DynamicToolbarController(private val context: Context) {
         if (up) ToolbarMotion.startPull(ys, tb.height.toFloat(), density)
         else ToolbarMotion.startBounce(ys, density)
         if (unclipped.isEmpty()) {
+            // the keyboard view draws into a hardware layer, which is cut at its edges whatever the parents do:
+            //  without it while the rows move
+            layerTypeBefore = kv.layerType
+            motionKeyboardView = kv
+            kv.setLayerType(View.LAYER_TYPE_NONE, null)
             // the rows draw above the keyboard view (and a little below): no clipping on the way to the input view
             var v = kv.parent as? android.view.ViewGroup
             while (v != null) {
@@ -348,6 +356,8 @@ class DynamicToolbarController(private val context: Context) {
         ToolbarMotion.stop()
         unclipped.forEach { (v, clip) -> v.clipChildren = clip }
         unclipped.clear()
+        motionKeyboardView?.setLayerType(layerTypeBefore, null)
+        motionKeyboardView = null
         KeyboardSwitcher.getInstance().mainKeyboardView?.invalidateAllKeys()
         updatePosition()
     }
