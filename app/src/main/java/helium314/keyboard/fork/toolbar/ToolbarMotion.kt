@@ -130,7 +130,7 @@ object ToolbarMotion {
         if (phase == Phase.PULL && !fingerDown) {
             releasedFor += h
             // up far enough (or long enough): back down
-            if (pos.firstOrNull() ?: 0f >= height * 0.85f || releasedFor > 0.25f) {
+            if (pos.firstOrNull() ?: 0f >= height * 0.8f || releasedFor > 0.16f) {
                 phase = Phase.RETURN
                 target = 0f
             }
@@ -144,8 +144,8 @@ object ToolbarMotion {
             val stiffness: Float
             val damping: Float
             when (phase) {
-                Phase.PULL -> { stiffness = 700f * (1.25f - 0.5f * f); damping = 0.82f }
-                Phase.RETURN -> { stiffness = 420f * (1.2f - 0.4f * f); damping = 0.62f }
+                Phase.PULL -> { stiffness = 1400f * (1.2f - 0.4f * f); damping = 0.85f }
+                Phase.RETURN -> { stiffness = 800f * (1.15f - 0.3f * f); damping = 0.68f }
                 else -> { stiffness = 560f * (1.1f - 0.2f * f); damping = 0.6f }
             }
             if (phase == Phase.BOUNCE && !kicked[i] && elapsed >= kickAt[i]) {
@@ -154,13 +154,15 @@ object ToolbarMotion {
                 val w = sqrt(stiffness)
                 vel[i] = -dipPx * w / PEAK_FACTOR
             }
+            // opening: the top row is pulled the whole way, the rows below less and less (the bottom one about half)
+            val rowTarget = if (phase == Phase.PULL) target * (1f - PULL_SPREAD * f) else target
             val c = 2f * damping * sqrt(stiffness)
             repeat(sub) {
-                val a = -stiffness * (pos[i] - target) - c * vel[i]
+                val a = -stiffness * (pos[i] - rowTarget) - c * vel[i]
                 vel[i] += a * s
                 pos[i] += vel[i] * s
             }
-            if (abs(pos[i] - target) > 0.5f || abs(vel[i]) > 6f || (phase == Phase.BOUNCE && !kicked[i])) moving = true
+            if (abs(pos[i] - rowTarget) > 0.5f || abs(vel[i]) > 6f || (phase == Phase.BOUNCE && !kicked[i])) moving = true
         }
         if (phase == Phase.PULL) return true
         if (!moving) {
@@ -169,6 +171,9 @@ object ToolbarMotion {
         }
         return true
     }
+
+    /** how much less the bottom row is pulled up than the top row when opening */
+    private const val PULL_SPREAD = 0.5f
 
     /** peak of an underdamped spring pushed from rest, as a share of v / w (about, for damping 0.6) */
     private val PEAK_FACTOR = exp(-0.7f)
