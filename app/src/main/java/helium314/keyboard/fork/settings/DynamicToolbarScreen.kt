@@ -353,6 +353,8 @@ fun createDynamicToolbarSettings(context: Context) = listOf(
         helium314.keyboard.settings.preferences.InlineChoicePreference(setting.title, setting.key, listOf(
             ctx.getString(R.string.fork_ai_glow_style_ring) to GlowPrefs.AI_STYLE_RING,
             ctx.getString(R.string.fork_ai_glow_style_dots) to GlowPrefs.AI_STYLE_DOTS,
+            ctx.getString(R.string.fork_ai_glow_style_edge) to GlowPrefs.AI_STYLE_EDGE,
+            ctx.getString(R.string.fork_ai_glow_style_edge_google) to GlowPrefs.AI_STYLE_EDGE_GOOGLE,
         ), GlowPrefs.AI_STYLE_RING)
     },
     Setting(context, GlowPrefs.AI_GLOW_BLOOM, R.string.fork_ai_glow_bloom, R.string.fork_ai_glow_bloom_summary) {

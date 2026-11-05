@@ -24,10 +24,12 @@ import kotlin.math.sqrt
 /**
  * fork: pastel glow behind the keys and the toolbar while an AI command or translation runs, seen through the key mask
  * like the chip glow; it breathes and fades in and out. It is one glow over both: the keyboard view and the toolbar each
- * draw their part of it. Two looks ([GlowPrefs.AI_GLOW_STYLE]):
+ * draw their part of it. The looks ([GlowPrefs.AI_GLOW_STYLE]):
  * - [GlowPrefs.AI_STYLE_RING]: like the Siri light on a HomePod, soft blobs of random pastel colors in a ring round the
  *   keyboard's middle, turning slowly, smooth over the whole keyboard
  * - [GlowPrefs.AI_STYLE_DOTS]: the chip glow's dots and shape, the HomePod colors blending softly across it
+ * - [GlowPrefs.AI_STYLE_EDGE] / [GlowPrefs.AI_STYLE_EDGE_GOOGLE]: like Gemini on Android, a gradient turning round the
+ *   edges and fading inwards, in Gemini's or Google's colors
  */
 class AiGlow(
     private val host: View,
@@ -91,10 +93,13 @@ class AiGlow(
         if (on && drawable == null) {
             val view = keyboardView() ?: return
             val params = GlowPrefs.aiGlow(prefs)
-            val glow = if (prefs.getString(GlowPrefs.AI_GLOW_STYLE, GlowPrefs.AI_STYLE_RING) == GlowPrefs.AI_STYLE_DOTS)
-                    PastelDotsDrawable(host.resources.displayMetrics.density, params,
-                        prefs.getFloat(GlowPrefs.AI_GLOW_BLOOM, GlowPrefs.DEFAULT_AI_GLOW_BLOOM).coerceIn(0f, 1f))
-                else PastelRingDrawable(params.maxAlpha, params.minAlpha, params.periodMs)
+            val glow = when (prefs.getString(GlowPrefs.AI_GLOW_STYLE, GlowPrefs.AI_STYLE_RING)) {
+                GlowPrefs.AI_STYLE_DOTS -> PastelDotsDrawable(host.resources.displayMetrics.density, params,
+                    prefs.getFloat(GlowPrefs.AI_GLOW_BLOOM, GlowPrefs.DEFAULT_AI_GLOW_BLOOM).coerceIn(0f, 1f))
+                GlowPrefs.AI_STYLE_EDGE -> EdgeDrawable(GEMINI, 0.11f, params)
+                GlowPrefs.AI_STYLE_EDGE_GOOGLE -> EdgeDrawable(GOOGLE, 0.09f, params)
+                else -> PastelRingDrawable(params.maxAlpha, params.minAlpha, params.periodMs)
+            }
             drawable = glow
             kv = view
             place(view, glow)
@@ -346,6 +351,67 @@ class AiGlow(
         }
     }
 
+    /**
+     * a sweep gradient of [colors] turning round the middle, kept to a soft band along the edges by a mask: the light
+     * fades inwards with the distance to a rounded rectangle (so it curves round the corners instead of creasing along
+     * their diagonals), [depth] of the shorter side being where it is down to a third. Breathes like the other looks.
+     */
+    private class EdgeDrawable(colors: IntArray, private val depth: Float, private val params: GlowPrefs.Glow) : Layer() {
+        private val sweepColors = colors + colors[0]
+        private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
+        private val matrix = android.graphics.Matrix()
+        private val maskPaint = Paint(Paint.FILTER_BITMAP_FLAG).apply {
+            xfermode = android.graphics.PorterDuffXfermode(android.graphics.PorterDuff.Mode.DST_IN)
+        }
+        private val layerPaint = Paint()
+        private val rect = android.graphics.RectF()
+        private var size = 0L
+        private var mask: android.graphics.Bitmap? = null
+
+        override fun draw(canvas: Canvas) {
+            val w = bounds.width()
+            val h = bounds.height()
+            if (w <= 0 || h <= 0 || fade <= 0f) return
+            if (size != (w.toLong() shl 32 or h.toLong())) layout(w, h)
+            val breath = 0.5f - 0.5f * cos(2 * PI * time / params.periodMs.coerceAtLeast(1)).toFloat()
+            layerPaint.alpha = (255 * fade * (params.minAlpha + (params.maxAlpha - params.minAlpha) * breath)).toInt().coerceIn(0, 255)
+            if (layerPaint.alpha <= 0) return
+            rect.set(bounds)
+            val saved = canvas.saveLayer(rect, layerPaint)
+            val cx = bounds.exactCenterX()
+            val cy = bounds.exactCenterY()
+            matrix.setRotate((time / TURN_EDGE_MS.toFloat() * 360f) % 360f, cx, cy)
+            paint.shader = android.graphics.SweepGradient(cx, cy, sweepColors, null).apply { setLocalMatrix(matrix) }
+            canvas.drawRect(rect, paint)
+            mask?.let { canvas.drawBitmap(it, null, rect, maskPaint) }
+            canvas.restoreToCount(saved)
+        }
+
+        /** the falloff, at a quarter of the size (it is smooth, drawn scaled up with filtering) */
+        private fun layout(width: Int, height: Int) {
+            size = width.toLong() shl 32 or height.toLong()
+            val scale = 4
+            val mw = (width / scale).coerceAtLeast(1)
+            val mh = (height / scale).coerceAtLeast(1)
+            val tau = minOf(mw, mh) * depth
+            val r = tau * 3
+            val hx = mw / 2f - r
+            val hy = mh / 2f - r
+            val pixels = IntArray(mw * mh)
+            for (y in 0 until mh) for (x in 0 until mw) {
+                val qx = kotlin.math.abs(x + 0.5f - mw / 2f) - hx
+                val qy = kotlin.math.abs(y + 0.5f - mh / 2f) - hy
+                val ox = maxOf(qx, 0f)
+                val oy = maxOf(qy, 0f)
+                val sdf = sqrt(ox * ox + oy * oy) + minOf(maxOf(qx, qy), 0f) - r
+                val a = (255 * kotlin.math.exp(-maxOf(0f, -sdf) / tau)).toInt().coerceIn(0, 255)
+                pixels[y * mw + x] = a shl 24
+            }
+            mask?.recycle()
+            mask = android.graphics.Bitmap.createBitmap(pixels, mw, mh, android.graphics.Bitmap.Config.ARGB_8888)
+        }
+    }
+
     companion object {
         private const val BLOBS = 5
         /** HomePod light colors, bright: pink, magenta, violet, periwinkle, cyan, aqua, peach, coral */
@@ -356,6 +422,14 @@ class AiGlow(
         /** the pale light in the middle of the dot glow */
         private const val CENTER_LIGHT = 0xFFFFF2FB.toInt()
         private const val TURN_MS = 16_000L
+        /** one turn of the edge glow's gradient */
+        private const val TURN_EDGE_MS = 16_000L
+        /** Gemini's colors: blue, light blue, violet, rose, amber */
+        private val GEMINI = intArrayOf(
+            0xFF4796E3.toInt(), 0xFF6EC6FF.toInt(), 0xFF9177C7.toInt(), 0xFFCA6673.toInt(), 0xFFF2A45C.toInt(),
+        )
+        /** Google's logo colors: blue, red, yellow, green */
+        private val GOOGLE = intArrayOf(0xFF4285F4.toInt(), 0xFFEA4335.toInt(), 0xFFFBBC04.toInt(), 0xFF34A853.toInt())
         private const val DRIFT_MS = 5_000L
         /** pink, peach, butter, mint, sky, periwinkle, lavender, orchid */
         private val COLORS = intArrayOf(
