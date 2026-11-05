@@ -54,6 +54,7 @@ fun DynamicToolbarScreen(
             ForkSettings.PREF_SWIPE_MAX_DURATION.takeIf { swipe },
             ForkSettings.PREF_ONE_HANDED_SWIPE,
             R.string.fork_cat_animation,
+            helium314.keyboard.fork.toolbar.ToolbarMotion.PREF,
             ForkSettings.PREF_TOOLBAR_ANIM_DURATION,
             ForkSettings.PREF_TOOLBAR_SMOOTH_RESIZE,
             ForkSettings.PREF_TOOLBAR_OVERLAY,
@@ -164,6 +165,14 @@ fun createDynamicToolbarSettings(context: Context) = listOf(
     },
     Setting(context, ForkSettings.PREF_ONE_HANDED_SWIPE, R.string.fork_one_handed_swipe, R.string.fork_one_handed_swipe_summary) {
         SwitchPreference(it, true)
+    },
+    Setting(context, helium314.keyboard.fork.toolbar.ToolbarMotion.PREF, R.string.fork_toolbar_motion,
+        R.string.fork_toolbar_motion_summary) { setting ->
+        val ctx = androidx.compose.ui.platform.LocalContext.current
+        helium314.keyboard.settings.preferences.InlineChoicePreference(setting.title, setting.key, listOf(
+            ctx.getString(R.string.fork_toolbar_motion_slide) to helium314.keyboard.fork.toolbar.ToolbarMotion.SLIDE,
+            ctx.getString(R.string.fork_toolbar_motion_pull) to helium314.keyboard.fork.toolbar.ToolbarMotion.PULL,
+        ), helium314.keyboard.fork.toolbar.ToolbarMotion.SLIDE)
     },
     Setting(context, ForkSettings.PREF_TOOLBAR_ANIM_DURATION, R.string.fork_toolbar_anim_duration) { def ->
         SliderPreference(

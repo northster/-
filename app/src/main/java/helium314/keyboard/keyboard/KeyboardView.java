@@ -351,6 +351,7 @@ public class KeyboardView extends View {
                 canvas.drawColor(Color.BLACK, PorterDuff.Mode.CLEAR);
                 background.draw(canvas);
             }
+            drawForkBackgroundAbove(canvas); // fork: rows raised by the toolbar's "pull" motion
             drawForkDecoration(mForkUnderlay, canvas); // fork: under the keys
             drawForkDecoration(mForkAiUnderlay, canvas);
             final int glowOnKeys = (mForkUnderlay != null || mForkAiUnderlay != null)
@@ -411,7 +412,8 @@ public class KeyboardView extends View {
         for (final Key key : keyboard.getSortedKeys()) {
             if (key.isSpacer()) continue;
             final int keyDrawX = key.getDrawX() + getPaddingLeft();
-            final int keyDrawY = key.getY() + getPaddingTop();
+            final float keyDrawY = key.getY() + getPaddingTop()
+                    + forkRowOffset(key);
             canvas.translate(keyDrawX, keyDrawY);
             onDrawKeyBackground(key, canvas, key.selectBackgroundDrawable(
                     mKeyBackground, mFunctionalKeyBackground, mSpacebarBackground, mActionKeyBackground));
@@ -424,6 +426,35 @@ public class KeyboardView extends View {
         canvas.restoreToCount(saved);
     }
 
+    private Drawable mForkBackgroundCopy;
+
+    /** fork: how far the toolbar's "pull" motion moves the row of [key] (main keyboard only) */
+    private float forkRowOffset(@NonNull final Key key) {
+        return this instanceof MainKeyboardView ? helium314.keyboard.fork.toolbar.ToolbarMotion.rowOffset(key.getY()) : 0f;
+    }
+
+    /**
+     * fork: while the toolbar's "pull" motion raises the rows above the view, the keyboard background reaches up with
+     * them (from this view or the view around it that has it), so the whole keyboard looks pulled up
+     */
+    private void drawForkBackgroundAbove(@NonNull final Canvas canvas) {
+        if (!(this instanceof MainKeyboardView)) return;
+        final float raised = helium314.keyboard.fork.toolbar.ToolbarMotion.getMaxRaised();
+        if (raised <= 0) return;
+        if (mForkBackgroundCopy == null) {
+            Drawable bg = getBackground();
+            android.view.ViewParent p = getParent();
+            while (bg == null && p instanceof View) {
+                bg = ((View) p).getBackground();
+                p = p.getParent();
+            }
+            if (bg == null || bg.getConstantState() == null) return;
+            mForkBackgroundCopy = bg.getConstantState().newDrawable(getResources()).mutate();
+        }
+        mForkBackgroundCopy.setBounds(0, -(int) Math.ceil(raised), getWidth(), getPaddingTop() + 1);
+        mForkBackgroundCopy.draw(canvas);
+    }
+
     private void onDrawKey(@NonNull final Key key, @NonNull final Canvas canvas,
             @NonNull final Paint paint) {
         onDrawKey(key, canvas, paint, true, true);
@@ -433,7 +464,9 @@ public class KeyboardView extends View {
     private void onDrawKey(@NonNull final Key key, @NonNull final Canvas canvas,
             @NonNull final Paint paint, final boolean drawBackground, final boolean drawTop) {
         final int keyDrawX = key.getDrawX() + getPaddingLeft();
-        final int keyDrawY = key.getY() + getPaddingTop();
+        // fork: each row moved by the toolbar's "pull" motion
+        final float keyDrawY = key.getY() + getPaddingTop()
+                + forkRowOffset(key);
         canvas.translate(keyDrawX, keyDrawY);
 
         final KeyVisualAttributes attr = key.getVisualAttributes();

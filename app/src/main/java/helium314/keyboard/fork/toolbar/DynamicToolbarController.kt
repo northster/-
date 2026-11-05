@@ -202,8 +202,13 @@ class DynamicToolbarController(private val context: Context) {
         val before = isExpanded
         // opened for what glowed behind the closed toolbar: it closes again once that is used or dismissed
         val forGlow = up && !before && hintView != null
-        setExpanded(up, true)
-        if (isExpanded != before) startWave(isExpanded)
+        if (ToolbarMotion.isPull(context.prefs()) && up != before && startMotion(up)) {
+            // the rows move instead of the wave; opening shows the toolbar as they come back down
+            setExpanded(up, !up)
+        } else {
+            setExpanded(up, true)
+            if (isExpanded != before) startWave(isExpanded)
+        }
         if (forGlow && isExpanded) {
             if (chip != null) autoOpened = true
             if (typedHit != null) typedAutoOpened = true
@@ -292,6 +297,61 @@ class DynamicToolbarController(private val context: Context) {
 
     private fun isUsable() = !Settings.getValues().mIsFloatingKeyboard && keyboardFrame?.visibility == View.VISIBLE
 
+    // ---------------------------------------------------------------- "pull" open / close (ToolbarMotion)
+
+    private var motionAnimator: ValueAnimator? = null
+    /** views whose clipping was turned off so the rows can move past the keyboard's edges, with what it was */
+    private val unclipped = ArrayList<Pair<android.view.ViewGroup, Boolean>>()
+
+    /** starts the rows' motion for opening ([up]) or closing; false if the keyboard can't show it */
+    private fun startMotion(up: Boolean): Boolean {
+        val kv = KeyboardSwitcher.getInstance().mainKeyboardView ?: return false
+        val keys = kv.keyboard?.sortedKeys ?: return false
+        val tb = toolbar ?: return false
+        if (!kv.isShown || toolActive || !isUsable() || tb.height == 0) return false
+        val density = context.resources.displayMetrics.density
+        val ys = keys.map { it.y }
+        if (up) ToolbarMotion.startPull(ys, tb.height.toFloat(), density)
+        else ToolbarMotion.startBounce(ys, density)
+        if (unclipped.isEmpty()) {
+            // the rows draw above the keyboard view (and a little below): no clipping on the way to the input view
+            var v = kv.parent as? android.view.ViewGroup
+            while (v != null) {
+                unclipped += v to v.clipChildren
+                v.clipChildren = false
+                if (v === inputView) break
+                v = v.parent as? android.view.ViewGroup
+            }
+        }
+        if (motionAnimator == null) {
+            var last = System.nanoTime()
+            motionAnimator = ValueAnimator.ofFloat(0f, 1f).apply {
+                duration = 1000
+                repeatCount = ValueAnimator.INFINITE
+                addUpdateListener {
+                    val now = System.nanoTime()
+                    val going = ToolbarMotion.step((now - last) / 1e9f)
+                    last = now
+                    kv.invalidateAllKeys()
+                    updatePosition()
+                    if (!going) endMotion()
+                }
+                start()
+            }
+        }
+        return true
+    }
+
+    private fun endMotion() {
+        motionAnimator?.cancel()
+        motionAnimator = null
+        ToolbarMotion.stop()
+        unclipped.forEach { (v, clip) -> v.clipChildren = clip }
+        unclipped.clear()
+        KeyboardSwitcher.getInstance().mainKeyboardView?.invalidateAllKeys()
+        updatePosition()
+    }
+
     /** Place the toolbar right above the keyboard frame, shifted down by the hidden part. */
     private fun updatePosition() {
         val tb = toolbar ?: return
@@ -309,6 +369,17 @@ class DynamicToolbarController(private val context: Context) {
         // while it slides away it looks like going behind the keys.
         tb.translationZ = 1f
         tb.outlineProvider = null // no shadow from the elevation
+        if (isExpanded && ToolbarMotion.opening) {
+            // "pull" opening: the toolbar in its place, showing from the top down as far as the top row has come down
+            tb.translationY = frameTop + padOverlap() - tb.bottom
+            val shown = if (!ToolbarMotion.revealing) 0
+                else (tb.height - ToolbarMotion.topRaised).toInt().coerceIn(0, tb.height)
+            tb.visibility = if (visible && shown > 0) View.VISIBLE else View.INVISIBLE
+            val clip = tb.clipBounds
+            if (clip == null || clip.bottom != shown || clip.right != tb.width)
+                tb.clipBounds = android.graphics.Rect(0, 0, tb.width, shown)
+            return
+        }
         tb.translationY = frameTop + padOverlap() - tb.bottom + hiddenFraction * tb.height
         val shown = (tb.height * (1f - hiddenFraction)).toInt().coerceAtLeast(0)
         val clip = tb.clipBounds
@@ -1314,6 +1385,7 @@ class DynamicToolbarController(private val context: Context) {
     }
 
     fun onWindowHidden() {
+        if (motionAnimator != null) endMotion()
         if (isExpanded && context.prefs().getBoolean(ForkSettings.PREF_TOOLBAR_START_CLOSED, false)) {
             closingForHide = true
             setExpanded(false, false)

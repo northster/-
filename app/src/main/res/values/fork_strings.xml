@@ -19,6 +19,10 @@
     <string name="fork_toolbar_overlay_summary">Don\'t resize the app when the toolbar is shown. No layout jump in the app, but the toolbar covers the bottom of it</string>
     <string name="fork_toolbar_smooth_resize">Move the app smoothly with the toolbar</string>
     <string name="fork_toolbar_smooth_resize_summary">The app moves smoothly with the toolbar (may stutter in heavy apps)</string>
+    <string name="fork_toolbar_motion">Opening effect</string>
+    <string name="fork_toolbar_motion_summary">Pull: the keyboard follows the swipe up by the height of the toolbar and drops back as the toolbar appears; closing makes it bounce a little. The dot wave is not shown then</string>
+    <string name="fork_toolbar_motion_slide">Slide up</string>
+    <string name="fork_toolbar_motion_pull">Pull</string>
     <string name="fork_toolbar_anim_duration">Animation duration</string>
     <string name="fork_unit_dp">%s dp</string>
     <string name="fork_unit_dp_per_s">%s dp/s</string>

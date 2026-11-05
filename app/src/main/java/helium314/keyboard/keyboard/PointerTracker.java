@@ -853,10 +853,23 @@ public final class PointerTracker implements PointerTrackerQueue.Element,
      * fork: the pointer was recognized as a vertical swipe. Cancel whatever the key would have done
      * on release and let the listener expand / collapse the toolbar.
      */
-    private void onToolbarSwipe(final boolean up) {
+    private void onToolbarSwipe(final boolean up, final int y) {
         mOneHandedFlingDetector.abort();
         cancelKeyForForkGesture();
         sListener.onToolbarSwipe(up);
+        // fork: the "pull" opening follows the finger until it lets go
+        mInToolbarPull = up && helium314.keyboard.fork.toolbar.ToolbarMotion.isPulling();
+        mToolbarPullStartY = y;
+    }
+
+    /** fork: the finger pulls the rows up (toolbar "pull" opening), from [mToolbarPullStartY] */
+    private boolean mInToolbarPull = false;
+    private int mToolbarPullStartY;
+
+    private void endToolbarPull() {
+        if (!mInToolbarPull) return;
+        mInToolbarPull = false;
+        helium314.keyboard.fork.toolbar.ToolbarMotion.release();
     }
 
     /** fork: a gesture (toolbar swipe, one-handed fling) took the pointer: the key does nothing on release */
@@ -938,6 +951,10 @@ public final class PointerTracker implements PointerTrackerQueue.Element,
         if (DEBUG_MOVE_EVENT) {
             printTouchEvent("onMoveEvent:", x, y, eventTime);
         }
+        if (mInToolbarPull) { // fork: the finger only pulls the rows now
+            helium314.keyboard.fork.toolbar.ToolbarMotion.drag(mToolbarPullStartY - y);
+            return;
+        }
         // fork: toolbar swipe detection has priority over everything else except already running gestures.
         // It runs even if key tracking was disabled (e.g. finger slid onto the next key row before the
         // swipe was recognized), the key input is cancelled anyway in that case.
@@ -964,7 +981,7 @@ public final class PointerTracker implements PointerTrackerQueue.Element,
             } else {
                 final VerticalSwipeDetector.Result result = mToolbarSwipeDetector.onMove(x, y, eventTime);
                 if (result == VerticalSwipeDetector.Result.SWIPE_UP || result == VerticalSwipeDetector.Result.SWIPE_DOWN) {
-                    onToolbarSwipe(result == VerticalSwipeDetector.Result.SWIPE_UP);
+                    onToolbarSwipe(result == VerticalSwipeDetector.Result.SWIPE_UP, y);
                     return;
                 }
             }
@@ -1260,6 +1277,7 @@ public final class PointerTracker implements PointerTrackerQueue.Element,
     }
 
     private void onUpEventInternal(final int x, final int y, final long eventTime) {
+        endToolbarPull(); // fork
         sTimerProxy.cancelKeyTimersOf(this);
         final boolean isInDraggingFinger = mIsInDraggingFinger;
         final boolean isInSlidingKeyInput = mIsInSlidingKeyInput;
@@ -1447,6 +1465,7 @@ public final class PointerTracker implements PointerTrackerQueue.Element,
     }
 
     private void onCancelEventInternal() {
+        endToolbarPull(); // fork
         mToolbarSwipeDetector.abort();
         if (mInSpaceWidgetMode) {
             mInSpaceWidgetMode = false;
