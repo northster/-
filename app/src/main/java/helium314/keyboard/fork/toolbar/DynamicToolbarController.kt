@@ -342,6 +342,8 @@ class DynamicToolbarController(private val context: Context) {
                     last = now
                     kv.invalidateAllKeys()
                     updatePosition()
+                    // the app is pushed up with the rising keyboard (smooth resize)
+                    if (ToolbarMotion.opening || !going) requestInsetsUpdate()
                     if (!going) endMotion()
                 }
                 start()
@@ -427,6 +429,18 @@ class DynamicToolbarController(private val context: Context) {
         return (frame.top + frame.translationY).toInt() + padOverlap() - tb.height
     }
 
+    /**
+     * how far the app is pushed up, as the share of the toolbar it leaves out: the slide's [hiddenFraction], or while
+     * the "pull" opening raises the rows, as far as the keyboard's top has come up (the keyboard pushes the app up),
+     * then none once the rows fall back and uncover the toolbar
+     */
+    private fun shownHiddenFraction(): Float {
+        val tb = toolbar ?: return hiddenFraction
+        if (!isExpanded || !ToolbarMotion.opening || tb.height == 0) return hiddenFraction
+        if (ToolbarMotion.revealing) return 0f
+        return (1f - ToolbarMotion.maxRaised / tb.height).coerceIn(0f, 1f)
+    }
+
     /** Top of the area the app should be resized for (contentTopInsets), Int.MAX_VALUE if toolbar is not relevant. */
     fun insetTop(): Int {
         if (!isUsable() || !insetsIncludeToolbar) return Int.MAX_VALUE
@@ -435,8 +449,9 @@ class DynamicToolbarController(private val context: Context) {
         if (prefs.getBoolean(ForkSettings.PREF_TOOLBAR_SMOOTH_RESIZE, ForkSettings.DEFAULT_TOOLBAR_SMOOTH_RESIZE)) {
             // follow the currently visible part of the toolbar, so the app moves with the animation
             val tb = toolbar ?: return Int.MAX_VALUE
-            if (hiddenFraction >= 1f) return Int.MAX_VALUE
-            return expandedTop() + (hiddenFraction * tb.height).toInt()
+            val hidden = shownHiddenFraction()
+            if (hidden >= 1f) return Int.MAX_VALUE
+            return expandedTop() + (hidden * tb.height).toInt()
         }
         return expandedTop()
     }
