@@ -21,6 +21,8 @@
     <string name="fork_toolbar_smooth_resize_summary">앱 화면이 툴바를 따라 부드럽게 움직임(무거운 앱에서는 버벅일 수 있음)</string>
     <string name="fork_toolbar_motion">여는 효과</string>
     <string name="fork_toolbar_motion_summary">당기기: 스와이프하면 키보드가 툴바만큼 딸려 올라갔다 내려오며 툴바가 나타나고, 닫을 때는 살짝 튕깁니다. 이때 도트 파동은 나오지 않습니다</string>
+    <string name="fork_toolbar_motion_row_delay">줄 사이 시간차 (맨 아랫줄)</string>
+    <string name="fork_toolbar_motion_speed">당기는 속도</string>
     <string name="fork_toolbar_motion_slide">밀어 올리기</string>
     <string name="fork_toolbar_motion_pull">당기기</string>
     <string name="fork_toolbar_anim_duration">애니메이션 시간</string>

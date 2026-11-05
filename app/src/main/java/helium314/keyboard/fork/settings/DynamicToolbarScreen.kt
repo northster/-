@@ -39,6 +39,7 @@ fun DynamicToolbarScreen(
         helium314.keyboard.latin.utils.Log.v("irrelevant", "stupid way to trigger recomposition on preference change")
     // sub-options only while the switch they belong to is on
     val swipe = prefs.getBoolean(ForkSettings.PREF_TOOLBAR_SWIPE_ENABLED, ForkSettings.DEFAULT_TOOLBAR_SWIPE_ENABLED)
+    val pull = helium314.keyboard.fork.toolbar.ToolbarMotion.isPull(prefs)
     val wave = GlowPrefs.waveEnabled(prefs)
     val glow = GlowPrefs.glowEnabled(prefs)
     val aiGlow = prefs.getBoolean(GlowPrefs.AI_GLOW, true)
@@ -57,6 +58,8 @@ fun DynamicToolbarScreen(
             ForkSettings.PREF_ONE_HANDED_SWIPE,
             R.string.fork_cat_animation,
             helium314.keyboard.fork.toolbar.ToolbarMotion.PREF,
+            helium314.keyboard.fork.toolbar.ToolbarMotion.PREF_ROW_DELAY.takeIf { pull },
+            helium314.keyboard.fork.toolbar.ToolbarMotion.PREF_SPEED.takeIf { pull },
             ForkSettings.PREF_TOOLBAR_ANIM_DURATION,
             ForkSettings.PREF_TOOLBAR_SMOOTH_RESIZE,
             ForkSettings.PREF_TOOLBAR_OVERLAY,
@@ -168,6 +171,14 @@ fun createDynamicToolbarSettings(context: Context) = listOf(
     },
     Setting(context, ForkSettings.PREF_ONE_HANDED_SWIPE, R.string.fork_one_handed_swipe, R.string.fork_one_handed_swipe_summary) {
         SwitchPreference(it, true)
+    },
+    Setting(context, helium314.keyboard.fork.toolbar.ToolbarMotion.PREF_ROW_DELAY, R.string.fork_toolbar_motion_row_delay) {
+        helium314.keyboard.settings.preferences.InlineSliderPreference(name = it.title, key = it.key,
+            default = helium314.keyboard.fork.toolbar.ToolbarMotion.DEFAULT_ROW_DELAY, range = 0f..150f, format = ::ms, step = 5f)
+    },
+    Setting(context, helium314.keyboard.fork.toolbar.ToolbarMotion.PREF_SPEED, R.string.fork_toolbar_motion_speed) {
+        helium314.keyboard.settings.preferences.InlineSliderPreference(name = it.title, key = it.key,
+            default = helium314.keyboard.fork.toolbar.ToolbarMotion.DEFAULT_SPEED, range = 0.5f..2f, format = ::percent, step = 0.05f)
     },
     Setting(context, helium314.keyboard.fork.toolbar.ToolbarMotion.PREF, R.string.fork_toolbar_motion,
         R.string.fork_toolbar_motion_summary) { setting ->

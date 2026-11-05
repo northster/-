@@ -22,6 +22,22 @@ object ToolbarMotion {
 
     fun isPull(prefs: SharedPreferences) = prefs.getString(PREF, SLIDE) == PULL
 
+    /** how much later the bottom row starts than the top row (ms); the rows between in steps */
+    const val PREF_ROW_DELAY = "fork_toolbar_motion_row_delay"
+    const val DEFAULT_ROW_DELAY = 30f
+    /** speed of the rows' springs, 1 = as designed */
+    const val PREF_SPEED = "fork_toolbar_motion_speed"
+    const val DEFAULT_SPEED = 1f
+
+    private var rowDelay = DEFAULT_ROW_DELAY / 1000f
+    private var speed = DEFAULT_SPEED
+
+    /** reads the delay and speed settings, before a motion starts */
+    fun configure(prefs: SharedPreferences) {
+        rowDelay = prefs.getFloat(PREF_ROW_DELAY, DEFAULT_ROW_DELAY).coerceIn(0f, 300f) / 1000f
+        speed = prefs.getFloat(PREF_SPEED, DEFAULT_SPEED).coerceIn(0.3f, 3f)
+    }
+
     private enum class Phase { NONE, PULL, RETURN, BOUNCE }
     private var phase = Phase.NONE
 
@@ -136,7 +152,7 @@ object ToolbarMotion {
         if (phase == Phase.PULL && !fingerDown) {
             releasedFor += h
             // up far enough (or long enough): back down
-            if (pos.firstOrNull() ?: 0f >= height * 0.8f || releasedFor > 0.2f) {
+            if (pos.firstOrNull() ?: 0f >= height * 0.8f || releasedFor > 0.2f / speed) {
                 phase = Phase.RETURN
                 heldTarget = target
                 target = 0f
@@ -149,13 +165,15 @@ object ToolbarMotion {
         val s = h / sub
         for (i in pos.indices) {
             val f = rowFrac[i]
-            val stiffness: Float
+            var stiffness: Float
             val damping: Float
             when (phase) {
                 Phase.PULL -> { stiffness = 1000f * (1.3f - 0.6f * f); damping = 0.85f }
                 Phase.RETURN -> { stiffness = 600f * (1.25f - 0.5f * f); damping = 0.68f }
                 else -> { stiffness = 560f * (1.1f - 0.2f * f); damping = 0.6f }
             }
+            // faster or slower as set: the springs' times scale with 1 / speed
+            stiffness *= speed * speed
             if (phase == Phase.BOUNCE && !kicked[i] && elapsed >= kickAt[i]) {
                 kicked[i] = true
                 // a push down: with these springs the dip is about dipPx
@@ -164,7 +182,7 @@ object ToolbarMotion {
             }
             // opening: the top row is pulled the whole way, the rows below less and less (the bottom one about half);
             //  each row starts a little after the one above it, so the motion runs down the keyboard
-            val started = phaseTime >= ROW_DELAY * f
+            val started = phaseTime >= rowDelay * f
             val rowTarget = when (phase) {
                 Phase.PULL -> if (started) target * (1f - PULL_SPREAD * f) else 0f
                 Phase.RETURN -> if (started) 0f else heldTarget * (1f - PULL_SPREAD * f)
@@ -185,9 +203,6 @@ object ToolbarMotion {
         }
         return true
     }
-
-    /** opening: how much later the bottom row starts moving than the top row (s), rising and falling back */
-    private const val ROW_DELAY = 0.1f
 
     /** how much less the bottom row is pulled up than the top row when opening */
     private const val PULL_SPREAD = 0.5f

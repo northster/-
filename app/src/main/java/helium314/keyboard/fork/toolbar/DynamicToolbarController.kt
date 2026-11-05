@@ -314,6 +314,7 @@ class DynamicToolbarController(private val context: Context) {
         if (!kv.isShown || toolActive || !isUsable() || tb.height == 0) return false
         val density = context.resources.displayMetrics.density
         val ys = keys.map { it.y }
+        ToolbarMotion.configure(context.prefs())
         if (up) ToolbarMotion.startPull(ys, tb.height.toFloat(), density)
         else ToolbarMotion.startBounce(ys, density)
         if (unclipped.isEmpty()) {
