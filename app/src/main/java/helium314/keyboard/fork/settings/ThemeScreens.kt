@@ -348,7 +348,7 @@ private fun ValueSlider(
 ) {
     val s = LocalShadcn.current
     var v by remember(value) { mutableFloatStateOf(value) }
-    Column(Modifier.fillMaxWidth().padding(start = 16.dp, end = 16.dp, top = 12.dp, bottom = 4.dp)) {
+    Column(Modifier.fillMaxWidth().padding(start = 16.dp, end = 16.dp, top = 10.dp, bottom = 8.dp)) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(name, style = MaterialTheme.typography.bodyLarge, modifier = Modifier.weight(1f))
             val shown = if (step < 1f) "%.1f".format(v) else v.roundToInt().toString()

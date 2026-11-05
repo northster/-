@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
@@ -60,18 +61,15 @@ fun InlineSliderPreference(
     val stored = prefs.getFloat(key, default)
     var value by remember(key, stored) { mutableFloatStateOf(stored) }
     val s = LocalShadcn.current
-    Column(Modifier.fillMaxWidth().padding(start = 16.dp, end = 8.dp, top = 12.dp, bottom = 4.dp)) {
+    Column(Modifier.fillMaxWidth().padding(start = 16.dp, end = 8.dp, top = 10.dp, bottom = 8.dp)) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(name, style = MaterialTheme.typography.bodyLarge, modifier = Modifier.weight(1f))
             Text(format(value), style = MaterialTheme.typography.bodyMedium, color = s.mutedForeground)
-            TextButton(
-                onClick = {
-                    prefs.edit { remove(key) }
-                    value = default
-                    onChanged()
-                },
-                enabled = value != default,
-            ) { Text(stringResource(R.string.button_default), style = MaterialTheme.typography.labelMedium) }
+            SliderDefaultButton(enabled = value != default) {
+                prefs.edit { remove(key) }
+                value = default
+                onChanged()
+            }
         }
         helium314.keyboard.settings.ScrollSafeSlider(
             value = value,
@@ -103,6 +101,24 @@ fun InlineSliderPreference(
 }
 
 /**
+ * fork: the "default" button of a slider row, only as tall as its text (32dp, not Material's 48dp touch box), so a
+ * slider row is not much taller than other rows
+ */
+@Composable
+fun SliderDefaultButton(enabled: Boolean, onClick: () -> Unit) {
+    androidx.compose.runtime.CompositionLocalProvider(
+        androidx.compose.material3.LocalMinimumInteractiveComponentSize provides 0.dp
+    ) {
+        TextButton(
+            onClick = onClick,
+            enabled = enabled,
+            modifier = Modifier.height(32.dp),
+            contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = 10.dp),
+        ) { Text(stringResource(R.string.button_default), style = MaterialTheme.typography.labelMedium) }
+    }
+}
+
+/**
  * Slider over a list of [steps] that don't need to be evenly spaced (e.g. hours, then days), so small values get fine
  * steps and large ones coarse steps. [current] is snapped to the nearest step; [onChanged] gets the step on release.
  */
@@ -124,18 +140,15 @@ fun StepSliderPreference(
     var index by remember(stored) { mutableFloatStateOf(storedIndex.toFloat()) }
     val s = LocalShadcn.current
     val step = steps[index.roundToInt().coerceIn(steps.indices)]
-    Column(Modifier.fillMaxWidth().padding(start = 16.dp, end = 8.dp, top = 12.dp, bottom = 4.dp)) {
+    Column(Modifier.fillMaxWidth().padding(start = 16.dp, end = 8.dp, top = 10.dp, bottom = 8.dp)) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(name, style = MaterialTheme.typography.bodyLarge, modifier = Modifier.weight(1f))
             Text(format(step), style = MaterialTheme.typography.bodyMedium, color = s.mutedForeground)
             if (default != null)
-                TextButton(
-                    onClick = {
-                        index = steps.indexOf(default).coerceAtLeast(0).toFloat()
-                        onChanged(default)
-                    },
-                    enabled = step != default,
-                ) { Text(stringResource(R.string.button_default), style = MaterialTheme.typography.labelMedium) }
+                SliderDefaultButton(enabled = step != default) {
+                    index = steps.indexOf(default).coerceAtLeast(0).toFloat()
+                    onChanged(default)
+                }
         }
         helium314.keyboard.settings.ScrollSafeSlider(
             value = index,

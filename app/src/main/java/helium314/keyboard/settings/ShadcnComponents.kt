@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
@@ -86,7 +87,21 @@ fun ScrollSafeSlider(
     val onFinish by rememberUpdatedState(onValueChangeFinished)
     val range by rememberUpdatedState(valueRange)
     Box(modifier) {
-        Slider(value = value, onValueChange = { }, valueRange = valueRange, colors = colors, modifier = Modifier.fillMaxWidth())
+        // fork: drawn here instead of with Material's Slider (only looks: the touches are the box's on top), so it is
+        //  as tall as it looks: a 4dp track and a 16dp thumb in a 24dp row, not Material's 44dp thumb and 48dp minimum
+        val fraction = if (valueRange.endInclusive > valueRange.start)
+            ((value - valueRange.start) / (valueRange.endInclusive - valueRange.start)).coerceIn(0f, 1f) else 0f
+        androidx.compose.foundation.Canvas(Modifier.fillMaxWidth().height(24.dp)) {
+            val inset = 10.dp.toPx()
+            val cy = size.height / 2
+            val track = 4.dp.toPx()
+            val x = inset + fraction * (size.width - 2 * inset)
+            drawLine(colors.inactiveTrackColor, androidx.compose.ui.geometry.Offset(inset, cy),
+                androidx.compose.ui.geometry.Offset(size.width - inset, cy), track, androidx.compose.ui.graphics.StrokeCap.Round)
+            drawLine(colors.activeTrackColor, androidx.compose.ui.geometry.Offset(inset, cy),
+                androidx.compose.ui.geometry.Offset(x, cy), track, androidx.compose.ui.graphics.StrokeCap.Round)
+            drawCircle(colors.thumbColor, 8.dp.toPx(), androidx.compose.ui.geometry.Offset(x, cy))
+        }
         // on top of the slider, takes all touches; a drag only starts after moving sideways past the touch slop
         Box(Modifier.matchParentSize().pointerInput(Unit) {
             val inset = 10.dp.toPx() // half the thumb, the track starts there

@@ -117,7 +117,7 @@ fun DpSliderPreference(name: String, size: ForkSize, description: String? = null
     val stored = size.effectiveDp(ctx, prefs)
     var value by remember(size, stored) { mutableFloatStateOf(stored) }
     val s = LocalShadcn.current
-    Column(Modifier.fillMaxWidth().padding(start = 16.dp, end = 8.dp, top = 12.dp, bottom = 4.dp)) {
+    Column(Modifier.fillMaxWidth().padding(start = 16.dp, end = 8.dp, top = 10.dp, bottom = 8.dp)) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Column(Modifier.weight(1f)) {
                 Text(name, style = MaterialTheme.typography.bodyLarge)
@@ -126,14 +126,11 @@ fun DpSliderPreference(name: String, size: ForkSize, description: String? = null
             }
             val shown = if (size.step < 1f && value % 1f != 0f) "%.1f".format(value) else value.roundToInt().toString()
             Text("$shown dp", style = MaterialTheme.typography.bodyMedium, color = s.mutedForeground)
-            TextButton(
-                onClick = {
-                    size.reset(prefs)
-                    value = size.effectiveDp(ctx, prefs)
-                    ForkLive.requestReload()
-                },
-                enabled = !size.isDefault(prefs),
-            ) { Text(stringResource(R.string.button_default), style = MaterialTheme.typography.labelMedium) }
+            helium314.keyboard.settings.preferences.SliderDefaultButton(enabled = !size.isDefault(prefs)) {
+                size.reset(prefs)
+                value = size.effectiveDp(ctx, prefs)
+                ForkLive.requestReload()
+            }
         }
         helium314.keyboard.settings.ScrollSafeSlider(
             value = value.coerceIn(size.range),
