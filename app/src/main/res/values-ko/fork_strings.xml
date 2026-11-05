@@ -461,6 +461,10 @@
     <string name="fork_ai_glow_over_summary">테두리 빛을 키와 툴바 버튼 위에 그립니다. 끄면 키 뒤에서 비칩니다</string>
     <string name="fork_ai_glow_style_edge">제미나이 테두리</string>
     <string name="fork_ai_glow_style_edge_google">구글 4색 테두리</string>
+    <string name="fork_ai_glow_style_light_top">제미나이 앱 (위에서)</string>
+    <string name="fork_ai_glow_style_light_horizon">지평선 (아래에서)</string>
+    <string name="fork_ai_glow_style_light_sides">양 끝 빛</string>
+    <string name="fork_ai_glow_style_light_flow">흐르는 빛</string>
     <string name="fork_ai_glow_in">나타나고 사라지는 시간</string>
     <string name="fork_split_auto">펼치면 자동 분할</string>
     <string name="fork_split_auto_summary">넓은 화면(폴드 내부, 태블릿)에서는 자동으로 분할</string>

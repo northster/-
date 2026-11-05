@@ -46,6 +46,11 @@ object GlowPrefs {
     /** a gradient turning round the edges, Gemini's colors / Google's colors */
     const val AI_STYLE_EDGE = "edge"
     const val AI_STYLE_EDGE_GOOGLE = "edge_google"
+    /** big soft lights like Gemini's pictures: from above, a horizon from below, both ends, drifting */
+    const val AI_STYLE_LIGHT_TOP = "light_top"
+    const val AI_STYLE_LIGHT_HORIZON = "light_horizon"
+    const val AI_STYLE_LIGHT_SIDES = "light_sides"
+    const val AI_STYLE_LIGHT_FLOW = "light_flow"
     /** the edge looks over the keys instead of behind them */
     const val AI_GLOW_OVER = "fork_ai_glow_over"
     const val DEFAULT_AI_GLOW_OVER = false

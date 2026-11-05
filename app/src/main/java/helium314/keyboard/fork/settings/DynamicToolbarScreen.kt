@@ -367,6 +367,10 @@ fun createDynamicToolbarSettings(context: Context) = listOf(
             ctx.getString(R.string.fork_ai_glow_style_dots) to GlowPrefs.AI_STYLE_DOTS,
             ctx.getString(R.string.fork_ai_glow_style_edge) to GlowPrefs.AI_STYLE_EDGE,
             ctx.getString(R.string.fork_ai_glow_style_edge_google) to GlowPrefs.AI_STYLE_EDGE_GOOGLE,
+            ctx.getString(R.string.fork_ai_glow_style_light_top) to GlowPrefs.AI_STYLE_LIGHT_TOP,
+            ctx.getString(R.string.fork_ai_glow_style_light_horizon) to GlowPrefs.AI_STYLE_LIGHT_HORIZON,
+            ctx.getString(R.string.fork_ai_glow_style_light_sides) to GlowPrefs.AI_STYLE_LIGHT_SIDES,
+            ctx.getString(R.string.fork_ai_glow_style_light_flow) to GlowPrefs.AI_STYLE_LIGHT_FLOW,
         ), GlowPrefs.AI_STYLE_RING)
     },
     Setting(context, GlowPrefs.AI_GLOW_OVER, R.string.fork_ai_glow_over, R.string.fork_ai_glow_over_summary) {
