@@ -43,6 +43,8 @@ fun DynamicToolbarScreen(
     val glow = GlowPrefs.glowEnabled(prefs)
     val aiGlow = prefs.getBoolean(GlowPrefs.AI_GLOW, true)
     val aiDots = aiGlow && prefs.getString(GlowPrefs.AI_GLOW_STYLE, GlowPrefs.AI_STYLE_RING) == GlowPrefs.AI_STYLE_DOTS
+    val aiEdge = aiGlow && prefs.getString(GlowPrefs.AI_GLOW_STYLE, GlowPrefs.AI_STYLE_RING) in
+        listOf(GlowPrefs.AI_STYLE_EDGE, GlowPrefs.AI_STYLE_EDGE_GOOGLE)
     val autofill = prefs.getBoolean(DynamicToolbarController.PREF_AUTOFILL, true)
     val items = listOfNotNull(
             R.string.fork_cat_gesture,
@@ -86,6 +88,7 @@ fun DynamicToolbarScreen(
             GlowPrefs.AI_GLOW,
             GlowPrefs.AI_GLOW_TEST.takeIf { aiGlow },
             GlowPrefs.AI_GLOW_STYLE.takeIf { aiGlow },
+            GlowPrefs.AI_GLOW_OVER.takeIf { aiEdge },
             GlowPrefs.AI_GLOW_BLOOM.takeIf { aiDots },
             GlowPrefs.AI_GLOW_POSITION.takeIf { aiDots },
             GlowPrefs.AI_GLOW_HEIGHT.takeIf { aiDots },
@@ -365,6 +368,9 @@ fun createDynamicToolbarSettings(context: Context) = listOf(
             ctx.getString(R.string.fork_ai_glow_style_edge) to GlowPrefs.AI_STYLE_EDGE,
             ctx.getString(R.string.fork_ai_glow_style_edge_google) to GlowPrefs.AI_STYLE_EDGE_GOOGLE,
         ), GlowPrefs.AI_STYLE_RING)
+    },
+    Setting(context, GlowPrefs.AI_GLOW_OVER, R.string.fork_ai_glow_over, R.string.fork_ai_glow_over_summary) {
+        SwitchPreference(it, GlowPrefs.DEFAULT_AI_GLOW_OVER)
     },
     Setting(context, GlowPrefs.AI_GLOW_BLOOM, R.string.fork_ai_glow_bloom, R.string.fork_ai_glow_bloom_summary) {
         GlowSlider(it, GlowPrefs.DEFAULT_AI_GLOW_BLOOM, 0f..1f, 0.05f, ::percent)

@@ -101,13 +101,13 @@ object ToolbarMotion {
         target = height
     }
 
-    /** closing: the rows dip by about [dipDp] and bounce back, one after the other from the top */
-    fun startBounce(keyYs: Collection<Int>, density: Float, dipDp: Float = 10f) {
+    /** closing: the rows dip by about [dipDp] and settle back, one just after the other from the top */
+    fun startBounce(keyYs: Collection<Int>, density: Float, dipDp: Float = 4f) {
         setRows(keyYs)
         this.density = density
         elapsed = 0f
         for (i in rowYs.indices) {
-            kickAt[i] = 0.04f + rowFrac[i] * 0.06f
+            kickAt[i] = 0.02f + rowFrac[i] * 0.03f
             kicked[i] = false
         }
         target = 0f
@@ -146,7 +146,7 @@ object ToolbarMotion {
             when (phase) {
                 Phase.PULL -> { stiffness = 700f * (1.25f - 0.5f * f); damping = 0.82f }
                 Phase.RETURN -> { stiffness = 420f * (1.2f - 0.4f * f); damping = 0.62f }
-                else -> { stiffness = 620f * (1.15f - 0.3f * f); damping = 0.42f }
+                else -> { stiffness = 560f * (1.1f - 0.2f * f); damping = 0.6f }
             }
             if (phase == Phase.BOUNCE && !kicked[i] && elapsed >= kickAt[i]) {
                 kicked[i] = true
@@ -170,6 +170,6 @@ object ToolbarMotion {
         return true
     }
 
-    /** peak of an underdamped spring pushed from rest, as a share of v / w (about, for damping ~0.4) */
-    private val PEAK_FACTOR = exp(-0.45f)
+    /** peak of an underdamped spring pushed from rest, as a share of v / w (about, for damping 0.6) */
+    private val PEAK_FACTOR = exp(-0.7f)
 }

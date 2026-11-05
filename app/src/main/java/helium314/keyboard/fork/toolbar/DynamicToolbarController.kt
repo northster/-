@@ -367,17 +367,18 @@ class DynamicToolbarController(private val context: Context) {
         // the toolbar sits on the keyboard's top padding, right above the keys: the room above and below its icons
         // stays the same whatever the padding is. Drawn in front of the keyboard frame and cut at the keys' top, so
         // while it slides away it looks like going behind the keys.
-        tb.translationZ = 1f
+        // while the rows of the "pull" motion move, the keyboard is in front: the raised keyboard covers the toolbar
+        val keyboardInFront = ToolbarMotion.isActive
+        tb.translationZ = if (keyboardInFront) 0f else 1f
+        frame.translationZ = if (keyboardInFront) 2f else 0f
         tb.outlineProvider = null // no shadow from the elevation
         if (isExpanded && ToolbarMotion.opening) {
-            // "pull" opening: the toolbar in its place, showing from the top down as far as the top row has come down
+            // "pull" opening: hidden while the rows rise, then in its place, uncovered as the keyboard comes down
             tb.translationY = frameTop + padOverlap() - tb.bottom
-            val shown = if (!ToolbarMotion.revealing) 0
-                else (tb.height - ToolbarMotion.topRaised).toInt().coerceIn(0, tb.height)
-            tb.visibility = if (visible && shown > 0) View.VISIBLE else View.INVISIBLE
+            tb.visibility = if (visible && ToolbarMotion.revealing) View.VISIBLE else View.INVISIBLE
             val clip = tb.clipBounds
-            if (clip == null || clip.bottom != shown || clip.right != tb.width)
-                tb.clipBounds = android.graphics.Rect(0, 0, tb.width, shown)
+            if (clip == null || clip.bottom != tb.height || clip.right != tb.width)
+                tb.clipBounds = android.graphics.Rect(0, 0, tb.width, tb.height)
             return
         }
         tb.translationY = frameTop + padOverlap() - tb.bottom + hiddenFraction * tb.height

@@ -73,8 +73,9 @@ class AiGlow(
         }
         if (bar !== tb) {
             tb?.setUnderGlow(null)
+            tb?.setOverGlow(null)
             tb = bar
-            bar?.setUnderGlow(tbPart)
+            if (over) bar?.setOverGlow(tbPart) else bar?.setUnderGlow(tbPart)
         }
         kvPart.offsetY = kvTop - top
         glow.setBounds(0, 0, view.width, kvTop - top + view.height)
@@ -83,6 +84,8 @@ class AiGlow(
     private var ticker: ValueAnimator? = null
     private var fader: ValueAnimator? = null
     private var shown = false
+    /** drawn over the keys instead of behind them ([GlowPrefs.AI_GLOW_OVER]) */
+    private var over = false
 
     fun show(on: Boolean) {
         val prefs = host.context.prefs()
@@ -102,8 +105,10 @@ class AiGlow(
             }
             drawable = glow
             kv = view
+            // the edge looks can be drawn over the keys (and the toolbar's buttons) instead of behind them
+            over = glow is EdgeDrawable && prefs.getBoolean(GlowPrefs.AI_GLOW_OVER, GlowPrefs.DEFAULT_AI_GLOW_OVER)
             place(view, glow)
-            view.setForkAiUnderlay(kvPart)
+            if (over) view.setForkAiOverlay(kvPart) else view.setForkAiUnderlay(kvPart)
             val start = SystemClock.uptimeMillis()
             ticker = ValueAnimator.ofFloat(0f, 1f).apply {
                 duration = 1000
@@ -137,8 +142,10 @@ class AiGlow(
         ticker?.cancel()
         ticker = null
         kv?.setForkAiUnderlay(null)
+        kv?.setForkAiOverlay(null)
         kv = null
         tb?.setUnderGlow(null)
+        tb?.setOverGlow(null)
         tb = null
         drawable = null
     }
@@ -354,19 +361,24 @@ class AiGlow(
     /**
      * a sweep gradient of [colors] turning round the middle, kept to a soft band along the edges by a mask: the light
      * fades inwards with the distance to a rounded rectangle (so it curves round the corners instead of creasing along
-     * their diagonals), [depth] of the shorter side being where it is down to a third. Breathes like the other looks.
+     * their diagonals). Made to look smooth to the eye: the colors blend in OKLab (even steps in how they look, not in
+     * RGB numbers, which makes muddy or banded middles), the fade is a gaussian (no visible edge where it starts or
+     * ends) and both are drawn dithered. [depth]: share of the shorter side the band reaches. Breathes like the others.
      */
     private class EdgeDrawable(colors: IntArray, private val depth: Float, private val params: GlowPrefs.Glow) : Layer() {
-        private val sweepColors = colors + colors[0]
-        private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
+        private val sweepColors = oklabRamp(colors + colors[0], 72)
+        private val paint = Paint(Paint.ANTI_ALIAS_FLAG or Paint.DITHER_FLAG)
         private val matrix = android.graphics.Matrix()
-        private val maskPaint = Paint(Paint.FILTER_BITMAP_FLAG).apply {
+        private val maskPaint = Paint(Paint.FILTER_BITMAP_FLAG or Paint.DITHER_FLAG).apply {
             xfermode = android.graphics.PorterDuffXfermode(android.graphics.PorterDuff.Mode.DST_IN)
         }
         private val layerPaint = Paint()
         private val rect = android.graphics.RectF()
         private var size = 0L
         private var mask: android.graphics.Bitmap? = null
+        private var sweep: android.graphics.SweepGradient? = null
+        private var sweepCx = Float.NaN
+        private var sweepCy = Float.NaN
 
         override fun draw(canvas: Canvas) {
             val w = bounds.width()
@@ -380,20 +392,27 @@ class AiGlow(
             val saved = canvas.saveLayer(rect, layerPaint)
             val cx = bounds.exactCenterX()
             val cy = bounds.exactCenterY()
+            if (sweep == null || cx != sweepCx || cy != sweepCy) {
+                sweep = android.graphics.SweepGradient(cx, cy, sweepColors, null)
+                sweepCx = cx
+                sweepCy = cy
+            }
             matrix.setRotate((time / TURN_EDGE_MS.toFloat() * 360f) % 360f, cx, cy)
-            paint.shader = android.graphics.SweepGradient(cx, cy, sweepColors, null).apply { setLocalMatrix(matrix) }
+            sweep!!.setLocalMatrix(matrix)
+            paint.shader = sweep
             canvas.drawRect(rect, paint)
             mask?.let { canvas.drawBitmap(it, null, rect, maskPaint) }
             canvas.restoreToCount(saved)
         }
 
-        /** the falloff, at a quarter of the size (it is smooth, drawn scaled up with filtering) */
+        /** the fade, at half the size (it is smooth, drawn scaled up with filtering) */
         private fun layout(width: Int, height: Int) {
             size = width.toLong() shl 32 or height.toLong()
-            val scale = 4
+            val scale = 2
             val mw = (width / scale).coerceAtLeast(1)
             val mh = (height / scale).coerceAtLeast(1)
             val tau = minOf(mw, mh) * depth
+            val sigma = tau * 1.4f
             val r = tau * 3
             val hx = mw / 2f - r
             val hy = mh / 2f - r
@@ -404,7 +423,8 @@ class AiGlow(
                 val ox = maxOf(qx, 0f)
                 val oy = maxOf(qy, 0f)
                 val sdf = sqrt(ox * ox + oy * oy) + minOf(maxOf(qx, qy), 0f) - r
-                val a = (255 * kotlin.math.exp(-maxOf(0f, -sdf) / tau)).toInt().coerceIn(0, 255)
+                val d = maxOf(0f, -sdf) / sigma
+                val a = (255 * kotlin.math.exp(-0.5f * d * d)).toInt().coerceIn(0, 255)
                 pixels[y * mw + x] = a shl 24
             }
             mask?.recycle()
@@ -428,6 +448,56 @@ class AiGlow(
         private val GEMINI = intArrayOf(
             0xFF4796E3.toInt(), 0xFF6EC6FF.toInt(), 0xFF9177C7.toInt(), 0xFFCA6673.toInt(), 0xFFF2A45C.toInt(),
         )
+        /** [stops] colors going through [colors] in even steps of OKLab (how different colors look), as sRGB */
+        private fun oklabRamp(colors: IntArray, stops: Int): IntArray {
+            val labs = colors.map { toOklab(it) }
+            return IntArray(stops) { k ->
+                val t = k / (stops - 1f) * (labs.size - 1)
+                val i = t.toInt().coerceAtMost(labs.size - 2)
+                val f = t - i
+                val a = labs[i]
+                val b = labs[i + 1]
+                fromOklab(FloatArray(3) { j -> a[j] + (b[j] - a[j]) * f })
+            }
+        }
+
+        private fun toLinear(c: Int): Float {
+            val v = c / 255f
+            return if (v <= 0.04045f) v / 12.92f else ((v + 0.055f) / 1.055f).pow(2.4f)
+        }
+
+        private fun fromLinear(v: Float): Int {
+            val c = if (v <= 0.0031308f) v * 12.92f else 1.055f * v.coerceAtLeast(0f).pow(1f / 2.4f) - 0.055f
+            return (c * 255f + 0.5f).toInt().coerceIn(0, 255)
+        }
+
+        private fun toOklab(color: Int): FloatArray {
+            val r = toLinear((color shr 16) and 0xFF)
+            val g = toLinear((color shr 8) and 0xFF)
+            val b = toLinear(color and 0xFF)
+            val l = Math.cbrt((0.4122214708f * r + 0.5363325363f * g + 0.0514459929f * b).toDouble()).toFloat()
+            val m = Math.cbrt((0.2119034982f * r + 0.6806995451f * g + 0.1073969566f * b).toDouble()).toFloat()
+            val s = Math.cbrt((0.0883024619f * r + 0.2817188376f * g + 0.6299787005f * b).toDouble()).toFloat()
+            return floatArrayOf(
+                0.2104542553f * l + 0.7936177850f * m - 0.0040720468f * s,
+                1.9779984951f * l - 2.4285922050f * m + 0.4505937099f * s,
+                0.0259040371f * l + 0.7827717662f * m - 0.8086757660f * s,
+            )
+        }
+
+        private fun fromOklab(lab: FloatArray): Int {
+            val l = lab[0] + 0.3963377774f * lab[1] + 0.2158037573f * lab[2]
+            val m = lab[0] - 0.1055613458f * lab[1] - 0.0638541728f * lab[2]
+            val s = lab[0] - 0.0894841775f * lab[1] - 1.2914855480f * lab[2]
+            val l3 = l * l * l
+            val m3 = m * m * m
+            val s3 = s * s * s
+            val r = 4.0767416621f * l3 - 3.3077115913f * m3 + 0.2309699292f * s3
+            val g = -1.2684380046f * l3 + 2.6097574011f * m3 - 0.3413193965f * s3
+            val b = -0.0041960863f * l3 - 0.7034186147f * m3 + 1.7076147010f * s3
+            return (0xFF shl 24) or (fromLinear(r) shl 16) or (fromLinear(g) shl 8) or fromLinear(b)
+        }
+
         /** Google's logo colors: blue, red, yellow, green */
         private val GOOGLE = intArrayOf(0xFF4285F4.toInt(), 0xFFEA4335.toInt(), 0xFFFBBC04.toInt(), 0xFF34A853.toInt())
         private const val DRIFT_MS = 5_000L

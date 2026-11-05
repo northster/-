@@ -460,6 +460,8 @@
     <string name="fork_ai_glow_style">Look</string>
     <string name="fork_ai_glow_style_ring">Pastel light (HomePod)</string>
     <string name="fork_ai_glow_style_dots">Dot glow</string>
+    <string name="fork_ai_glow_over">Over the keys</string>
+    <string name="fork_ai_glow_over_summary">The edge light is drawn over the keys and the toolbar buttons. Off: it shines from behind them</string>
     <string name="fork_ai_glow_style_edge">Gemini edge</string>
     <string name="fork_ai_glow_style_edge_google">Google colors edge</string>
     <string name="fork_ai_glow_in">Time to appear and go away</string>
