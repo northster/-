@@ -39,6 +39,10 @@ object ToolbarMotion {
     private var fingerDown = false
     private var releasedFor = 0f
     private var elapsed = 0f
+    /** time in the current phase (s), for the rows' delays */
+    private var phaseTime = 0f
+    /** the pull's target when the rows started falling back, held by the rows not falling yet */
+    private var heldTarget = 0f
     private var density = 1f
 
     val isActive get() = phase != Phase.NONE
@@ -80,6 +84,7 @@ object ToolbarMotion {
         fingerDown = true
         releasedFor = 0f
         elapsed = 0f
+        phaseTime = 0f
         phase = Phase.PULL
     }
 
@@ -127,12 +132,15 @@ object ToolbarMotion {
         if (phase == Phase.NONE) return false
         val h = dt.coerceIn(0f, 0.05f)
         elapsed += h
+        phaseTime += h
         if (phase == Phase.PULL && !fingerDown) {
             releasedFor += h
             // up far enough (or long enough): back down
-            if (pos.firstOrNull() ?: 0f >= height * 0.8f || releasedFor > 0.16f) {
+            if (pos.firstOrNull() ?: 0f >= height * 0.8f || releasedFor > 0.2f) {
                 phase = Phase.RETURN
+                heldTarget = target
                 target = 0f
+                phaseTime = 0f
             }
         }
         var moving = false
@@ -144,8 +152,8 @@ object ToolbarMotion {
             val stiffness: Float
             val damping: Float
             when (phase) {
-                Phase.PULL -> { stiffness = 1400f * (1.2f - 0.4f * f); damping = 0.85f }
-                Phase.RETURN -> { stiffness = 800f * (1.15f - 0.3f * f); damping = 0.68f }
+                Phase.PULL -> { stiffness = 1000f * (1.3f - 0.6f * f); damping = 0.85f }
+                Phase.RETURN -> { stiffness = 600f * (1.25f - 0.5f * f); damping = 0.68f }
                 else -> { stiffness = 560f * (1.1f - 0.2f * f); damping = 0.6f }
             }
             if (phase == Phase.BOUNCE && !kicked[i] && elapsed >= kickAt[i]) {
@@ -154,8 +162,14 @@ object ToolbarMotion {
                 val w = sqrt(stiffness)
                 vel[i] = -dipPx * w / PEAK_FACTOR
             }
-            // opening: the top row is pulled the whole way, the rows below less and less (the bottom one about half)
-            val rowTarget = if (phase == Phase.PULL) target * (1f - PULL_SPREAD * f) else target
+            // opening: the top row is pulled the whole way, the rows below less and less (the bottom one about half);
+            //  each row starts a little after the one above it, so the motion runs down the keyboard
+            val started = phaseTime >= ROW_DELAY * f
+            val rowTarget = when (phase) {
+                Phase.PULL -> if (started) target * (1f - PULL_SPREAD * f) else 0f
+                Phase.RETURN -> if (started) 0f else heldTarget * (1f - PULL_SPREAD * f)
+                else -> target
+            }
             val c = 2f * damping * sqrt(stiffness)
             repeat(sub) {
                 val a = -stiffness * (pos[i] - rowTarget) - c * vel[i]
@@ -171,6 +185,9 @@ object ToolbarMotion {
         }
         return true
     }
+
+    /** opening: how much later the bottom row starts moving than the top row (s), rising and falling back */
+    private const val ROW_DELAY = 0.1f
 
     /** how much less the bottom row is pulled up than the top row when opening */
     private const val PULL_SPREAD = 0.5f
