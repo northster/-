@@ -36,7 +36,8 @@ class SettingsContainer(context: Context) {
     fun filter(searchTerm: String): List<Setting> {
         val term = searchTerm.lowercase()
         // fork: options from HeliBoard that do nothing in this keyboard are not offered at all
-        val list = list.filter { it.key !in helium314.keyboard.fork.ForkSettings.removedHeliBoardSettings }
+        val list = list.filter { it.key !in helium314.keyboard.fork.ForkSettings.removedHeliBoardSettings
+            && it.key !in helium314.keyboard.fork.settings.EasySettings.ALWAYS_HIDDEN }
         val results = mutableSetOf<Setting>()
         list.forEach { setting -> if (setting.title.lowercase().startsWith(term)) results.add(setting) }
         list.forEach { setting -> if (setting.title.lowercase().split(' ').any { it.startsWith(term) }) results.add(setting) }

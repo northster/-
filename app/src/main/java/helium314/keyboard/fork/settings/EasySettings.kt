@@ -14,14 +14,48 @@ import helium314.keyboard.settings.SettingsWithoutKey
 
 /**
  * fork: easy settings mode (Advanced > easy settings). Only what a light user sets is shown: fine tuning, animation
- * details, testers and rarely used keys are hidden, their values stay as they are. The search still finds everything.
+ * details and rarely used keys are hidden, their values stay as they are; the search still finds them. [ALWAYS_HIDDEN]
+ * is hidden in every mode and from the search.
  */
 object EasySettings {
     const val PREF = "fork_easy_settings"
 
     fun enabled(prefs: SharedPreferences) = prefs.getBoolean(PREF, false)
 
-    fun shows(prefs: SharedPreferences, key: String) = !enabled(prefs) || key !in HIDDEN
+    fun shows(prefs: SharedPreferences, key: String) = key !in ALWAYS_HIDDEN && (!enabled(prefs) || key !in HIDDEN)
+
+    /**
+     * hidden in every mode (and from the search): testers, debug views and design knobs nobody needs to touch, whose
+     * values stay as they are
+     */
+    val ALWAYS_HIDDEN = setOf(
+        // how a swipe on the keys is told from a tap
+        ForkSettings.PREF_SWIPE_MIN_DISTANCE_DP,
+        ForkSettings.PREF_SWIPE_MIN_VELOCITY,
+        ForkSettings.PREF_SWIPE_MAX_ANGLE,
+        ForkSettings.PREF_SWIPE_HORIZONTAL_REJECT_DP,
+        ForkSettings.PREF_SWIPE_MAX_DURATION,
+        // testers and debug views
+        SmartPrefs.TESTER,
+        SmartPrefs.DEBUG,
+        ClipPrefs.SMART_TESTER,
+        ClipPrefs.CODE_TEST_UNTIL,
+        // the glows' and the wave's drawing details
+        GlowPrefs.GLOW_MIN,
+        GlowPrefs.GLOW_PERIOD,
+        GlowPrefs.GLOW_HEIGHT,
+        GlowPrefs.GLOW_WIDTH,
+        GlowPrefs.GLOW_DOT_SIZE,
+        GlowPrefs.GLOW_DOT_SPACING,
+        GlowPrefs.GLOW_BLOOM,
+        GlowPrefs.AI_GLOW_MIN,
+        GlowPrefs.AI_GLOW_BLOOM,
+        GlowPrefs.AI_GLOW_POSITION,
+        GlowPrefs.AI_GLOW_HEIGHT,
+        GlowPrefs.AI_GLOW_WIDTH,
+        GlowPrefs.WAVE_THICKNESS,
+        GlowPrefs.WAVE_RIPPLE_DEPTH,
+    )
 
     private val HIDDEN = setOf(
         // keys & feedback
@@ -77,9 +111,15 @@ object EasySettings {
         ForkSettings.PREF_SWIPE_HORIZONTAL_REJECT_DP,
         ForkSettings.PREF_SWIPE_MAX_DURATION,
         ForkSettings.PREF_TOOLBAR_ANIM_DURATION,
+        helium314.keyboard.fork.toolbar.ToolbarMotion.PREF_ROW_DELAY,
+        helium314.keyboard.fork.toolbar.ToolbarMotion.PREF_SPEED,
+        ForkSettings.PREF_TOOLBAR_START_CLOSED,
+        ForkSettings.PREF_ONE_HANDED_SWIPE,
         ForkSettings.PREF_TOOLBAR_SMOOTH_RESIZE,
         ForkSettings.PREF_TOOLBAR_OVERLAY,
         GlowPrefs.WAVE_DURATION,
+        GlowPrefs.GLOW_COLOR,
+        GlowPrefs.AI_GLOW_BREATH,
         GlowPrefs.WAVE_BRIGHTNESS,
         GlowPrefs.WAVE_THICKNESS,
         GlowPrefs.WAVE_SHAPE,
@@ -106,6 +146,9 @@ object EasySettings {
         GlowPrefs.AI_GLOW_IN,
         // clipboard and smart chips: display details and testers
         ClipPrefs.PREVIEW_LINES,
+        ClipPrefs.COLUMNS,
+        ClipPrefs.MAX_ITEMS,
+        helium314.keyboard.fork.clipboard.ClipAction.PREF,
         Settings.PREF_ABC_AFTER_CLIP,
         Settings.PREF_CLIPBOARD_USE_FILES,
         Settings.PREF_CLIPBOARD_FILES_SIZE_LIMIT,
