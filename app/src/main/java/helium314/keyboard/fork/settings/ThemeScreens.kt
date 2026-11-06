@@ -74,7 +74,7 @@ object ForkThemeSettings {
 }
 
 fun createForkThemeSettings(context: Context) = listOf(
-    Setting(context, ForkThemeSettings.THEME_FILES, R.string.fork_theme_files, R.string.fork_theme_files_summary) {
+    Setting(context, ForkThemeSettings.THEME_FILES, R.string.fork_theme_files) {
         Preference(
             name = it.title,
             description = it.description,

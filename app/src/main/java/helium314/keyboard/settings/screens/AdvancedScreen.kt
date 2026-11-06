@@ -189,7 +189,7 @@ fun createAdvancedSettings(context: Context) = listOf(
         SwitchPreference(it, Defaults.PREF_ABC_AFTER_EMOJI)
     },
     // fork: shown in the clipboard section of the preferences screen
-    Setting(context, Settings.PREF_ABC_AFTER_CLIP, R.string.fork_clip_abc_after, R.string.fork_clip_abc_after_summary) {
+    Setting(context, Settings.PREF_ABC_AFTER_CLIP, R.string.fork_clip_abc_after) {
         SwitchPreference(it, Defaults.PREF_ABC_AFTER_CLIP)
     },
     Setting(context, Settings.PREF_CUSTOM_CURRENCY_KEY, R.string.customize_currencies) { setting ->

@@ -232,12 +232,11 @@ fun createAppearanceSettings(context: Context) = listOf(
     Setting(context, Settings.PREF_THEME_DAY_NIGHT, R.string.day_night_mode, R.string.day_night_mode_summary) {
         SwitchPreference(it, Defaults.PREF_THEME_DAY_NIGHT) { KeyboardSwitcher.getInstance().setThemeNeedsReload() }
     },
-    Setting(context, helium314.keyboard.fork.ForkSettings.PREF_ACCENT_ON_DELETE, R.string.fork_accent_on_delete,
-        R.string.fork_accent_on_delete_summary) {
+    Setting(context, helium314.keyboard.fork.ForkSettings.PREF_ACCENT_ON_DELETE, R.string.fork_accent_on_delete) {
         // the layouts are built again with the swapped key looks
         SwitchPreference(it, false) { KeyboardSwitcher.getInstance().setThemeNeedsReload() }
     },
-    Setting(context, helium314.keyboard.fork.DotIcons.PREF_STYLE, R.string.fork_icon_style, R.string.fork_icon_style_summary) {
+    Setting(context, helium314.keyboard.fork.DotIcons.PREF_STYLE, R.string.fork_icon_style) {
         val items = listOf(
             stringResource(R.string.fork_icon_style_dot) to helium314.keyboard.fork.DotIcons.DOT,
             stringResource(R.string.fork_icon_style_ios) to helium314.keyboard.fork.DotIcons.IOS,

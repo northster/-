@@ -35,7 +35,7 @@ import helium314.keyboard.settings.ShadcnSwitch
 
 /** fork: emoji settings added to the appearance screen */
 fun createForkEmojiSettings(context: Context) = listOf(
-    Setting(context, EmojiTabs.PREF, R.string.fork_emoji_tabs, R.string.fork_emoji_tabs_summary) { setting ->
+    Setting(context, EmojiTabs.PREF, R.string.fork_emoji_tabs) { setting ->
         EmojiTabOrderPreference(setting.title, setting.description)
     },
 )
