@@ -317,15 +317,6 @@ public class KeyboardView extends View {
         invalidateAllKeys();
     }
 
-    // fork: the AI glow's part on the keyboard when it is drawn over the keys
-    @Nullable private Drawable mForkAiOverlay;
-
-    public void setForkAiOverlay(@Nullable final Drawable overlay) {
-        if (mForkAiOverlay == overlay) return;
-        mForkAiOverlay = overlay;
-        invalidateAllKeys();
-    }
-
     /** fork: drawn over the keys (toolbar wave) */
     public void setForkOverlay(@Nullable final Drawable overlay) {
         if (mForkOverlay == overlay) return;
@@ -381,7 +372,6 @@ public class KeyboardView extends View {
                 }
             }
             drawForkDecoration(mForkOverlay, canvas); // fork: over the keys
-            drawForkDecoration(mForkAiOverlay, canvas);
         } else {
             for (final Key key : mInvalidatedKeys) {
                 if (!keyboard.hasKey(key)) {

@@ -25,13 +25,11 @@ import kotlin.math.sqrt
  * fork: pastel glow behind the keys and the toolbar while an AI command or translation runs, seen through the key mask
  * like the chip glow; it breathes and fades in and out. It is one glow over both: the keyboard view and the toolbar each
  * draw their part of it. The looks ([GlowPrefs.AI_GLOW_STYLE]):
- * - [GlowPrefs.AI_STYLE_RING]: like the Siri light on a HomePod, soft blobs of random pastel colors in a ring round the
- *   keyboard's middle, turning slowly, smooth over the whole keyboard
+ * - [GlowPrefs.AI_STYLE_EDGE_LINES] (default) / [GlowPrefs.AI_STYLE_EDGE_LINES_RAINBOW]: the keyboard's edges as thin
+ *   white light lines glowing a little way inward, blue or in rainbow colors
+ * - [GlowPrefs.AI_STYLE_LIGHT_TOP] / [GlowPrefs.AI_STYLE_LIGHT_SIDES]: light coming in along the top edge, or the left
+ *   edge and the bottom right corner, fading into the dark
  * - [GlowPrefs.AI_STYLE_DOTS]: the chip glow's dots and shape, the HomePod colors blending softly across it
- * - [GlowPrefs.AI_STYLE_EDGE] / [GlowPrefs.AI_STYLE_EDGE_GOOGLE]: like Gemini on Android, a gradient turning round the
- *   edges and fading inwards, in Gemini's or Google's colors
- * - the "light" looks ([LightsDrawable]): like Gemini's pictures, big soft lights at an edge or corner fading into the
- *   dark, from above (the Gemini app), a horizon from below, both ends, or drifting about
  */
 class AiGlow(
     private val host: View,
@@ -75,9 +73,8 @@ class AiGlow(
         }
         if (bar !== tb) {
             tb?.setUnderGlow(null)
-            tb?.setOverGlow(null)
             tb = bar
-            if (over) bar?.setOverGlow(tbPart) else bar?.setUnderGlow(tbPart)
+            bar?.setUnderGlow(tbPart)
         }
         kvPart.offsetY = kvTop - top
         glow.setBounds(0, 0, view.width, kvTop - top + view.height)
@@ -86,8 +83,6 @@ class AiGlow(
     private var ticker: ValueAnimator? = null
     private var fader: ValueAnimator? = null
     private var shown = false
-    /** drawn over the keys instead of behind them ([GlowPrefs.AI_GLOW_OVER]) */
-    private var over = false
 
     fun show(on: Boolean) {
         val prefs = host.context.prefs()
@@ -98,25 +93,18 @@ class AiGlow(
         if (on && drawable == null) {
             val view = keyboardView() ?: return
             val params = GlowPrefs.aiGlow(prefs)
-            val glow = when (prefs.getString(GlowPrefs.AI_GLOW_STYLE, GlowPrefs.AI_STYLE_RING)) {
+            val glow = when (GlowPrefs.aiStyle(prefs)) {
                 GlowPrefs.AI_STYLE_DOTS -> PastelDotsDrawable(host.resources.displayMetrics.density, params,
                     prefs.getFloat(GlowPrefs.AI_GLOW_BLOOM, GlowPrefs.DEFAULT_AI_GLOW_BLOOM).coerceIn(0f, 1f))
-                GlowPrefs.AI_STYLE_EDGE -> EdgeDrawable(GEMINI, 0.11f, params)
-                GlowPrefs.AI_STYLE_EDGE_GOOGLE -> EdgeDrawable(GOOGLE, 0.09f, params)
                 GlowPrefs.AI_STYLE_LIGHT_TOP -> EdgeWashDrawable(top = true, params)
-                GlowPrefs.AI_STYLE_LIGHT_HORIZON -> LightsDrawable(LIGHTS_HORIZON, params)
                 GlowPrefs.AI_STYLE_LIGHT_SIDES -> EdgeWashDrawable(top = false, params)
-                GlowPrefs.AI_STYLE_LIGHT_FLOW -> LightsDrawable(LIGHTS_FLOW, params)
-                GlowPrefs.AI_STYLE_EDGE_LINES -> EdgeLinesDrawable(gemini = false, params)
-                GlowPrefs.AI_STYLE_EDGE_LINES_GEMINI -> EdgeLinesDrawable(gemini = true, params)
-                else -> PastelRingDrawable(params.maxAlpha, params.minAlpha, params.periodMs)
+                GlowPrefs.AI_STYLE_EDGE_LINES_RAINBOW -> EdgeLinesDrawable(rainbow = true, params)
+                else -> EdgeLinesDrawable(rainbow = false, params)
             }
             drawable = glow
             kv = view
-            // the edge looks can be drawn over the keys (and the toolbar's buttons) instead of behind them
-            over = glow is EdgeDrawable && prefs.getBoolean(GlowPrefs.AI_GLOW_OVER, GlowPrefs.DEFAULT_AI_GLOW_OVER)
             place(view, glow)
-            if (over) view.setForkAiOverlay(kvPart) else view.setForkAiUnderlay(kvPart)
+            view.setForkAiUnderlay(kvPart)
             val start = SystemClock.uptimeMillis()
             ticker = ValueAnimator.ofFloat(0f, 1f).apply {
                 duration = 1000
@@ -150,10 +138,8 @@ class AiGlow(
         ticker?.cancel()
         ticker = null
         kv?.setForkAiUnderlay(null)
-        kv?.setForkAiOverlay(null)
         kv = null
         tb?.setUnderGlow(null)
-        tb?.setOverGlow(null)
         tb = null
         drawable = null
     }
@@ -308,232 +294,13 @@ class AiGlow(
         }
     }
 
-    /** soft round blobs of pastel light on an ellipse round the middle, turning; a faint light in the middle */
-    private class PastelRingDrawable(private val maxAlpha: Float, private val minAlpha: Float, private val breathMs: Long) : Layer() {
-        private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
-        private val random = java.util.Random()
-        /** a different color for each blob */
-        private val colors = COLORS.toList().shuffled(random).take(BLOBS)
-        /** where on the ring each blob sits (turns) and how it wobbles */
-        private val offsets = FloatArray(BLOBS) { (it + random.nextFloat() * 0.5f) / BLOBS }
-        private val wobble = FloatArray(BLOBS) { random.nextFloat() }
-        private var size = 0L
-        private var shaders = arrayOfNulls<RadialGradient>(0)
-        private var center: RadialGradient? = null
-        private var radius = 0f
-
-        override fun draw(canvas: Canvas) {
-            val w = bounds.width().toFloat()
-            val h = bounds.height().toFloat()
-            if (w <= 0f || h <= 0f || fade <= 0f) return
-            if (size != (w.toLong() shl 32 or h.toLong())) layout(w, h)
-            val breath = 0.5f - 0.5f * cos(2 * PI * time / breathMs).toFloat()
-            val alpha = fade * (minAlpha + (maxAlpha - minAlpha) * breath)
-            val cx = bounds.left + w / 2
-            val cy = bounds.top + h / 2
-            // the whole ring turns once in TURN_MS, each blob also drifts in and out a little
-            val turn = time / TURN_MS.toFloat()
-            for (i in 0 until BLOBS) {
-                val angle = 2 * PI * (offsets[i] + turn)
-                val drift = 1f + 0.18f * sin(2 * PI * (time / DRIFT_MS.toFloat() + wobble[i])).toFloat()
-                val x = cx + (w * 0.34f * drift * cos(angle)).toFloat()
-                val y = cy + (h * 0.30f * drift * sin(angle)).toFloat()
-                paint.shader = shaders[i]
-                paint.alpha = (255 * alpha).toInt().coerceIn(0, 255)
-                canvas.save()
-                canvas.translate(x, y)
-                canvas.drawCircle(0f, 0f, radius, paint)
-                canvas.restore()
-            }
-            paint.shader = center
-            paint.alpha = (255 * alpha * 0.35f).toInt().coerceIn(0, 255)
-            canvas.save()
-            canvas.translate(cx, cy)
-            canvas.drawCircle(0f, 0f, radius * 0.9f, paint)
-            canvas.restore()
-        }
-
-        private fun layout(w: Float, h: Float) {
-            size = w.toLong() shl 32 or h.toLong()
-            radius = maxOf(h * 0.75f, w * 0.28f)
-            val stops = floatArrayOf(0f, 0.45f, 1f)
-            shaders = Array(BLOBS) { i ->
-                val c = colors[i]
-                RadialGradient(0f, 0f, radius, intArrayOf(c, (c and 0xFFFFFF) or 0x88000000.toInt(), c and 0xFFFFFF),
-                    stops, Shader.TileMode.CLAMP)
-            }
-            center = RadialGradient(0f, 0f, radius * 0.9f, intArrayOf(0xFFFFFFFF.toInt(), 0x00FFFFFF), null, Shader.TileMode.CLAMP)
-        }
-    }
-
-    /**
-     * a sweep gradient of [colors] turning round the middle, kept to a soft band along the edges by a mask: the light
-     * fades inwards with the distance to a rounded rectangle (so it curves round the corners instead of creasing along
-     * their diagonals). Made to look smooth to the eye: the colors blend in OKLab (even steps in how they look, not in
-     * RGB numbers, which makes muddy or banded middles), the fade is a gaussian (no visible edge where it starts or
-     * ends) and both are drawn dithered. [depth]: share of the shorter side the band reaches. Breathes like the others.
-     */
-    private class EdgeDrawable(colors: IntArray, private val depth: Float, private val params: GlowPrefs.Glow) : Layer() {
-        private val sweepColors = oklabRamp(colors + colors[0], 72)
-        private val paint = Paint(Paint.ANTI_ALIAS_FLAG or Paint.DITHER_FLAG)
-        private val matrix = android.graphics.Matrix()
-        private val maskPaint = Paint(Paint.FILTER_BITMAP_FLAG or Paint.DITHER_FLAG).apply {
-            xfermode = android.graphics.PorterDuffXfermode(android.graphics.PorterDuff.Mode.DST_IN)
-        }
-        private val layerPaint = Paint()
-        private val rect = android.graphics.RectF()
-        private var size = 0L
-        private var mask: android.graphics.Bitmap? = null
-        private var sweep: android.graphics.SweepGradient? = null
-        private var sweepCx = Float.NaN
-        private var sweepCy = Float.NaN
-
-        override fun draw(canvas: Canvas) {
-            val w = bounds.width()
-            val h = bounds.height()
-            if (w <= 0 || h <= 0 || fade <= 0f) return
-            if (size != (w.toLong() shl 32 or h.toLong())) layout(w, h)
-            val breath = 0.5f - 0.5f * cos(2 * PI * time / params.periodMs.coerceAtLeast(1)).toFloat()
-            layerPaint.alpha = (255 * fade * (params.minAlpha + (params.maxAlpha - params.minAlpha) * breath)).toInt().coerceIn(0, 255)
-            if (layerPaint.alpha <= 0) return
-            rect.set(bounds)
-            val saved = canvas.saveLayer(rect, layerPaint)
-            val cx = bounds.exactCenterX()
-            val cy = bounds.exactCenterY()
-            if (sweep == null || cx != sweepCx || cy != sweepCy) {
-                sweep = android.graphics.SweepGradient(cx, cy, sweepColors, null)
-                sweepCx = cx
-                sweepCy = cy
-            }
-            matrix.setRotate((time / TURN_EDGE_MS.toFloat() * 360f) % 360f, cx, cy)
-            sweep!!.setLocalMatrix(matrix)
-            paint.shader = sweep
-            canvas.drawRect(rect, paint)
-            mask?.let { canvas.drawBitmap(it, null, rect, maskPaint) }
-            canvas.restoreToCount(saved)
-        }
-
-        /** the fade, at half the size (it is smooth, drawn scaled up with filtering) */
-        private fun layout(width: Int, height: Int) {
-            size = width.toLong() shl 32 or height.toLong()
-            val scale = 2
-            val mw = (width / scale).coerceAtLeast(1)
-            val mh = (height / scale).coerceAtLeast(1)
-            val tau = minOf(mw, mh) * depth
-            val sigma = tau * 1.4f
-            val r = tau * 3
-            val hx = mw / 2f - r
-            val hy = mh / 2f - r
-            val pixels = IntArray(mw * mh)
-            for (y in 0 until mh) for (x in 0 until mw) {
-                val qx = kotlin.math.abs(x + 0.5f - mw / 2f) - hx
-                val qy = kotlin.math.abs(y + 0.5f - mh / 2f) - hy
-                val ox = maxOf(qx, 0f)
-                val oy = maxOf(qy, 0f)
-                val sdf = sqrt(ox * ox + oy * oy) + minOf(maxOf(qx, qy), 0f) - r
-                val d = maxOf(0f, -sdf) / sigma
-                val a = (255 * kotlin.math.exp(-0.5f * d * d)).toInt().coerceIn(0, 255)
-                pixels[y * mw + x] = a shl 24
-            }
-            mask?.recycle()
-            mask = android.graphics.Bitmap.createBitmap(pixels, mw, mh, android.graphics.Bitmap.Config.ARGB_8888)
-        }
-    }
-
-    /** a soft light: where (share of the glow's width / height, may be outside), how big, its color, how strong, drift */
-    private class Light(val x: Float, val y: Float, val rx: Float, val ry: Float, color: Int, val strength: Float,
-                        val dx: Float = 0f, val dy: Float = 0f, val periodS: Float = 20f) {
-        val r = toLinear((color shr 16) and 0xFF)
-        val g = toLinear((color shr 8) and 0xFF)
-        val b = toLinear(color and 0xFF)
-    }
-
-    /**
-     * big soft lights added up the way light adds up (in linear light), then softly compressed so where they meet
-     * stays a deep color instead of going flat white; each light fades as a gaussian, so there is no edge anywhere.
-     * Computed at a low resolution and drawn scaled up with filtering and dithering, with a fine film grain over it
-     * (like the pictures it is made after, and no banding in the dark). Breathes a little and drifts slowly.
-     */
-    private class LightsDrawable(private val lights: Array<Light>, private val params: GlowPrefs.Glow) : Layer() {
-        private var bitmap: android.graphics.Bitmap? = null
-        private var pixels = IntArray(0)
-        private var gw = 0
-        private var gh = 0
-        private val paint = Paint(Paint.FILTER_BITMAP_FLAG or Paint.DITHER_FLAG)
-        private val grainPaint = Paint().apply {
-            shader = android.graphics.BitmapShader(grain(), Shader.TileMode.REPEAT, Shader.TileMode.REPEAT)
-            xfermode = android.graphics.PorterDuffXfermode(android.graphics.PorterDuff.Mode.SRC_ATOP)
-            alpha = 16
-        }
-        private val rect = android.graphics.RectF()
-        private val lx = FloatArray(lights.size)
-        private val ly = FloatArray(lights.size)
-        private val lk = FloatArray(lights.size)
-
-        override fun draw(canvas: Canvas) {
-            val w = bounds.width()
-            val h = bounds.height()
-            if (w <= 0 || h <= 0 || fade <= 0f) return
-            if (bitmap == null || gw != GLOW_W || gh != (GLOW_W * h / w).coerceIn(16, 200)) {
-                gw = GLOW_W
-                gh = (GLOW_W * h / w).coerceIn(16, 200)
-                bitmap?.recycle()
-                bitmap = android.graphics.Bitmap.createBitmap(gw, gh, android.graphics.Bitmap.Config.ARGB_8888)
-                pixels = IntArray(gw * gh)
-            }
-            val t = time / 1000f
-            val breath = 0.88f + 0.12f * sin(2 * PI * time / params.periodMs.coerceAtLeast(1)).toFloat()
-            // the brightness settings scale it (their defaults give the look as designed)
-            val bright = (params.maxAlpha / GlowPrefs.DEFAULT_AI_GLOW_MAX).coerceIn(0f, 1.5f)
-            for (i in lights.indices) {
-                val l = lights[i]
-                val ph = 2 * PI * t / l.periodS
-                lx[i] = l.x + l.dx * sin(ph).toFloat()
-                ly[i] = l.y + l.dy * cos(ph * 0.8).toFloat()
-                lk[i] = l.strength * breath * bright * EXPOSURE
-            }
-            for (j in 0 until gh) {
-                val v = (j + 0.5f) / gh
-                for (i in 0 until gw) {
-                    val u = (i + 0.5f) / gw
-                    var r = 0f; var g = 0f; var b = 0f
-                    for (n in lights.indices) {
-                        val l = lights[n]
-                        val a = (u - lx[n]) / l.rx
-                        val e = (v - ly[n]) / l.ry
-                        val q = a * a + e * e
-                        if (q > 12f) continue // too far to matter
-                        val wgt = lk[n] * kotlin.math.exp(-0.5f * q * FALLOFF)
-                        r += l.r * wgt; g += l.g * wgt; b += l.b * wgt
-                    }
-                    // as light over the keyboard: the brightest channel is the alpha (dark = see-through, so it also
-                    //  works on light themes), the color is the light at full strength
-                    val cr = fromLinear(1f - kotlin.math.exp(-r))
-                    val cg = fromLinear(1f - kotlin.math.exp(-g))
-                    val cb = fromLinear(1f - kotlin.math.exp(-b))
-                    val a = maxOf(cr, cg, cb)
-                    pixels[j * gw + i] = if (a == 0) 0
-                        else (a shl 24) or ((cr * 255 / a) shl 16) or ((cg * 255 / a) shl 8) or (cb * 255 / a)
-                }
-            }
-            val bmp = bitmap ?: return
-            bmp.setPixels(pixels, 0, gw, 0, 0, gw, gh)
-            rect.set(bounds)
-            // fading in and out with the glow; the grain only where there is light (SRC_ATOP)
-            paint.alpha = (255 * fade).toInt().coerceIn(0, 255)
-            val saved = canvas.saveLayer(rect, null)
-            canvas.drawBitmap(bmp, null, rect, paint)
-            canvas.drawRect(rect, grainPaint)
-            canvas.restoreToCount(saved)
-        }
-    }
-
     /**
      * light coming in along a whole edge (and from just outside a corner), like Gemini's pictures: brightest a little
      * inside the edge, a long smooth tail, no round blobs that bunch up. [top]: from the top edge, teal on the left to
      * blue on the right (the Gemini app); else from the left edge, orange above to violet and indigo below, with blue from
      * the bottom right corner. Every edge fades gently, multiplied so the corners curve evenly (no diagonal seams), and
-     * bright light goes smoothly toward white. Computed small and drawn scaled up like [LightsDrawable].
+     * bright light goes smoothly toward white. Computed in a small picture each frame and drawn scaled up, filtered and
+     * dithered, with a fine film grain over it; dark is see-through.
      */
     private class EdgeWashDrawable(private val top: Boolean, private val params: GlowPrefs.Glow) : Layer() {
         private var bitmap: android.graphics.Bitmap? = null
@@ -640,11 +407,11 @@ class AiGlow(
      * the keyboard's edges as light lines: a very thin white line right on each edge, a bright tight glow and a short
      * soft one going inward, the middle staying dark. Each edge is its own light and they are added up, so a corner is
      * brighter and round, never a diagonal seam. Along each edge the brightness drifts slowly; the top edge (the
-     * toolbar's) is weaker. Colors: blue, or ([gemini]) Gemini's colors changing slowly round the keyboard.
-     * The glows are computed small and drawn scaled up like [LightsDrawable]; the thin white lines are drawn sharp at
+     * toolbar's) is weaker. Colors: blue, or ([rainbow]) rainbow colors changing slowly round the keyboard.
+     * The glows are computed small and drawn scaled up like [EdgeWashDrawable]; the thin white lines are drawn sharp at
      * full size, each in its own layer: brightness along the edge, faded across it (DST_IN).
      */
-    private class EdgeLinesDrawable(private val gemini: Boolean, private val params: GlowPrefs.Glow) : Layer() {
+    private class EdgeLinesDrawable(private val rainbow: Boolean, private val params: GlowPrefs.Glow) : Layer() {
         private var bitmap: android.graphics.Bitmap? = null
         private var pixels = IntArray(0)
         private var gw = 0
@@ -658,7 +425,7 @@ class AiGlow(
         private val rect = android.graphics.RectF()
         private val near = lin(0xFF5B7CFF.toInt())
         private val wide = lin(0xFF1D2FB8.toInt())
-        private val rampColors = GEMINI_EDGE.map { lin(it) }
+        private val rampColors = RAINBOW.map { lin(it) }
         private val col = FloatArray(3)
         private val linePaint = Paint(Paint.ANTI_ALIAS_FLAG or Paint.DITHER_FLAG)
         private val fadePaint = Paint().apply {
@@ -699,7 +466,7 @@ class AiGlow(
                         val bloom = 1f / (1 + q2 * q2).pow(1.4f)
                         val wNear = k * glow * 0.9f
                         val wWide = k * bloom * 0.55f
-                        if (gemini) {
+                        if (rainbow) {
                             rampAt(EDGE_AT[e] + along * 0.25f + t / 30000f)
                             r += col[0] * (wNear + wWide * 0.55f); g += col[1] * (wNear + wWide * 0.55f); b += col[2] * (wNear + wWide * 0.55f)
                         } else {
@@ -766,14 +533,16 @@ class AiGlow(
             }
         }
 
-        /** brightness along an edge ([s] 0..1), drifting slowly; [at] makes each edge different */
+        /**
+         * brightness along an edge ([s] 0..1), drifting slowly; [at] makes each edge different. One long, gentle wave
+         * and never below 60 %, so the light looks even, not blotchy
+         */
         private fun modulation(s: Float, t: Float, at: Float): Float {
-            val a = sin(2 * PI * (s * 0.9f + t / 9000f + at * 3)).toFloat()
-            val b = sin(2 * PI * (s * 2.1f - t / 6500f + at * 5)).toFloat()
-            return 0.12f + 0.88f * smooth((0.5f + 0.5f * (0.6f * a + 0.4f * b)).coerceIn(0f, 1f))
+            val a = sin(2 * PI * (s * 0.6f + t / 14000f + at * 3)).toFloat()
+            return 0.6f + 0.4f * smooth(0.5f + 0.5f * a)
         }
 
-        /** Gemini's colors round the keyboard, into [col] (linear) */
+        /** rainbow colors round the keyboard, into [col] (linear) */
         private fun rampAt(pos: Float) {
             val f = ((pos % 1f) + 1f) % 1f
             val x = f * (rampColors.size - 1)
@@ -798,25 +567,6 @@ class AiGlow(
         /** the pale light in the middle of the dot glow */
         private const val CENTER_LIGHT = 0xFFFFF2FB.toInt()
         private const val TURN_MS = 16_000L
-        /** one turn of the edge glow's gradient */
-        private const val TURN_EDGE_MS = 16_000L
-        /** Gemini's colors: blue, light blue, violet, rose, amber */
-        private val GEMINI = intArrayOf(
-            0xFF4796E3.toInt(), 0xFF6EC6FF.toInt(), 0xFF9177C7.toInt(), 0xFFCA6673.toInt(), 0xFFF2A45C.toInt(),
-        )
-        /** [stops] colors going through [colors] in even steps of OKLab (how different colors look), as sRGB */
-        private fun oklabRamp(colors: IntArray, stops: Int): IntArray {
-            val labs = colors.map { toOklab(it) }
-            return IntArray(stops) { k ->
-                val t = k / (stops - 1f) * (labs.size - 1)
-                val i = t.toInt().coerceAtMost(labs.size - 2)
-                val f = t - i
-                val a = labs[i]
-                val b = labs[i + 1]
-                fromOklab(FloatArray(3) { j -> a[j] + (b[j] - a[j]) * f })
-            }
-        }
-
         private fun toLinear(c: Int): Float {
             val v = c / 255f
             return if (v <= 0.04045f) v / 12.92f else ((v + 0.055f) / 1.055f).pow(2.4f)
@@ -827,37 +577,8 @@ class AiGlow(
             return (c * 255f + 0.5f).toInt().coerceIn(0, 255)
         }
 
-        private fun toOklab(color: Int): FloatArray {
-            val r = toLinear((color shr 16) and 0xFF)
-            val g = toLinear((color shr 8) and 0xFF)
-            val b = toLinear(color and 0xFF)
-            val l = Math.cbrt((0.4122214708f * r + 0.5363325363f * g + 0.0514459929f * b).toDouble()).toFloat()
-            val m = Math.cbrt((0.2119034982f * r + 0.6806995451f * g + 0.1073969566f * b).toDouble()).toFloat()
-            val s = Math.cbrt((0.0883024619f * r + 0.2817188376f * g + 0.6299787005f * b).toDouble()).toFloat()
-            return floatArrayOf(
-                0.2104542553f * l + 0.7936177850f * m - 0.0040720468f * s,
-                1.9779984951f * l - 2.4285922050f * m + 0.4505937099f * s,
-                0.0259040371f * l + 0.7827717662f * m - 0.8086757660f * s,
-            )
-        }
-
-        private fun fromOklab(lab: FloatArray): Int {
-            val l = lab[0] + 0.3963377774f * lab[1] + 0.2158037573f * lab[2]
-            val m = lab[0] - 0.1055613458f * lab[1] - 0.0638541728f * lab[2]
-            val s = lab[0] - 0.0894841775f * lab[1] - 1.2914855480f * lab[2]
-            val l3 = l * l * l
-            val m3 = m * m * m
-            val s3 = s * s * s
-            val r = 4.0767416621f * l3 - 3.3077115913f * m3 + 0.2309699292f * s3
-            val g = -1.2684380046f * l3 + 2.6097574011f * m3 - 0.3413193965f * s3
-            val b = -0.0041960863f * l3 - 0.7034186147f * m3 + 1.7076147010f * s3
-            return (0xFF shl 24) or (fromLinear(r) shl 16) or (fromLinear(g) shl 8) or fromLinear(b)
-        }
-
-        /** the light looks: low resolution width, how strong and how wide they shine (as in the preview page) */
+        /** the light looks: width of the small picture they are computed in */
         private const val GLOW_W = 160
-        private const val EXPOSURE = 0.62f
-        private const val FALLOFF = 3.6f
 
         /** the edge lines: left, right, bottom, top; how strong, and where each starts in the drift and the colors */
         private val EDGE_WEIGHT = floatArrayOf(1f, 1f, 1f, 0.4f)
@@ -865,9 +586,9 @@ class AiGlow(
         private const val LINE_STOPS = 24
         private val ACROSS_POS = floatArrayOf(0f, 0.25f, 0.5f, 0.75f, 1f)
         private val ACROSS_COLORS = intArrayOf(0xFFFFFFFF.toInt(), 0x5EFFFFFF, 0x23FFFFFF, 0x0DFFFFFF, 0x00FFFFFF)
-        /** Gemini's colors round the keyboard: blue, violet, orchid, pink, amber */
-        private val GEMINI_EDGE = intArrayOf(0xFF4C8DFF.toInt(), 0xFF7B5CFF.toInt(), 0xFFC45CE0.toInt(), 0xFFFF7AA8.toInt(),
-            0xFFFFA64A.toInt(), 0xFF4C8DFF.toInt())
+        /** rainbow round the keyboard: red, orange, yellow, green, blue, violet */
+        private val RAINBOW = intArrayOf(0xFFFF5A5A.toInt(), 0xFFFF9F43.toInt(), 0xFFFFE15A.toInt(), 0xFF5FD97A.toInt(),
+            0xFF4C8DFF.toInt(), 0xFF9B5CFF.toInt(), 0xFFFF5A5A.toInt())
 
         /** fine film grain: random grays, drawn faintly over the light (lighter and darker specks) */
         private fun grain(): android.graphics.Bitmap {
@@ -876,30 +597,6 @@ class AiGlow(
             return android.graphics.Bitmap.createBitmap(px, 128, 128, android.graphics.Bitmap.Config.ARGB_8888)
         }
 
-        /** H2, a horizon from below: red, orange, warm white, sky, blue */
-        private val LIGHTS_HORIZON = arrayOf(
-            Light(0.04f, 1.18f, 0.3f, 0.5f, 0xFFE2321E.toInt(), 1.4f, dx = 0.03f, periodS = 21f),
-            Light(0.2f, 1.14f, 0.28f, 0.45f, 0xFFF2873A.toInt(), 1.3f, dx = 0.03f, periodS = 25f),
-            Light(0.38f, 1.12f, 0.26f, 0.42f, 0xFFFFE6C2.toInt(), 1.6f, dx = 0.04f, periodS = 18f),
-            Light(0.57f, 1.06f, 0.3f, 0.5f, 0xFF86D9F7.toInt(), 1.4f, dx = -0.03f, periodS = 27f),
-            Light(0.8f, 0.98f, 0.42f, 0.72f, 0xFF1E6FE6.toInt(), 1.5f, dx = -0.03f, periodS = 23f),
-            Light(0.98f, 0.6f, 0.36f, 0.75f, 0xFF1A3FAE.toInt(), 1.0f, dy = 0.05f, periodS = 31f),
-        )
-        /** H4, drifting: blue, indigo violet, teal, orange floating about */
-        private val LIGHTS_FLOW = arrayOf(
-            Light(0.2f, 0.15f, 0.42f, 0.7f, 0xFF1F66E0.toInt(), 1.3f, dx = 0.22f, dy = 0.18f, periodS = 14f),
-            Light(0.75f, 0.3f, 0.4f, 0.65f, 0xFF5A2FD0.toInt(), 1.2f, dx = -0.2f, dy = 0.2f, periodS = 17f),
-            Light(0.5f, 0.95f, 0.45f, 0.6f, 0xFF0F8A86.toInt(), 1.0f, dx = 0.25f, dy = -0.1f, periodS = 21f),
-            Light(0.05f, 0.9f, 0.3f, 0.5f, 0xFFF2873A.toInt(), 1.0f, dx = 0.12f, dy = -0.12f, periodS = 26f),
-        )
-
-        /** Google's logo colors: blue, red, yellow, green */
-        private val GOOGLE = intArrayOf(0xFF4285F4.toInt(), 0xFFEA4335.toInt(), 0xFFFBBC04.toInt(), 0xFF34A853.toInt())
         private const val DRIFT_MS = 5_000L
-        /** pink, peach, butter, mint, sky, periwinkle, lavender, orchid */
-        private val COLORS = intArrayOf(
-            0xFFFFB3C7.toInt(), 0xFFFFD6A5.toInt(), 0xFFFDFFB6.toInt(), 0xFFCAFFBF.toInt(),
-            0xFF9BF6FF.toInt(), 0xFFA0C4FF.toInt(), 0xFFBDB2FF.toInt(), 0xFFFFC6FF.toInt(),
-        )
     }
 }

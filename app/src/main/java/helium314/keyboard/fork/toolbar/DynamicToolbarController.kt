@@ -653,9 +653,6 @@ class DynamicToolbarController(private val context: Context) {
             tb.usageView.setUsage(helium314.keyboard.fork.usage.ClaudeUsage.cached(prefs))
             pages.add(helium314.keyboard.fork.widget.WidgetArea.Page(WidgetPrefs.ID_USAGE, tb.usageView))
         }
-        // without a Gemini key it shows how to get one, so the widgets can still be swiped through
-        if (prefs.getBoolean(WidgetPrefs.TRIVIA, true))
-            pages.add(helium314.keyboard.fork.widget.WidgetArea.Page(WidgetPrefs.ID_TRIVIA, triviaView()))
         if (prefs.getBoolean(WidgetPrefs.EMOJI, true) && (gemini || emojiSource() != WidgetPrefs.EMOJI_AI)) {
             helium314.keyboard.fork.widget.EmojiDictionary.preload(context)
             pages.add(helium314.keyboard.fork.widget.WidgetArea.Page(WidgetPrefs.ID_EMOJI, emojiView()))
@@ -672,42 +669,8 @@ class DynamicToolbarController(private val context: Context) {
 
     // ---------------------------------------------------------------- popup widgets
 
-    private var trivia: android.widget.TextView? = null
     private var emojiRow: android.widget.LinearLayout? = null
     private val emojiSoon = Runnable { suggestEmoji() }
-
-    private fun triviaView() = trivia ?: android.widget.TextView(context).apply {
-        val colors = Settings.getValues().mColors
-        maxLines = 2
-        ellipsize = android.text.TextUtils.TruncateAt.END
-        setTextSize(android.util.TypedValue.COMPLEX_UNIT_SP, 12f)
-        // quieter than the keys: regular weight, a bit dimmed, centered with the same room above and below
-        setTextColor(colors.get(ColorType.KEY_TEXT) and 0x00FFFFFF or (0xB4 shl 24))
-        typeface = android.graphics.Typeface.DEFAULT
-        includeFontPadding = false
-        setLineSpacing(0f, 1.1f)
-        gravity = android.view.Gravity.CENTER_VERTICAL or android.view.Gravity.START
-        // tap: the next one (no Gemini key: the settings), double tap: its Wikipedia article, long press: copy it
-        val gestures = android.view.GestureDetector(context, object : android.view.GestureDetector.SimpleOnGestureListener() {
-            override fun onDown(e: android.view.MotionEvent) = true
-            override fun onSingleTapConfirmed(e: android.view.MotionEvent): Boolean {
-                if (helium314.keyboard.fork.slate.SlateKeys.keys(context.prefs()).isEmpty()) openSettings() else showTrivia()
-                return true
-            }
-            override fun onDoubleTap(e: android.view.MotionEvent): Boolean {
-                val page = triviaPage
-                if (page == null) KeyboardSwitcher.getInstance().showToast(context.getString(R.string.fork_widget_trivia_no_page), true)
-                else runCatching {
-                    context.startActivity(android.content.Intent(android.content.Intent.ACTION_VIEW, android.net.Uri.parse(page))
-                        .addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK))
-                }
-                return true
-            }
-            override fun onLongPress(e: android.view.MotionEvent) { copyTrivia() }
-        })
-        setOnTouchListener { _, e -> gestures.onTouchEvent(e) }
-        trivia = this
-    }
 
     private fun emojiView() = emojiRow ?: android.widget.LinearLayout(context).apply {
         orientation = android.widget.LinearLayout.HORIZONTAL
@@ -716,10 +679,9 @@ class DynamicToolbarController(private val context: Context) {
         showEmojis(emptyList(), false)
     }
 
-    /** [id] is shown now; [opened]: because the toolbar opened (a new fact then) */
+    /** [id] is shown now; [opened]: because the toolbar opened */
     private fun onWidgetShown(id: String?, opened: Boolean) {
         when (id) {
-            WidgetPrefs.ID_TRIVIA -> if (opened || trivia?.text.isNullOrEmpty()) showTrivia()
             WidgetPrefs.ID_EMOJI -> suggestEmoji()
         }
     }
@@ -738,7 +700,6 @@ class DynamicToolbarController(private val context: Context) {
      * nothing, the spacebar is then drawn as usual.
      */
     fun spaceWidgetText(): String? = when (spaceWidgetId()) {
-        WidgetPrefs.ID_TRIVIA -> trivia?.text?.toString()?.takeIf { it.isNotBlank() }
         WidgetPrefs.ID_EMOJI -> shownEmojis.takeIf { it.isNotEmpty() }?.joinToString("   ")
         WidgetPrefs.ID_USAGE -> helium314.keyboard.fork.usage.ClaudeUsage.cached(context.prefs())?.let {
             "Claude ${((it.session?.used ?: 0f) * 100).toInt()}% · ${((it.week?.used ?: 0f) * 100).toInt()}%"
@@ -767,8 +728,6 @@ class DynamicToolbarController(private val context: Context) {
     /** space held and let go without sliding: what tapping the widget does */
     fun spaceWidgetAction() {
         when (spaceWidgetId() ?: toolbar?.widgetArea?.currentId) {
-            WidgetPrefs.ID_TRIVIA ->
-                if (helium314.keyboard.fork.slate.SlateKeys.keys(context.prefs()).isEmpty()) openSettings() else showTrivia()
             WidgetPrefs.ID_EMOJI -> shownEmojis.firstOrNull()?.let { e ->
                 helium314.keyboard.fork.widget.EmojiDictionary.used(context, e)
                 runCatching { helium314.keyboard.keyboard.emoji.RecentEmojis.add(e) }
@@ -784,32 +743,6 @@ class DynamicToolbarController(private val context: Context) {
     /** the widget's content changed: the spacebar shows it too */
     private fun refreshSpaceWidget() {
         if (ForkSettings.isWidgetOnSpace()) KeyboardSwitcher.getInstance().mainKeyboardView?.forkInvalidateSpace()
-    }
-
-    /** the Wikipedia article of the fact shown, null if it has none */
-    private var triviaPage: String? = null
-
-    private fun copyTrivia() {
-        val fact = trivia?.text?.toString().orEmpty()
-        if (helium314.keyboard.fork.slate.SlateKeys.keys(context.prefs()).isEmpty() || fact.isBlank()
-            || fact == context.getString(R.string.fork_widget_trivia_loading)) return
-        val cm = context.getSystemService(Context.CLIPBOARD_SERVICE) as? android.content.ClipboardManager ?: return
-        cm.setPrimaryClip(android.content.ClipData.newPlainText("trivia", fact))
-        KeyboardSwitcher.getInstance().showToast(context.getString(R.string.fork_widget_trivia_copied), true)
-    }
-
-    private fun showTrivia() {
-        val view = trivia ?: return
-        triviaPage = null
-        if (helium314.keyboard.fork.slate.SlateKeys.keys(context.prefs()).isEmpty()) {
-            view.setText(R.string.fork_widget_trivia_no_key)
-            return
-        }
-        val fact = helium314.keyboard.fork.widget.Trivia.next(context)
-        triviaPage = fact?.page
-        view.text = fact?.text ?: context.getString(R.string.fork_widget_trivia_loading)
-        refreshSpaceWidget()
-        helium314.keyboard.fork.widget.Trivia.refreshIfDue(context) { added -> if (added && fact == null) showTrivia() }
     }
 
     private fun emojiSource() = context.prefs().getString(WidgetPrefs.EMOJI_SOURCE, WidgetPrefs.EMOJI_LOCAL) ?: WidgetPrefs.EMOJI_LOCAL

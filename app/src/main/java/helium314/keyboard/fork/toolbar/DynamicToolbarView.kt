@@ -557,18 +557,9 @@ class DynamicToolbarView @JvmOverloads constructor(
         invalidate()
     }
 
-    /** the AI glow's part over the toolbar's buttons, when it is drawn over the keys */
-    private var overGlow: android.graphics.drawable.Drawable? = null
-
-    fun setOverGlow(glow: android.graphics.drawable.Drawable?) {
-        overGlow = glow
-        invalidate()
-    }
-
     override fun dispatchDraw(canvas: android.graphics.Canvas) {
         underGlow?.draw(canvas)
         super.dispatchDraw(canvas)
-        overGlow?.draw(canvas)
         val w = wave ?: return
         getLocationOnScreen(screenPos)
         w.draw(canvas, screenPos[0].toFloat(), screenPos[1].toFloat(), width.toFloat(), height.toFloat())

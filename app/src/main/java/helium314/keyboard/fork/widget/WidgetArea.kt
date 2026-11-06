@@ -10,7 +10,7 @@ import android.widget.FrameLayout
 import kotlin.math.abs
 
 /**
- * fork: the popup area of the toolbar, right of the tool buttons: one widget at a time (Claude usage, trivia, emoji
+ * fork: the popup area of the toolbar, right of the tool buttons: one widget at a time (Claude usage, emoji
  * suggestions ...), the next one with a sideways swipe.
  */
 @SuppressLint("ViewConstructor")

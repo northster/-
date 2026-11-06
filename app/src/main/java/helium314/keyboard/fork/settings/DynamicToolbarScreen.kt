@@ -43,9 +43,7 @@ fun DynamicToolbarScreen(
     val wave = GlowPrefs.waveEnabled(prefs)
     val glow = GlowPrefs.glowEnabled(prefs)
     val aiGlow = prefs.getBoolean(GlowPrefs.AI_GLOW, true)
-    val aiDots = aiGlow && prefs.getString(GlowPrefs.AI_GLOW_STYLE, GlowPrefs.AI_STYLE_RING) == GlowPrefs.AI_STYLE_DOTS
-    val aiEdge = aiGlow && prefs.getString(GlowPrefs.AI_GLOW_STYLE, GlowPrefs.AI_STYLE_RING) in
-        listOf(GlowPrefs.AI_STYLE_EDGE, GlowPrefs.AI_STYLE_EDGE_GOOGLE)
+    val aiDots = aiGlow && GlowPrefs.aiStyle(prefs) == GlowPrefs.AI_STYLE_DOTS
     val autofill = prefs.getBoolean(DynamicToolbarController.PREF_AUTOFILL, true)
     val items = listOfNotNull(
             R.string.fork_cat_gesture,
@@ -91,7 +89,6 @@ fun DynamicToolbarScreen(
             GlowPrefs.AI_GLOW,
             GlowPrefs.AI_GLOW_TEST.takeIf { aiGlow },
             GlowPrefs.AI_GLOW_STYLE.takeIf { aiGlow },
-            GlowPrefs.AI_GLOW_OVER.takeIf { aiEdge },
             GlowPrefs.AI_GLOW_BLOOM.takeIf { aiDots },
             GlowPrefs.AI_GLOW_POSITION.takeIf { aiDots },
             GlowPrefs.AI_GLOW_HEIGHT.takeIf { aiDots },
@@ -289,19 +286,6 @@ fun createDynamicToolbarSettings(context: Context) = listOf(
     Setting(context, helium314.keyboard.fork.widget.WidgetPrefs.USAGE, R.string.fork_widget_usage, R.string.fork_widget_usage_summary) {
         SwitchPreference(it, true) { DynamicToolbarController.current?.setToolbarItems() }
     },
-    Setting(context, helium314.keyboard.fork.widget.WidgetPrefs.TRIVIA, R.string.fork_widget_trivia, R.string.fork_widget_trivia_summary) {
-        SwitchPreference(it, true) { DynamicToolbarController.current?.setToolbarItems() }
-    },
-    Setting(context, helium314.keyboard.fork.widget.TriviaInterests.PREF, R.string.fork_trivia_interests) {
-        TriviaInterestsPreference(it.title)
-    },
-    Setting(context, helium314.keyboard.fork.widget.TriviaInterests.PREF_SHARE, R.string.fork_trivia_interest_share) { setting ->
-        val ctx = androidx.compose.ui.platform.LocalContext.current
-        // a plain number: how many of each batch of 25 are about the interests
-        InlineSliderPreference(name = setting.title, key = setting.key,
-            default = helium314.keyboard.fork.widget.TriviaInterests.DEFAULT_SHARE, range = 0f..1f, step = 0.2f,
-            format = { ctx.getString(R.string.fork_trivia_interest_share_value, (it * 25).roundToInt(), (it * 100).roundToInt()) })
-    },
     Setting(context, helium314.keyboard.fork.widget.SpaceWidget.PREF, R.string.fork_widget_on_space,
         R.string.fork_widget_on_space_summary) {
         // the spacebar is drawn again with or without it
@@ -313,42 +297,9 @@ fun createDynamicToolbarSettings(context: Context) = listOf(
         val ids = helium314.keyboard.fork.widget.WidgetPrefs
         helium314.keyboard.settings.preferences.InlineChoicePreference(setting.title, setting.key, listOf(
             ctx.getString(R.string.fork_widget_on_space_same) to space.SAME,
-            ctx.getString(R.string.fork_widget_cat_trivia) to ids.ID_TRIVIA,
             ctx.getString(R.string.fork_widget_cat_emoji) to ids.ID_EMOJI,
             ctx.getString(R.string.fork_widget_cat_usage) to ids.ID_USAGE,
         ), space.SAME) { helium314.keyboard.keyboard.KeyboardSwitcher.getInstance().setThemeNeedsReload() }
-    },
-    Setting(context, helium314.keyboard.fork.widget.WidgetPrefs.TRIVIA_NOW, R.string.fork_widget_trivia_now) { setting ->
-        val ctx = androidx.compose.ui.platform.LocalContext.current
-        val trivia = helium314.keyboard.fork.widget.Trivia
-        // fetching (also when the keyboard started it) and the counts, looked at again while the screen shows
-        var loading by androidx.compose.runtime.remember { androidx.compose.runtime.mutableStateOf(trivia.isFetching) }
-        var counts by androidx.compose.runtime.remember { androidx.compose.runtime.mutableStateOf(trivia.count(ctx) to trivia.unseen(ctx)) }
-        androidx.compose.runtime.LaunchedEffect(Unit) {
-            while (true) {
-                loading = trivia.isFetching
-                counts = trivia.count(ctx) to trivia.unseen(ctx)
-                kotlinx.coroutines.delay(if (loading) 500 else 2000)
-            }
-        }
-        helium314.keyboard.settings.preferences.Preference(name = setting.title,
-            description = if (loading) ctx.getString(R.string.fork_widget_trivia_fetching)
-                else ctx.getString(R.string.fork_widget_trivia_count, counts.first, counts.second),
-            onClick = {
-                if (loading) return@Preference
-                loading = true
-                trivia.refreshIfDue(ctx, force = true) { added ->
-                    loading = false
-                    counts = trivia.count(ctx) to trivia.unseen(ctx)
-                    android.widget.Toast.makeText(ctx,
-                        if (added) ctx.getString(R.string.fork_widget_trivia_added_count, trivia.lastAdded)
-                        else ctx.getString(R.string.fork_widget_trivia_failed, trivia.lastError ?: "?"),
-                        android.widget.Toast.LENGTH_LONG).show()
-                }
-            }) {
-            if (loading) androidx.compose.material3.CircularProgressIndicator(
-                modifier = androidx.compose.ui.Modifier.padding(start = 12.dp).size(22.dp), strokeWidth = 2.5.dp)
-        }
     },
     Setting(context, helium314.keyboard.fork.widget.WidgetPrefs.EMOJI, R.string.fork_widget_emoji, R.string.fork_widget_emoji_summary) {
         SwitchPreference(it, true) { DynamicToolbarController.current?.setToolbarItems() }
@@ -374,20 +325,12 @@ fun createDynamicToolbarSettings(context: Context) = listOf(
     Setting(context, GlowPrefs.AI_GLOW_STYLE, R.string.fork_ai_glow_style) { setting ->
         val ctx = androidx.compose.ui.platform.LocalContext.current
         helium314.keyboard.settings.preferences.InlineChoicePreference(setting.title, setting.key, listOf(
-            ctx.getString(R.string.fork_ai_glow_style_ring) to GlowPrefs.AI_STYLE_RING,
-            ctx.getString(R.string.fork_ai_glow_style_dots) to GlowPrefs.AI_STYLE_DOTS,
-            ctx.getString(R.string.fork_ai_glow_style_edge) to GlowPrefs.AI_STYLE_EDGE,
-            ctx.getString(R.string.fork_ai_glow_style_edge_google) to GlowPrefs.AI_STYLE_EDGE_GOOGLE,
-            ctx.getString(R.string.fork_ai_glow_style_light_top) to GlowPrefs.AI_STYLE_LIGHT_TOP,
-            ctx.getString(R.string.fork_ai_glow_style_light_horizon) to GlowPrefs.AI_STYLE_LIGHT_HORIZON,
-            ctx.getString(R.string.fork_ai_glow_style_light_sides) to GlowPrefs.AI_STYLE_LIGHT_SIDES,
-            ctx.getString(R.string.fork_ai_glow_style_light_flow) to GlowPrefs.AI_STYLE_LIGHT_FLOW,
             ctx.getString(R.string.fork_ai_glow_style_edge_lines) to GlowPrefs.AI_STYLE_EDGE_LINES,
-            ctx.getString(R.string.fork_ai_glow_style_edge_lines_gemini) to GlowPrefs.AI_STYLE_EDGE_LINES_GEMINI,
-        ), GlowPrefs.AI_STYLE_RING)
-    },
-    Setting(context, GlowPrefs.AI_GLOW_OVER, R.string.fork_ai_glow_over, R.string.fork_ai_glow_over_summary) {
-        SwitchPreference(it, GlowPrefs.DEFAULT_AI_GLOW_OVER)
+            ctx.getString(R.string.fork_ai_glow_style_edge_lines_rainbow) to GlowPrefs.AI_STYLE_EDGE_LINES_RAINBOW,
+            ctx.getString(R.string.fork_ai_glow_style_light_top) to GlowPrefs.AI_STYLE_LIGHT_TOP,
+            ctx.getString(R.string.fork_ai_glow_style_light_sides) to GlowPrefs.AI_STYLE_LIGHT_SIDES,
+            ctx.getString(R.string.fork_ai_glow_style_dots) to GlowPrefs.AI_STYLE_DOTS,
+        ), GlowPrefs.aiStyle(ctx.prefs()))
     },
     Setting(context, GlowPrefs.AI_GLOW_BLOOM, R.string.fork_ai_glow_bloom, R.string.fork_ai_glow_bloom_summary) {
         GlowSlider(it, GlowPrefs.DEFAULT_AI_GLOW_BLOOM, 0f..1f, 0.05f, ::percent)
@@ -559,7 +502,6 @@ fun WidgetScreen(onClickBack: () -> Unit) {
     val b = (ctx.getActivity() as? helium314.keyboard.settings.SettingsActivity)?.prefChanged?.collectAsState()
     if ((b?.value ?: 0) < 0) helium314.keyboard.latin.utils.Log.v("irrelevant", "recompose on preference change")
     val usage = prefs.getBoolean(helium314.keyboard.fork.widget.WidgetPrefs.USAGE, true)
-    val trivia = prefs.getBoolean(helium314.keyboard.fork.widget.WidgetPrefs.TRIVIA, true)
     val items = listOfNotNull(
         helium314.keyboard.fork.widget.SpaceWidget.PREF,
         helium314.keyboard.fork.widget.SpaceWidget.PREF_WHICH.takeIf {
@@ -568,13 +510,6 @@ fun WidgetScreen(onClickBack: () -> Unit) {
         R.string.fork_widget_cat_usage,
         helium314.keyboard.fork.widget.WidgetPrefs.USAGE,
         helium314.keyboard.fork.usage.ClaudeUsage.PREF_SESSION_KEY.takeIf { usage },
-        R.string.fork_widget_cat_trivia,
-        helium314.keyboard.fork.widget.WidgetPrefs.TRIVIA,
-        helium314.keyboard.fork.widget.TriviaInterests.PREF.takeIf { trivia },
-        helium314.keyboard.fork.widget.TriviaInterests.PREF_SHARE.takeIf {
-            trivia && helium314.keyboard.fork.widget.TriviaInterests.all(prefs).isNotEmpty()
-        },
-        helium314.keyboard.fork.widget.WidgetPrefs.TRIVIA_NOW.takeIf { trivia },
         R.string.fork_widget_cat_emoji,
         helium314.keyboard.fork.widget.WidgetPrefs.EMOJI,
         helium314.keyboard.fork.widget.WidgetPrefs.EMOJI_SOURCE.takeIf { prefs.getBoolean(helium314.keyboard.fork.widget.WidgetPrefs.EMOJI, true) },

@@ -39,25 +39,23 @@ object GlowPrefs {
     const val AI_GLOW_MIN = "fork_ai_glow_min"
     /** breathing, like the chip glow's [GLOW_PERIOD] */
     const val AI_GLOW_BREATH = "fork_ai_glow_breath"
-    /** [AI_STYLE_RING] (smooth pastel light over the keyboard) or [AI_STYLE_DOTS] (the chip glow's dots and shape) */
+    /** the look of the glow while AI runs, see [aiStyle] and AiGlow */
     const val AI_GLOW_STYLE = "fork_ai_glow_look"
-    const val AI_STYLE_RING = "ring"
     const val AI_STYLE_DOTS = "dots"
-    /** a gradient turning round the edges, Gemini's colors / Google's colors */
-    const val AI_STYLE_EDGE = "edge"
-    const val AI_STYLE_EDGE_GOOGLE = "edge_google"
-    /** big soft lights like Gemini's pictures: from above, a horizon from below, both ends, drifting */
+    /** light coming in along the top edge / along the left edge and from the bottom right corner */
     const val AI_STYLE_LIGHT_TOP = "light_top"
-    const val AI_STYLE_LIGHT_HORIZON = "light_horizon"
     const val AI_STYLE_LIGHT_SIDES = "light_sides"
-    const val AI_STYLE_LIGHT_FLOW = "light_flow"
-    /** the keyboard's edges as thin white light lines glowing inward: blue / Gemini's colors */
+    /** the keyboard's edges as thin white light lines glowing inward: blue / rainbow colors */
     const val AI_STYLE_EDGE_LINES = "edge_lines"
-    const val AI_STYLE_EDGE_LINES_GEMINI = "edge_lines_gemini"
-    /** the edge looks over the keys instead of behind them */
-    const val AI_GLOW_OVER = "fork_ai_glow_over"
-    const val DEFAULT_AI_GLOW_OVER = false
-    /** dots style: strength of the smooth light under the dots (0 = dots only) */
+    const val AI_STYLE_EDGE_LINES_RAINBOW = "edge_lines_rainbow"
+    const val DEFAULT_AI_STYLE = AI_STYLE_EDGE_LINES
+
+    /** the chosen look; looks that were removed (and none chosen) give the default */
+    fun aiStyle(prefs: SharedPreferences): String = when (val v = prefs.getString(AI_GLOW_STYLE, null)) {
+        AI_STYLE_DOTS, AI_STYLE_LIGHT_TOP, AI_STYLE_LIGHT_SIDES, AI_STYLE_EDGE_LINES, AI_STYLE_EDGE_LINES_RAINBOW -> v
+        "edge_lines_gemini" -> AI_STYLE_EDGE_LINES_RAINBOW
+        else -> DEFAULT_AI_STYLE
+    }
     const val AI_GLOW_BLOOM = "fork_ai_glow_bloom"
     const val DEFAULT_AI_GLOW_BLOOM = 0.35f
     /** shape of the dots style, like the chip glow's */

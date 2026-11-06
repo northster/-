@@ -15,7 +15,7 @@ An Android keyboard based on [HeliBoard](https://github.com/HeliBorg/HeliBoard),
 - 스마트 칩: 계산, 환율, 단위 변환, 인증번호
 - AI 명령과 번역(Google Gemini, 본인 API 키)
 - GIF 검색(KLIPY / GIPHY), 즐겨찾기, 최근 사용
-- 툴바 위젯: Claude 사용량, 잡학 상식, 이모지 추천(앱에 들어 있는 사전, 오프라인)
+- 툴바 위젯: Claude 사용량, 이모지 추천(앱에 들어 있는 사전, 오프라인)
 - 분할 키보드 자동 전환(폴드 펼침), 한손 모드, 화면별로 따로 배우는 오타 보정
 - 테마 편집, 글로우 / 웨이브 효과, 쉬운 설정 모드(고급 > 설정 모드)
 
@@ -23,10 +23,9 @@ An Android keyboard based on [HeliBoard](https://github.com/HeliBorg/HeliBoard),
 
 ## 개인정보
 HeliBoard와 달리 인터넷 권한이 있다. 아래 기능을 켜고 키를 넣었을 때만 쓴다.
-- Google Gemini: AI 명령, 번역, 잡학 상식, AI 이모지 추천. 선택한 글이 Google로 간다.
+- Google Gemini: AI 명령, 번역, AI 이모지 추천. 선택한 글이 Google로 간다.
 - KLIPY / GIPHY: GIF 검색어
 - claude.ai: 사용량 위젯(본인 세션 키)
-- 위키백과(en.wikipedia.org): 토막상식(주요 문서 "vital articles"의 첫 부분에서 뽑음, CC BY-SA 4.0)
 - 환율, 링크 미리보기(붙여넣은 링크의 페이지 제목과 아이콘)
 
 키보드로 입력한 글을 따로 수집하거나 보내지 않는다. API 키는 기기 안에 암호화해서 저장한다.
