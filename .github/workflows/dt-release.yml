@@ -4,11 +4,18 @@ name: DTboard release
 # with a new v… tag). Builds the release APK ("DTboard", app id without .debug, same key as the dev builds) and
 # publishes it as the latest release:
 #   https://github.com/<repo>/releases/latest/download/DTboard-release.apk
-# Run by hand (Actions > DTboard release > Run workflow) it only builds and keeps the APK as a workflow artifact.
+# Run by hand (Actions > DTboard release > Run workflow) with a version (e.g. 0.1.0-beta.1) it makes the tag v<version>
+# on the commit it ran on and publishes the release the same way; without one it only builds and keeps the APK as a
+# workflow artifact.
 on:
   push:
     tags: [ 'v*' ]
   workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to release (e.g. 0.1.0-beta.1); empty = test build only'
+        required: false
+        default: ''
 
 permissions:
   contents: write
@@ -35,10 +42,20 @@ jobs:
         run: ./gradlew testDebugUnitTest --tests 'helium314.keyboard.fork.*' --stacktrace
 
       - name: Version
-        # v1.2.0 -> 1.2.0; a run by hand is a test build
+        # v1.2.0 -> 1.2.0; a run by hand is a release with its version given, else a test build
+        env:
+          INPUT_VERSION: ${{ github.event.inputs.version }}
         run: |
           if [ "${GITHUB_REF_TYPE}" = "tag" ]; then
             echo "DT_VERSION_NAME=${GITHUB_REF_NAME#v}" >> "$GITHUB_ENV"
+            echo "DT_TAG=${GITHUB_REF_NAME}" >> "$GITHUB_ENV"
+          elif [ -n "$INPUT_VERSION" ]; then
+            v="${INPUT_VERSION#v}"
+            if ! printf '%s' "$v" | grep -Eq '^[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.]+)?$'; then
+              echo "::error::Not a version: $INPUT_VERSION"; exit 1
+            fi
+            echo "DT_VERSION_NAME=$v" >> "$GITHUB_ENV"
+            echo "DT_TAG=v$v" >> "$GITHUB_ENV"
           else
             echo "DT_VERSION_NAME=test-${GITHUB_RUN_NUMBER}" >> "$GITHUB_ENV"
           fi
@@ -72,10 +89,11 @@ jobs:
           path: app/build/outputs/apk/release/*.apk
 
       - name: Publish release
-        if: ${{ github.ref_type == 'tag' }}
+        if: ${{ env.DT_TAG != '' }}
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: ${{ github.ref_name }}
+          tag_name: ${{ env.DT_TAG }}
+          target_commitish: ${{ github.sha }}
           name: DTboard ${{ env.DT_VERSION_NAME }}
           prerelease: false
           make_latest: true
