@@ -299,7 +299,12 @@ fun createDynamicToolbarSettings(context: Context) = listOf(
             ctx.getString(R.string.fork_widget_on_space_same) to space.SAME,
             ctx.getString(R.string.fork_widget_cat_emoji) to ids.ID_EMOJI,
             ctx.getString(R.string.fork_widget_cat_usage) to ids.ID_USAGE,
+            ctx.getString(R.string.fork_widget_on_space_date) to ids.ID_DATE,
         ), space.SAME) { helium314.keyboard.keyboard.KeyboardSwitcher.getInstance().setThemeNeedsReload() }
+    },
+    Setting(context, helium314.keyboard.fork.widget.DateWeather.PREF_CITY, R.string.fork_weather_city) {
+        helium314.keyboard.settings.preferences.TextInputPreference(it, "",
+            androidx.compose.ui.platform.LocalContext.current.getString(R.string.fork_weather_city_info))
     },
     Setting(context, helium314.keyboard.fork.widget.WidgetPrefs.EMOJI, R.string.fork_widget_emoji, R.string.fork_widget_emoji_summary) {
         SwitchPreference(it, true) { DynamicToolbarController.current?.setToolbarItems() }
@@ -506,6 +511,11 @@ fun WidgetScreen(onClickBack: () -> Unit) {
         helium314.keyboard.fork.widget.SpaceWidget.PREF,
         helium314.keyboard.fork.widget.SpaceWidget.PREF_WHICH.takeIf {
             prefs.getBoolean(helium314.keyboard.fork.widget.SpaceWidget.PREF, false)
+        },
+        helium314.keyboard.fork.widget.DateWeather.PREF_CITY.takeIf {
+            prefs.getBoolean(helium314.keyboard.fork.widget.SpaceWidget.PREF, false) &&
+                prefs.getString(helium314.keyboard.fork.widget.SpaceWidget.PREF_WHICH, null) ==
+                helium314.keyboard.fork.widget.WidgetPrefs.ID_DATE
         },
         R.string.fork_widget_cat_usage,
         helium314.keyboard.fork.widget.WidgetPrefs.USAGE,

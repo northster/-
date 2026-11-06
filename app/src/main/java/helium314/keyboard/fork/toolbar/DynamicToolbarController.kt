@@ -701,11 +701,15 @@ class DynamicToolbarController(private val context: Context) {
      */
     fun spaceWidgetText(): String? = when (spaceWidgetId()) {
         WidgetPrefs.ID_EMOJI -> shownEmojis.takeIf { it.isNotEmpty() }?.joinToString("   ")
+        WidgetPrefs.ID_DATE -> helium314.keyboard.fork.widget.DateWeather.text(context) { refreshSpaceWidget() }
         WidgetPrefs.ID_USAGE -> helium314.keyboard.fork.usage.ClaudeUsage.cached(context.prefs())?.let {
             "Claude ${((it.session?.used ?: 0f) * 100).toInt()}% · ${((it.week?.used ?: 0f) * 100).toInt()}%"
         }
         else -> null
     }
+
+    /** the spacebar's text is set in a serif face (date and weather) */
+    fun spaceWidgetSerif() = spaceWidgetId() == WidgetPrefs.ID_DATE
 
     /** the widget the spacebar shows: the one chosen in the settings, or the toolbar's */
     private fun spaceWidgetId(): String? {
@@ -733,6 +737,7 @@ class DynamicToolbarController(private val context: Context) {
                 runCatching { helium314.keyboard.keyboard.emoji.RecentEmojis.add(e) }
                 latinIME?.onTextInput(e)
             }
+            WidgetPrefs.ID_DATE -> helium314.keyboard.fork.widget.DateWeather.refresh(context) { refreshSpaceWidget() }
             WidgetPrefs.ID_USAGE -> helium314.keyboard.fork.usage.ClaudeUsage.refreshIfOld(context, force = true) { usage ->
                 if (usage != null) toolbar?.usageView?.setUsage(usage)
                 refreshSpaceWidget()

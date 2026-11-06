@@ -17,4 +17,6 @@ object WidgetPrefs {
 
     const val ID_USAGE = "usage"
     const val ID_EMOJI = "emoji"
+    /** only on the spacebar: today's date and the weather (DateWeather) */
+    const val ID_DATE = "date"
 }

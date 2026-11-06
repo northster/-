@@ -717,7 +717,7 @@ public final class MainKeyboardView extends KeyboardView implements DrawingProxy
                     ? toolbar.spaceWidgetText() : null;
             if (widget != null) {
                 helium314.keyboard.fork.widget.SpaceWidget.INSTANCE.draw(canvas, widget, key.getDrawWidth(), key.getHeight(),
-                        paint, mLanguageOnSpacebarTextColor, mLanguageOnSpacebarTextSize * 0.85f);
+                        paint, mLanguageOnSpacebarTextColor, mLanguageOnSpacebarTextSize * 0.85f, toolbar.spaceWidgetSerif());
             } else
             // If input language are explicitly selected.
             if (mLanguageOnSpacebarFormatType != LanguageOnSpacebarUtils.FORMAT_TYPE_NONE) {

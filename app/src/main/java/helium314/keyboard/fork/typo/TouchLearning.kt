@@ -17,8 +17,9 @@ import org.json.JSONObject
  *
  * - Every letter typed adds its touch point, relative to the key, to that key's running average. A key's learned
  *   center is where it is actually pressed.
- * - A letter, deleted right away and replaced by a neighbouring letter, is a typo: it is counted (for the statistics
- *   screen), and its touch point is learned for the key that was meant.
+ * - A letter deleted soon after (up to the last 4, several deletions in a row too) and replaced by a neighbouring
+ *   letter is a typo: it is counted (for the statistics screen), and its touch point is learned for the key that was
+ *   meant.
  * - Near the border between two letters, the key whose learned center is closer to the touch wins ([adjust]), instead
  *   of the one whose drawn outline contains it. Only letters, only neighbours, and only once a key has enough samples.
  * - Hands and keys differ between the cover and the inner screen of a foldable, upright and sideways, and in one-handed
@@ -34,6 +35,9 @@ object TouchLearning {
     private const val WINDOW = 60
     /** touch points kept per key for the statistics screen */
     private const val KEPT_POINTS = 40
+    /** letters remembered for spotting typos, and how long a pause may be while deleting and retyping them */
+    private const val RECENT = 4
+    private const val FIX_MS = 3000L
     /** a touch this close (key widths) to another letter's outline lets the learned centers decide */
     private const val BORDER = 0.4f
 
@@ -70,14 +74,12 @@ object TouchLearning {
     private val save = Runnable { persist() }
 
     // the last letter typed, and one that was deleted right after typing it
-    private var lastCode = 0
-    private var lastX = 0
-    private var lastY = 0
+    /** a letter typed: its code and touch point */
+    private class Typed(val code: Int, val x: Int, val y: Int)
+    /** the last letters typed (newest last), and those deleted since (last deleted last) */
+    private val recent = ArrayDeque<Typed>()
+    private val deleted = ArrayDeque<Typed>()
     private var lastTime = 0L
-    private var deletedCode = 0
-    private var deletedX = 0
-    private var deletedY = 0
-    private var deletedTime = 0L
 
     private val listener = SharedPreferences.OnSharedPreferenceChangeListener { p, key ->
         if (key == PREF_ENABLED) enabled = p.getBoolean(PREF_ENABLED, true)
@@ -127,34 +129,38 @@ object TouchLearning {
         if (!enabled || prefs == null) return
         val code = base(typedCode)
         if (code == KeyCode.DELETE) {
-            if (lastCode != 0 && time - lastTime < 1500) {
-                deletedCode = lastCode; deletedX = lastX; deletedY = lastY; deletedTime = time
-            } else deletedCode = 0
-            lastCode = 0
+            // deleting letters typed a moment ago (several in a row too): they may be retyped as neighbours
+            if (recent.isNotEmpty() && time - lastTime < FIX_MS) deleted.addLast(recent.removeLast())
+            else { recent.clear(); deleted.clear() }
+            lastTime = time
             return
         }
         if (!isLetter(code)) {
-            lastCode = 0
-            deletedCode = 0
+            recent.clear()
+            deleted.clear()
             return
         }
         val prof = profile(current())
         remember(prof, key, code, keyboardWidth, keyboardHeight)
         val w = key.width.toFloat().coerceAtLeast(1f)
         val h = key.height.toFloat().coerceAtLeast(1f)
-        // a neighbour typed right after deleting a letter: the deleted touch was meant for this key
-        if (deletedCode != 0 && deletedCode != code && time - deletedTime < 2000) {
+        // retyping after deleting: each new letter takes the place of the last deleted one; a neighbour there means the
+        //  deleted touch was meant for this key
+        val replaced = if (time - lastTime < FIX_MS) deleted.removeLastOrNull() else null
+        if (replaced == null) deleted.clear()
+        if (replaced != null && replaced.code != code) {
             val cx = key.x + w / 2
             val cy = key.y + h / 2
-            if (kotlin.math.abs(deletedX - cx) < w * 1.6f && kotlin.math.abs(deletedY - cy) < h * 1.6f) {
-                val pair = "$deletedCode>$code"
+            if (kotlin.math.abs(replaced.x - cx) < w * 1.6f && kotlin.math.abs(replaced.y - cy) < h * 1.6f) {
+                val pair = "${replaced.code}>$code"
                 prof.typos[pair] = (prof.typos[pair] ?: 0) + 1
-                learn(prof, code, (deletedX - cx) / w, (deletedY - cy) / h)
+                learn(prof, code, (replaced.x - cx) / w, (replaced.y - cy) / h)
             }
         }
-        deletedCode = 0
         learn(prof, code, (x - key.x - w / 2) / w, (y - key.y - h / 2) / h)
-        lastCode = code; lastX = x; lastY = y; lastTime = time
+        recent.addLast(Typed(code, x, y))
+        while (recent.size > RECENT) recent.removeFirst()
+        lastTime = time
         handler.removeCallbacks(save)
         handler.postDelayed(save, 5000)
     }

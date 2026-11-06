@@ -12,18 +12,19 @@ import helium314.keyboard.keyboard.KeyboardTypeface
  */
 object SpaceWidget {
     const val PREF = "fork_widget_on_space"
-    /** which widget: [SAME] (the one shown on the toolbar) or a widget id from [WidgetPrefs] */
+    /** which widget: [SAME] (the one shown on the toolbar) or a widget id from [WidgetPrefs] ([WidgetPrefs.ID_DATE]: the
+     *  date and the weather, only here) */
     const val PREF_WHICH = "fork_widget_on_space_which"
     const val SAME = "same"
 
-    /** [text] in up to two lines, centered in a key of [width] x [height], small and dimmed */
-    fun draw(canvas: Canvas, text: String, width: Int, height: Int, paint: Paint, color: Int, textSize: Float) {
+    /** [text] in up to two lines, centered in a key of [width] x [height], small and dimmed; [serif]: in a serif face */
+    fun draw(canvas: Canvas, text: String, width: Int, height: Int, paint: Paint, color: Int, textSize: Float, serif: Boolean) {
         val margin = height * 0.25f
         val maxWidth = width - 2 * margin
         if (maxWidth <= 0) return
         paint.textAlign = Paint.Align.CENTER
         paint.textSize = textSize
-        paint.typeface = KeyboardTypeface.resolve(text, Typeface.DEFAULT)
+        paint.typeface = if (serif) Typeface.create(Typeface.SERIF, Typeface.NORMAL) else KeyboardTypeface.resolve(text, Typeface.DEFAULT)
         paint.color = color
         paint.textScaleX = 1f
         paint.clearShadowLayer()

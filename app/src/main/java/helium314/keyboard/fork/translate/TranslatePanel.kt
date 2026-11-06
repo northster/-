@@ -59,9 +59,8 @@ class TranslatePanel(
         // the three wheels
         val wheels = LinearLayout(context).apply { orientation = LinearLayout.HORIZONTAL }
         fun column(title: Int, options: List<Option>, selected: Option, weight: Float, onPick: (Option) -> Unit) {
-            val col = LinearLayout(context).apply { orientation = LinearLayout.VERTICAL }
-            col.addView(label(context.getString(title), 12f, ColorType.KEY_HINT_TEXT).apply { gravity = Gravity.CENTER },
-                LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT))
+            // no title over the wheel: what it is shows from its entries (the wheel's description still names it)
+            val col = LinearLayout(context).apply { orientation = LinearLayout.VERTICAL; contentDescription = context.getString(title) }
             col.addView(WheelPicker(context, options.map { it.label }, options.indexOf(selected).coerceAtLeast(0)) {
                 onPick(options[it])
             }, LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 1f))

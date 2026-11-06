@@ -495,6 +495,9 @@
     <string name="fork_widget_on_space">스페이스바에 위젯 표시</string>
     <string name="fork_widget_on_space_summary">스페이스바 아이콘 대신 위젯 내용을 보여 줍니다(보기만 됩니다)</string>
     <string name="fork_widget_on_space_which">표시할 위젯</string>
+    <string name="fork_widget_on_space_date">날짜·날씨</string>
+    <string name="fork_weather_city">날씨 지역</string>
+    <string name="fork_weather_city_info">도시 이름을 적습니다(예: 서울, 부산). 비워 두면 날짜만 나옵니다. 날씨는 Open-Meteo에서 가져오며 도시 이름만 보냅니다</string>
     <string name="fork_widget_on_space_same">툴바와 같은 것</string>
     <string name="fork_widget_cat_emoji">이모지 추천</string>
     <string name="fork_widget_usage">Claude 사용량 위젯</string>

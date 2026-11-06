@@ -288,5 +288,6 @@ Online services
 ---------------
 Only used when you turn them on and add a key: Google Gemini (AI commands,
 translation, emoji ideas), KLIPY / GIPHY (GIF search, "Powered by
-KLIPY / GIPHY"), claude.ai (usage widget), exchange rates for the currency chip,
+KLIPY / GIPHY"), claude.ai (usage widget), Open-Meteo (spacebar weather, only the
+city name), exchange rates for the currency chip,
 website titles and icons for link previews. Their own terms apply.
