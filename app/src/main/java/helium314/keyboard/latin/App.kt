@@ -42,6 +42,7 @@ class App : Application() {
         }
 
         RichInputMethodManager.init(this)
+        helium314.keyboard.fork.ForkDefaults.seedIfFresh(this) // fork: a new install starts with these settings
         checkVersionUpgrade(this)
         if (BuildConfig.DEBUG) // do this on every debug apk start because we may work on adding a new toolbar key
             upgradeToolbarPrefs(prefs())
