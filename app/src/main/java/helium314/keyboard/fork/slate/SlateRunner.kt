@@ -217,7 +217,7 @@ class SlateRunner(private val ime: LatinIME, private val ui: Ui) {
 
     private fun setClip(text: String) {
         runCatching {
-            (ime.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager).setPrimaryClip(ClipData.newPlainText("DT Keyboard", text))
+            (ime.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager).setPrimaryClip(ClipData.newPlainText("DTboard", text))
         }.onFailure { Log.w(TAG, "can't set clipboard", it) }
     }
 

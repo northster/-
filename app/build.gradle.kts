@@ -88,7 +88,7 @@ android {
             }
             variant.outputs.forEach { output ->
                 if (output is com.android.build.api.variant.impl.VariantOutputImpl) {
-                    output.outputFileName = "DTKeyboard-${variant.buildType}.apk" // fork: fixed name, so releases/latest/download/... always works
+                    output.outputFileName = "DTboard-${variant.buildType}.apk" // fork: fixed name, so releases/latest/download/... always works
                 }
             }
         }

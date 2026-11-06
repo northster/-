@@ -1,6 +1,6 @@
-DT Keyboard
+DTboard
 ===========
-DT Keyboard is free software under the GNU General Public License v3.0
+DTboard is free software under the GNU General Public License v3.0
 (GPL-3.0-only). Source code: https://github.com/northster/-
 
 It is a modified version of HeliBoard (https://github.com/HeliBorg/HeliBoard,

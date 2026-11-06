@@ -19,6 +19,9 @@ import java.util.Locale
  * current weather there is fetched at most every [REFRESH_MS]. Without a city only the date shows.
  */
 object DateWeather {
+    /** hidden for now: not offered in the settings, a stored choice of it is ignored */
+    const val ENABLED = false
+
     /** the city the weather is for, written freely ("서울", "Busan") */
     const val PREF_CITY = "fork_weather_city"
     private const val PREF_PLACE = "fork_weather_place" // "city|lat|lon" the city was found at

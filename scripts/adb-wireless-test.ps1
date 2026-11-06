@@ -1,7 +1,7 @@
-# DT Keyboard: install + smoke test over wireless debugging (Windows PowerShell)
+# DTboard: install + smoke test over wireless debugging (Windows PowerShell)
 # Usage:
 #   .\scripts\adb-wireless-test.ps1 -Pair 192.168.0.12:37123 -Code 123456   # first time only
-#   .\scripts\adb-wireless-test.ps1 -Target 192.168.0.12:41234 -Apk .\DTKeyboard-debug.apk
+#   .\scripts\adb-wireless-test.ps1 -Target 192.168.0.12:41234 -Apk .\DTboard-debug.apk
 param(
     [string]$Target,
     [string]$Apk,
@@ -18,14 +18,14 @@ if (-not $Target -or -not (Test-Path $Apk)) { Write-Host "usage: -Target ip:port
 function Notify([string]$msg) {
     Write-Host ">>> $msg"
     # phone notification shade
-    adb -s $Target shell cmd notification post -S bigtext -t "'DT Keyboard test'" dt_test "'$msg'" | Out-Null
+    adb -s $Target shell cmd notification post -S bigtext -t "'DTboard test'" dt_test "'$msg'" | Out-Null
     # Windows balloon notification
     try {
         Add-Type -AssemblyName System.Windows.Forms
         $n = New-Object System.Windows.Forms.NotifyIcon
         $n.Icon = [System.Drawing.SystemIcons]::Information
         $n.Visible = $true
-        $n.ShowBalloonTip(5000, "DT Keyboard", $msg, "Info")
+        $n.ShowBalloonTip(5000, "DTboard", $msg, "Info")
     } catch {}
 }
 

@@ -292,7 +292,7 @@
     <string name="fork_notification_codes">알림에서 인증번호 가져오기</string>
     <string name="fork_notification_codes_summary">인증번호 문자가 오면 복사하지 않아도 칩으로 보여 줍니다</string>
     <string name="fork_notification_codes_no_access">아직 알림 접근 권한이 없습니다: 스위치를 껐다 켜면 설정 화면이 열립니다</string>
-    <string name="fork_notification_codes_grant">DT Keyboard의 알림 접근을 허용해 주십시오</string>
+    <string name="fork_notification_codes_grant">DTboard의 알림 접근을 허용해 주십시오</string>
     <string name="fork_cat_smart_typing">입력 스마트 칩</string>
     <string name="fork_smart_typing">입력하면서 스마트 칩</string>
     <string name="fork_smart_typing_summary">계산식, 금액, 단위를 입력하면 툴바에 답이 나옵니다</string>

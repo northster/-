@@ -716,7 +716,9 @@ class DynamicToolbarController(private val context: Context) {
         if (!ForkSettings.isWidgetOnSpace()) return null
         val chosen = context.prefs().getString(helium314.keyboard.fork.widget.SpaceWidget.PREF_WHICH,
             helium314.keyboard.fork.widget.SpaceWidget.SAME)
-        return if (chosen == helium314.keyboard.fork.widget.SpaceWidget.SAME) toolbar?.widgetArea?.currentId else chosen
+        // date & weather hidden for now: a stored choice of it shows the toolbar's widget
+        val hidden = chosen == WidgetPrefs.ID_DATE && !helium314.keyboard.fork.widget.DateWeather.ENABLED
+        return if (chosen == helium314.keyboard.fork.widget.SpaceWidget.SAME || hidden) toolbar?.widgetArea?.currentId else chosen
     }
 
     /** a widget is shown on the toolbar or on the spacebar, so it keeps its content up to date */

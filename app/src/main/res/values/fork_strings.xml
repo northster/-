@@ -295,7 +295,7 @@
     <string name="fork_notification_codes">Verification codes from notifications</string>
     <string name="fork_notification_codes_summary">Codes from texts show as a chip without copying them</string>
     <string name="fork_notification_codes_no_access">Notification access is not granted yet: tap the switch off and on to open the setting</string>
-    <string name="fork_notification_codes_grant">Allow notification access for DT Keyboard</string>
+    <string name="fork_notification_codes_grant">Allow notification access for DTboard</string>
     <string name="fork_cat_smart_typing">Smart chips for typed text</string>
     <string name="fork_smart_typing">Smart chips while typing</string>
     <string name="fork_smart_typing_summary">Type a calculation, an amount or a unit and the answer shows on the toolbar</string>

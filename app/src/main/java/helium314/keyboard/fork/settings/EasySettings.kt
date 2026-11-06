@@ -31,6 +31,8 @@ object EasySettings {
     val ALWAYS_HIDDEN = setOf(
         // how a swipe on the keys is told from a tap
         ForkSettings.PREF_SWIPE_MIN_DISTANCE_DP,
+        // spacebar date & weather, hidden for now
+        helium314.keyboard.fork.widget.DateWeather.PREF_CITY,
         ForkSettings.PREF_SWIPE_MIN_VELOCITY,
         ForkSettings.PREF_SWIPE_MAX_ANGLE,
         ForkSettings.PREF_SWIPE_HORIZONTAL_REJECT_DP,
@@ -106,6 +108,8 @@ object EasySettings {
         ClipPrefs.CHIP_RADIUS,
         // toolbar: swipe tuning, animation, wave and glow details
         ForkSettings.PREF_SWIPE_MIN_DISTANCE_DP,
+        // spacebar date & weather, hidden for now
+        helium314.keyboard.fork.widget.DateWeather.PREF_CITY,
         ForkSettings.PREF_SWIPE_MIN_VELOCITY,
         ForkSettings.PREF_SWIPE_MAX_ANGLE,
         ForkSettings.PREF_SWIPE_HORIZONTAL_REJECT_DP,

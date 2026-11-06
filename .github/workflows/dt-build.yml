@@ -1,6 +1,6 @@
-name: DT Keyboard APK
+name: DTboard APK
 
-# Dev builds: an installable APK on every push ("DT Keyboard Dev", its own app id with .debug), published as a
+# Dev builds: an installable APK on every push ("DTboard Dev", its own app id with .debug), published as a
 # pre-release dt-N so it can be downloaded directly on the phone. Proper releases come from dt-release.yml (tag v*).
 on:
   push:
@@ -66,7 +66,7 @@ jobs:
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: DTKeyboard-debug
+          name: DTboard-debug
           path: app/build/outputs/apk/debug/*.apk
 
       - name: Publish release
@@ -75,7 +75,7 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           tag_name: dt-${{ github.run_number }}
-          name: DT Keyboard Dev 4.1-dt.${{ github.run_number }}
+          name: DTboard Dev 4.1-dt.${{ github.run_number }}
           target_commitish: ${{ github.sha }}
           prerelease: true
           make_latest: false

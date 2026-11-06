@@ -299,8 +299,9 @@ fun createDynamicToolbarSettings(context: Context) = listOf(
             ctx.getString(R.string.fork_widget_on_space_same) to space.SAME,
             ctx.getString(R.string.fork_widget_cat_emoji) to ids.ID_EMOJI,
             ctx.getString(R.string.fork_widget_cat_usage) to ids.ID_USAGE,
-            ctx.getString(R.string.fork_widget_on_space_date) to ids.ID_DATE,
-        ), space.SAME) { helium314.keyboard.keyboard.KeyboardSwitcher.getInstance().setThemeNeedsReload() }
+            // date & weather: hidden for now (DateWeather.ENABLED)
+        ) + listOfNotNull((ctx.getString(R.string.fork_widget_on_space_date) to ids.ID_DATE)
+            .takeIf { helium314.keyboard.fork.widget.DateWeather.ENABLED }), space.SAME) { helium314.keyboard.keyboard.KeyboardSwitcher.getInstance().setThemeNeedsReload() }
     },
     Setting(context, helium314.keyboard.fork.widget.DateWeather.PREF_CITY, R.string.fork_weather_city) {
         helium314.keyboard.settings.preferences.TextInputPreference(it, "",
@@ -513,6 +514,7 @@ fun WidgetScreen(onClickBack: () -> Unit) {
             prefs.getBoolean(helium314.keyboard.fork.widget.SpaceWidget.PREF, false)
         },
         helium314.keyboard.fork.widget.DateWeather.PREF_CITY.takeIf {
+            helium314.keyboard.fork.widget.DateWeather.ENABLED &&
             prefs.getBoolean(helium314.keyboard.fork.widget.SpaceWidget.PREF, false) &&
                 prefs.getString(helium314.keyboard.fork.widget.SpaceWidget.PREF_WHICH, null) ==
                 helium314.keyboard.fork.widget.WidgetPrefs.ID_DATE

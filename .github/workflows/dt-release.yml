@@ -1,10 +1,10 @@
-name: DT Keyboard release
+name: DTboard release
 
 # Proper releases: push a tag like v1.0.0 (git tag v1.0.0 && git push origin v1.0.0, or create the release on GitHub
-# with a new v… tag). Builds the release APK ("DT Keyboard", app id without .debug, same key as the dev builds) and
+# with a new v… tag). Builds the release APK ("DTboard", app id without .debug, same key as the dev builds) and
 # publishes it as the latest release:
-#   https://github.com/<repo>/releases/latest/download/DTKeyboard-release.apk
-# Run by hand (Actions > DT Keyboard release > Run workflow) it only builds and keeps the APK as a workflow artifact.
+#   https://github.com/<repo>/releases/latest/download/DTboard-release.apk
+# Run by hand (Actions > DTboard release > Run workflow) it only builds and keeps the APK as a workflow artifact.
 on:
   push:
     tags: [ 'v*' ]
@@ -68,7 +68,7 @@ jobs:
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: DTKeyboard-release
+          name: DTboard-release
           path: app/build/outputs/apk/release/*.apk
 
       - name: Publish release
@@ -76,7 +76,7 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ github.ref_name }}
-          name: DT Keyboard ${{ env.DT_VERSION_NAME }}
+          name: DTboard ${{ env.DT_VERSION_NAME }}
           prerelease: false
           make_latest: true
           generate_release_notes: true

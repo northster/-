@@ -1,4 +1,4 @@
-# DT Keyboard (HeliBoard 포크): 동적 툴바 UX 테스트용
+# DTboard (HeliBoard 포크): 동적 툴바 UX 테스트용
 
 동적 툴바 UX를 테스트하려고 [HeliBoard](https://github.com/Helium314/HeliBoard)를 포크한 키보드.
 upstream 커밋 `dc28c24d`(2026-09-09)가 기준이고, git 히스토리를 그대로 가져왔기 때문에 upstream 변경을 병합할 수 있다.
@@ -93,19 +93,19 @@ fork/
 - 스와이프로 열고 닫을 때만 나온다. 인증번호 때문에 자동으로 열리거나 ‹ 버튼으로 닫힐 때는 나오지 않는다.
 
 ## 3. 빌드와 설치
-- 패키지명: `io.github.northster.dtkeyboard`. 앱 이름은 "DT Keyboard".
+- 패키지명: `io.github.northster.dtkeyboard`. 앱 이름은 "DTboard".
   콘텐츠 프로바이더 authority도 바꿨기 때문에 HeliBoard와 함께 설치할 수 있다.
 - ABI는 `arm64-v8a`(폴드8)와 `x86_64`(에뮬레이터)만 넣었다.
 - 서명: 아래 "서명 키" 참고. 개발 빌드와 정식 빌드는 같은 키로 서명한다.
 - 개발 빌드(`.github/workflows/dt-build.yml`): push마다 단위 테스트, APK 빌드.
-  - 앱 이름 "DT Keyboard Dev", 패키지 `io.github.northster.dtkeyboard.debug`. 정식 앱과 따로 설치된다(설정도 따로).
+  - 앱 이름 "DTboard Dev", 패키지 `io.github.northster.dtkeyboard.debug`. 정식 앱과 따로 설치된다(설정도 따로).
   - 빌드마다 사전 릴리스(pre-release) `dt-<번호>`(버전 `4.1-dt.<번호>`)를 만들고, 최신 10개만 남긴다.
   - "Latest"는 정식 릴리스 몫이라 개발 빌드는 Releases 목록의 맨 위 pre-release에서 받는다.
   - Obtainium으로 개발 빌드를 받으려면 "Include prereleases"를 켜고 APK 필터를 `debug`로.
 - 정식 릴리스(`.github/workflows/dt-release.yml`): `v`로 시작하는 태그를 push하면(예: `git tag v1.0.0 && git push origin v1.0.0`,
   또는 GitHub 웹에서 Releases > Draft a new release > 새 태그 `v1.0.0`) 릴리스 빌드를 만들어 "Latest" 릴리스로 올린다.
-  - 앱 이름 "DT Keyboard", 패키지 `io.github.northster.dtkeyboard`, 버전 이름은 태그에서(`v1.0.0` → `1.0.0`).
-  - 고정 링크: https://github.com/northster/-/releases/latest/download/DTKeyboard-release.apk
+  - 앱 이름 "DTboard", 패키지 `io.github.northster.dtkeyboard`, 버전 이름은 태그에서(`v1.0.0` → `1.0.0`).
+  - 고정 링크: https://github.com/northster/-/releases/latest/download/DTboard-release.apk
   - Actions에서 손으로 실행하면 빌드만 하고 APK를 워크플로 아티팩트로 남긴다(배포 안 함, 확인용).
 - GIF 내장 키: 저장소 Secrets에 `DT_KLIPY_KEY`나 `DT_GIPHY_KEY`가 있으면 빌드에 넣어서, 사용자가 키를 안 넣어도 GIF가 된다.
   사용자가 설정에서 자기 키를 넣으면 그게 먼저다. 내장 키는 APK에서 뽑아낼 수 있고 모든 사용자가 한도를 나눠 쓴다.
@@ -115,9 +115,9 @@ fork/
 폰과 PC가 같은 Wi-Fi에 있어야 하고, 폰에서 개발자 옵션 > 무선 디버깅을 켠다.
 ```
 scripts/adb-wireless-test.sh --pair 192.168.0.12:37123 123456   # 최초 1회 페어링
-scripts/adb-wireless-test.sh 192.168.0.12:41234 DTKeyboard-debug.apk
+scripts/adb-wireless-test.sh 192.168.0.12:41234 DTboard-debug.apk
 ```
-Windows는 `scripts/adb-wireless-test.ps1 -Target 192.168.0.12:41234 -Apk .\DTKeyboard-debug.apk`를 쓴다(페어링은 `-Pair ... -Code ...`).
+Windows는 `scripts/adb-wireless-test.ps1 -Target 192.168.0.12:41234 -Apk .\DTboard-debug.apk`를 쓴다(페어링은 `-Pair ... -Code ...`).
 스크립트는 다음 순서로 동작한다.
 1. 폰 알림창과 PC에 **"테스트 시작"** 알림을 띄운다.
 2. 앱을 설치하고, IME를 활성화하고 기본 키보드로 지정한다.
