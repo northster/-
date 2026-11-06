@@ -467,6 +467,8 @@
     <string name="fork_ai_glow_style_light_horizon">지평선 (아래에서)</string>
     <string name="fork_ai_glow_style_light_sides">양 끝 빛</string>
     <string name="fork_ai_glow_style_light_flow">흐르는 빛</string>
+    <string name="fork_ai_glow_style_edge_lines">테두리 빛줄기 (파랑)</string>
+    <string name="fork_ai_glow_style_edge_lines_gemini">테두리 빛줄기 (제미나이 색)</string>
     <string name="fork_ai_glow_in">나타나고 사라지는 시간</string>
     <string name="fork_split_auto">펼치면 자동 분할</string>
     <string name="fork_split_auto_summary">넓은 화면(폴드 내부, 태블릿)에서는 자동으로 분할</string>

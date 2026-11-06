@@ -470,6 +470,8 @@
     <string name="fork_ai_glow_style_light_horizon">Horizon (from below)</string>
     <string name="fork_ai_glow_style_light_sides">Both ends</string>
     <string name="fork_ai_glow_style_light_flow">Drifting light</string>
+    <string name="fork_ai_glow_style_edge_lines">Edge light lines (blue)</string>
+    <string name="fork_ai_glow_style_edge_lines_gemini">Edge light lines (Gemini colors)</string>
     <string name="fork_ai_glow_in">Time to appear and go away</string>
     <string name="fork_split_auto">Split when unfolded</string>
     <string name="fork_split_auto_summary">Splits on wide screens (Fold inner screen, tablets) by itself</string>

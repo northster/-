@@ -51,6 +51,9 @@ object GlowPrefs {
     const val AI_STYLE_LIGHT_HORIZON = "light_horizon"
     const val AI_STYLE_LIGHT_SIDES = "light_sides"
     const val AI_STYLE_LIGHT_FLOW = "light_flow"
+    /** the keyboard's edges as thin white light lines glowing inward: blue / Gemini's colors */
+    const val AI_STYLE_EDGE_LINES = "edge_lines"
+    const val AI_STYLE_EDGE_LINES_GEMINI = "edge_lines_gemini"
     /** the edge looks over the keys instead of behind them */
     const val AI_GLOW_OVER = "fork_ai_glow_over"
     const val DEFAULT_AI_GLOW_OVER = false
