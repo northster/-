@@ -492,7 +492,7 @@
     <string name="fork_widget_on_space">Widget on the spacebar</string>
     <string name="fork_widget_on_space_summary">The widget instead of the spacebar\'s icon</string>
     <string name="fork_widget_on_space_which">Widget to show</string>
-    <string name="fork_widget_on_space_date">Date & weather</string>
+    <string name="fork_widget_on_space_date">Date &amp; weather</string>
     <string name="fork_weather_city">Weather city</string>
     <string name="fork_weather_city_info">E.g. Seoul. Empty: only the date (only the city name is sent to Open-Meteo)</string>
     <string name="fork_widget_on_space_same">Same as the toolbar</string>
