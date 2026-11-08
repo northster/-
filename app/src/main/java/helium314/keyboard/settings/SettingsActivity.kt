@@ -159,7 +159,11 @@ open class SettingsActivity : ComponentActivity(), SharedPreferences.OnSharedPre
             intent = null
         }
 
-        enableEdgeToEdge()
+        // fork: the settings are always dark, so are the system bars' icons
+        enableEdgeToEdge(
+            statusBarStyle = androidx.activity.SystemBarStyle.dark(android.graphics.Color.TRANSPARENT),
+            navigationBarStyle = androidx.activity.SystemBarStyle.dark(android.graphics.Color.TRANSPARENT),
+        )
     }
 
     // fork: the system writes the selected / enabled keyboards to secure settings, sometimes after our

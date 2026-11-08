@@ -509,4 +509,5 @@
     <string name="fork_widget_emoji_auto_ai">AI, automatic</string>
     <string name="fork_widget_emoji_ai">Emoji ideas from AI</string>
     <string name="fork_widget_emoji_asking">Asking the AI…</string>
+    <string name="fork_main_change_theme">Change theme</string>
 </resources>

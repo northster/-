@@ -3,7 +3,6 @@ package helium314.keyboard.settings
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -53,17 +52,17 @@ fun ShadcnSwitch(
         enabled = enabled,
         thumbContent = { Box(Modifier.size(SwitchDefaults.IconSize)) },
         colors = SwitchDefaults.colors(
-            checkedThumbColor = s.primaryForeground,
+            checkedThumbColor = Color.White,
             checkedTrackColor = s.primary,
             checkedBorderColor = Color.Transparent,
-            uncheckedThumbColor = s.mutedForeground,
+            uncheckedThumbColor = Color.White,
             uncheckedTrackColor = s.input,
             uncheckedBorderColor = Color.Transparent,
             // fork: a disabled "on" switch still has to look on
-            disabledCheckedThumbColor = s.primaryForeground,
+            disabledCheckedThumbColor = Color.White,
             disabledCheckedTrackColor = s.primary.copy(alpha = 0.6f),
             disabledCheckedBorderColor = Color.Transparent,
-            disabledUncheckedThumbColor = s.mutedForeground.copy(alpha = 0.5f),
+            disabledUncheckedThumbColor = Color.White.copy(alpha = 0.5f),
             disabledUncheckedTrackColor = s.input,
             disabledUncheckedBorderColor = Color.Transparent,
         ),
@@ -91,8 +90,8 @@ fun ScrollSafeSlider(
         //  as tall as it looks: a 4dp track and a 16dp thumb in a 24dp row, not Material's 44dp thumb and 48dp minimum
         val fraction = if (valueRange.endInclusive > valueRange.start)
             ((value - valueRange.start) / (valueRange.endInclusive - valueRange.start)).coerceIn(0f, 1f) else 0f
-        androidx.compose.foundation.Canvas(Modifier.fillMaxWidth().height(24.dp)) {
-            val inset = 10.dp.toPx()
+        androidx.compose.foundation.Canvas(Modifier.fillMaxWidth().height(28.dp)) {
+            val inset = 12.dp.toPx()
             val cy = size.height / 2
             val track = 4.dp.toPx()
             val x = inset + fraction * (size.width - 2 * inset)
@@ -100,11 +99,13 @@ fun ScrollSafeSlider(
                 androidx.compose.ui.geometry.Offset(size.width - inset, cy), track, androidx.compose.ui.graphics.StrokeCap.Round)
             drawLine(colors.activeTrackColor, androidx.compose.ui.geometry.Offset(inset, cy),
                 androidx.compose.ui.geometry.Offset(x, cy), track, androidx.compose.ui.graphics.StrokeCap.Round)
-            drawCircle(colors.thumbColor, 8.dp.toPx(), androidx.compose.ui.geometry.Offset(x, cy))
+            // fork: a white thumb on the colored track (the thumb color asked for is the track's)
+            drawCircle(Color.Black.copy(alpha = 0.35f), 12.dp.toPx(), androidx.compose.ui.geometry.Offset(x, cy + 1.dp.toPx()))
+            drawCircle(Color.White, 11.dp.toPx(), androidx.compose.ui.geometry.Offset(x, cy))
         }
         // on top of the slider, takes all touches; a drag only starts after moving sideways past the touch slop
         Box(Modifier.matchParentSize().pointerInput(Unit) {
-            val inset = 10.dp.toPx() // half the thumb, the track starts there
+            val inset = 12.dp.toPx() // about half the thumb, the track starts there
             fun valueAt(x: Float): Float {
                 val f = ((x - inset) / (size.width - 2 * inset)).coerceIn(0f, 1f)
                 return range.start + f * (range.endInclusive - range.start)
@@ -127,13 +128,16 @@ fun ScrollSafeSlider(
 fun SectionLabel(text: String, modifier: Modifier = Modifier) {
     Text(
         text = text,
-        style = MaterialTheme.typography.labelMedium,
+        style = MaterialTheme.typography.labelLarge.copy(fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold),
         color = LocalShadcn.current.mutedForeground,
-        modifier = modifier.padding(start = 20.dp, end = 20.dp, top = 20.dp, bottom = 8.dp),
+        modifier = modifier.padding(start = 24.dp, end = 24.dp, top = 26.dp, bottom = 10.dp),
     )
 }
 
-/** shadcn Card: 1px border, 8dp radius, rows separated by thin dividers. */
+/** the settings' card: 22dp corners */
+val CardShape = androidx.compose.foundation.shape.RoundedCornerShape(22.dp)
+
+/** Card on the page: lifted fill, 22dp corners, rows separated by faint dividers. */
 @Composable
 fun SettingsCard(
     modifier: Modifier = Modifier,
@@ -142,11 +146,10 @@ fun SettingsCard(
     val s = LocalShadcn.current
     Column(
         modifier
-            .padding(horizontal = 16.dp)
+            .padding(horizontal = 12.dp)
             .fillMaxWidth()
-            .clip(MaterialTheme.shapes.medium)
-            // fork: the outline is the page color, the lighter fill alone marks the card
-            .border(BorderStroke(1.dp, s.background), MaterialTheme.shapes.medium)
+            .clip(CardShape)
+            // fork: no outline, the lifted fill alone marks the card
             .background(s.card)
     ) {
         rows.forEachIndexed { i, row ->
@@ -175,8 +178,8 @@ fun SetupAlert(
 ) {
     val s = LocalShadcn.current
     Surface(
-        modifier = modifier.padding(horizontal = 16.dp, vertical = 8.dp).fillMaxWidth(),
-        shape = MaterialTheme.shapes.medium,
+        modifier = modifier.padding(horizontal = 12.dp, vertical = 8.dp).fillMaxWidth(),
+        shape = CardShape,
         color = s.warningBackground,
         border = BorderStroke(1.dp, s.warning.copy(alpha = 0.5f)),
     ) {
@@ -197,7 +200,7 @@ fun ShadcnButton(text: String, onClick: () -> Unit, modifier: Modifier = Modifie
     Button(
         onClick = onClick,
         modifier = modifier,
-        shape = MaterialTheme.shapes.small,
+        shape = androidx.compose.foundation.shape.RoundedCornerShape(50),
         colors = ButtonDefaults.buttonColors(containerColor = s.primary, contentColor = s.primaryForeground),
         contentPadding = ButtonDefaults.ContentPadding,
     ) { Text(text, style = MaterialTheme.typography.labelLarge) }

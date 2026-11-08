@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Surface
+import androidx.compose.foundation.layout.size
+import androidx.compose.ui.unit.dp
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -20,9 +22,12 @@ import helium314.keyboard.latin.R
 
 @Composable
 fun NextScreenIcon() {
+    // fork: a small, dim chevron
     Icon(
         painterResource(R.drawable.ic_arrow_left), null,
-        if (LocalLayoutDirection.current == LayoutDirection.Ltr) Modifier.scale(-1f, 1f) else Modifier
+        (if (LocalLayoutDirection.current == LayoutDirection.Ltr) Modifier.scale(-1f, 1f) else Modifier)
+            .then(Modifier.size(18.dp)),
+        tint = LocalShadcn.current.ring,
     )
 }
 

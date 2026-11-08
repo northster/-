@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-only
 package helium314.keyboard.latin.utils
 
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Shapes
@@ -57,21 +56,22 @@ val ShadcnLight = ShadcnColors(
     ring = Color(0xFFA1A1AA),
 )
 
+// fork: the settings' dark look ("the keyboard is the menu"): near-black page, lifted cards, one orange highlight
 val ShadcnDark = ShadcnColors(
-    background = Color(0xFF09090B),
-    foreground = Color(0xFFFAFAFA),
-    card = Color(0xFF1C1C20),
-    muted = Color(0xFF2E2E33),
-    mutedForeground = Color(0xFFA1A1AA),
-    border = Color(0xFF34343A),
-    input = Color(0xFF27272A),
-    primary = Color(0xFFFAFAFA),
-    primaryForeground = Color(0xFF18181B),
-    accent = Color(0xFF27272A),
-    destructive = Color(0xFFDC2626),
-    warning = Color(0xFFFBBF24),
-    warningBackground = Color(0xFF1C1407),
-    ring = Color(0xFF52525B),
+    background = Color(0xFF0A0A0C),
+    foreground = Color(0xFFF3F3F5),
+    card = Color(0xFF131316),
+    muted = Color(0xFF232328),
+    mutedForeground = Color(0xFF9A9AA4),
+    border = Color(0x0FFFFFFF),
+    input = Color(0xFF2B2B31),
+    primary = Color(0xFFFF6A2B),
+    primaryForeground = Color(0xFF0A0A0C),
+    accent = Color(0xFF1A1A1E),
+    destructive = Color(0xFFF2554A),
+    warning = Color(0xFFFFB547),
+    warningBackground = Color(0xFF1E1609),
+    ring = Color(0xFF5E5E68),
 )
 
 val LocalShadcn = staticCompositionLocalOf { ShadcnLight }
@@ -86,7 +86,7 @@ val ShadcnShapes = Shapes(
 )
 
 @Composable
-fun Theme(dark: Boolean = isSystemInDarkTheme(), content: @Composable () -> Unit) {
+fun Theme(dark: Boolean = true, content: @Composable () -> Unit) {
     val s = if (dark) ShadcnDark else ShadcnLight
     val scheme = if (dark) darkColorScheme(
         primary = s.primary, onPrimary = s.primaryForeground,
@@ -117,6 +117,7 @@ fun Theme(dark: Boolean = isSystemInDarkTheme(), content: @Composable () -> Unit
         outline = s.ring, outlineVariant = s.border,
         error = s.destructive, onError = s.primaryForeground,
     )
+    // fork: the settings are always dark (light tokens are kept for previews)
     val base = Typography()
     fun TextStyle.tight(size: Int, weight: FontWeight, line: Int) =
         copy(fontSize = size.sp, fontWeight = weight, lineHeight = line.sp, letterSpacing = (-0.1).sp)
@@ -125,7 +126,7 @@ fun Theme(dark: Boolean = isSystemInDarkTheme(), content: @Composable () -> Unit
         titleLarge = base.titleLarge.tight(18, FontWeight.SemiBold, 24),
         titleMedium = base.titleMedium.tight(15, FontWeight.SemiBold, 20),
         titleSmall = base.titleSmall.tight(13, FontWeight.SemiBold, 18),
-        bodyLarge = base.bodyLarge.tight(15, FontWeight.Medium, 20),
+        bodyLarge = base.bodyLarge.tight(16, FontWeight.Medium, 21),
         bodyMedium = base.bodyMedium.tight(13, FontWeight.Normal, 18),
         bodySmall = base.bodySmall.tight(12, FontWeight.Normal, 16),
         labelLarge = base.labelLarge.tight(14, FontWeight.Medium, 20),

@@ -6,6 +6,13 @@ import android.content.Intent
 import android.view.inputmethod.InputMethodManager
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import helium314.keyboard.fork.settings.CategoryKeys
+import helium314.keyboard.fork.settings.KeyboardHero
+import helium314.keyboard.latin.utils.locale
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.fillMaxSize
@@ -121,7 +128,7 @@ fun MainSettingsScreen(
                 ImeSetupState.OK -> {}
             }
 
-            SettingsSection(stringResource(R.string.fork_main_input), listOfNotNull(
+            val input = listOfNotNull(
                 entry(R.string.language_and_layouts_title, subtypeNames,
                     R.drawable.ic_settings_languages, onClickLanguage),
                 entry(R.string.settings_screen_preferences, stringResource(R.string.fork_desc_preferences),
@@ -141,8 +148,8 @@ fun MainSettingsScreen(
                 if (!easy && JniUtils.sHaveGestureLib && System.currentTimeMillis() < END_DATE_EPOCH_MILLIS + TWO_WEEKS_IN_MILLIS)
                     entry(R.string.gesture_data_screen, null, R.drawable.ic_settings_gesture, onClickDataGathering)
                 else null,
-            ))
-            SettingsSection(stringResource(R.string.fork_main_look), listOfNotNull(
+            )
+            val look = listOfNotNull(
                 entry(R.string.fork_theme_colors, stringResource(R.string.fork_desc_theme_colors),
                     R.drawable.ic_settings_appearance, onClickThemeColors),
                 entry(R.string.settings_screen_appearance, stringResource(R.string.fork_desc_appearance),
@@ -150,8 +157,8 @@ fun MainSettingsScreen(
                 if (easy) null
                 else entry(R.string.settings_screen_secondary_layouts, stringResource(R.string.fork_desc_layouts),
                     R.drawable.ic_settings_layout, onClickLayouts),
-            ))
-            SettingsSection(stringResource(R.string.fork_main_tools), listOf(
+            )
+            val tools = listOf(
                 // fork: the toolbar, and the tools on it with their own screens
                 entry(R.string.settings_screen_toolbar, stringResource(R.string.fork_desc_dynamic_toolbar),
                     R.drawable.ic_settings_toolbar, onClickDynamicToolbar),
@@ -167,15 +174,30 @@ fun MainSettingsScreen(
                     helium314.keyboard.fork.DotIcons.of(R.drawable.ic_dot_gif), onClickGif),
                 entry(R.string.fork_screen_widgets, stringResource(R.string.fork_desc_widgets),
                     helium314.keyboard.fork.DotIcons.of(R.drawable.ic_dot_more), onClickWidgets),
-            ))
-            SettingsSection(stringResource(R.string.fork_main_more), listOf(
+            )
+            val more = listOf(
                 entry(R.string.fork_screen_permissions, stringResource(R.string.fork_desc_permissions),
                     R.drawable.ic_settings_about_license, onClickPermissions),
                 entry(R.string.settings_screen_advanced, stringResource(R.string.fork_desc_advanced),
                     R.drawable.ic_settings_advanced, onClickAdvanced),
                 entry(R.string.settings_screen_about, stringResource(R.string.fork_desc_about),
                     R.drawable.ic_settings_about, onClickAbout),
-            ))
+            )
+
+            // fork: the keyboard on top, four keys under it pick the group that is listed
+            var group by rememberSaveable { mutableIntStateOf(0) }
+            val korean = remember { SubtypeSettings.getEnabledSubtypes(true).any { it.locale().language == "ko" } }
+            KeyboardHero(korean, appName, subtypeNames, stringResource(R.string.fork_main_change_theme), onClickThemeColors)
+            Spacer(Modifier.height(22.dp))
+            CategoryKeys(
+                listOf(stringResource(R.string.fork_main_input), stringResource(R.string.fork_main_look),
+                    stringResource(R.string.fork_main_tools), stringResource(R.string.fork_main_more)),
+                listOf(R.drawable.ic_line_keyboard, R.drawable.ic_settings_appearance, R.drawable.ic_line_sparkles,
+                    R.drawable.ic_line_more),
+                group,
+            ) { group = it }
+            Spacer(Modifier.height(6.dp))
+            SettingsSection(null, listOf(input, look, tools, more)[group])
         }
     }
 }

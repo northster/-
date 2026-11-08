@@ -506,4 +506,5 @@
     <string name="fork_widget_emoji_auto_ai">AI 자동</string>
     <string name="fork_widget_emoji_ai">AI로 이모지 추천</string>
     <string name="fork_widget_emoji_asking">AI에게 물어보는 중…</string>
+    <string name="fork_main_change_theme">테마 바꾸기</string>
 </resources>

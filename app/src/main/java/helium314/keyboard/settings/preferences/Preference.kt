@@ -3,7 +3,11 @@ package helium314.keyboard.settings.preferences
 
 import helium314.keyboard.settings.ShadcnSwitch
 import androidx.annotation.DrawableRes
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.ui.draw.clip
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -53,19 +57,25 @@ fun Preference(
     @DrawableRes icon: Int? = null,
     value: @Composable (RowScope.() -> Unit)? = null,
 ) {
-    // fork: shadcn style row: 15sp medium title, 13sp muted description, 16dp padding
+    // fork: row: the icon on a rounded tile, 16sp medium title, 13sp muted description
     Row(
         modifier = modifier
             .fillMaxWidth()
             .clickable { onClick() }
-            .heightIn(min = 52.dp)
+            .heightIn(min = 56.dp)
             .padding(vertical = 12.dp, horizontal = 16.dp),
         horizontalArrangement = Arrangement.spacedBy(14.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         if (icon != null)
-            CompositionLocalProvider(LocalContentColor provides MaterialTheme.colorScheme.onSurface) {
-                IconOrImage(icon, name, 22)
+            androidx.compose.foundation.layout.Box(
+                Modifier.size(36.dp).clip(RoundedCornerShape(11.dp))
+                    .background(helium314.keyboard.latin.utils.LocalShadcn.current.muted),
+                contentAlignment = Alignment.Center,
+            ) {
+                CompositionLocalProvider(LocalContentColor provides MaterialTheme.colorScheme.onSurface) {
+                    IconOrImage(icon, name, 20)
+                }
             }
         Column(modifier = Modifier.weight(1f)) {
             Text(text = name, style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurface)
