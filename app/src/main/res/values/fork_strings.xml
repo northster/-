@@ -513,4 +513,14 @@
     <string name="fork_glow_position_all">All around</string>
     <string name="fork_ai_glow_rainbow">Rainbow colors</string>
     <string name="fork_cat_glow_common">Both glows</string>
+    <string name="fork_screen_texts">Edit texts</string>
+    <string name="fork_desc_texts">Change the app\'s wording and send it</string>
+    <string name="fork_texts_intro">Tap a text to change it, then tap Send when done. Changed texts go into the app with the next build.</string>
+    <string name="fork_texts_count">%d texts changed</string>
+    <string name="fork_texts_only_changed">Changed only</string>
+    <string name="fork_texts_send">Send</string>
+    <string name="fork_texts_original">Was: %s</string>
+    <string name="fork_texts_reset">Undo change</string>
+    <string name="fork_texts_save">Save</string>
+    <string name="fork_texts_placeholder_warning">Keep these marks (a number or name goes there): %s</string>
 </resources>

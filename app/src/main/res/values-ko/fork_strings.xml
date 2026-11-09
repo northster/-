@@ -510,4 +510,14 @@
     <string name="fork_glow_position_all">전체</string>
     <string name="fork_ai_glow_rainbow">무지개 색</string>
     <string name="fork_cat_glow_common">글로우 공통</string>
+    <string name="fork_screen_texts">텍스트 고치기</string>
+    <string name="fork_desc_texts">앱 안의 문구를 고쳐서 보내기</string>
+    <string name="fork_texts_intro">문구를 눌러 고치고, 다 고치면 보내기를 눌러 주십시오. 고친 문구는 다음 빌드부터 앱에 들어갑니다.</string>
+    <string name="fork_texts_count">고친 문구 %d개</string>
+    <string name="fork_texts_only_changed">고친 것만</string>
+    <string name="fork_texts_send">보내기</string>
+    <string name="fork_texts_original">원래: %s</string>
+    <string name="fork_texts_reset">원래대로</string>
+    <string name="fork_texts_save">저장</string>
+    <string name="fork_texts_placeholder_warning">이 표시는 지우지 마십시오 (숫자나 이름이 들어가는 자리): %s</string>
 </resources>

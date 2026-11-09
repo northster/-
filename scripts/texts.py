@@ -5,6 +5,7 @@ fork: the app's Korean texts as one spreadsheet (CSV, opens in Excel / Google Sh
 
   python3 scripts/texts.py export texts.csv   # all texts: file, key, current Korean, English, an empty "new" column
   python3 scripts/texts.py apply texts.csv    # writes every filled "new" cell into the Korean string files
+  python3 scripts/texts.py sent texts.txt     # applies what the app's "Edit texts" screen sent (More > Edit texts)
 
 Only the "바꿀 한국어" (new Korean) column is read back; empty cells change nothing. Line breaks are written as \\n,
 placeholders like %s / %1$s must stay.
@@ -71,6 +72,22 @@ def apply(src: Path):
             new = (row.get("바꿀 한국어") or "").strip()
             if new:
                 changes.setdefault(row["구분"], {})[row["키"]] = new
+    write(changes)
+
+
+def sent(src: Path):
+    """lines of label, key, old text, new text (tabs and line breaks escaped), as the app's text editor sends them"""
+    def unesc(t: str) -> str:
+        return re.sub(r"\\(.)", lambda m: {"t": "\t", "n": "\n"}.get(m.group(1), m.group(1)), t)
+    changes = {}
+    for line in src.read_text(encoding="utf-8-sig").splitlines():
+        parts = line.split("\t")
+        if len(parts) == 4 and parts[0] in dict(FILES):
+            changes.setdefault(parts[0], {})[parts[1]] = unesc(parts[3])
+    write(changes)
+
+
+def write(changes):
     files = dict(FILES)
     total = 0
     for label, keys in changes.items():
@@ -90,6 +107,7 @@ def apply(src: Path):
 
 
 if __name__ == "__main__":
-    if len(sys.argv) != 3 or sys.argv[1] not in ("export", "apply"):
+    commands = {"export": export, "apply": apply, "sent": sent}
+    if len(sys.argv) != 3 or sys.argv[1] not in commands:
         sys.exit(__doc__)
-    (export if sys.argv[1] == "export" else apply)(Path(sys.argv[2]))
+    commands[sys.argv[1]](Path(sys.argv[2]))

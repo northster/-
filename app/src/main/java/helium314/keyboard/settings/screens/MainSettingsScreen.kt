@@ -89,6 +89,7 @@ fun MainSettingsScreen(
     onClickWidgets: () -> Unit = {},
     onClickPermissions: () -> Unit = {},
     onClickEffects: () -> Unit = {},
+    onClickTexts: () -> Unit = {},
 ) {
     SearchSettingsScreen(
         onClickBack = onClickBack,
@@ -195,6 +196,8 @@ fun MainSettingsScreen(
                     R.drawable.ic_settings_advanced, onClickAdvanced),
                 entry(R.string.settings_screen_about, stringResource(R.string.fork_desc_about),
                     R.drawable.ic_settings_about, onClickAbout),
+                entry(R.string.fork_screen_texts, stringResource(R.string.fork_desc_texts),
+                    R.drawable.ic_settings_correction, onClickTexts),
             )
 
             // fork: the keyboard on top, four keys under it pick the group that is listed

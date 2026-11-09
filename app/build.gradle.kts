@@ -137,6 +137,34 @@ android {
     }
 }
 
+
+// fork: the names of the app's texts, for the in-app text editor (fork/settings/TextEditScreen.kt)
+abstract class TextKeysTask : DefaultTask() {
+    @get:InputFiles
+    abstract val sources: ConfigurableFileCollection
+    @get:OutputDirectory
+    abstract val outputDir: DirectoryProperty
+
+    @TaskAction
+    fun run() {
+        val name = Regex("<string name=\"([^\"]+)\"([^>]*)>")
+        val lines = sources.files.sortedByDescending { it.name.startsWith("fork") }.flatMap { f ->
+            val label = if (f.name.startsWith("fork")) "DTboard" else "HeliBoard"
+            name.findAll(f.readText()).filter { "translatable=\"false\"" !in it.groupValues[2] }
+                .map { "$label\t${it.groupValues[1]}" }.toList()
+        }
+        val out = outputDir.get().file("text_keys.txt").asFile
+        out.parentFile.mkdirs()
+        out.writeText(lines.joinToString("\n"))
+    }
+}
+val textKeys = tasks.register<TextKeysTask>("generateTextKeys") {
+    sources.from(file("src/main/res/values/fork_strings.xml"), file("src/main/res/values/strings.xml"))
+}
+androidComponents.onVariants { variant ->
+    variant.sources.assets?.addGeneratedSourceDirectory(textKeys, TextKeysTask::outputDir)
+}
+
 dependencies {
     // androidx
     implementation("androidx.core:core-ktx:1.17.0") // 1.18.0 requires minSdk 23
