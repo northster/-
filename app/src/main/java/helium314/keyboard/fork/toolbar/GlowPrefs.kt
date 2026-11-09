@@ -11,23 +11,22 @@ object GlowPrefs {
     const val GLOW_MIN = "fork_glow_min"
     /** one full breath (dim -> bright -> dim), ms */
     const val GLOW_PERIOD = "fork_glow_period"
-    /** how far into the keyboard the glow reaches from its edge, fraction of the keyboard height */
-    const val GLOW_HEIGHT = "fork_glow_height"
-    /** how wide the glow is, fraction of the keyboard width */
-    const val GLOW_WIDTH = "fork_glow_width"
-    /** edge the glow comes from, [POSITION_TOP] or [POSITION_BOTTOM] */
+    /** the glow's look: [LOOK_LINE] (light lines on the edges) or [LOOK_SOFT] (a soft light coming in) */
+    const val GLOW_LOOK = "fork_glow_look_v2"
+    const val LOOK_LINE = "line"
+    const val LOOK_SOFT = "soft"
+    /** edge(s) the glow comes from: [POSITION_TOP], [POSITION_BOTTOM] or [POSITION_ALL] */
     const val GLOW_POSITION = "fork_glow_position"
     const val POSITION_TOP = "top"
     const val POSITION_BOTTOM = "bottom"
-    /** color of the glow's dots, unset = [DEFAULT_GLOW_COLOR] */
+    const val POSITION_ALL = "all"
+    /** color of the smart chip's glow, unset = [DEFAULT_GLOW_COLOR] */
     const val GLOW_COLOR = "fork_glow_color"
     /** a sky blue that stands out on a black keyboard */
     const val DEFAULT_GLOW_COLOR = 0xFF38BDF8.toInt()
+    /** grid of the toolbar wave's dots */
     const val GLOW_DOT_SIZE = "fork_glow_dot_size"
     const val GLOW_DOT_SPACING = "fork_glow_dot_spacing"
-    /** chip glow: smooth light added onto the dots (0 = dots only) */
-    const val GLOW_BLOOM = "fork_glow_bloom"
-    const val DEFAULT_GLOW_BLOOM = 0.35f
     /** until this time (ms) a test chip is offered, to see the glow without copying anything */
     const val GLOW_TEST_UNTIL = "fork_clip_hint_test_until"
 
@@ -39,37 +38,19 @@ object GlowPrefs {
     const val AI_GLOW_MIN = "fork_ai_glow_min"
     /** breathing, like the chip glow's [GLOW_PERIOD] */
     const val AI_GLOW_BREATH = "fork_ai_glow_breath"
-    /** the look of the glow while AI runs, see [aiStyle] and AiGlow */
-    const val AI_GLOW_STYLE = "fork_ai_glow_look"
-    const val AI_STYLE_DOTS = "dots"
-    /** light coming in along the top edge / along the left edge and from the bottom right corner */
-    const val AI_STYLE_LIGHT_TOP = "light_top"
-    const val AI_STYLE_LIGHT_SIDES = "light_sides"
-    /** the keyboard's edges as thin white light lines glowing inward: blue / rainbow colors */
-    const val AI_STYLE_EDGE_LINES = "edge_lines"
-    const val AI_STYLE_EDGE_LINES_RAINBOW = "edge_lines_rainbow"
-    const val DEFAULT_AI_STYLE = AI_STYLE_EDGE_LINES
-
-    /** the chosen look; looks that were removed (and none chosen) give the default */
-    fun aiStyle(prefs: SharedPreferences): String = when (val v = prefs.getString(AI_GLOW_STYLE, null)) {
-        AI_STYLE_DOTS, AI_STYLE_LIGHT_TOP, AI_STYLE_LIGHT_SIDES, AI_STYLE_EDGE_LINES, AI_STYLE_EDGE_LINES_RAINBOW -> v
-        "edge_lines_gemini" -> AI_STYLE_EDGE_LINES_RAINBOW
-        else -> DEFAULT_AI_STYLE
-    }
-    const val AI_GLOW_BLOOM = "fork_ai_glow_bloom"
-    const val DEFAULT_AI_GLOW_BLOOM = 0.35f
-    /** shape of the dots style, like the chip glow's */
-    const val AI_GLOW_HEIGHT = "fork_ai_glow_height"
-    const val AI_GLOW_WIDTH = "fork_ai_glow_width"
-    const val AI_GLOW_POSITION = "fork_ai_glow_position"
+    /** the AI glow's look ([LOOK_LINE] / [LOOK_SOFT]), edge(s) and colors, see [aiLook], [aiSide], [aiRainbow] */
+    const val AI_GLOW_LOOK = "fork_ai_glow_look_v2"
+    const val AI_GLOW_SIDE = "fork_ai_glow_side"
+    /** rainbow colors instead of blue */
+    const val AI_GLOW_RAINBOW = "fork_ai_glow_rainbow"
+    /** the look chosen before the looks were line / soft, to start from it */
+    private const val OLD_AI_STYLE = "fork_ai_glow_look"
     /** settings entry that shows the glow for a few seconds (nothing stored) */
     const val AI_GLOW_TEST = "fork_ai_glow_test"
     const val DEFAULT_AI_GLOW_IN = 900f
     const val DEFAULT_AI_GLOW_MAX = 0.7f
     const val DEFAULT_AI_GLOW_MIN = 0.4f
     const val DEFAULT_AI_GLOW_BREATH = 2400f
-    const val DEFAULT_AI_GLOW_HEIGHT = 0.8f
-    const val DEFAULT_AI_GLOW_WIDTH = 1.2f
 
     /**
      * the glows are drawn behind the keys and again over them, clipped to the key shapes: this is how opaque that
@@ -94,8 +75,6 @@ object GlowPrefs {
     const val DEFAULT_GLOW_MAX = 0.85f
     const val DEFAULT_GLOW_MIN = 0.25f
     const val DEFAULT_GLOW_PERIOD = 2400f
-    const val DEFAULT_GLOW_HEIGHT = 0.8f
-    const val DEFAULT_GLOW_WIDTH = 1f
     const val DEFAULT_GLOW_DOT_SIZE = 1.1f
     const val DEFAULT_GLOW_DOT_SPACING = 4.5f
     const val DEFAULT_WAVE = true
@@ -104,13 +83,8 @@ object GlowPrefs {
     const val DEFAULT_WAVE_THICKNESS = 28f
     const val DEFAULT_WAVE_RIPPLE_DEPTH = 120f
 
-    /** everything the glow drawable needs, read once when it is (re)created */
-    data class Glow(
-        val maxAlpha: Float, val minAlpha: Float, val periodMs: Long,
-        val height: Float, val width: Float, val dotDp: Float, val spacingDp: Float, val fromBottom: Boolean,
-        /** smooth light added onto the dots, 0..1 */
-        val bloom: Float = 0f,
-    )
+    /** brightness and breathing of a glow, read once when it is (re)created */
+    data class Glow(val maxAlpha: Float, val minAlpha: Float, val periodMs: Long)
 
     /** [rippleDepthDp] 0 = straight band */
     data class Wave(
@@ -128,28 +102,35 @@ object GlowPrefs {
             maxAlpha = max,
             minAlpha = prefs.getFloat(GLOW_MIN, DEFAULT_GLOW_MIN).coerceIn(0f, max),
             periodMs = prefs.getFloat(GLOW_PERIOD, DEFAULT_GLOW_PERIOD).toLong().coerceIn(200, 20_000),
-            height = prefs.getFloat(GLOW_HEIGHT, DEFAULT_GLOW_HEIGHT).coerceIn(0.05f, 1f),
-            width = prefs.getFloat(GLOW_WIDTH, DEFAULT_GLOW_WIDTH).coerceIn(0.05f, 2f),
-            dotDp = prefs.getFloat(GLOW_DOT_SIZE, DEFAULT_GLOW_DOT_SIZE).coerceIn(0.3f, 4f),
-            spacingDp = prefs.getFloat(GLOW_DOT_SPACING, DEFAULT_GLOW_DOT_SPACING).coerceIn(2f, 16f),
-            fromBottom = prefs.getString(GLOW_POSITION, POSITION_TOP) == POSITION_BOTTOM,
-            bloom = prefs.getFloat(GLOW_BLOOM, DEFAULT_GLOW_BLOOM).coerceIn(0f, 1f),
         )
     }
 
-    /** the AI glow: its own brightness, breathing and (dots style) shape, on the chip glow's dot grid */
+    /** the smart chip glow: soft light from the top unless chosen otherwise */
+    fun chipLine(prefs: SharedPreferences) = prefs.getString(GLOW_LOOK, LOOK_SOFT) == LOOK_LINE
+    fun chipSide(prefs: SharedPreferences) = side(prefs.getString(GLOW_POSITION, POSITION_TOP))
+
     fun aiGlow(prefs: SharedPreferences): Glow {
         val max = prefs.getFloat(AI_GLOW_MAX, DEFAULT_AI_GLOW_MAX).coerceIn(0f, 1f)
         return Glow(
             maxAlpha = max,
             minAlpha = prefs.getFloat(AI_GLOW_MIN, DEFAULT_AI_GLOW_MIN).coerceIn(0f, max),
             periodMs = prefs.getFloat(AI_GLOW_BREATH, DEFAULT_AI_GLOW_BREATH).toLong().coerceIn(200, 20_000),
-            height = prefs.getFloat(AI_GLOW_HEIGHT, DEFAULT_AI_GLOW_HEIGHT).coerceIn(0.05f, 2f),
-            width = prefs.getFloat(AI_GLOW_WIDTH, DEFAULT_AI_GLOW_WIDTH).coerceIn(0.05f, 2f),
-            dotDp = prefs.getFloat(GLOW_DOT_SIZE, DEFAULT_GLOW_DOT_SIZE).coerceIn(0.3f, 4f),
-            spacingDp = prefs.getFloat(GLOW_DOT_SPACING, DEFAULT_GLOW_DOT_SPACING).coerceIn(2f, 16f),
-            fromBottom = prefs.getString(AI_GLOW_POSITION, POSITION_TOP) == POSITION_BOTTOM,
         )
+    }
+
+    /** the AI glow: lines all round unless chosen otherwise; a look chosen before (light from the top...) carries over */
+    fun aiLook(prefs: SharedPreferences): String = prefs.getString(AI_GLOW_LOOK, null)
+        ?: when (prefs.getString(OLD_AI_STYLE, null)) { "light_top", "light_sides" -> LOOK_SOFT; else -> LOOK_LINE }
+    fun aiSidePref(prefs: SharedPreferences): String = prefs.getString(AI_GLOW_SIDE, null)
+        ?: when (prefs.getString(OLD_AI_STYLE, null)) { "light_top" -> POSITION_TOP; else -> POSITION_ALL }
+    fun aiSide(prefs: SharedPreferences) = side(aiSidePref(prefs))
+    fun aiRainbow(prefs: SharedPreferences) = prefs.getBoolean(AI_GLOW_RAINBOW,
+        prefs.getString(OLD_AI_STYLE, null).let { it == "edge_lines_rainbow" || it == "edge_lines_gemini" })
+
+    private fun side(v: String?) = when (v) {
+        POSITION_BOTTOM -> GlowSide.BOTTOM
+        POSITION_ALL -> GlowSide.ALL
+        else -> GlowSide.TOP
     }
 
     /** the wave uses the glow's dot grid, so both look like one dot matrix */

@@ -1068,7 +1068,7 @@ class DynamicToolbarController(private val context: Context) {
         refreshPasteChips()
     }
 
-    private var hintGlow: DotGlowDrawable? = null
+    private var hintGlow: ChipGlowDrawable? = null
     /** fades the glow in (to 1) or out (to 0, then removes it) */
     private var fadeAnimator: ValueAnimator? = null
     private var fade = 0f
@@ -1089,9 +1089,10 @@ class DynamicToolbarController(private val context: Context) {
         if (kv == null) return
         if (hintView !== kv) {
             removeHint()
-            val params = GlowPrefs.glow(context.prefs())
+            val prefs = context.prefs()
+            val params = GlowPrefs.glow(prefs)
             // over the background, under the keys
-            val glow = DotGlowDrawable(color, context.resources.displayMetrics.density, params)
+            val glow = ChipGlowDrawable(GlowPrefs.chipLine(prefs), GlowPrefs.chipSide(prefs), color, params)
             hintGlowColor = color
             glow.setFade(0f)
             kv.setForkUnderlay(glow)

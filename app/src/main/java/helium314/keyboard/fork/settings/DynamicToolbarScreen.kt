@@ -40,10 +40,6 @@ fun DynamicToolbarScreen(
     // sub-options only while the switch they belong to is on
     val swipe = prefs.getBoolean(ForkSettings.PREF_TOOLBAR_SWIPE_ENABLED, ForkSettings.DEFAULT_TOOLBAR_SWIPE_ENABLED)
     val pull = helium314.keyboard.fork.toolbar.ToolbarMotion.isPull(prefs)
-    val wave = GlowPrefs.waveEnabled(prefs)
-    val glow = GlowPrefs.glowEnabled(prefs)
-    val aiGlow = prefs.getBoolean(GlowPrefs.AI_GLOW, true)
-    val aiDots = aiGlow && GlowPrefs.aiStyle(prefs) == GlowPrefs.AI_STYLE_DOTS
     val autofill = prefs.getBoolean(DynamicToolbarController.PREF_AUTOFILL, true)
     val items = listOfNotNull(
             R.string.fork_cat_gesture,
@@ -62,41 +58,6 @@ fun DynamicToolbarScreen(
             ForkSettings.PREF_TOOLBAR_SMOOTH_RESIZE,
             ForkSettings.PREF_TOOLBAR_OVERLAY,
             ForkSettings.PREF_TOOLBAR_START_CLOSED,
-            R.string.fork_cat_wave,
-            GlowPrefs.WAVE,
-            GlowPrefs.WAVE_DURATION.takeIf { wave },
-            GlowPrefs.WAVE_BRIGHTNESS.takeIf { wave },
-            GlowPrefs.WAVE_THICKNESS.takeIf { wave },
-            GlowPrefs.WAVE_SHAPE.takeIf { wave },
-            GlowPrefs.WAVE_RIPPLE_DEPTH.takeIf {
-                wave && prefs.getString(GlowPrefs.WAVE_SHAPE, GlowPrefs.SHAPE_LINE) == GlowPrefs.SHAPE_RIPPLE
-            },
-            R.string.fork_cat_ai_glow,
-            GlowPrefs.KEY_MASK,
-            GlowPrefs.AI_GLOW,
-            GlowPrefs.AI_GLOW_TEST.takeIf { aiGlow },
-            GlowPrefs.AI_GLOW_STYLE.takeIf { aiGlow },
-            GlowPrefs.AI_GLOW_BLOOM.takeIf { aiDots },
-            GlowPrefs.AI_GLOW_POSITION.takeIf { aiDots },
-            GlowPrefs.AI_GLOW_HEIGHT.takeIf { aiDots },
-            GlowPrefs.AI_GLOW_WIDTH.takeIf { aiDots },
-            GlowPrefs.AI_GLOW_MAX.takeIf { aiGlow },
-            GlowPrefs.AI_GLOW_MIN.takeIf { aiGlow },
-            GlowPrefs.AI_GLOW_BREATH.takeIf { aiGlow },
-            GlowPrefs.AI_GLOW_IN.takeIf { aiGlow },
-            R.string.fork_cat_glow,
-            GlowPrefs.GLOW,
-            GlowPrefs.GLOW_TEST_UNTIL.takeIf { glow },
-            GlowPrefs.GLOW_POSITION.takeIf { glow },
-            GlowPrefs.GLOW_COLOR.takeIf { glow },
-            GlowPrefs.GLOW_MAX.takeIf { glow },
-            GlowPrefs.GLOW_MIN.takeIf { glow },
-            GlowPrefs.GLOW_PERIOD.takeIf { glow },
-            GlowPrefs.GLOW_HEIGHT.takeIf { glow },
-            GlowPrefs.GLOW_WIDTH.takeIf { glow },
-            GlowPrefs.GLOW_DOT_SIZE.takeIf { glow },
-            GlowPrefs.GLOW_DOT_SPACING.takeIf { glow },
-            GlowPrefs.GLOW_BLOOM.takeIf { glow },
             R.string.fork_cat_autofill,
             DynamicToolbarController.PREF_AUTOFILL,
             DynamicToolbarController.PREF_AUTOFILL_OPEN.takeIf { autofill },
@@ -246,7 +207,15 @@ fun createDynamicToolbarSettings(context: Context) = listOf(
         helium314.keyboard.settings.preferences.InlineChoicePreference(setting.title, setting.key, listOf(
             ctx.getString(R.string.fork_glow_position_top) to GlowPrefs.POSITION_TOP,
             ctx.getString(R.string.fork_glow_position_bottom) to GlowPrefs.POSITION_BOTTOM,
+            ctx.getString(R.string.fork_glow_position_all) to GlowPrefs.POSITION_ALL,
         ), GlowPrefs.POSITION_TOP) { DynamicToolbarController.current?.onGlowSettingsChanged() }
+    },
+    Setting(context, GlowPrefs.GLOW_LOOK, R.string.fork_ai_glow_style) { setting ->
+        val ctx = androidx.compose.ui.platform.LocalContext.current
+        helium314.keyboard.settings.preferences.InlineChoicePreference(setting.title, setting.key, listOf(
+            ctx.getString(R.string.fork_glow_look_line) to GlowPrefs.LOOK_LINE,
+            ctx.getString(R.string.fork_glow_look_soft) to GlowPrefs.LOOK_SOFT,
+        ), GlowPrefs.LOOK_SOFT) { DynamicToolbarController.current?.onGlowSettingsChanged() }
     },
     Setting(context, GlowPrefs.GLOW_COLOR, R.string.fork_glow_color, R.string.fork_glow_color_default) { setting ->
         ChipColorPreference(setting.title, setting.key, setting.description) {
@@ -265,17 +234,8 @@ fun createDynamicToolbarSettings(context: Context) = listOf(
     Setting(context, GlowPrefs.GLOW_PERIOD, R.string.fork_glow_period) {
         GlowSlider(it, GlowPrefs.DEFAULT_GLOW_PERIOD, 400f..8000f, 100f, ::ms)
     },
-    Setting(context, GlowPrefs.GLOW_HEIGHT, R.string.fork_glow_height) {
-        GlowSlider(it, GlowPrefs.DEFAULT_GLOW_HEIGHT, 0.1f..1f, 0.05f, ::percent)
-    },
-    Setting(context, GlowPrefs.GLOW_WIDTH, R.string.fork_glow_width) {
-        GlowSlider(it, GlowPrefs.DEFAULT_GLOW_WIDTH, 0.2f..2f, 0.05f, ::percent)
-    },
     Setting(context, GlowPrefs.GLOW_DOT_SIZE, R.string.fork_glow_dot_size) {
         GlowSlider(it, GlowPrefs.DEFAULT_GLOW_DOT_SIZE, 0.4f..3f, 0.1f, ::dp)
-    },
-    Setting(context, GlowPrefs.GLOW_BLOOM, R.string.fork_ai_glow_bloom, R.string.fork_ai_glow_bloom_summary) {
-        GlowSlider(it, GlowPrefs.DEFAULT_GLOW_BLOOM, 0f..1f, 0.05f, ::percent)
     },
     Setting(context, GlowPrefs.GLOW_DOT_SPACING, R.string.fork_glow_dot_spacing) {
         GlowSlider(it, GlowPrefs.DEFAULT_GLOW_DOT_SPACING, 2.5f..12f, 0.5f, ::dp)
@@ -328,31 +288,23 @@ fun createDynamicToolbarSettings(context: Context) = listOf(
                 android.widget.Toast.makeText(ctx, R.string.fork_ai_glow_test_no_keyboard, android.widget.Toast.LENGTH_LONG).show()
         })
     },
-    Setting(context, GlowPrefs.AI_GLOW_STYLE, R.string.fork_ai_glow_style) { setting ->
+    Setting(context, GlowPrefs.AI_GLOW_LOOK, R.string.fork_ai_glow_style) { setting ->
         val ctx = androidx.compose.ui.platform.LocalContext.current
         helium314.keyboard.settings.preferences.InlineChoicePreference(setting.title, setting.key, listOf(
-            ctx.getString(R.string.fork_ai_glow_style_edge_lines) to GlowPrefs.AI_STYLE_EDGE_LINES,
-            ctx.getString(R.string.fork_ai_glow_style_edge_lines_rainbow) to GlowPrefs.AI_STYLE_EDGE_LINES_RAINBOW,
-            ctx.getString(R.string.fork_ai_glow_style_light_top) to GlowPrefs.AI_STYLE_LIGHT_TOP,
-            ctx.getString(R.string.fork_ai_glow_style_light_sides) to GlowPrefs.AI_STYLE_LIGHT_SIDES,
-            ctx.getString(R.string.fork_ai_glow_style_dots) to GlowPrefs.AI_STYLE_DOTS,
-        ), GlowPrefs.aiStyle(ctx.prefs()))
+            ctx.getString(R.string.fork_glow_look_line) to GlowPrefs.LOOK_LINE,
+            ctx.getString(R.string.fork_glow_look_soft) to GlowPrefs.LOOK_SOFT,
+        ), GlowPrefs.aiLook(ctx.prefs()))
     },
-    Setting(context, GlowPrefs.AI_GLOW_BLOOM, R.string.fork_ai_glow_bloom, R.string.fork_ai_glow_bloom_summary) {
-        GlowSlider(it, GlowPrefs.DEFAULT_AI_GLOW_BLOOM, 0f..1f, 0.05f, ::percent)
-    },
-    Setting(context, GlowPrefs.AI_GLOW_POSITION, R.string.fork_glow_position) { setting ->
+    Setting(context, GlowPrefs.AI_GLOW_SIDE, R.string.fork_glow_position) { setting ->
         val ctx = androidx.compose.ui.platform.LocalContext.current
         helium314.keyboard.settings.preferences.InlineChoicePreference(setting.title, setting.key, listOf(
             ctx.getString(R.string.fork_glow_position_top) to GlowPrefs.POSITION_TOP,
             ctx.getString(R.string.fork_glow_position_bottom) to GlowPrefs.POSITION_BOTTOM,
-        ), GlowPrefs.POSITION_TOP)
+            ctx.getString(R.string.fork_glow_position_all) to GlowPrefs.POSITION_ALL,
+        ), GlowPrefs.aiSidePref(ctx.prefs()))
     },
-    Setting(context, GlowPrefs.AI_GLOW_HEIGHT, R.string.fork_glow_height) {
-        GlowSlider(it, GlowPrefs.DEFAULT_AI_GLOW_HEIGHT, 0.1f..2f, 0.05f, ::percent)
-    },
-    Setting(context, GlowPrefs.AI_GLOW_WIDTH, R.string.fork_glow_width) {
-        GlowSlider(it, GlowPrefs.DEFAULT_AI_GLOW_WIDTH, 0.2f..2f, 0.05f, ::percent)
+    Setting(context, GlowPrefs.AI_GLOW_RAINBOW, R.string.fork_ai_glow_rainbow) {
+        SwitchPreference(it, GlowPrefs.aiRainbow(androidx.compose.ui.platform.LocalContext.current.prefs()))
     },
     Setting(context, GlowPrefs.AI_GLOW_MAX, R.string.fork_glow_max) {
         GlowSlider(it, GlowPrefs.DEFAULT_AI_GLOW_MAX, 0.05f..1f, 0.05f, ::percent)
@@ -497,6 +449,53 @@ private fun TranslateChoice(setting: Setting, kind: String) {
                 }
             },
         )
+    }
+}
+
+/** Look > Effects: the glows (smart chip, AI) and the wave when the toolbar opens and closes */
+@Composable
+fun EffectsScreen(onClickBack: () -> Unit) {
+    val ctx = androidx.compose.ui.platform.LocalContext.current
+    val prefs = ctx.prefs()
+    val b = (ctx.getActivity() as? helium314.keyboard.settings.SettingsActivity)?.prefChanged?.collectAsState()
+    if ((b?.value ?: 0) < 0) helium314.keyboard.latin.utils.Log.v("irrelevant", "recompose on preference change")
+    val glow = GlowPrefs.glowEnabled(prefs)
+    val aiGlow = prefs.getBoolean(GlowPrefs.AI_GLOW, true)
+    val wave = GlowPrefs.waveEnabled(prefs)
+    val items = listOfNotNull(
+        R.string.fork_cat_glow,
+        GlowPrefs.GLOW,
+        GlowPrefs.GLOW_TEST_UNTIL.takeIf { glow },
+        GlowPrefs.GLOW_LOOK.takeIf { glow },
+        GlowPrefs.GLOW_POSITION.takeIf { glow },
+        GlowPrefs.GLOW_COLOR.takeIf { glow },
+        GlowPrefs.GLOW_MAX.takeIf { glow },
+        GlowPrefs.GLOW_MIN.takeIf { glow },
+        GlowPrefs.GLOW_PERIOD.takeIf { glow },
+        R.string.fork_cat_ai_glow,
+        GlowPrefs.AI_GLOW,
+        GlowPrefs.AI_GLOW_TEST.takeIf { aiGlow },
+        GlowPrefs.AI_GLOW_LOOK.takeIf { aiGlow },
+        GlowPrefs.AI_GLOW_SIDE.takeIf { aiGlow },
+        GlowPrefs.AI_GLOW_RAINBOW.takeIf { aiGlow },
+        GlowPrefs.AI_GLOW_MAX.takeIf { aiGlow },
+        GlowPrefs.AI_GLOW_MIN.takeIf { aiGlow },
+        GlowPrefs.AI_GLOW_BREATH.takeIf { aiGlow },
+        GlowPrefs.AI_GLOW_IN.takeIf { aiGlow },
+        R.string.fork_cat_glow_common,
+        GlowPrefs.KEY_MASK,
+        R.string.fork_cat_wave,
+        GlowPrefs.WAVE,
+        GlowPrefs.WAVE_DURATION.takeIf { wave },
+        GlowPrefs.WAVE_BRIGHTNESS.takeIf { wave },
+        GlowPrefs.WAVE_THICKNESS.takeIf { wave },
+        GlowPrefs.WAVE_SHAPE.takeIf { wave },
+        GlowPrefs.WAVE_RIPPLE_DEPTH.takeIf {
+            wave && prefs.getString(GlowPrefs.WAVE_SHAPE, GlowPrefs.SHAPE_LINE) == GlowPrefs.SHAPE_RIPPLE
+        },
+    )
+    SearchSettingsScreen(onClickBack = onClickBack, title = stringResource(R.string.fork_screen_effects), settings = items) {
+        KeyboardPreviewScaffold { helium314.keyboard.settings.SettingsSections(items) }
     }
 }
 

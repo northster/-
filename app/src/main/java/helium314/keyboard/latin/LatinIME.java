@@ -1103,8 +1103,6 @@ public class LatinIME extends InputMethodService implements
 
     void onFinishInputViewInternal(final boolean finishingInput) {
         if (mDynamicToolbar != null) mDynamicToolbar.onFinishInputView(); // fork: ends the clipboard search, drops autofill chips
-        // fork: a picture of the keyboard as it is now, for the settings' main screen
-        helium314.keyboard.fork.settings.KeyboardSnapshot.INSTANCE.capture(mKeyboardSwitcher.getMainKeyboardView());
         super.onFinishInputView(finishingInput);
         Log.i(TAG, "onFinishInputView");
         cleanupInternalStateForFinishInput();

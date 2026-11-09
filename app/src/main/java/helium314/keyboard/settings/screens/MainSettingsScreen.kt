@@ -88,6 +88,7 @@ fun MainSettingsScreen(
     onClickGif: () -> Unit = {},
     onClickWidgets: () -> Unit = {},
     onClickPermissions: () -> Unit = {},
+    onClickEffects: () -> Unit = {},
 ) {
     SearchSettingsScreen(
         onClickBack = onClickBack,
@@ -155,6 +156,8 @@ fun MainSettingsScreen(
                     R.drawable.ic_settings_appearance, onClickThemeColors),
                 entry(R.string.settings_screen_appearance, stringResource(R.string.fork_desc_appearance),
                     R.drawable.ic_settings_size, onClickAppearance),
+                entry(R.string.fork_screen_effects, stringResource(R.string.fork_desc_effects),
+                    R.drawable.ic_line_sparkles, onClickEffects),
                 if (easy) null
                 else entry(R.string.settings_screen_secondary_layouts, stringResource(R.string.fork_desc_layouts),
                     R.drawable.ic_settings_layout, onClickLayouts),

@@ -40,7 +40,7 @@
     <string name="fork_desc_dictionaries">Add or manage dictionaries</string>
     <string name="fork_desc_appearance">Key height, spacing, fonts, emoji</string>
     <string name="fork_desc_layouts">Symbols, numbers and functional key layouts</string>
-    <string name="fork_desc_dynamic_toolbar">Swipes, opening effect, glows, autofill</string>
+    <string name="fork_desc_dynamic_toolbar">Swipes, opening effect, autofill</string>
     <string name="fork_desc_toolbar">Suggestion strip and toolbar keys of the original keyboard</string>
     <string name="fork_desc_advanced">Long press timing, automatic layout switch, backup</string>
     <string name="fork_desc_about">Version, license, logs</string>
@@ -239,7 +239,7 @@
     <string name="fork_clip_hint_test_started">Tap a text field now, with the toolbar closed. The glow shows for 30 seconds.</string>
     <string name="fork_clip_hint_test_text">Test chip</string>
     <string name="fork_cat_wave">Wave when opening / closing</string>
-    <string name="fork_cat_glow">Paste glow</string>
+    <string name="fork_cat_glow">Smart chip glow</string>
     <string name="fork_wave">Dot wave</string>
     <string name="fork_wave_summary">A white dot wave when the toolbar opens and closes</string>
     <string name="fork_wave_duration">Wave duration</string>
@@ -261,7 +261,7 @@
     <string name="fork_clip_code_test_text">[Web] Your verification code is [482913]. Do not share it. Help: 1588-1234</string>
     <string name="fork_wave_shape">Wave shape</string>
     <string name="fork_wave_shape_line">Straight</string>
-    <string name="fork_glow_position">Glow position</string>
+    <string name="fork_glow_position">Direction</string>
     <string name="fork_glow_position_top">Top</string>
     <string name="fork_glow_position_bottom">Bottom</string>
     <string name="fork_smart_chips">Smart chips</string>
@@ -435,7 +435,7 @@
     <string name="fork_one_handed_swipe_summary">Swipe far left or right on the keys for a one-handed keyboard</string>
     <string name="fork_clip_pinned_toast">Pinned, moved to the end of the list</string>
     <string name="fork_clip_unpinned_toast">Unpinned</string>
-    <string name="fork_cat_ai_glow">Glows</string>
+    <string name="fork_cat_ai_glow">AI glow</string>
     <string name="fork_ai_glow">Glow while AI works</string>
     <string name="fork_ai_glow_summary">Light behind the keys while an AI command or translation runs</string>
     <string name="fork_translate_empty_short">Nothing typed yet</string>
@@ -455,11 +455,6 @@
     <string name="fork_ai_glow_test_summary">Shown for 6 seconds (tap the field below to open the keyboard)</string>
     <string name="fork_ai_glow_test_no_keyboard">The keyboard is not open. Tap the test field below to open it, then try again</string>
     <string name="fork_ai_glow_style">Look</string>
-    <string name="fork_ai_glow_style_dots">Dot glow</string>
-    <string name="fork_ai_glow_style_light_top">Light from above</string>
-    <string name="fork_ai_glow_style_light_sides">Both ends</string>
-    <string name="fork_ai_glow_style_edge_lines">Edge light lines (blue)</string>
-    <string name="fork_ai_glow_style_edge_lines_rainbow">Edge light lines (rainbow)</string>
     <string name="fork_ai_glow_in">Time to appear and go away</string>
     <string name="fork_split_auto">Split when unfolded</string>
     <string name="fork_split_auto_summary">Splits on wide screens (Fold inner screen, tablets) by itself</string>
@@ -510,5 +505,12 @@
     <string name="fork_widget_emoji_ai">Emoji ideas from AI</string>
     <string name="fork_widget_emoji_asking">Asking the AI…</string>
     <string name="fork_main_change_theme">Change theme</string>
-    <string name="fork_main_keyboard_hint">Open and close the keyboard once to see yours here</string>
+    <string name="fork_main_keyboard_hint">Could not draw your keyboard</string>
+    <string name="fork_screen_effects">Effects</string>
+    <string name="fork_desc_effects">Glows, the wave when the toolbar opens</string>
+    <string name="fork_glow_look_line">Line</string>
+    <string name="fork_glow_look_soft">Soft</string>
+    <string name="fork_glow_position_all">All around</string>
+    <string name="fork_ai_glow_rainbow">Rainbow colors</string>
+    <string name="fork_cat_glow_common">Both glows</string>
 </resources>

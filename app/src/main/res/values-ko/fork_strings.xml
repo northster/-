@@ -37,7 +37,7 @@
     <string name="fork_desc_dictionaries">사전 추가 및 관리</string>
     <string name="fork_desc_appearance">키 높이, 간격, 글꼴, 이모지</string>
     <string name="fork_desc_layouts">기호, 숫자, 기능 키 레이아웃</string>
-    <string name="fork_desc_dynamic_toolbar">스와이프, 여는 효과, 글로우, 자동완성</string>
+    <string name="fork_desc_dynamic_toolbar">스와이프, 여는 효과, 자동완성</string>
     <string name="fork_desc_toolbar">원래 키보드의 제안 줄과 툴바 키</string>
     <string name="fork_desc_advanced">길게 누르기 시간, 자판 자동 전환, 백업</string>
     <string name="fork_desc_about">버전, 라이선스, 로그</string>
@@ -235,8 +235,8 @@
     <string name="fork_clip_hint_test_summary">30초 동안 보여 줍니다</string>
     <string name="fork_clip_hint_test_started">아무 입력칸이나 눌러 키보드를 여십시오(툴바는 접은 상태). 30초 동안 보입니다.</string>
     <string name="fork_clip_hint_test_text">테스트 칩</string>
-    <string name="fork_cat_wave">열고 닫을 때 파동</string>
-    <string name="fork_cat_glow">붙여넣기 글로우</string>
+    <string name="fork_cat_wave">열고 닫을 때 물결</string>
+    <string name="fork_cat_glow">스마트 칩 글로우</string>
     <string name="fork_wave">도트 파동</string>
     <string name="fork_wave_summary">툴바를 열고 닫을 때 흰 점 파동이 지나갑니다</string>
     <string name="fork_wave_duration">파동 시간</string>
@@ -258,7 +258,7 @@
     <string name="fork_clip_code_test_text">[Web발신] 인증번호 [482913]를 입력해주세요. 타인에게 알려주지 마세요. 문의 1588-1234</string>
     <string name="fork_wave_shape">파동 모양</string>
     <string name="fork_wave_shape_line">직선</string>
-    <string name="fork_glow_position">글로우 위치</string>
+    <string name="fork_glow_position">방향</string>
     <string name="fork_glow_position_top">위</string>
     <string name="fork_glow_position_bottom">아래</string>
     <string name="fork_smart_chips">스마트 칩</string>
@@ -432,7 +432,7 @@
     <string name="fork_one_handed_swipe_summary">키 위를 좌우로 길게 밀면 그쪽으로 한손 키보드</string>
     <string name="fork_clip_pinned_toast">고정했습니다 (목록 맨 아래로 이동)</string>
     <string name="fork_clip_unpinned_toast">고정을 해제했습니다</string>
-    <string name="fork_cat_ai_glow">글로우</string>
+    <string name="fork_cat_ai_glow">AI 글로우</string>
     <string name="fork_ai_glow">AI 작동 중 글로우</string>
     <string name="fork_ai_glow_summary">AI 명령이나 번역이 도는 동안 키 뒤에서 빛납니다</string>
     <string name="fork_translate_empty_short">입력한 글이 없습니다</string>
@@ -452,11 +452,6 @@
     <string name="fork_ai_glow_test_summary">6초 동안 보여 줍니다(아래 칸을 눌러 키보드를 여십시오)</string>
     <string name="fork_ai_glow_test_no_keyboard">키보드가 열려 있지 않습니다. 아래 테스트 칸을 눌러 키보드를 연 뒤 다시 누르십시오</string>
     <string name="fork_ai_glow_style">모양</string>
-    <string name="fork_ai_glow_style_dots">점 글로우</string>
-    <string name="fork_ai_glow_style_light_top">위에서 비추는 빛</string>
-    <string name="fork_ai_glow_style_light_sides">양 끝 빛</string>
-    <string name="fork_ai_glow_style_edge_lines">테두리 빛줄기 (파랑)</string>
-    <string name="fork_ai_glow_style_edge_lines_rainbow">테두리 빛줄기 (무지개)</string>
     <string name="fork_ai_glow_in">나타나고 사라지는 시간</string>
     <string name="fork_split_auto">펼치면 자동 분할</string>
     <string name="fork_split_auto_summary">넓은 화면(폴드 내부, 태블릿)에서는 자동으로 분할</string>
@@ -507,5 +502,12 @@
     <string name="fork_widget_emoji_ai">AI로 이모지 추천</string>
     <string name="fork_widget_emoji_asking">AI에게 물어보는 중…</string>
     <string name="fork_main_change_theme">테마 바꾸기</string>
-    <string name="fork_main_keyboard_hint">키보드를 한 번 열었다 닫으면 내 키보드가 여기 보입니다</string>
+    <string name="fork_main_keyboard_hint">키보드 모양을 불러오지 못했습니다</string>
+    <string name="fork_screen_effects">효과</string>
+    <string name="fork_desc_effects">글로우, 열고 닫을 때 물결</string>
+    <string name="fork_glow_look_line">라인</string>
+    <string name="fork_glow_look_soft">소프트</string>
+    <string name="fork_glow_position_all">전체</string>
+    <string name="fork_ai_glow_rainbow">무지개 색</string>
+    <string name="fork_cat_glow_common">글로우 공통</string>
 </resources>

@@ -2,22 +2,36 @@
 package helium314.keyboard.fork.settings
 
 import androidx.annotation.DrawableRes
-import android.graphics.BitmapFactory
+import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.text.InputType
+import android.view.ContextThemeWrapper
+import android.view.View
+import android.view.inputmethod.EditorInfo
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import helium314.keyboard.keyboard.KeyboardElement
+import helium314.keyboard.keyboard.KeyboardLayoutSet
+import helium314.keyboard.keyboard.KeyboardTheme
+import helium314.keyboard.keyboard.KeyboardView
+import helium314.keyboard.latin.RichInputMethodManager
+import helium314.keyboard.latin.common.ColorType
+import helium314.keyboard.latin.settings.Settings
+import helium314.keyboard.latin.utils.ResourceUtils
+import helium314.keyboard.latin.utils.getActivity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.withContext
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -61,32 +75,27 @@ private val KeyColor = Color(0xFF2B2B31)
 private val FnKeyColor = Color(0xFF1E1E23)
 
 /**
- * the user's keyboard as it looks ([KeyboardSnapshot], made when the keyboard last hid), or a drawn one with [hint]
- * until there is a picture; [caption] under it, and a button ([action]) next to it
+ * the user's keyboard as it looks: drawn here from the keyboard's own settings (theme, colors, size, font, layout,
+ * language), again whenever a setting changes or the screen comes back; the drawn stand-in with [hint] only if that
+ * fails. [caption] under it, and a button ([action]) next to it
  */
 @Composable
 fun KeyboardHero(korean: Boolean, appName: String, caption: String, hint: String, action: String, onAction: () -> Unit) {
     val s = LocalShadcn.current
     val ctx = LocalContext.current
-    val file = remember { KeyboardSnapshot.file(ctx) }
-    var stamp by remember { mutableLongStateOf(file.lastModified()) }
-    var image by remember { mutableStateOf(load(file)) }
-    // a new picture is written when the keyboard hides (e.g. after trying it at the bottom of the screen)
-    LaunchedEffect(Unit) {
-        while (true) {
-            delay(1500)
-            val m = file.lastModified()
-            if (m != stamp) {
-                stamp = m
-                image = withContext(Dispatchers.IO) { load(file) }
-            }
-        }
+    val changed = (ctx.getActivity() as? helium314.keyboard.settings.SettingsActivity)?.prefChanged?.collectAsState()
+    var resumed by remember { mutableIntStateOf(0) }
+    val lifecycle = androidx.lifecycle.compose.LocalLifecycleOwner.current.lifecycle
+    DisposableEffect(lifecycle) {
+        val observer = LifecycleEventObserver { _, event -> if (event == Lifecycle.Event.ON_RESUME) resumed++ }
+        lifecycle.addObserver(observer)
+        onDispose { lifecycle.removeObserver(observer) }
     }
+    val pic = remember(changed?.value, resumed) { KeyboardPicture.render(ctx)?.asImageBitmap() }
     Column(
         Modifier.padding(horizontal = 12.dp).fillMaxWidth().clip(RoundedCornerShape(24.dp)).background(s.card)
             .padding(start = 10.dp, end = 10.dp, top = 10.dp, bottom = 12.dp)
     ) {
-        val pic = image
         if (pic != null) {
             Image(pic, null, Modifier.fillMaxWidth().aspectRatio(pic.width.toFloat() / pic.height)
                 .clip(RoundedCornerShape(14.dp)), contentScale = ContentScale.FillWidth)
@@ -104,8 +113,41 @@ fun KeyboardHero(korean: Boolean, appName: String, caption: String, hint: String
     }
 }
 
-private fun load(file: java.io.File): ImageBitmap? =
-    if (!file.exists()) null else runCatching { BitmapFactory.decodeFile(file.path)?.asImageBitmap() }.getOrNull()
+/** draws the keyboard's letter layout (current language) the way the keyboard does, without the keyboard running */
+object KeyboardPicture {
+    fun render(context: Context): Bitmap? = try {
+        val values = Settings.getValues()
+        val theme = KeyboardTheme.getKeyboardTheme(context)
+        val themeContext = ContextThemeWrapper(context, theme.mStyleId)
+        val editorInfo = EditorInfo().apply { inputType = InputType.TYPE_CLASS_TEXT }
+        val width = ResourceUtils.getKeyboardWidth(themeContext, values)
+        val height = ResourceUtils.getKeyboardHeight(themeContext.resources, values)
+        val layoutSet = KeyboardLayoutSet.Builder(themeContext, editorInfo, values)
+            .setKeyboardGeometry(width, height)
+            .setSubtype(RichInputMethodManager.getInstance().currentSubtype)
+            .build()
+        val keyboard = layoutSet.getKeyboard(KeyboardElement.ALPHABET)
+        val view = KeyboardView(themeContext, null)
+        view.setKeyboard(keyboard)
+        val w = keyboard.mOccupiedWidth
+        val h = keyboard.mOccupiedHeight
+        view.measure(View.MeasureSpec.makeMeasureSpec(w, View.MeasureSpec.EXACTLY),
+            View.MeasureSpec.makeMeasureSpec(h, View.MeasureSpec.EXACTLY))
+        view.layout(0, 0, w, h)
+        val bitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(bitmap)
+        // the keyboard's background (on the keyboard's frame in the real thing)
+        View(themeContext).also { values.mColors.setBackground(it, ColorType.MAIN_BACKGROUND) }.background?.let {
+            it.setBounds(0, 0, w, h)
+            it.draw(canvas)
+        }
+        view.draw(canvas)
+        bitmap
+    } catch (e: Throwable) {
+        helium314.keyboard.latin.utils.Log.w("KeyboardPicture", "can't draw the keyboard", e)
+        null
+    }
+}
 
 /** stands in for the picture until the keyboard was shown once */
 @Composable
