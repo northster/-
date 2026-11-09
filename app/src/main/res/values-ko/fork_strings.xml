@@ -73,7 +73,7 @@
     <string name="fork_open_source">오픈소스 고지</string>
     <string name="fork_open_source_summary">사용한 오픈소스, 글꼴, 아이콘과 라이선스</string>
     <string name="fork_cat_settings_mode">설정 모드</string>
-    <string name="fork_easy_settings">쉬운 설정 모드</string>
+    <string name="fork_easy_settings">간단 설정 모드</string>
     <string name="fork_easy_settings_summary">자주 쓰는 설정만 보입니다(숨긴 설정도 검색하면 나옵니다)</string>
     <string name="fork_cat_behavior">키 동작</string>
     <string name="fork_cat_auto_switch">자동으로 문자 자판으로 돌아가기</string>
@@ -507,4 +507,5 @@
     <string name="fork_widget_emoji_ai">AI로 이모지 추천</string>
     <string name="fork_widget_emoji_asking">AI에게 물어보는 중…</string>
     <string name="fork_main_change_theme">테마 바꾸기</string>
+    <string name="fork_main_keyboard_hint">키보드를 한 번 열었다 닫으면 내 키보드가 여기 보입니다</string>
 </resources>

@@ -64,10 +64,12 @@ fun SearchSettingsScreen(
     title: String,
     settings: List<Any?>,
     extraActions: @Composable (() -> Unit)? = null, // fork: extra top bar buttons
+    showBack: Boolean = true, // fork: the main screen has no back button (only while searching)
     content: @Composable (ColumnScope.() -> Unit)? = null // overrides settings if not null
 ) {
     SearchScreen(
         onClickBack = onClickBack,
+        showBack = showBack,
         title = { Text(title) },
         extraActions = extraActions,
         content = {
@@ -114,6 +116,7 @@ fun <T: Any?> SearchScreen(
     icon: @Composable (() -> Unit)? = null,
     menu: List<Pair<String, () -> Unit>>? = null,
     extraActions: @Composable (() -> Unit)? = null,
+    showBack: Boolean = true,
     content: @Composable (ColumnScope.() -> Unit)? = null,
 ) {
     // searchText and showSearch should have the same remember or rememberSaveable
@@ -143,7 +146,7 @@ fun <T: Any?> SearchScreen(
                         title = title,
                         windowInsets = WindowInsets(0),
                         navigationIcon = {
-                            BackButton {
+                            if (showBack || showSearch) BackButton {
                                 if (showSearch) setShowSearch(false)
                                 else onClickBack()
                             }

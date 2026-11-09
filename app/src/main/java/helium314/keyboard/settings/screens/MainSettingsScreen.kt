@@ -93,6 +93,7 @@ fun MainSettingsScreen(
         onClickBack = onClickBack,
         title = stringResource(R.string.ime_settings),
         settings = emptyList(),
+        showBack = false,
     ) {
         val ctx = LocalContext.current
         // fork: computed once, not again on every recomposition
@@ -102,7 +103,7 @@ fun MainSettingsScreen(
         val setupState by SettingsActivity.imeSetupState.collectAsState()
         val appName = stringResource(R.string.english_ime_name)
         // fork: easy settings mode leaves out the screens that are only details
-        val easy = helium314.keyboard.fork.settings.EasySettings.enabled(ctx.prefs())
+        var easy by remember { mutableStateOf(helium314.keyboard.fork.settings.EasySettings.enabled(ctx.prefs())) }
         // fork: the bottom inset (keyboard, dynamic toolbar) is taken by SearchScreen while laying out. Reading
         // Scaffold's innerPadding here recomposed the whole screen on every frame the keyboard or toolbar moved, on
         // the main thread the keyboard shares with this activity. The keyboard test field is at the bottom of every
@@ -175,7 +176,16 @@ fun MainSettingsScreen(
                 entry(R.string.fork_screen_widgets, stringResource(R.string.fork_desc_widgets),
                     helium314.keyboard.fork.DotIcons.of(R.drawable.ic_dot_more), onClickWidgets),
             )
-            val more = listOf(
+            val more = listOf<@Composable () -> Unit>(
+                // fork: easy mode is switched here, on top of "more", where it is easy to find
+                {
+                    helium314.keyboard.settings.preferences.SwitchPreference(
+                        name = stringResource(R.string.fork_easy_settings),
+                        key = helium314.keyboard.fork.settings.EasySettings.PREF,
+                        default = false,
+                        description = stringResource(R.string.fork_easy_settings_summary),
+                    ) { easy = it }
+                },
                 entry(R.string.fork_screen_permissions, stringResource(R.string.fork_desc_permissions),
                     R.drawable.ic_settings_about_license, onClickPermissions),
                 entry(R.string.settings_screen_advanced, stringResource(R.string.fork_desc_advanced),
@@ -187,7 +197,8 @@ fun MainSettingsScreen(
             // fork: the keyboard on top, four keys under it pick the group that is listed
             var group by rememberSaveable { mutableIntStateOf(0) }
             val korean = remember { SubtypeSettings.getEnabledSubtypes(true).any { it.locale().language == "ko" } }
-            KeyboardHero(korean, appName, subtypeNames, stringResource(R.string.fork_main_change_theme), onClickThemeColors)
+            KeyboardHero(korean, appName, subtypeNames, stringResource(R.string.fork_main_keyboard_hint),
+                stringResource(R.string.fork_main_change_theme), onClickThemeColors)
             Spacer(Modifier.height(22.dp))
             CategoryKeys(
                 listOf(stringResource(R.string.fork_main_input), stringResource(R.string.fork_main_look),

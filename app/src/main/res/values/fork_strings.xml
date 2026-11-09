@@ -510,4 +510,5 @@
     <string name="fork_widget_emoji_ai">Emoji ideas from AI</string>
     <string name="fork_widget_emoji_asking">Asking the AI…</string>
     <string name="fork_main_change_theme">Change theme</string>
+    <string name="fork_main_keyboard_hint">Open and close the keyboard once to see yours here</string>
 </resources>
